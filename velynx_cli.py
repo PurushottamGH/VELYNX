@@ -1,73 +1,59 @@
-"""
-VELYNX CLI v2 — powered by the Unified Brain
-"""
+"""VELYNX CLI — unified entry point for terminal usage."""
+from __future__ import annotations
+
 import asyncio
 import sys
-from rich.console import Console
-from rich.panel import Panel
-from rich.progress import Progress, SpinnerColumn, TextColumn
-from rich.markdown import Markdown
+from pathlib import Path
 
-from backend.brain import VelynxBrain, Intent
+sys.path.append(str(Path(__file__).resolve().parent / "backend"))
 
-console = Console()
-brain   = VelynxBrain()
+from app.pipeline import answer_question
+from cli import main as backend_cli_main
+from pipeline.reasoning_core import reason as _reason
 
 
-async def main():
-    query = " ".join(sys.argv[1:]).strip()
-    if not query:
-        console.print("[red]Usage: python velynx_cli.py <your query>[/red]")
-        sys.exit(1)
+def internal_reason(query: str, sources: list[dict]) -> dict:
+    result = _reason(sources=sources, query=query)
+    if not isinstance(result, dict):
+        return {"answer": str(result), "confidence": "UNKNOWN"}
+    return {
+        "answer": result.get("draft", ""),
+        "confidence": result.get("confidence", "UNKNOWN"),
+        "citations": result.get("citations", []),
+        "gaps": result.get("gaps", []),
+    }
 
-    with Progress(
-        SpinnerColumn(),
-        TextColumn("[cyan]VELYNX thinking...[/cyan]"),
-        console=console,
-        transient=True,
-    ) as progress:
-        progress.add_task("think")
-        result = await brain.think(query)
 
-    if result.error:
-        console.print(Panel(f"[red]{result.error}[/red]", title="[red]Error[/red]"))
-        sys.exit(1)
+def _run_direct_question(question: str) -> int:
+    if not question:
+        print("Usage: python velynx_cli.py <your query>")
+        return 1
 
-    # Choose display based on intent
-    if result.intent == Intent.SIMULATE:
-        # Save HTML and open
-        out_path = "velynx_output/simulation.html"
-        import os; os.makedirs("velynx_output", exist_ok=True)
-        with open(out_path, "w") as f:
-            f.write(result.answer)
-        console.print(Panel(
-            f"[green]Simulation saved to[/green] {out_path}\nOpen in browser.",
-            title="[cyan]VELYNX Simulate[/cyan]"
-        ))
-    else:
-        # Show rich markdown answer
-        intent_color = {
-            Intent.ANSWER:  "cyan",
-            Intent.LEARN:   "green",
-            Intent.CODE:    "yellow",
-            Intent.REFLECT: "magenta",
-            Intent.IMPROVE: "blue",
-        }.get(result.intent, "white")
+    response = asyncio.run(answer_question(question))
+    print(f"You: {question}")
+    print(f"Velynx: {response.answer}")
+    print(f"Confidence: {response.confidence}")
 
-        console.print(Panel(
-            Markdown(result.answer),
-            title=f"[{intent_color}]VELYNX · {result.intent.value.upper()}[/{intent_color}]",
-            subtitle=f"[dim]confidence {result.confidence:.0%} · {result.latency_ms:.0f}ms[/dim]",
-        ))
+    if response.citations:
+        print("Citations:")
+        for item in response.citations:
+            print(f"  - {item}")
 
-        if result.reasoning_chain:
-            console.print("\n[dim]Reasoning chain:[/dim]")
-            for i, step in enumerate(result.reasoning_chain[:5]):
-                console.print(f"  [dim]{i+1}.[/dim] {step}")
+    if response.gaps:
+        print("Gaps:")
+        for item in response.gaps:
+            print(f"  - {item}")
 
-        if result.improved:
-            console.print("[green]✓ Self-improved during this session[/green]")
+    return 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = list(argv) if argv is not None else sys.argv[1:]
+    subcommands = {"teach", "review", "chat"}
+    if args and not args[0].startswith("-") and args[0] not in subcommands:
+        return _run_direct_question(" ".join(args).strip())
+    return int(backend_cli_main(args))
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    raise SystemExit(main())
