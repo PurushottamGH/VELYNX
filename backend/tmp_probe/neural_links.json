@@ -1,0 +1,52 @@
+{
+  "concepts": {
+    "apples": {
+      "episodes": [
+        "1ef7bd1b776517ab581c3af5f64eeff31c3d6e34"
+      ],
+      "last_seen": "2026-05-25T06:08:04.548083+00:00",
+      "weight": 0.35
+    },
+    "likes": {
+      "episodes": [
+        "1ef7bd1b776517ab581c3af5f64eeff31c3d6e34"
+      ],
+      "last_seen": "2026-05-25T06:08:04.548083+00:00",
+      "weight": 0.35
+    },
+    "velynx": {
+      "episodes": [
+        "1ef7bd1b776517ab581c3af5f64eeff31c3d6e34"
+      ],
+      "last_seen": "2026-05-25T06:08:04.548083+00:00",
+      "weight": 0.35
+    }
+  },
+  "episodes": {
+    "1ef7bd1b776517ab581c3af5f64eeff31c3d6e34": {
+      "answer": "Velynx likes apples.",
+      "answer_tokens": [
+        "velynx",
+        "likes",
+        "apples"
+      ],
+      "confidence": "CERTAIN",
+      "created_at": "2026-05-25T06:08:04.548083+00:00",
+      "kind": "feedback",
+      "prompt": "Velynx likes apples",
+      "prompt_tokens": [
+        "velynx",
+        "likes",
+        "apples"
+      ],
+      "source": "terminal",
+      "strength": 0.35,
+      "tags": [
+        "broad_retrieval",
+        "feedback",
+        "practical"
+      ],
+      "updated_at": "2026-05-25T06:08:04.548083+00:00"
+    }
+  }
+}

@@ -1,0 +1,84 @@
+[
+  {
+    "id": "reverse-string-001",
+    "type": "coding",
+    "topic": "strings",
+    "difficulty": 1,
+    "title": "Reverse String",
+    "description": "Write a function that reverses a string.",
+    "template": "def reverse_string(s):\n    pass",
+    "test_cases": [
+      {"input": "reverse_string('hello')", "output": "'olleh'"},
+      {"input": "reverse_string('Hannah')", "output": "'annaH'"},
+      {"input": "reverse_string('a')", "output": "'a'"}
+    ],
+    "solution": "def reverse_string(s):\n    return s[::-1]",
+    "techniques": ["slicing"],
+    "related_topics": ["strings"]
+  },
+  {
+    "id": "is-palindrome-001",
+    "type": "coding",
+    "topic": "strings",
+    "difficulty": 2,
+    "title": "Valid Palindrome",
+    "description": "Given a string s, return true if it is a palindrome after converting all uppercase to lowercase and removing non-alphanumeric characters.",
+    "template": "def is_palindrome(s):\n    pass",
+    "test_cases": [
+      {"input": "is_palindrome('A man, a plan, a canal: Panama')", "output": "True"},
+      {"input": "is_palindrome('race a car')", "output": "False"},
+      {"input": "is_palindrome(' ')", "output": "True"}
+    ],
+    "solution": "def is_palindrome(s):\n    s = ''.join(c.lower() for c in s if c.isalnum())\n    return s == s[::-1]",
+    "techniques": ["two-pointer"],
+    "related_topics": ["strings"]
+  },
+  {
+    "id": "is-anagram-001",
+    "type": "coding",
+    "topic": "strings",
+    "difficulty": 2,
+    "title": "Valid Anagram",
+    "description": "Given two strings s and t, return true if t is an anagram of s.",
+    "template": "def is_anagram(s, t):\n    pass",
+    "test_cases": [
+      {"input": "is_anagram('anagram', 'nagaram')", "output": "True"},
+      {"input": "is_anagram('rat', 'car')", "output": "False"}
+    ],
+    "solution": "def is_anagram(s, t):\n    return sorted(s) == sorted(t)",
+    "techniques": ["sorting", "hash-map"],
+    "related_topics": ["strings"]
+  },
+  {
+    "id": "longest-substring-001",
+    "type": "coding",
+    "topic": "strings",
+    "difficulty": 5,
+    "title": "Longest Substring Without Repeating Characters",
+    "description": "Given a string s, find the length of the longest substring without repeating characters.",
+    "template": "def length_of_longest_substring(s):\n    pass",
+    "test_cases": [
+      {"input": "length_of_longest_substring('abcabcbb')", "output": "3"},
+      {"input": "length_of_longest_substring('bbbbb')", "output": "1"},
+      {"input": "length_of_longest_substring('pwwkew')", "output": "3"}
+    ],
+    "solution": "def length_of_longest_substring(s):\n    seen = {}\n    left = 0\n    max_len = 0\n    for right, c in enumerate(s):\n        if c in seen and seen[c] >= left:\n            left = seen[c] + 1\n        seen[c] = right\n        max_len = max(max_len, right - left + 1)\n    return max_len",
+    "techniques": ["sliding-window", "hash-map"],
+    "related_topics": ["strings"]
+  },
+  {
+    "id": "group-anagrams-001",
+    "type": "coding",
+    "topic": "strings",
+    "difficulty": 4,
+    "title": "Group Anagrams",
+    "description": "Given an array of strings strs, group the anagrams together.",
+    "template": "def group_anagrams(strs):\n    pass",
+    "test_cases": [
+      {"input": "group_anagrams(['eat','tea','tan','ate','nat','bat'])", "output": "[['eat','tea','ate'], ['tan','nat'], ['bat']]"}
+    ],
+    "solution": "def group_anagrams(strs):\n    from collections import defaultdict\n    groups = defaultdict(list)\n    for s in strs:\n        key = tuple(sorted(s))\n        groups[key].append(s)\n    return list(groups.values())",
+    "techniques": ["hash-map", "sorting"],
+    "related_topics": ["strings"]
+  }
+]

@@ -1,0 +1,25 @@
+what is the scientific method and why does it produce reliable knowledge
+explain the difference between correlation and causation with examples
+how does Bayesian reasoning update beliefs when new evidence arrives
+what are the most common logical fallacies and why do they mislead
+explain how falsifiability distinguishes science from pseudoscience
+how does Occam's razor guide theory selection in science
+what is the problem of induction and can we justify general laws from observations
+explain how controlled experiments isolate causal variables
+how does peer review maintain quality in scientific publishing
+what is cognitive bias and how does it distort human reasoning
+explain the Dunning-Kruger effect and its impact on self-assessment
+how does survivorship bias skew our understanding of success
+what is the trolley problem and what does it reveal about ethics
+explain how thought experiments advance philosophical understanding
+what is emergence and how do complex systems produce novel properties
+explain the difference between necessary and sufficient conditions
+how does parsimony guide hypothesis selection in science
+what is the replication crisis and how does it affect research trust
+explain how statistical significance differs from practical significance
+what is the butterfly effect and how does sensitivity to initial conditions work
+explain how analogical reasoning transfers knowledge between domains
+what is abductive reasoning and how does it generate the best explanation
+explain how scientific paradigms shift according to Thomas Kuhn
+what is the is-ought problem and can science determine moral values
+explain how complexity theory studies computational hardness

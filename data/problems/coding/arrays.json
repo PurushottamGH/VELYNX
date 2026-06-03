@@ -1,0 +1,103 @@
+[
+  {
+    "id": "two-sum-001",
+    "type": "coding",
+    "topic": "arrays",
+    "difficulty": 3,
+    "title": "Two Sum",
+    "description": "Given an array of integers nums and an integer target, return indices of the two numbers that add up to target. You may assume each input has exactly one solution.",
+    "template": "def two_sum(nums, target):\n    pass",
+    "test_cases": [
+      {"input": "two_sum([2,7,11,15], 9)", "output": "[0, 1]"},
+      {"input": "two_sum([3,2,4], 6)", "output": "[1, 2]"},
+      {"input": "two_sum([3,3], 6)", "output": "[0, 1]"}
+    ],
+    "solution": "def two_sum(nums, target):\n    seen = {}\n    for i, n in enumerate(nums):\n        if target - n in seen:\n            return [seen[target-n], i]\n        seen[n] = i",
+    "techniques": ["hash-map"],
+    "related_topics": ["hash-table"]
+  },
+  {
+    "id": "max-subarray-001",
+    "type": "coding",
+    "topic": "arrays",
+    "difficulty": 4,
+    "title": "Maximum Subarray",
+    "description": "Given an integer array nums, find the subarray with the largest sum and return its sum.",
+    "template": "def max_subarray(nums):\n    pass",
+    "test_cases": [
+      {"input": "max_subarray([-2,1,-3,4,-1,2,1,-5,4])", "output": "6"},
+      {"input": "max_subarray([1])", "output": "1"},
+      {"input": "max_subarray([5,4,-1,7,8])", "output": "23"}
+    ],
+    "solution": "def max_subarray(nums):\n    max_sum = nums[0]\n    cur_sum = nums[0]\n    for n in nums[1:]:\n        cur_sum = max(n, cur_sum + n)\n        max_sum = max(max_sum, cur_sum)\n    return max_sum",
+    "techniques": ["dynamic-programming", "greedy"],
+    "related_topics": ["kadane-algorithm"]
+  },
+  {
+    "id": "contains-duplicate-001",
+    "type": "coding",
+    "topic": "arrays",
+    "difficulty": 2,
+    "title": "Contains Duplicate",
+    "description": "Given an integer array nums, return true if any value appears at least twice, and false if every element is distinct.",
+    "template": "def contains_duplicate(nums):\n    pass",
+    "test_cases": [
+      {"input": "contains_duplicate([1,2,3,1])", "output": "True"},
+      {"input": "contains_duplicate([1,2,3,4])", "output": "False"},
+      {"input": "contains_duplicate([1,1,1,3,3,4,3,2,4,2])", "output": "True"}
+    ],
+    "solution": "def contains_duplicate(nums):\n    return len(nums) != len(set(nums))",
+    "techniques": ["hash-set"],
+    "related_topics": ["set"]
+  },
+  {
+    "id": "product-except-self-001",
+    "type": "coding",
+    "topic": "arrays",
+    "difficulty": 5,
+    "title": "Product of Array Except Self",
+    "description": "Given an integer array nums, return an array answer such that answer[i] is the product of all elements of nums except nums[i]. Must run in O(n) without using division.",
+    "template": "def product_except_self(nums):\n    pass",
+    "test_cases": [
+      {"input": "product_except_self([1,2,3,4])", "output": "[24, 12, 8, 6]"},
+      {"input": "product_except_self([-1,1,0,-3,3])", "output": "[0, 0, 9, 0, 0]"}
+    ],
+    "solution": "def product_except_self(nums):\n    n = len(nums)\n    left = [1] * n\n    right = [1] * n\n    for i in range(1, n):\n        left[i] = left[i-1] * nums[i-1]\n    for i in range(n-2, -1, -1):\n        right[i] = right[i+1] * nums[i+1]\n    return [l * r for l, r in zip(left, right)]",
+    "techniques": ["prefix-product"],
+    "related_topics": ["arrays"]
+  },
+  {
+    "id": "max-product-001",
+    "type": "coding",
+    "topic": "arrays",
+    "difficulty": 5,
+    "title": "Maximum Product Subarray",
+    "description": "Given an integer array nums, find a subarray that has the largest product and return the product.",
+    "template": "def max_product(nums):\n    pass",
+    "test_cases": [
+      {"input": "max_product([2,3,-2,4])", "output": "6"},
+      {"input": "max_product([-2,0,-1])", "output": "0"},
+      {"input": "max_product([-2,3,-4])", "output": "24"}
+    ],
+    "solution": "def max_product(nums):\n    res = max(nums)\n    cur_min, cur_max = 1, 1\n    for n in nums:\n        vals = (n, n * cur_max, n * cur_min)\n        cur_max, cur_min = max(vals), min(vals)\n        res = max(res, cur_max)\n    return res",
+    "techniques": ["dynamic-programming"],
+    "related_topics": ["arrays"]
+  },
+  {
+    "id": "three-sum-001",
+    "type": "coding",
+    "topic": "arrays",
+    "difficulty": 5,
+    "title": "3Sum",
+    "description": "Given an integer array nums, return all triplets [nums[i], nums[j], nums[k]] such that i != j != k and nums[i] + nums[j] + nums[k] == 0.",
+    "template": "def three_sum(nums):\n    pass",
+    "test_cases": [
+      {"input": "three_sum([-1,0,1,2,-1,-4])", "output": "[[-1,-1,2], [-1,0,1]]"},
+      {"input": "three_sum([0,1,1])", "output": "[]"},
+      {"input": "three_sum([0,0,0])", "output": "[[0,0,0]]"}
+    ],
+    "solution": "def three_sum(nums):\n    nums.sort()\n    res = []\n    for i in range(len(nums)-2):\n        if i > 0 and nums[i] == nums[i-1]:\n            continue\n        l, r = i+1, len(nums)-1\n        while l < r:\n            s = nums[i] + nums[l] + nums[r]\n            if s < 0: l += 1\n            elif s > 0: r -= 1\n            else:\n                res.append([nums[i], nums[l], nums[r]])\n                while l < r and nums[l] == nums[l+1]: l += 1\n                while l < r and nums[r] == nums[r-1]: r -= 1\n                l += 1; r -= 1\n    return res",
+    "techniques": ["two-pointer", "sorting"],
+    "related_topics": ["arrays"]
+  }
+]

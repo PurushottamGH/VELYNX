@@ -1,0 +1,579 @@
+V E L Y N X
+The Raised Mind
+Complete Project Blueprint
+Architecture  |  Build Plan  |  Tech Stack  |  Roadmap
+"We don't store truth. We find it."
+Built with VS Code  |  2025
+01. Vision & Philosophy
+The Core Idea
+VELYNX is not a search engine. It is not an LLM. It is a raised synthetic mind — taught how to think, sent into the live internet to find truth, and trained to know what it does not know. It learns from being wrong without ever retraining.
+What Makes VELYNX Different
+System
+How It Works
+Google
+Finds pages, ranks by links
+ChatGPT / Claude
+Recalls static training data
+Perplexity
+Searches and summarizes shallowly
+Research Agents
+Executes tasks step by step
+VELYNX
+Raised mind — thinks, explores, reasons, corrects
+Founding Principles
+We don't store truth. We find it.
+Every answer must be traceable to a source.
+Uncertainty is not weakness — it is honesty.
+The system must get smarter from being wrong.
+Knowledge has no cutoff date.
+The human who built it owns it completely.
+02. Full System Architecture
+The Seven Layers
+VELYNX operates as a pipeline of seven distinct layers. Each layer has one job and does it precisely.
+Layer 1 — Constitution Layer
+The soul of VELYNX. Loaded into every query as system context. Defines how VELYNX thinks before it searches anything.
+Rules of valid logical reasoning
+Scientific method and peer review standards
+How to handle contradictory information
+How to assign and communicate confidence
+How to speak to humans across different tones
+How to know what it does not know
+Layer 2 — Intent Engine
+VELYNX never takes a query at face value. It decomposes every question into multiple dimensions before searching.
+Query: 'How big is the universe?'
+Dimensions extracted:
+  Scientific   → observable size, measurement methods
+  Philosophical→ what does infinite mean?
+  Human        → why do people ask this?
+  Historical   → how understanding evolved
+  Emotional    → awe, scale, insignificance
+Layer 3 — Retrieval Mesh
+All sources queried in parallel. Total time equals slowest single call, not sum of all calls.
+Source
+What It Provides
+SearXNG (self-hosted)
+70+ search engines simultaneously — free forever
+Brave Search API
+2,000 free queries/month — clean index
+Tavily API
+1,000 free queries — built for AI agents
+arXiv API
+2M+ research papers — completely free
+Semantic Scholar
+200M+ academic papers — free API
+Wikipedia API
+Foundational knowledge — unlimited free
+Playwright Browser
+Visits sites like a human — reads full content
+YouTube + Whisper
+Transcribes and learns from video
+Own Crawler
+Proprietary focused index — your moat
+Layer 4 — Truth Filter
+The immune system of VELYNX. Eliminates noise before it reaches the reasoning layer.
+Domain authority scoring
+Publication date and freshness checking
+Cross-source agreement measurement
+Fact versus opinion detection
+Logical consistency validation
+Deduplication via MinHash
+Layer 5 — Contradiction Engine
+What separates VELYNX from everything else. Surfaces disagreement instead of hiding it.
+Source A: 'Coffee helps headaches'
+Source B: 'Avoid caffeine for headaches'
+VELYNX: 'Evidence is divided — here is why
+         both are true in different contexts'
+Layer 6 — Reasoning Core
+The PhD brain. Small but sharp. Does not recall facts — only reasons across what was retrieved.
+What do these sources collectively prove?
+What can be inferred beyond what is stated?
+What is missing that matters?
+How confident should the answer be?
+Layer 7 — Human Synthesis Layer
+Builds the final answer in natural human language across five tone profiles.
+Tone Profile
+When Used
+Scientific
+Precise, measured, evidence-first
+Philosophical
+Exploratory, questioning, honest about limits
+Casual
+Warm, relatable, uses analogies
+Teaching
+Step by step, patient, builds understanding
+Awe
+Used for questions about universe, existence, wonder
+03. Complete Tech Stack
+VS Code Setup
+Editor: Visual Studio Code
+Python extension — ms-python.python
+Pylance — ms-python.vscode-pylance
+ESLint — dbaeumer.vscode-eslint
+Prettier — esbenp.prettier-vscode
+Docker — ms-azuretools.vscode-docker
+GitLens — eamodio.gitlens
+Thunder Client — REST API testing inside VS Code
+Backend Stack
+Tool
+Type
+Purpose
+FastAPI
+Python
+Main API framework — async, fast, clean
+Python 3.11+
+Python
+Core language for all pipeline logic
+aiohttp
+Python
+Async HTTP — parallel API calls
+Playwright
+Python
+Browser automation — visits sites like human
+BeautifulSoup4
+Python
+HTML parsing and content extraction
+Whisper AI
+Python
+Video/audio transcription — free, local
+OpenCV
+Python
+Video frame extraction for visual learning
+feedparser
+Python
+arXiv RSS feed parsing
+datasketch
+Python
+MinHash deduplication
+Redis
+Service
+Session memory and query caching
+ChromaDB
+Python
+Vector memory for learned knowledge
+SQLite + FTS5
+Built-in
+Own search index — full text search
+Pydantic
+Python
+Data validation throughout pipeline
+Frontend Stack
+Tool
+Type
+Purpose
+React 18
+Framework
+Main UI framework
+Vite
+Build tool
+Fast development and production builds
+TailwindCSS
+Styling
+Utility-first styling
+Framer Motion
+Animation
+Smooth pipeline visualization
+Zustand
+State
+Lightweight global state management
+React Query
+Data
+Server state and caching
+Recharts
+Charts
+Confidence and accuracy visualizations
+Search Layer
+Source
+Cost
+Notes
+SearXNG
+Self-hosted
+Free forever — 70+ engines — deploy on HuggingFace
+Brave Search API
+Free tier
+2,000 queries/month — independent index
+Tavily API
+Free tier
+1,000 queries — AI-optimized — full page content
+arXiv API
+Free unlimited
+2M+ research papers — no key needed
+Wikipedia API
+Free unlimited
+Foundational knowledge — no key needed
+Semantic Scholar
+Free unlimited
+200M+ academic papers
+DuckDuckGo
+Unofficial free
+Fallback — no key — good for prototyping
+AI / Reasoning Layer
+Component
+Provider
+Role
+Claude API
+Anthropic
+Primary reasoning core — constitution, synthesis
+Groq API
+Free tier
+Fast inference for quick queries — Llama 3.3 70B
+Whisper (local)
+OpenAI — Free
+Audio and video transcription
+sentence-transformers
+HuggingFace
+Semantic similarity for deduplication
+Own fine-tuned model
+Future
+Small specialist model for truth scoring
+Deployment Stack
+Platform
+Purpose
+HuggingFace Spaces
+Backend API + SearXNG — free Docker deployment
+Vercel
+Frontend React app — free tier
+Railway.app
+Redis instance — free tier
+GitHub
+Version control — free with GitHub Education
+GitHub Actions
+CI/CD pipeline — free for public repos
+04. VS Code Project Structure
+Create this exact folder structure in VS Code from day one.
+velynx/
+  ├── backend/
+  │   ├── main.py                  # FastAPI app entry point
+  │   ├── requirements.txt
+  │   ├── Dockerfile
+  │   │
+  │   ├── constitution/            # VELYNX's rules of thinking
+  │   │   ├── logic.md
+  │   │   ├── science.md
+  │   │   ├── epistemology.md
+  │   │   ├── uncertainty.md
+  │   │   ├── communication.md
+  │   │   └── curiosity.md
+  │   │
+  │   ├── pipeline/
+  │   │   ├── intent_engine.py     # Layer 2 — query decomposition
+  │   │   ├── retrieval_mesh.py    # Layer 3 — parallel search
+  │   │   ├── truth_filter.py      # Layer 4 — credibility scoring
+  │   │   ├── contradiction.py     # Layer 5 — conflict detection
+  │   │   ├── reasoning_core.py    # Layer 6 — synthesis reasoning
+  │   │   └── synthesizer.py       # Layer 7 — human answer
+  │   │
+  │   ├── retrieval/
+  │   │   ├── searxng_client.py    # SearXNG interface
+  │   │   ├── brave_client.py      # Brave Search API
+  │   │   ├── tavily_client.py     # Tavily AI search
+  │   │   ├── arxiv_client.py      # Academic papers
+  │   │   ├── wiki_client.py       # Wikipedia
+  │   │   ├── browser.py           # Playwright human browsing
+  │   │   └── video_learner.py     # YouTube + Whisper
+  │   │
+  │   ├── memory/
+  │   │   ├── session.py           # Redis session memory
+  │   │   ├── vector_store.py      # ChromaDB knowledge
+  │   │   └── crawler_index.py     # Own SQLite search index
+  │   │
+  │   ├── learning/
+  │   │   ├── feedback_loop.py     # Learns from wrong answers
+  │   │   ├── source_trust.py      # Updates source credibility
+  │   │   └── gap_tracker.py       # Tracks knowledge gaps
+  │   │
+  │   └── models/
+  │       ├── query.py             # Pydantic models
+  │       ├── source.py
+  │       └── answer.py
+  │
+  ├── frontend/
+  │   ├── src/
+  │   │   ├── App.jsx
+  │   │   ├── components/
+  │   │   │   ├── SearchBar.jsx
+  │   │   │   ├── Pipeline.jsx     # Live pipeline visualization
+  │   │   │   ├── Answer.jsx
+  │   │   │   ├── Sources.jsx
+  │   │   │   ├── Analysis.jsx
+  │   │   │   └── AccuracyDash.jsx
+  │   │   ├── store/
+  │   │   │   └── velynx.js        # Zustand global state
+  │   │   └── api/
+  │   │       └── velynx.js        # API calls to backend
+  │   ├── package.json
+  │   └── vite.config.js
+  │
+  ├── searxng/
+  │   ├── settings.yml             # SearXNG configuration
+  │   └── Dockerfile
+  │
+  ├── crawler/
+  │   ├── spider.py               # Main crawler
+  │   ├── indexer.py              # SQLite FTS5 indexer
+  │   └── scheduler.py            # Continuous crawl scheduler
+  │
+  ├── tests/
+  │   ├── test_pipeline.py
+  │   ├── test_truth_filter.py
+  │   └── test_retrieval.py
+  │
+  ├── .env                        # API keys — never commit
+  ├── .env.example               # Template for keys
+  ├── .gitignore
+  ├── docker-compose.yml
+  └── README.md
+05. The Constitution — VELYNX's Soul
+The Constitution is the most important file in the entire project. It is loaded as system context for every single query. It defines how VELYNX thinks, not what it knows.
+constitution/logic.md
+# Rules of Valid Reasoning
+1. A claim requires evidence. Assertion is not evidence.
+2. Correlation is not causation. Always distinguish.
+3. Absence of evidence is not evidence of absence.
+4. Extraordinary claims require extraordinary evidence.
+5. The simplest explanation that fits all facts is preferred.
+6. Expert consensus carries more weight than individual opinion.
+7. Recent peer-reviewed evidence outweighs older sources.
+8. Never present a conclusion with more confidence than
+   the evidence supports.
+constitution/uncertainty.md
+# How VELYNX Handles Uncertainty
+CERTAIN   → 90%+ source consensus, peer-reviewed, recent
+PROBABLE  → 65-90% consensus, good sources, some debate
+DEBATED   → Active expert disagreement, present both sides
+UNKNOWN   → Insufficient sources, say so explicitly
+VELYNX never presents DEBATED as CERTAIN.
+VELYNX never presents UNKNOWN as PROBABLE.
+Intellectual honesty is non-negotiable.
+constitution/curiosity.md
+# How VELYNX Explores a Question
+Every question has multiple dimensions:
+  Scientific   — what do measurements and data say?
+  Historical   — how did understanding evolve?
+  Philosophical— what does this mean at a deeper level?
+  Human        — why do people ask this?
+  Practical    — what does someone DO with this answer?
+VELYNX explores all relevant dimensions before answering.
+VELYNX is curious, not just responsive.
+06. Week-by-Week Build Roadmap
+Realistic timeline for one developer with college hours 8:30 AM to 1:30 PM, evenings free.
+Phase 1 — Foundation (Weeks 1–2)
+Goal
+Project structure, constitution, environment setup, first working API call
+Set up VS Code workspace with folder structure from Section 04
+Create .env file with all API key placeholders
+Set up Python virtual environment — python -m venv venv
+Install all backend dependencies — pip install -r requirements.txt
+Set up React frontend — npm create vite@latest frontend
+Write all six constitution files — this is your most important work
+Build basic FastAPI server with one test endpoint
+Get first Claude API call working with constitution as system prompt
+Commit everything to GitHub
+End of Phase 1: You have a working API that can reason using the constitution.
+Phase 2 — Retrieval Layer (Weeks 3–4)
+Goal
+VELYNX can search the internet in parallel and return raw results
+Deploy SearXNG on HuggingFace Spaces — settings.yml configured
+Get free API keys: Tavily, Brave Search, Serper
+Build retrieval/searxng_client.py — test with 10 queries
+Build retrieval/tavily_client.py — test full page content
+Build retrieval/arxiv_client.py — test academic search
+Build retrieval/wiki_client.py — test foundational queries
+Build retrieval_mesh.py — run ALL sources in parallel with asyncio
+Measure and log response times — target under 8 seconds
+Basic deduplication — remove duplicate URLs
+End of Phase 2: VELYNX searches 5+ sources simultaneously in under 8 seconds.
+Phase 3 — Truth Filter (Weeks 5–6)
+Goal
+VELYNX can score every source for credibility and eliminate noise
+Build domain authority scoring — whitelist trusted domains
+Build freshness scoring — penalize old sources by topic type
+Build cross-source agreement measurement
+Build fact vs opinion detector using Claude API
+Build MinHash deduplication with datasketch
+Combine into truth_filter.py — single score per source
+Test on 50 diverse queries — check what gets filtered
+Tune thresholds — target keeping top 30% of sources
+End of Phase 3: VELYNX only reasons on high-quality sources.
+Phase 4 — Contradiction Engine (Weeks 7–8)
+Goal
+VELYNX finds where sources disagree and understands why
+Build claim extraction — pull factual claims from each source
+Build claim comparison — find semantically opposite claims
+Build contradiction classifier — minor vs major vs irreconcilable
+Build context resolver — explain why both might be true
+Connect to contradiction.py — outputs structured conflict report
+Test on controversial topics — health, science, current events
+Add contradiction summary to every answer
+End of Phase 4: VELYNX surfaces truth honestly, not conveniently.
+Phase 5 — Reasoning Core + Synthesis (Weeks 9–10)
+Goal
+Full pipeline connected — VELYNX gives complete human answers
+Build reasoning_core.py — Claude reasons across filtered sources
+Build confidence assignment — CERTAIN / PROBABLE / DEBATED / UNKNOWN
+Build synthesizer.py — final human answer in appropriate tone
+Connect all seven layers into one pipeline function
+Build accuracy report — sources used, confidence, contradictions, gaps
+End-to-end test with 100 diverse queries
+Measure quality — is the answer trustworthy and clear?
+Fix the worst 20% of answers based on testing
+End of Phase 5: VELYNX gives complete, accurate, source-grounded answers.
+Phase 6 — Browser + Video Learning (Weeks 11–12)
+Goal
+VELYNX visits websites like a human and learns from video
+Install Playwright — playwright install chromium
+Build browser.py — visit, scroll, extract full page content
+Handle JavaScript-rendered pages — wait for networkidle
+Build video_learner.py — download, transcribe with Whisper, extract knowledge
+Build frame extractor with OpenCV — visual understanding
+Connect browser to retrieval mesh — visit top sources directly
+Test on complex research queries that need full page content
+End of Phase 6: VELYNX reads the full internet, not just snippets.
+Phase 7 — Learning Feedback Loop (Weeks 13–14)
+Goal
+VELYNX learns from being wrong without retraining
+Build user feedback collection — thumbs up/down per answer
+Build source trust updater — wrong answers reduce source score
+Build gap tracker — records what VELYNX could not answer well
+Build query cache — do not re-search identical queries within 1 hour
+Build source blacklist — permanently low-trust sources blocked
+Store learning state in Redis — persists across sessions
+Test improvement over 1 week of use — measure accuracy trend
+End of Phase 7: VELYNX gets smarter every day without retraining.
+Phase 8 — Frontend + Deployment (Weeks 15–16)
+Goal
+VELYNX is live on the internet for real users
+Build React frontend — search bar, pipeline visualization, answer display
+Build live pipeline status — show each layer as it runs
+Build sources tab — all sources with credibility scores
+Build accuracy dashboard — confidence, contradictions, gaps
+Connect frontend to FastAPI backend
+Deploy backend to HuggingFace Spaces via Docker
+Deploy frontend to Vercel — free
+Deploy Redis to Railway.app — free tier
+Test end to end in production — fix deployment issues
+Share with first real users — collect feedback
+End of Phase 8: VELYNX is live. The world can use it.
+07. Environment Setup — Day One
+Step 1 — VS Code Workspace
+# Open terminal in VS Code (Ctrl + `)
+mkdir velynx
+cd velynx
+git init
+code .
+Step 2 — Python Environment
+python -m venv venv
+# Activate (Windows)
+.\venv\Scripts\activate
+# Activate (Mac/Linux)
+source venv/bin/activate
+pip install fastapi uvicorn aiohttp playwright
+pip install beautifulsoup4 feedparser datasketch
+pip install anthropic chromadb redis sentence-transformers
+pip install openai-whisper opencv-python pydantic python-dotenv
+pip install tavily-python
+playwright install chromium
+Step 3 — Frontend
+npm create vite@latest frontend -- --template react
+cd frontend
+npm install
+npm install tailwindcss framer-motion zustand
+npm install @tanstack/react-query recharts
+npx tailwindcss init
+Step 4 — Environment Variables
+# .env file — never commit to GitHub
+ANTHROPIC_API_KEY=your_key_here
+TAVILY_API_KEY=your_key_here
+BRAVE_SEARCH_API_KEY=your_key_here
+SERPER_API_KEY=your_key_here
+SEARXNG_BASE_URL=https://your-instance.hf.space
+REDIS_URL=redis://localhost:6379
+# Free keys from:
+# anthropic.com → Claude API
+# tavily.com    → 1,000 free queries
+# brave.com/search/api → 2,000 free queries
+# serper.dev    → 2,500 free queries
+Step 5 — First Test
+# backend/main.py
+from fastapi import FastAPI
+import anthropic, os
+from dotenv import load_dotenv
+load_dotenv()
+app    = FastAPI()
+client = anthropic.Anthropic(api_key=os.getenv('ANTHROPIC_API_KEY'))
+@app.get('/test')
+async def test():
+    msg = client.messages.create(
+        model='claude-opus-4-5',
+        max_tokens=200,
+        messages=[{'role':'user','content':'Say VELYNX is alive.'}]
+    )
+    return {'response': msg.content[0].text}
+# Run: uvicorn main:app --reload
+# Visit: http://localhost:8000/test
+08. The Accuracy Report — Every Answer
+Every answer VELYNX gives includes a structured accuracy report. This is what makes it trustworthy.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+VELYNX ACCURACY REPORT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Query               : How big is the observable universe?
+Sources retrieved   : 847
+Sources used        : 23  (passed truth filter)
+Consensus level     : 94%
+Confidence tier     : CERTAIN
+Last verified       : Live — 2 minutes ago
+Contradictions      : 2 minor (explained in answer)
+Knowledge gaps      : 1 (beyond observable universe)
+Tone used           : Awe + Scientific
+Sources cited       : NASA, arXiv:2301.04659, Nature 2022
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+09. Cost Breakdown
+Monthly Cost at Different Scales
+Usage
+Infrastructure
+Estimated Cost
+0–500 queries/month
+Free tier everything
+₹0
+500–5,000 queries/month
+Minimal API costs
+₹500–2,000
+5,000–50,000 queries/month
+Scale APIs
+₹2,000–15,000
+50,000+ queries/month
+Negotiate enterprise
+Revenue covers it
+Free Resources Available Right Now
+HuggingFace Spaces — free Docker hosting for backend + SearXNG
+Vercel — free frontend hosting
+Railway.app — free Redis tier
+GitHub — free version control with GitHub Education benefits
+arXiv API — unlimited free academic search
+Wikipedia API — unlimited free
+Kaggle — free GPU for any model fine-tuning needed
+Groq — free fast inference for lightweight reasoning tasks
+10. Future Vision — VELYNX Ecosystem
+VELYNX Core is the foundation. These products grow from it naturally.
+Product
+What It Does
+VELYNX Search
+What you are building now — daily life queries
+VELYNX Research
+Deep multi-hour analysis of complex topics
+VELYNX Watch
+Monitors topics over time, sends you alerts
+VELYNX Debate
+Shows both sides of any argument with sources
+VELYNX Verify
+Fact-checks any claim in real time
+VELYNX Learn
+Teaches you any topic from live sources
+VELYNX Code
+Finds and reasons across coding documentation and patterns
+NOVA + VELYNX
+NOVA thinks. VELYNX finds. Combined — unstoppable.
+VELYNX
+The Raised Mind
+"We don't store truth. We find it."
+Start with the Constitution.
+Everything else follows.

@@ -1,0 +1,27 @@
+{
+  "beliefs": {
+    "783a254193397ddb0f90adb1c4de826e38c495a6": {
+      "fact": "Velynx likes apples",
+      "layer": null,
+      "score": 0.55,
+      "source": "terminal",
+      "updated_at": "2026-05-25T06:08:04.533028+00:00"
+    }
+  },
+  "fact_history": {
+    "783a254193397ddb0f90adb1c4de826e38c495a6": [
+      {
+        "fact": "Velynx likes apples",
+        "layer": null,
+        "score": 0.55,
+        "source": "terminal",
+        "updated_at": "2026-05-25T06:08:04.533028+00:00"
+      }
+    ]
+  },
+  "strategy_scores": {
+    "practical": {
+      "broad_retrieval": 0.05
+    }
+  }
+}

@@ -1,0 +1,112 @@
+[
+  {
+    "id": "derivative-power-001",
+    "type": "math",
+    "topic": "calculus",
+    "difficulty": 2,
+    "title": "Power Rule Derivative",
+    "description": "d/dx of x**3",
+    "solution": "3*x**2",
+    "techniques": ["power-rule"],
+    "related_topics": ["derivatives"]
+  },
+  {
+    "id": "derivative-chain-001",
+    "type": "math",
+    "topic": "calculus",
+    "difficulty": 4,
+    "title": "Chain Rule Derivative",
+    "description": "d/dx of sin(x**2)",
+    "solution": "2*x*cos(x**2)",
+    "techniques": ["chain-rule"],
+    "related_topics": ["derivatives"]
+  },
+  {
+    "id": "derivative-product-001",
+    "type": "math",
+    "topic": "calculus",
+    "difficulty": 4,
+    "title": "Product Rule Derivative",
+    "description": "d/dx of x**2 * sin(x)",
+    "solution": "2*x*sin(x) + x**2*cos(x)",
+    "techniques": ["product-rule"],
+    "related_topics": ["derivatives"]
+  },
+  {
+    "id": "integral-power-001",
+    "type": "math",
+    "topic": "calculus",
+    "difficulty": 2,
+    "title": "Power Rule Integral",
+    "description": "integral of x**2 dx",
+    "solution": "x**3/3",
+    "techniques": ["power-rule"],
+    "related_topics": ["integrals"]
+  },
+  {
+    "id": "integral-substitution-001",
+    "type": "math",
+    "topic": "calculus",
+    "difficulty": 5,
+    "title": "Integration by Substitution",
+    "description": "integral of 2*x*cos(x**2) dx",
+    "solution": "sin(x**2)",
+    "techniques": ["u-substitution"],
+    "related_topics": ["integrals"]
+  },
+  {
+    "id": "integral-parts-001",
+    "type": "math",
+    "topic": "calculus",
+    "difficulty": 6,
+    "title": "Integration by Parts",
+    "description": "integral of x*e**x dx",
+    "solution": "x*e**x - e**x",
+    "techniques": ["integration-by-parts"],
+    "related_topics": ["integrals"]
+  },
+  {
+    "id": "limit-infinity-001",
+    "type": "math",
+    "topic": "calculus",
+    "difficulty": 3,
+    "title": "Limit at Infinity",
+    "description": "limit of (3*x**2 + x) / x**2 as x -> oo",
+    "solution": "3",
+    "techniques": ["limit"],
+    "related_topics": ["limits"]
+  },
+  {
+    "id": "limit-lhopital-001",
+    "type": "math",
+    "topic": "calculus",
+    "difficulty": 5,
+    "title": "L'Hopital's Rule",
+    "description": "limit of sin(x)/x as x -> 0",
+    "solution": "1",
+    "techniques": ["lhopital"],
+    "related_topics": ["limits"]
+  },
+  {
+    "id": "critical-points-001",
+    "type": "math",
+    "topic": "calculus",
+    "difficulty": 5,
+    "title": "Find Critical Points",
+    "description": "Find critical points of f(x) = x**3 - 3*x",
+    "solution": "x = -1, x = 1",
+    "techniques": ["derivatives", "optimization"],
+    "related_topics": ["maxima-minima"]
+  },
+  {
+    "id": "definite-integral-001",
+    "type": "math",
+    "topic": "calculus",
+    "difficulty": 4,
+    "title": "Definite Integral",
+    "description": "integral from 0 to 1 of x**2 dx",
+    "solution": "1/3",
+    "techniques": ["fundamental-theorem"],
+    "related_topics": ["integrals"]
+  }
+]

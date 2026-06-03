@@ -1,0 +1,16 @@
+node_modules/
+dist/
+.env
+.vscode/
+.DS_Store
+coverage/
+.openclaude/
+.pytest_cache/
+__pycache__/
+*.py[cod]
+.venv/
+.venv314/
+backend_backup_phase35/
+/data/chroma_db/
+/models/
+/velynx_output/

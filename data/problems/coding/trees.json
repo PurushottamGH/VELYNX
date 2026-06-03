@@ -1,0 +1,103 @@
+[
+  {
+    "id": "tree-traversal-001",
+    "type": "coding",
+    "topic": "trees",
+    "difficulty": 3,
+    "title": "Binary Tree Inorder Traversal",
+    "description": "Given a binary tree represented as a list (None for missing nodes), return the inorder traversal.",
+    "template": "def inorder(tree):\n    pass",
+    "test_cases": [
+      {"input": "inorder([1,None,2,3])", "output": "[1, 3, 2]"},
+      {"input": "inorder([])", "output": "[]"},
+      {"input": "inorder([1])", "output": "[1]"}
+    ],
+    "solution": "def inorder(tree):\n    if not tree: return []\n    result = []\n    def dfs(i):\n        if i >= len(tree) or tree[i] is None: return\n        dfs(2*i+1)\n        result.append(tree[i])\n        dfs(2*i+2)\n    dfs(0)\n    return result",
+    "techniques": ["dfs", "recursion"],
+    "related_topics": ["trees"]
+  },
+  {
+    "id": "max-depth-001",
+    "type": "coding",
+    "topic": "trees",
+    "difficulty": 2,
+    "title": "Maximum Depth of Binary Tree",
+    "description": "Given a binary tree represented as a list, return its maximum depth.",
+    "template": "def max_depth(tree):\n    pass",
+    "test_cases": [
+      {"input": "max_depth([3,9,20,None,None,15,7])", "output": "3"},
+      {"input": "max_depth([1,None,2])", "output": "2"},
+      {"input": "max_depth([])", "output": "0"}
+    ],
+    "solution": "def max_depth(tree):\n    if not tree: return 0\n    def depth(i):\n        if i >= len(tree) or tree[i] is None: return 0\n        return 1 + max(depth(2*i+1), depth(2*i+2))\n    return depth(0)",
+    "techniques": ["dfs", "recursion"],
+    "related_topics": ["trees"]
+  },
+  {
+    "id": "is-same-tree-001",
+    "type": "coding",
+    "topic": "trees",
+    "difficulty": 2,
+    "title": "Same Tree",
+    "description": "Given two binary trees represented as lists, check if they are identical.",
+    "template": "def is_same_tree(p, q):\n    pass",
+    "test_cases": [
+      {"input": "is_same_tree([1,2,3], [1,2,3])", "output": "True"},
+      {"input": "is_same_tree([1,2], [1,None,2])", "output": "False"},
+      {"input": "is_same_tree([1,2,1], [1,1,2])", "output": "False"}
+    ],
+    "solution": "def is_same_tree(p, q):\n    if not p and not q: return True\n    if not p or not q: return False\n    if p[0] != q[0]: return False\n    def same(i, j):\n        li = 2*i+1 if i < len(p) else i\n        ri = 2*i+2 if i < len(p) else i\n        lj = 2*j+1 if j < len(q) else j\n        rj = 2*j+2 if j < len(q) else j\n        lv = p[li] if li < len(p) and p[li] is not None else None\n        rv = p[ri] if ri < len(p) and p[ri] is not None else None\n        ljv = q[lj] if lj < len(q) and q[lj] is not None else None\n        rjv = q[rj] if rj < len(q) and q[rj] is not None else None\n        if lv != ljv or rv != rjv: return False\n        return True\n    return same(0, 0)",
+    "techniques": ["dfs", "recursion"],
+    "related_topics": ["trees"]
+  },
+  {
+    "id": "level-order-001",
+    "type": "coding",
+    "topic": "trees",
+    "difficulty": 4,
+    "title": "Level Order Traversal",
+    "description": "Given a binary tree represented as a list, return the level order traversal as a list of lists.",
+    "template": "def level_order(tree):\n    pass",
+    "test_cases": [
+      {"input": "level_order([3,9,20,None,None,15,7])", "output": "[[3], [9, 20], [15, 7]]"},
+      {"input": "level_order([1])", "output": "[[1]]"},
+      {"input": "level_order([])", "output": "[]"}
+    ],
+    "solution": "def level_order(tree):\n    if not tree: return []\n    from collections import deque\n    result = []\n    queue = deque([(0, 0)])\n    while queue:\n        i, level = queue.popleft()\n        if i >= len(tree) or tree[i] is None: continue\n        if len(result) <= level:\n            result.append([])\n        result[level].append(tree[i])\n        queue.append((2*i+1, level+1))\n        queue.append((2*i+2, level+1))\n    return result",
+    "techniques": ["bfs"],
+    "related_topics": ["trees"]
+  },
+  {
+    "id": "invert-tree-001",
+    "type": "coding",
+    "topic": "trees",
+    "difficulty": 3,
+    "title": "Invert Binary Tree",
+    "description": "Given a binary tree represented as a list, invert it (swap left and right children at every level) and return the inverted tree as a list.",
+    "template": "def invert_tree(tree):\n    pass",
+    "test_cases": [
+      {"input": "invert_tree([4,2,7,1,3,6,9])", "output": "[4, 7, 2, 9, 6, 3, 1]"},
+      {"input": "invert_tree([2,1,3])", "output": "[2, 3, 1]"},
+      {"input": "invert_tree([])", "output": "[]"}
+    ],
+    "solution": "def invert_tree(tree):\n    if not tree: return []\n    result = list(tree)\n    def invert(i):\n        if i >= len(result) or result[i] is None: return\n        li, ri = 2*i+1, 2*i+2\n        if li < len(result) and ri < len(result):\n            result[li], result[ri] = result[ri], result[li]\n        invert(li)\n        invert(ri)\n    invert(0)\n    return result",
+    "techniques": ["dfs", "recursion"],
+    "related_topics": ["trees"]
+  },
+  {
+    "id": "is-subtree-001",
+    "type": "coding",
+    "topic": "trees",
+    "difficulty": 4,
+    "title": "Subtree of Another Tree",
+    "description": "Given two binary trees as lists, check if the second tree is a subtree of the first.",
+    "template": "def is_subtree(root, sub):\n    pass",
+    "test_cases": [
+      {"input": "is_subtree([3,4,5,1,2], [4,1,2])", "output": "True"},
+      {"input": "is_subtree([3,4,5,1,2,None,None,None,None,0], [4,1,2])", "output": "False"}
+    ],
+    "solution": "def is_subtree(root, sub):\n    if not sub: return True\n    if not root: return False\n    def same(a, b):\n        if a >= len(root) and b >= len(sub): return True\n        if a >= len(root) or b >= len(sub): return False\n        if root[a] is None and sub[b] is None: return True\n        if root[a] is None or sub[b] is None: return False\n        if root[a] != sub[b]: return False\n        return same(2*a+1, 2*b+1) and same(2*a+2, 2*b+2)\n    def search(i):\n        if i >= len(root): return False\n        if root[i] is not None and root[i] == sub[0] and same(i, 0):\n            return True\n        return search(2*i+1) or search(2*i+2)\n    return search(0)",
+    "techniques": ["dfs", "recursion"],
+    "related_topics": ["trees"]
+  }
+]

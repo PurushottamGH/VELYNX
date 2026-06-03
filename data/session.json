@@ -1,0 +1,21 @@
+{
+  "current_lesson": null,
+  "history": [
+    {
+      "answer": "5",
+      "correct": true,
+      "lesson_id": "addition_two_plus_three",
+      "next_lesson_id": "letters_a_to_b",
+      "prompt": "What is 2 + 3?",
+      "timestamp": "2026-05-24T12:45:36.435423+00:00"
+    },
+    {
+      "answer": "Velynx likes apples.",
+      "correct": true,
+      "lesson_id": "freeform",
+      "next_lesson_id": null,
+      "prompt": "Velynx likes apples",
+      "timestamp": "2026-05-24T13:22:10.024675+00:00"
+    }
+  ]
+}

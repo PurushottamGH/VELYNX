@@ -1,0 +1,34 @@
+{
+  "dna?": {
+    "concept": "What is DNA?",
+    "domain": "biology",
+    "what": "Deoxyribonucleic acid (pronunciation; DNA) is a polymer composed of two polynucleotide chains that coil around each other to form a double helix.",
+    "how": "Deoxyribonucleic acid (pronunciation; DNA) is a polymer composed of two polynucleotide chains that coil around each other to form a double helix. The DNA\u00b2 (Japanese: D\u30fbN\u30fbA\u00b2 \uff5e\u4f55\u51e6\u304b\u3067\u5931\u304f\u3057\u305f\u3042\u3044\u3064\u306e\u30a2\u30a4\u30c4\uff5e, Hepburn: D\u012b En Ei Ts\u016b: Dokoka de Nakushita Aitsu no Aitsu) is a Japanese manga series written and illustrated Mitochondrial DNA (mDNA or mtDNA) is the DNA located in the mitochondria organelles in a eukaryotic cell that converts chemical energy from food into adenosine Deoxyribonucleic acid is a polymer composed of two polynucleotide chains that coil around each other to form a double helix.",
+    "why": "",
+    "so_what": "",
+    "human_meaning": "What is DNA? is part of what makes life possible.",
+    "connects_to": [
+      "Deoxyribonucleic",
+      "Japanese",
+      "Hepburn",
+      "En Ei",
+      "Dokoka",
+      "Nakushita Aitsu",
+      "Aitsu",
+      "Mitochondrial",
+      "Alongside",
+      "Each",
+      "Category"
+    ],
+    "depends_on": [],
+    "enables": [],
+    "open_questions": [],
+    "contradictions": [],
+    "confidence": 0.76,
+    "source_count": 6,
+    "query_count": 0,
+    "depth_score": 0.6,
+    "created_at": 1780209561.051158,
+    "updated_at": 1780209561.051158
+  }
+}

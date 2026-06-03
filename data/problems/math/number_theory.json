@@ -1,0 +1,112 @@
+[
+  {
+    "id": "is-prime-001",
+    "type": "math",
+    "topic": "number-theory",
+    "difficulty": 2,
+    "title": "Primality Test",
+    "description": "Is 97 prime?",
+    "solution": "Yes",
+    "techniques": ["trial-division"],
+    "related_topics": ["primes"]
+  },
+  {
+    "id": "gcd-001",
+    "type": "math",
+    "topic": "number-theory",
+    "difficulty": 2,
+    "title": "Greatest Common Divisor",
+    "description": "GCD of 48 and 18",
+    "solution": "6",
+    "techniques": ["euclidean-algorithm"],
+    "related_topics": ["divisibility"]
+  },
+  {
+    "id": "lcm-001",
+    "type": "math",
+    "topic": "number-theory",
+    "difficulty": 2,
+    "title": "Least Common Multiple",
+    "description": "LCM of 12 and 18",
+    "solution": "36",
+    "techniques": ["euclidean-algorithm"],
+    "related_topics": ["divisibility"]
+  },
+  {
+    "id": "prime-factorization-001",
+    "type": "math",
+    "topic": "number-theory",
+    "difficulty": 3,
+    "title": "Prime Factorization",
+    "description": "Prime factorization of 360",
+    "solution": "2**3 * 3**2 * 5",
+    "techniques": ["trial-division"],
+    "related_topics": ["primes"]
+  },
+  {
+    "id": "modular-arithmetic-001",
+    "type": "math",
+    "topic": "number-theory",
+    "difficulty": 3,
+    "title": "Modular Arithmetic",
+    "description": "What is 17 mod 5?",
+    "solution": "2",
+    "techniques": ["modular-arithmetic"],
+    "related_topics": ["congruences"]
+  },
+  {
+    "id": "modular-exponentiation-001",
+    "type": "math",
+    "topic": "number-theory",
+    "difficulty": 5,
+    "title": "Modular Exponentiation",
+    "description": "What is 2**10 mod 1000?",
+    "solution": "24",
+    "techniques": ["modular-arithmetic"],
+    "related_topics": ["cryptography"]
+  },
+  {
+    "id": "fibonacci-closed-001",
+    "type": "math",
+    "topic": "number-theory",
+    "difficulty": 4,
+    "title": "Fibonacci Closed Form",
+    "description": "What is the 10th Fibonacci number?",
+    "solution": "55",
+    "techniques": ["recurrence"],
+    "related_topics": ["sequences"]
+  },
+  {
+    "id": "divisors-001",
+    "type": "math",
+    "topic": "number-theory",
+    "difficulty": 3,
+    "title": "Count Divisors",
+    "description": "How many positive divisors does 28 have?",
+    "solution": "6",
+    "techniques": ["divisibility"],
+    "related_topics": ["primes"]
+  },
+  {
+    "id": "perfect-square-001",
+    "type": "math",
+    "topic": "number-theory",
+    "difficulty": 2,
+    "title": "Perfect Square",
+    "description": "Is 144 a perfect square?",
+    "solution": "Yes (12**2)",
+    "techniques": ["square-root"],
+    "related_topics": ["numbers"]
+  },
+  {
+    "id": "chinese-remainder-001",
+    "type": "math",
+    "topic": "number-theory",
+    "difficulty": 6,
+    "title": "Chinese Remainder Theorem",
+    "description": "Find x such that x mod 3 = 2 and x mod 5 = 3",
+    "solution": "8",
+    "techniques": ["chinese-remainder"],
+    "related_topics": ["modular-arithmetic"]
+  }
+]

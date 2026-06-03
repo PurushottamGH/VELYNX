@@ -1,0 +1,167 @@
+[
+  {
+    "id": "solve-linear-001",
+    "type": "math",
+    "topic": "algebra",
+    "difficulty": 2,
+    "title": "Solve Linear Equation",
+    "description": "2*x + 5 = 13",
+    "solution": "4",
+    "techniques": ["algebra"],
+    "related_topics": ["equations"]
+  },
+  {
+    "id": "solve-quadratic-001",
+    "type": "math",
+    "topic": "algebra",
+    "difficulty": 4,
+    "title": "Solve Quadratic Equation",
+    "description": "x**2 - 5*x + 6 = 0",
+    "solution": "2, 3",
+    "techniques": ["factoring", "quadratic-formula"],
+    "related_topics": ["polynomials"]
+  },
+  {
+    "id": "factor-polynomial-001",
+    "type": "math",
+    "topic": "algebra",
+    "difficulty": 3,
+    "title": "Factor Polynomial",
+    "description": "Factor x**2 - 9",
+    "solution": "(x - 3)*(x + 3)",
+    "techniques": ["difference-of-squares"],
+    "related_topics": ["factoring"]
+  },
+  {
+    "id": "simplify-rational-001",
+    "type": "math",
+    "topic": "algebra",
+    "difficulty": 3,
+    "title": "Simplify Expression",
+    "description": "Simplify (x**2 - 4)/(x - 2)",
+    "solution": "x + 2",
+    "techniques": ["factoring", "cancellation"],
+    "related_topics": ["rational-expressions"]
+  },
+  {
+    "id": "system-equations-001",
+    "type": "math",
+    "topic": "algebra",
+    "difficulty": 5,
+    "title": "System of Linear Equations",
+    "description": "2*x + y = 5, x - y = 1",
+    "solution": "x = 2, y = 1",
+    "techniques": ["substitution", "elimination"],
+    "related_topics": ["linear-algebra"]
+  },
+  {
+    "id": "exponential-solve-001",
+    "type": "math",
+    "topic": "algebra",
+    "difficulty": 4,
+    "title": "Exponential Equation",
+    "description": "Solve 2**x = 16",
+    "solution": "4",
+    "techniques": ["logarithms"],
+    "related_topics": ["exponents"]
+  },
+  {
+    "id": "logarithm-001",
+    "type": "math",
+    "topic": "algebra",
+    "difficulty": 2,
+    "title": "Logarithm",
+    "description": "log(1000)",
+    "solution": "3",
+    "techniques": ["logarithms"],
+    "related_topics": ["exponents"]
+  },
+  {
+    "id": "binomial-expand-001",
+    "type": "math",
+    "topic": "algebra",
+    "difficulty": 4,
+    "title": "Binomial Expansion",
+    "description": "Expand (x + 1)**3",
+    "solution": "x**3 + 3*x**2 + 3*x + 1",
+    "techniques": ["binomial-theorem"],
+    "related_topics": ["polynomials"]
+  },
+  {
+    "id": "solve-cubic-001",
+    "type": "math",
+    "topic": "algebra",
+    "difficulty": 5,
+    "title": "Solve Cubic Equation",
+    "description": "x**3 - 6*x**2 + 11*x - 6 = 0",
+    "solution": "1, 2, 3",
+    "techniques": ["factoring"],
+    "related_topics": ["polynomials"]
+  },
+  {
+    "id": "sum-geometric-001",
+    "type": "math",
+    "topic": "algebra",
+    "difficulty": 4,
+    "title": "Geometric Series Sum",
+    "description": "Sum of 1 + 2 + 4 + 8 + 16 + 32",
+    "solution": "63",
+    "techniques": ["geometric-series"],
+    "related_topics": ["sequences"]
+  },
+  {
+    "id": "sum-arithmetic-001",
+    "type": "math",
+    "topic": "algebra",
+    "difficulty": 3,
+    "title": "Arithmetic Series Sum",
+    "description": "Sum of 1 + 2 + 3 + ... + 100",
+    "solution": "5050",
+    "techniques": ["arithmetic-series"],
+    "related_topics": ["sequences"]
+  },
+  {
+    "id": "quadratic-vertex-001",
+    "type": "math",
+    "topic": "algebra",
+    "difficulty": 4,
+    "title": "Quadratic Vertex",
+    "description": "Find the vertex of y = x**2 - 4*x + 3",
+    "solution": "(2, -1)",
+    "techniques": ["completing-the-square"],
+    "related_topics": ["parabolas"]
+  },
+  {
+    "id": "rational-simplify-002",
+    "type": "math",
+    "topic": "algebra",
+    "difficulty": 3,
+    "title": "Simplify Radical",
+    "description": "Simplify sqrt(50)",
+    "solution": "5*sqrt(2)",
+    "techniques": ["radicals"],
+    "related_topics": ["simplification"]
+  },
+  {
+    "id": "complex-multiply-001",
+    "type": "math",
+    "topic": "algebra",
+    "difficulty": 4,
+    "title": "Complex Number Multiplication",
+    "description": "(2 + 3j) * (1 - 2j)",
+    "solution": "8 - 1j",
+    "techniques": ["complex-arithmetic"],
+    "related_topics": ["complex-numbers"]
+  },
+  {
+    "id": "polynomial-remainder-001",
+    "type": "math",
+    "topic": "algebra",
+    "difficulty": 4,
+    "title": "Polynomial Remainder",
+    "description": "What is the remainder when x**3 + 2*x**2 - 5*x + 1 is divided by (x - 1)?",
+    "solution": "-1",
+    "techniques": ["remainder-theorem"],
+    "related_topics": ["polynomials"]
+  }
+]

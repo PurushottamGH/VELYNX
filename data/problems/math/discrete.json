@@ -1,0 +1,112 @@
+[
+  {
+    "id": "combination-001",
+    "type": "math",
+    "topic": "discrete-math",
+    "difficulty": 3,
+    "title": "Combinations",
+    "description": "C(10, 3) = ?",
+    "solution": "120",
+    "techniques": ["combinatorics"],
+    "related_topics": ["probability"]
+  },
+  {
+    "id": "permutation-001",
+    "type": "math",
+    "topic": "discrete-math",
+    "difficulty": 3,
+    "title": "Permutations",
+    "description": "P(5, 3) = ?",
+    "solution": "60",
+    "techniques": ["combinatorics"],
+    "related_topics": ["probability"]
+  },
+  {
+    "id": "pigeonhole-001",
+    "type": "math",
+    "topic": "discrete-math",
+    "difficulty": 4,
+    "title": "Pigeonhole Principle",
+    "description": "In a group of 13 people, at least how many share a birth month?",
+    "solution": "2",
+    "techniques": ["pigeonhole"],
+    "related_topics": ["combinatorics"]
+  },
+  {
+    "id": "graph-edges-001",
+    "type": "math",
+    "topic": "discrete-math",
+    "difficulty": 2,
+    "title": "Graph Edges",
+    "description": "Maximum edges in a simple graph with 5 vertices?",
+    "solution": "10",
+    "techniques": ["graph-theory"],
+    "related_topics": ["graphs"]
+  },
+  {
+    "id": "euler-path-001",
+    "type": "math",
+    "topic": "discrete-math",
+    "difficulty": 5,
+    "title": "Euler Path",
+    "description": "Does a graph with vertices of degree 2, 3, 3, 4 have an Euler path?",
+    "solution": "Yes (exactly 2 odd-degree vertices)",
+    "techniques": ["graph-theory"],
+    "related_topics": ["graphs"]
+  },
+  {
+    "id": "induction-001",
+    "type": "math",
+    "topic": "discrete-math",
+    "difficulty": 5,
+    "title": "Proof by Induction",
+    "description": "Prove: 1+2+...+n = n(n+1)/2",
+    "solution": "Base: 1=1(2)/2=1. Assume true for k. Then 1+...+k+(k+1) = k(k+1)/2 + (k+1) = (k+1)(k+2)/2.",
+    "techniques": ["mathematical-induction"],
+    "related_topics": ["proofs"]
+  },
+  {
+    "id": "set-union-001",
+    "type": "math",
+    "topic": "discrete-math",
+    "difficulty": 2,
+    "title": "Set Operations",
+    "description": "|A ∪ B| where |A|=10, |B|=15, |A ∩ B|=5",
+    "solution": "20",
+    "techniques": ["inclusion-exclusion"],
+    "related_topics": ["sets"]
+  },
+  {
+    "id": "recurrence-001",
+    "type": "math",
+    "topic": "discrete-math",
+    "difficulty": 5,
+    "title": "Recurrence Relation",
+    "description": "Solve: a(n) = 3*a(n-1), a(0) = 2. What is a(4)?",
+    "solution": "162",
+    "techniques": ["recurrence"],
+    "related_topics": ["sequences"]
+  },
+  {
+    "id": "bayes-theorem-001",
+    "type": "math",
+    "topic": "discrete-math",
+    "difficulty": 5,
+    "title": "Bayes' Theorem",
+    "description": "A disease affects 1% of people. Test is 99% accurate. If positive, what's the probability of having the disease?",
+    "solution": "0.5 (approximately)",
+    "techniques": ["bayes-theorem"],
+    "related_topics": ["probability"]
+  },
+  {
+    "id": "expected-value-001",
+    "type": "math",
+    "topic": "discrete-math",
+    "difficulty": 3,
+    "title": "Expected Value",
+    "description": "Expected value of a fair 6-sided die?",
+    "solution": "3.5",
+    "techniques": ["expected-value"],
+    "related_topics": ["probability"]
+  }
+]

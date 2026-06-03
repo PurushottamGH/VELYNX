@@ -1,0 +1,95 @@
+[
+  {
+    "id": "bfs-001",
+    "type": "coding",
+    "topic": "graphs",
+    "difficulty": 3,
+    "title": "Breadth-First Search",
+    "description": "Given an adjacency list graph and a start node, return the BFS traversal order.",
+    "template": "def bfs(graph, start):\n    pass",
+    "test_cases": [
+      {"input": "bfs({0:[1,2], 1:[2], 2:[0,3], 3:[3]}, 2)", "output": "[2, 0, 3, 1]"}
+    ],
+    "solution": "def bfs(graph, start):\n    from collections import deque\n    visited = set([start])\n    queue = deque([start])\n    order = []\n    while queue:\n        node = queue.popleft()\n        order.append(node)\n        for neighbor in graph.get(node, []):\n            if neighbor not in visited:\n                visited.add(neighbor)\n                queue.append(neighbor)\n    return order",
+    "techniques": ["bfs"],
+    "related_topics": ["graphs"]
+  },
+  {
+    "id": "dfs-001",
+    "type": "coding",
+    "topic": "graphs",
+    "difficulty": 3,
+    "title": "Depth-First Search",
+    "description": "Given an adjacency list graph and a start node, return the DFS traversal order.",
+    "template": "def dfs(graph, start):\n    pass",
+    "test_cases": [
+      {"input": "dfs({0:[1,2], 1:[2], 2:[0,3], 3:[3]}, 2)", "output": "[2, 0, 1, 3]"}
+    ],
+    "solution": "def dfs(graph, start):\n    visited = set()\n    order = []\n    def traverse(node):\n        if node in visited: return\n        visited.add(node)\n        order.append(node)\n        for neighbor in graph.get(node, []):\n            traverse(neighbor)\n    traverse(start)\n    return order",
+    "techniques": ["dfs", "recursion"],
+    "related_topics": ["graphs"]
+  },
+  {
+    "id": "has-cycle-001",
+    "type": "coding",
+    "topic": "graphs",
+    "difficulty": 4,
+    "title": "Detect Cycle in Graph",
+    "description": "Given a directed graph as adjacency list, determine if it has a cycle.",
+    "template": "def has_cycle(graph):\n    pass",
+    "test_cases": [
+      {"input": "has_cycle({0:[1], 1:[2], 2:[0]})", "output": "True"},
+      {"input": "has_cycle({0:[1], 1:[2], 2:[]})", "output": "False"}
+    ],
+    "solution": "def has_cycle(graph):\n    WHITE, GRAY, BLACK = 0, 1, 2\n    color = {n: WHITE for n in graph}\n    def dfs(node):\n        color[node] = GRAY\n        for neighbor in graph.get(node, []):\n            if color[neighbor] == GRAY: return True\n            if color[neighbor] == WHITE and dfs(neighbor): return True\n        color[node] = BLACK\n        return False\n    for node in graph:\n        if color[node] == WHITE and dfs(node): return True\n    return False",
+    "techniques": ["dfs"],
+    "related_topics": ["graphs"]
+  },
+  {
+    "id": "shortest-path-001",
+    "type": "coding",
+    "topic": "graphs",
+    "difficulty": 5,
+    "title": "Shortest Path (Unweighted)",
+    "description": "Given an adjacency list and start/end nodes, return the shortest path length, or -1 if unreachable.",
+    "template": "def shortest_path(graph, start, end):\n    pass",
+    "test_cases": [
+      {"input": "shortest_path({0:[1,2], 1:[3], 2:[3], 3:[]}, 0, 3)", "output": "2"},
+      {"input": "shortest_path({0:[1], 2:[3]}, 0, 3)", "output": "-1"}
+    ],
+    "solution": "def shortest_path(graph, start, end):\n    from collections import deque\n    if start == end: return 0\n    visited = set([start])\n    queue = deque([(start, 0)])\n    while queue:\n        node, dist = queue.popleft()\n        for neighbor in graph.get(node, []):\n            if neighbor == end: return dist + 1\n            if neighbor not in visited:\n                visited.add(neighbor)\n                queue.append((neighbor, dist + 1))\n    return -1",
+    "techniques": ["bfs"],
+    "related_topics": ["graphs"]
+  },
+  {
+    "id": "topological-sort-001",
+    "type": "coding",
+    "topic": "graphs",
+    "difficulty": 5,
+    "title": "Topological Sort",
+    "description": "Given a DAG as adjacency list, return a topological ordering of nodes.",
+    "template": "def topo_sort(graph):\n    pass",
+    "test_cases": [
+      {"input": "topo_sort({0:[1,2], 1:[3], 2:[3], 3:[]})", "output": "[0, 2, 1, 3]"}
+    ],
+    "solution": "def topo_sort(graph):\n    visited = set()\n    order = []\n    def dfs(node):\n        if node in visited: return\n        visited.add(node)\n        for neighbor in graph.get(node, []):\n            dfs(neighbor)\n        order.append(node)\n    for node in graph:\n        dfs(node)\n    return order[::-1]",
+    "techniques": ["dfs"],
+    "related_topics": ["dag"]
+  },
+  {
+    "id": "connected-components-001",
+    "type": "coding",
+    "topic": "graphs",
+    "difficulty": 4,
+    "title": "Count Connected Components",
+    "description": "Given an undirected graph, count the number of connected components.",
+    "template": "def count_components(graph, n):\n    pass",
+    "test_cases": [
+      {"input": "count_components({0:[1], 1:[0], 2:[3], 3:[2]}, 4)", "output": "2"},
+      {"input": "count_components({0:[1,2], 1:[0], 2:[0]}, 3)", "output": "1"}
+    ],
+    "solution": "def count_components(graph, n):\n    visited = set()\n    count = 0\n    def dfs(node):\n        visited.add(node)\n        for neighbor in graph.get(node, []):\n            if neighbor not in visited:\n                dfs(neighbor)\n    for i in range(n):\n        if i not in visited:\n            dfs(i)\n            count += 1\n    return count",
+    "techniques": ["dfs", "union-find"],
+    "related_topics": ["graphs"]
+  }
+]

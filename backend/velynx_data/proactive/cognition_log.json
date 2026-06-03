@@ -1,0 +1,742 @@
+[
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.0,
+    "confidence_after": 0.749999994809822,
+    "sources_found": 6,
+    "timestamp": 1780330558.3307912,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499998229544405,
+    "confidence_after": 0.7499999946258548,
+    "sources_found": 6,
+    "timestamp": 1780330563.7728968,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499737833727435,
+    "confidence_after": 0.7499999956367125,
+    "sources_found": 6,
+    "timestamp": 1780330868.8694925,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499998236577338,
+    "confidence_after": 0.7499999950726001,
+    "sources_found": 6,
+    "timestamp": 1780330873.9996552,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499737815029822,
+    "confidence_after": 0.7499999949719551,
+    "sources_found": 6,
+    "timestamp": 1780331179.1232636,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499998249471395,
+    "confidence_after": 0.7499999957357846,
+    "sources_found": 6,
+    "timestamp": 1780331184.2280302,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499953511580033,
+    "confidence_after": 0.7499999956795741,
+    "sources_found": 6,
+    "timestamp": 1780331240.8501017,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499998231989439,
+    "confidence_after": 0.7499999960816364,
+    "sources_found": 6,
+    "timestamp": 1780331245.9500523,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499670748007035,
+    "confidence_after": 0.7499999957041402,
+    "sources_found": 6,
+    "timestamp": 1780331628.2952268,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499998260901407,
+    "confidence_after": 0.7499999954913846,
+    "sources_found": 6,
+    "timestamp": 1780331633.3656714,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.749988691271067,
+    "confidence_after": 0.7499999949257405,
+    "sources_found": 6,
+    "timestamp": 1780331766.7090635,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499998253522436,
+    "confidence_after": 0.7499999957467947,
+    "sources_found": 6,
+    "timestamp": 1780331771.7716122,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499737789397409,
+    "confidence_after": 0.7499999949167999,
+    "sources_found": 6,
+    "timestamp": 1780332076.9003034,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.74999982442653,
+    "confidence_after": 0.7499999938341687,
+    "sources_found": 6,
+    "timestamp": 1780332082.0079553,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499934757920839,
+    "confidence_after": 0.749999994328825,
+    "sources_found": 6,
+    "timestamp": 1780332160.2142208,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.749999819738005,
+    "confidence_after": 0.7499999951916437,
+    "sources_found": 6,
+    "timestamp": 1780332165.3533876,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.749973780880094,
+    "confidence_after": 0.7499999954347396,
+    "sources_found": 6,
+    "timestamp": 1780332470.4669542,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499998263775469,
+    "confidence_after": 0.7499999956092074,
+    "sources_found": 6,
+    "timestamp": 1780332475.5158718,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499737796119668,
+    "confidence_after": 0.749999994673518,
+    "sources_found": 6,
+    "timestamp": 1780332780.644417,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499998215752556,
+    "confidence_after": 0.749999994247055,
+    "sources_found": 6,
+    "timestamp": 1780332785.7618377,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499737811970432,
+    "confidence_after": 0.7499999951619242,
+    "sources_found": 6,
+    "timestamp": 1780333090.8552964,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499998240168931,
+    "confidence_after": 0.7499999952025506,
+    "sources_found": 6,
+    "timestamp": 1780333095.926433,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499945011246129,
+    "confidence_after": 0.7499999953607098,
+    "sources_found": 6,
+    "timestamp": 1780333162.331008,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499998233584896,
+    "confidence_after": 0.7499999950898812,
+    "sources_found": 6,
+    "timestamp": 1780333167.4193394,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499737798474176,
+    "confidence_after": 0.7499999953486439,
+    "sources_found": 6,
+    "timestamp": 1780333472.530656,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499998248572561,
+    "confidence_after": 0.7499999951039129,
+    "sources_found": 6,
+    "timestamp": 1780333477.6207643,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499810439366659,
+    "confidence_after": 0.7499999955306242,
+    "sources_found": 6,
+    "timestamp": 1780333699.0455425,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499998269006187,
+    "confidence_after": 0.7499999954272267,
+    "sources_found": 6,
+    "timestamp": 1780333704.0956357,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499645633325402,
+    "confidence_after": 0.7499999958531721,
+    "sources_found": 6,
+    "timestamp": 1780334115.3807995,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499998249097619,
+    "confidence_after": 0.7499999874848251,
+    "sources_found": 6,
+    "timestamp": 1780334120.5396376,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.749973780057806,
+    "confidence_after": 0.7499999960738541,
+    "sources_found": 6,
+    "timestamp": 1780334425.6260846,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499998250252872,
+    "confidence_after": 0.7499999957153363,
+    "sources_found": 6,
+    "timestamp": 1780334430.6849153,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499737833034346,
+    "confidence_after": 0.7499999958787524,
+    "sources_found": 6,
+    "timestamp": 1780334735.7658868,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499998252937771,
+    "confidence_after": 0.7499999950239224,
+    "sources_found": 6,
+    "timestamp": 1780334740.829729,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499737794403194,
+    "confidence_after": 0.7499999956240254,
+    "sources_found": 6,
+    "timestamp": 1780335045.939522,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499998258394286,
+    "confidence_after": 0.7499999954482124,
+    "sources_found": 6,
+    "timestamp": 1780335050.9979296,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499737846779773,
+    "confidence_after": 0.7499999961261739,
+    "sources_found": 6,
+    "timestamp": 1780335356.036639,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499998243205039,
+    "confidence_after": 0.7499999956623545,
+    "sources_found": 6,
+    "timestamp": 1780335361.118755,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499737816817481,
+    "confidence_after": 0.7499999949743347,
+    "sources_found": 6,
+    "timestamp": 1780335666.213921,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499998259291665,
+    "confidence_after": 0.7499999950379338,
+    "sources_found": 6,
+    "timestamp": 1780335671.2608953,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499737841747703,
+    "confidence_after": 0.7499999923012322,
+    "sources_found": 6,
+    "timestamp": 1780335976.3564553,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499998229829388,
+    "confidence_after": 0.7499999952347535,
+    "sources_found": 6,
+    "timestamp": 1780335981.4451025,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499737809099158,
+    "confidence_after": 0.7499999949582334,
+    "sources_found": 6,
+    "timestamp": 1780336286.5443778,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499998249708361,
+    "confidence_after": 0.7499999958328074,
+    "sources_found": 6,
+    "timestamp": 1780336291.6125088,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499737807193739,
+    "confidence_after": 0.7499999955625997,
+    "sources_found": 6,
+    "timestamp": 1780336596.7157657,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499998242333736,
+    "confidence_after": 0.7499999970860157,
+    "sources_found": 6,
+    "timestamp": 1780336601.770845,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499737801798466,
+    "confidence_after": 0.7499999955837303,
+    "sources_found": 6,
+    "timestamp": 1780336906.87154,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499998253628193,
+    "confidence_after": 0.7499999935726117,
+    "sources_found": 6,
+    "timestamp": 1780336911.953399,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499737832283727,
+    "confidence_after": 0.7499999954566773,
+    "sources_found": 6,
+    "timestamp": 1780337217.0044167,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.749999822945624,
+    "confidence_after": 0.749999995563117,
+    "sources_found": 6,
+    "timestamp": 1780337222.090774,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499737827338577,
+    "confidence_after": 0.7499999958208037,
+    "sources_found": 6,
+    "timestamp": 1780337527.1739147,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499998263311876,
+    "confidence_after": 0.7499999967164256,
+    "sources_found": 6,
+    "timestamp": 1780337532.2044554,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499737813226016,
+    "confidence_after": 0.7499999951330737,
+    "sources_found": 6,
+    "timestamp": 1780337837.324523,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499998225770065,
+    "confidence_after": 0.7499999954023915,
+    "sources_found": 6,
+    "timestamp": 1780337842.4175296,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499737757173532,
+    "confidence_after": 0.7499999934927457,
+    "sources_found": 6,
+    "timestamp": 1780338147.6237056,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499998235508386,
+    "confidence_after": 0.7499999950519659,
+    "sources_found": 6,
+    "timestamp": 1780338152.6971242,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499737594792981,
+    "confidence_after": 0.749999994137014,
+    "sources_found": 6,
+    "timestamp": 1780338458.064373,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.74999982395466,
+    "confidence_after": 0.7499999952054479,
+    "sources_found": 6,
+    "timestamp": 1780338463.1453521,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499737764181595,
+    "confidence_after": 0.7499999953990802,
+    "sources_found": 6,
+    "timestamp": 1780338768.2827427,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499998251761618,
+    "confidence_after": 0.7499999950199492,
+    "sources_found": 6,
+    "timestamp": 1780338773.353419,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499737788386857,
+    "confidence_after": 0.7499999955759695,
+    "sources_found": 6,
+    "timestamp": 1780339078.4680114,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.749999826021016,
+    "confidence_after": 0.7499999953123638,
+    "sources_found": 6,
+    "timestamp": 1780339083.516149,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499737826722479,
+    "confidence_after": 0.749999995822087,
+    "sources_found": 6,
+    "timestamp": 1780339388.6065598,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499998238619418,
+    "confidence_after": 0.7499999961634272,
+    "sources_found": 6,
+    "timestamp": 1780339393.6757586,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499737810832808,
+    "confidence_after": 0.7499999955843928,
+    "sources_found": 6,
+    "timestamp": 1780339698.7630167,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499998240408798,
+    "confidence_after": 0.7499999947431601,
+    "sources_found": 6,
+    "timestamp": 1780339703.8469393,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.749973784466223,
+    "confidence_after": 0.7499999956568496,
+    "sources_found": 6,
+    "timestamp": 1780340008.8861587,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499998240653425,
+    "confidence_after": 0.7499999944218745,
+    "sources_found": 6,
+    "timestamp": 1780340013.9724677,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.749973781971628,
+    "confidence_after": 0.7499999944457991,
+    "sources_found": 6,
+    "timestamp": 1780340319.0721207,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.749999822254707,
+    "confidence_after": 0.7499999943197188,
+    "sources_found": 6,
+    "timestamp": 1780340324.1773937,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499737819301753,
+    "confidence_after": 0.7499999956694743,
+    "sources_found": 6,
+    "timestamp": 1780340629.2474563,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499998247263745,
+    "confidence_after": 0.7499999966491843,
+    "sources_found": 6,
+    "timestamp": 1780340634.3042898,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499737816247536,
+    "confidence_after": 0.7499999958959511,
+    "sources_found": 6,
+    "timestamp": 1780340939.3995256,
+    "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "learned",
+    "confidence_before": 0.7499998245042643,
+    "confidence_after": 0.7499999958949369,
+    "sources_found": 6,
+    "timestamp": 1780340944.472922,
+    "notes": "domain=computer_science"
+  }
+]

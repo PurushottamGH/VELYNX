@@ -1,0 +1,112 @@
+[
+  {
+    "id": "matrix-det-2x2-001",
+    "type": "math",
+    "topic": "linear-algebra",
+    "difficulty": 2,
+    "title": "2x2 Matrix Determinant",
+    "description": "det([[1,2],[3,4]])",
+    "solution": "-2",
+    "techniques": ["determinant"],
+    "related_topics": ["matrices"]
+  },
+  {
+    "id": "matrix-det-3x3-001",
+    "type": "math",
+    "topic": "linear-algebra",
+    "difficulty": 4,
+    "title": "3x3 Matrix Determinant",
+    "description": "det([[1,2,3],[0,1,4],[5,6,0]])",
+    "solution": "1",
+    "techniques": ["cofactor-expansion"],
+    "related_topics": ["matrices"]
+  },
+  {
+    "id": "matrix-inverse-001",
+    "type": "math",
+    "topic": "linear-algebra",
+    "difficulty": 4,
+    "title": "Matrix Inverse",
+    "description": "Find inverse of [[1,2],[3,4]]",
+    "solution": "[[-2, 1], [3/2, -1/2]]",
+    "techniques": ["gaussian-elimination"],
+    "related_topics": ["matrices"]
+  },
+  {
+    "id": "eigenvalues-001",
+    "type": "math",
+    "topic": "linear-algebra",
+    "difficulty": 6,
+    "title": "Eigenvalues",
+    "description": "Find eigenvalues of [[2,1],[1,2]]",
+    "solution": "1, 3",
+    "techniques": ["characteristic-polynomial"],
+    "related_topics": ["eigenvectors"]
+  },
+  {
+    "id": "dot-product-001",
+    "type": "math",
+    "topic": "linear-algebra",
+    "difficulty": 1,
+    "title": "Dot Product",
+    "description": "Dot product of [1,2,3] and [4,5,6]",
+    "solution": "32",
+    "techniques": ["vectors"],
+    "related_topics": ["vectors"]
+  },
+  {
+    "id": "cross-product-001",
+    "type": "math",
+    "topic": "linear-algebra",
+    "difficulty": 3,
+    "title": "Cross Product",
+    "description": "Cross product of [1,0,0] and [0,1,0]",
+    "solution": "[0, 0, 1]",
+    "techniques": ["vectors"],
+    "related_topics": ["vectors"]
+  },
+  {
+    "id": "matrix-multiply-001",
+    "type": "math",
+    "topic": "linear-algebra",
+    "difficulty": 3,
+    "title": "Matrix Multiplication",
+    "description": "Multiply [[1,2],[3,4]] and [[5,6],[7,8]]",
+    "solution": "[[19, 22], [43, 50]]",
+    "techniques": ["matrix-multiplication"],
+    "related_topics": ["matrices"]
+  },
+  {
+    "id": "rref-001",
+    "type": "math",
+    "topic": "linear-algebra",
+    "difficulty": 5,
+    "title": "Row Reduced Echelon Form",
+    "description": "Find RREF of [[1,2,3],[4,5,6],[7,8,9]]",
+    "solution": "[[1,0,-1],[0,1,2],[0,0,0]]",
+    "techniques": ["gaussian-elimination"],
+    "related_topics": ["matrices"]
+  },
+  {
+    "id": "vector-norm-001",
+    "type": "math",
+    "topic": "linear-algebra",
+    "difficulty": 2,
+    "title": "Vector Norm",
+    "description": "Find the magnitude of [3,4]",
+    "solution": "5",
+    "techniques": ["vectors"],
+    "related_topics": ["vectors"]
+  },
+  {
+    "id": "linear-independence-001",
+    "type": "math",
+    "topic": "linear-algebra",
+    "difficulty": 4,
+    "title": "Linear Independence",
+    "description": "Are [1,0] and [0,1] linearly independent?",
+    "solution": "Yes",
+    "techniques": ["linear-independence"],
+    "related_topics": ["vectors"]
+  }
+]

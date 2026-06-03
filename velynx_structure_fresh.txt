@@ -1,0 +1,376 @@
+VELYNX Project Structure (2026-06-01)
+======================================
+
+C:\Users\Purushottam\Documents\VELYNX\
+│
+├── .env
+├── .env.example
+├── .gitignore
+├── docker-compose.yml
+├── night_learner.py
+├── package.json
+├── README.md
+├── request.json
+├── test.py
+├── tsconfig.json
+├── VELYNX Project.pdf
+├── velynx_cli.py
+├── VELYNX_PHASE36_AUDIT.md
+│
+├── backend/
+│   ├── __init__.py
+│   ├── alembic.ini
+│   ├── cli.py
+│   ├── Dockerfile
+│   ├── main.py
+│   ├── README.md
+│   ├── requirements.txt
+│   ├── requirements-dev.txt
+│   ├── test_velynx.db
+│   │
+│   ├── agents/
+│   │   ├── __init__.py
+│   │   └── agent_coordinator.py
+│   │
+│   ├── app/
+│   │   ├── __init__.py
+│   │   ├── db_bridge.py
+│   │   ├── lifespan.py
+│   │   ├── main.py
+│   │   ├── pipeline.py
+│   │   ├── routes_eval.py
+│   │   ├── routes_ops.py
+│   │   ├── routes_query.py
+│   │   └── streaming.py
+│   │
+│   ├── cognition/
+│   │   ├── __init__.py
+│   │   ├── advanced_cognition.py
+│   │   ├── answer_classifier.py
+│   │   ├── reasoning_engine.py
+│   │   ├── rich_formatter.py
+│   │   ├── sim_detector.py
+│   │   ├── sim_engine.py
+│   │   ├── teaching_engine.py
+│   │   ├── unified_pipeline.py
+│   │   ├── viz_detector.py
+│   │   └── viz_engine.py
+│   │
+│   ├── constitution/
+│   │   ├── communication.md
+│   │   ├── curiosity.md
+│   │   ├── epistemology.md
+│   │   ├── logic.md
+│   │   ├── science.md
+│   │   └── uncertainty.md
+│   │
+│   ├── conversation/
+│   │   ├── __init__.py
+│   │   ├── beliefs.py
+│   │   ├── context_compressor.py
+│   │   ├── dialogue_manager.py
+│   │   ├── monologue.py
+│   │   ├── reasoning_modes.py
+│   │   └── working_memory.py
+│   │
+│   ├── data/
+│   │   ├── chroma_db/
+│   │   │   └── chroma.sqlite3
+│   │   ├── feedback.jsonl
+│   │   ├── neural_links.json
+│   │   ├── permanence.json
+│   │   ├── source_trust.json
+│   │   └── vector_backend.json
+│   │
+│   ├── database/
+│   │   ├── __init__.py
+│   │   ├── alembic/
+│   │   │   ├── env.py
+│   │   │   ├── script.py.mako
+│   │   │   └── versions/
+│   │   │       └── 001_initial_schema.py
+│   │   ├── engine.py
+│   │   ├── models.py
+│   │   ├── redis_cache.py
+│   │   ├── repositories.py
+│   │   └── runtime_state.py
+│   │
+│   ├── evaluation/
+│   │   ├── __init__.py
+│   │   ├── adversarial_tests.py
+│   │   ├── benchmark_runner.py
+│   │   ├── cognition_benchmarks.py
+│   │   ├── cognition_drift_monitor.py
+│   │   ├── failure_analysis.py
+│   │   ├── hallucination_detector.py
+│   │   ├── memory_retrieval_tests.py
+│   │   ├── planning_evaluator.py
+│   │   ├── reality_checks.py
+│   │   ├── reflection_evaluator.py
+│   │   ├── runtime_profiler.py
+│   │   ├── scenario_loader.py
+│   │   ├── session_replay.py
+│   │   ├── stability_monitor.py
+│   │   └── trial_runner.py
+│   │
+│   ├── learning/
+│   │   ├── __init__.py
+│   │   ├── continuous_learner.py
+│   │   ├── curriculum.py
+│   │   ├── failure_diagnosis.py
+│   │   ├── feedback_loop.py
+│   │   ├── gap_tracker.py
+│   │   ├── knowledge_tutor.py
+│   │   ├── living_constitution.py
+│   │   ├── online_learner.py
+│   │   ├── permanence.py
+│   │   ├── proactive_cognition.py
+│   │   ├── rule_deriver.py
+│   │   ├── source_trust.py
+│   │   └── strategy_optimizer.py
+│   │
+│   ├── memory/
+│   │   ├── __init__.py
+│   │   ├── concept_engine.py
+│   │   ├── crawler_index.py
+│   │   ├── embedding_service.py
+│   │   ├── gpu_embedder.py
+│   │   ├── knowledge_graph.py
+│   │   ├── memory_manager.py
+│   │   ├── memory_schemas.py
+│   │   ├── retrieval_engine.py
+│   │   ├── session.py
+│   │   ├── vector_backend.py
+│   │   └── vector_store.py
+│   │
+│   ├── metacognition/
+│   │   ├── __init__.py
+│   │   ├── adaptation_engine.py
+│   │   ├── cognition_metrics.py
+│   │   ├── confidence_calibrator.py
+│   │   ├── meta_monitor.py
+│   │   ├── pattern_analyzer.py
+│   │   └── strategy_analyzer.py
+│   │
+│   ├── models/
+│   │   ├── answer.py
+│   │   ├── llm_client.py
+│   │   ├── query.py
+│   │   └── source.py
+│   │
+│   ├── ops/
+│   │   ├── __init__.py
+│   │   ├── circuit_breakers.py
+│   │   ├── failure_recovery.py
+│   │   ├── health_monitor.py
+│   │   ├── load_shedding.py
+│   │   ├── observability.py
+│   │   ├── resource_manager.py
+│   │   ├── runtime_snapshots.py
+│   │   ├── runtime_supervisor.py
+│   │   └── token_budget_manager.py
+│   │
+│   ├── pipeline/
+│   │   ├── __init__.py
+│   │   ├── constitution_loader.py
+│   │   ├── context_builder.py
+│   │   ├── contradiction.py
+│   │   ├── inference_pipeline.py
+│   │   ├── intent_engine.py
+│   │   ├── query_rewriter.py
+│   │   ├── reasoning_core.py
+│   │   ├── retrieval_mesh.py
+│   │   ├── seed_knowledge.py
+│   │   ├── synthesizer.py
+│   │   └── truth_filter.py
+│   │
+│   ├── reflection/
+│   │   ├── __init__.py
+│   │   ├── advanced_reflection.py
+│   │   ├── confidence_estimator.py
+│   │   ├── improvement_engine.py
+│   │   ├── reasoning_audit.py
+│   │   └── reflection_engine.py
+│   │
+│   ├── retrieval/
+│   │   ├── __init__.py
+│   │   ├── arxiv_client.py
+│   │   ├── brave_client.py
+│   │   ├── browser.py
+│   │   ├── duckduckgo_client.py
+│   │   ├── searxng_client.py
+│   │   ├── tavily_client.py
+│   │   ├── unified_retriever.py
+│   │   ├── video_learner.py
+│   │   └── wiki_client.py
+│   │
+│   ├── runtime/
+│   │   ├── __init__.py
+│   │   ├── event_bus.py
+│   │   ├── event_handlers.py
+│   │   ├── event_models.py
+│   │   ├── runtime_monitor.py
+│   │   └── tracing.py
+│   │
+│   ├── tests/
+│   │   ├── test_beliefs.py
+│   │   ├── test_browser.py
+│   │   ├── test_constitution_active.py
+│   │   ├── test_curriculum_expanded.py
+│   │   ├── test_curriculum_stages.py
+│   │   ├── test_db_bridge.py
+│   │   ├── test_dialogue.py
+│   │   ├── test_evaluation.py
+│   │   ├── test_event_system.py
+│   │   ├── test_feedback_ui.py
+│   │   ├── test_full_loop_smoke.py
+│   │   ├── test_health.py
+│   │   ├── test_learning_api.py
+│   │   ├── test_metacognition.py
+│   │   ├── test_monologue.py
+│   │   ├── test_ops.py
+│   │   ├── test_permanence.py
+│   │   ├── test_query.py
+│   │   ├── test_reasoning_modes.py
+│   │   ├── test_streaming.py
+│   │   ├── test_terminal_drill.py
+│   │   ├── test_trials.py
+│   │   ├── test_wiki_client.py
+│   │   └── test_working_memory.py
+│   │
+│   ├── tmp_probe/
+│   │   ├── feedback.jsonl
+│   │   ├── neural_links.json
+│   │   ├── permanence.json
+│   │   ├── session.json
+│   │   └── trust.json
+│   │
+│   └── velynx_data/
+│       ├── knowledge_graph/
+│       │   └── graph.db
+│       ├── learning/
+│       │   ├── learning_queue.json
+│       │   └── learning_stats.json
+│       └── proactive/
+│           ├── cognition_log.json
+│           └── proactive_state.json
+│
+├── curriculum/
+│   ├── biology.txt
+│   ├── chemistry.txt
+│   ├── deep_learn.py
+│   ├── earth_astronomy.txt
+│   ├── mathematics.txt
+│   ├── physics.txt
+│   ├── reasoning.txt
+│   └── technology.txt
+│
+├── data/
+│   ├── chroma_db/
+│   │   └── chroma.sqlite3
+│   ├── curriculum.json
+│   ├── deep_learn_checkpoint.json
+│   ├── feedback.jsonl
+│   ├── neural_links.json
+│   ├── permanence.json
+│   ├── problems/
+│   │   ├── coding/
+│   │   │   ├── arrays.json
+│   │   │   ├── dynamic_programming.json
+│   │   │   ├── graphs.json
+│   │   │   ├── greedy.json
+│   │   │   ├── linked_lists.json
+│   │   │   ├── sorting_searching.json
+│   │   │   ├── strings.json
+│   │   │   └── trees.json
+│   │   ├── math/
+│   │   │   ├── algebra.json
+│   │   │   ├── calculus.json
+│   │   │   ├── discrete.json
+│   │   │   ├── linear_algebra.json
+│   │   │   └── number_theory.json
+│   │   └── solved.jsonl
+│   ├── session.json
+│   └── source_trust.json
+│
+├── docs/
+│   ├── ARCHITECTURE.md
+│   ├── requirements.md
+│   ├── requirements_raw.txt
+│   └── VELYNX_AUDIT_2026-06-01.md
+│
+├── frontend/
+│   ├── index.html
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── postcss.config.js
+│   ├── tailwind.config.js
+│   ├── vite.config.js
+│   ├── dist/
+│   │   ├── index.html
+│   │   └── assets/
+│   │       ├── index-C5pdY6bZ.js
+│   │       └── index-CVOf9nc7.css
+│   └── src/
+│       ├── api/
+│       │   ├── client.js
+│       │   ├── streaming.js
+│       │   └── velynx.js
+│       ├── App.jsx
+│       ├── components/
+│       │   ├── AccuracyDash.jsx
+│       │   ├── Analysis.jsx
+│       │   ├── Answer.jsx
+│       │   ├── FeedbackBar.jsx
+│       │   ├── Pipeline.jsx
+│       │   ├── SearchBar.jsx
+│       │   ├── Sources.jsx
+│       │   └── ThinkingIndicator.jsx
+│       ├── hooks/
+│       │   └── useStreamingQuery.js
+│       ├── index.css
+│       ├── main.jsx
+│       └── store/
+│           └── velynx.js
+│
+├── models/                          (large binary models, gitignored)
+│
+├── scripts/
+│   ├── chat.py
+│   ├── gpu_deep_learn.py
+│   ├── start-frontend.ps1
+│   └── test-api.ps1
+│
+├── searxng/
+│   ├── Dockerfile
+│   └── settings.yml
+│
+├── src/
+│   └── index.ts
+│
+├── velynx_data/                     (runtime data, gitignored)
+└── velynx_output/                   (generated output, gitignored)
+
+
+Backend Module Summary
+=======================
+
+ Module           Purpose
+ ──────────────── ──────────────────────────────────────────────
+ agents           Agent coordination
+ app              FastAPI app, routes, streaming, pipeline bridge
+ cognition        Reasoning, classification, visualization, SIM
+ constitution     Core principles (6 markdown files)
+ conversation     Working memory, beliefs, dialogue, monologue
+ database         SQLAlchemy models, Alembic migrations, Redis cache
+ evaluation       Benchmarks, adversarial tests, hallucination detection
+ learning         Curriculum, feedback, permanence, proactive cognition
+ memory           Vector store, embeddings, knowledge graph
+ metacognition    Self-monitoring, confidence calibration, pattern analysis
+ models           Data models (Answer, Query, Source, LLM client)
+ ops              Circuit breakers, health, load shedding, observability
+ pipeline         Query rewriting, retrieval mesh, synthesis, truth filter
+ reflection       Self-reflection, reasoning audit, improvement engine
+ retrieval        Web clients (Wikipedia, Brave, Arxiv, DuckDuckGo, Tavily, SearXNG)
+ runtime          Event bus, tracing, monitoring
+ tests            24 test files

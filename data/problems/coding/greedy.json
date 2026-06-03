@@ -1,0 +1,82 @@
+[
+  {
+    "id": "max-profit-001",
+    "type": "coding",
+    "topic": "greedy",
+    "difficulty": 3,
+    "title": "Best Time to Buy and Sell Stock",
+    "description": "Given an array of prices, find the maximum profit from one buy and one sell.",
+    "template": "def max_profit(prices):\n    pass",
+    "test_cases": [
+      {"input": "max_profit([7,1,5,3,6,4])", "output": "5"},
+      {"input": "max_profit([7,6,4,3,1])", "output": "0"}
+    ],
+    "solution": "def max_profit(prices):\n    min_price = float('inf')\n    max_profit = 0\n    for p in prices:\n        min_price = min(min_price, p)\n        max_profit = max(max_profit, p - min_price)\n    return max_profit",
+    "techniques": ["greedy"],
+    "related_topics": ["arrays"]
+  },
+  {
+    "id": "jump-game-001",
+    "type": "coding",
+    "topic": "greedy",
+    "difficulty": 5,
+    "title": "Jump Game",
+    "description": "Given an array where each element is the max jump length, determine if you can reach the last index.",
+    "template": "def can_jump(nums):\n    pass",
+    "test_cases": [
+      {"input": "can_jump([2,3,1,1,4])", "output": "True"},
+      {"input": "can_jump([3,2,1,0,4])", "output": "False"}
+    ],
+    "solution": "def can_jump(nums):\n    max_reach = 0\n    for i, n in enumerate(nums):\n        if i > max_reach: return False\n        max_reach = max(max_reach, i + n)\n    return True",
+    "techniques": ["greedy"],
+    "related_topics": ["arrays"]
+  },
+  {
+    "id": "assign-cookies-001",
+    "type": "coding",
+    "topic": "greedy",
+    "difficulty": 3,
+    "title": "Assign Cookies",
+    "description": "Given greed factors g and cookie sizes s, maximize content children (child i is content if s[j] >= g[i]).",
+    "template": "def find_content_children(g, s):\n    pass",
+    "test_cases": [
+      {"input": "find_content_children([1,2,3], [1,1])", "output": "1"},
+      {"input": "find_content_children([1,2], [1,2,3])", "output": "2"}
+    ],
+    "solution": "def find_content_children(g, s):\n    g.sort()\n    s.sort()\n    child = cookie = 0\n    while child < len(g) and cookie < len(s):\n        if s[cookie] >= g[child]:\n            child += 1\n        cookie += 1\n    return child",
+    "techniques": ["greedy", "sorting"],
+    "related_topics": ["arrays"]
+  },
+  {
+    "id": "gas-station-001",
+    "type": "coding",
+    "topic": "greedy",
+    "difficulty": 5,
+    "title": "Gas Station",
+    "description": "Given gas[i] and cost[i] for a circular route, return the starting index to complete the circuit, or -1.",
+    "template": "def can_complete_circuit(gas, cost):\n    pass",
+    "test_cases": [
+      {"input": "can_complete_circuit([1,2,3,4,5], [3,4,5,1,2])", "output": "3"},
+      {"input": "can_complete_circuit([2,3,4], [3,4,3])", "output": "-1"}
+    ],
+    "solution": "def can_complete_circuit(gas, cost):\n    if sum(gas) < sum(cost): return -1\n    start = 0\n    tank = 0\n    for i in range(len(gas)):\n        tank += gas[i] - cost[i]\n        if tank < 0:\n            start = i + 1\n            tank = 0\n    return start",
+    "techniques": ["greedy"],
+    "related_topics": ["arrays"]
+  },
+  {
+    "id": "meeting-rooms-001",
+    "type": "coding",
+    "topic": "greedy",
+    "difficulty": 4,
+    "title": "Meeting Rooms",
+    "description": "Given meeting intervals as [[start,end],...], determine if a person can attend all meetings.",
+    "template": "def can_attend_all(intervals):\n    pass",
+    "test_cases": [
+      {"input": "can_attend_all([[0,30],[5,10],[15,20]])", "output": "False"},
+      {"input": "can_attend_all([[7,10],[2,4]])", "output": "True"}
+    ],
+    "solution": "def can_attend_all(intervals):\n    intervals.sort()\n    for i in range(1, len(intervals)):\n        if intervals[i][0] < intervals[i-1][1]:\n            return False\n    return True",
+    "techniques": ["greedy", "sorting"],
+    "related_topics": ["intervals"]
+  }
+]

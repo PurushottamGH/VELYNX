@@ -1,0 +1,30 @@
+how do neural networks learn through backpropagation
+explain how public key cryptography secures internet communication
+how does a transistor amplify and switch electronic signals
+what makes quantum computing fundamentally different from classical
+how does TCP/IP ensure reliable data delivery across unreliable networks
+explain how transformer architecture processes language with attention
+how does a CPU execute instructions at the hardware level
+what is recursion and why is it powerful for solving nested problems
+explain how databases use indexing and B-trees for fast queries
+how does the Domain Name System translate URLs to IP addresses
+what is containerization and how does Docker isolate applications
+explain how compilers transform source code into machine instructions
+how does garbage collection manage memory in programming languages
+what is a hash function and why is it irreversible
+explain how operating systems schedule processes and manage resources
+how does blockchain achieve consensus without a central authority
+what is MapReduce and how does it process data in parallel
+explain how load balancers distribute traffic across servers
+how does version control with Git track changes in code
+what is the CAP theorem and what tradeoffs do distributed systems face
+explain how machine learning models avoid overfitting with regularization
+how does end-to-end encryption protect messages from interception
+what is functional programming and how does it differ from imperative
+explain how virtualization creates isolated computing environments
+how does the internet routing protocol BGP find optimal paths
+what is WebAssembly and how does it run compiled code in browsers
+explain how compression algorithms reduce file sizes losslessly
+how do GPUs parallelize computation for graphics and machine learning
+what is a microservices architecture and when is it appropriate
+explain how anomaly detection identifies unusual patterns in data

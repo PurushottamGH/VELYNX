@@ -1,0 +1,30 @@
+explain why Euler's identity connects five fundamental constants
+how does the Fourier transform decompose complex signals into frequencies
+what is the intuition behind Bayes theorem and prior probability
+explain how gradient descent finds optimal solutions in high dimensions
+why are prime numbers distributed according to the prime number theorem
+how does the Laplace transform simplify solving differential equations
+what is the Central Limit Theorem and why does it matter for statistics
+explain how linear algebra underpins machine learning and graphics
+how does mathematical induction prove statements about all natural numbers
+what is Gödel's incompleteness theorem and what does it imply
+explain how eigenvalues reveal the behavior of linear transformations
+how does information theory quantify surprise with entropy
+what is the birthday paradox and why does probability defy intuition
+explain how Monte Carlo methods estimate complex integrals
+how does the RSA algorithm use prime factorization for encryption
+what is chaos theory and how do small changes cause large effects
+explain the P vs NP problem and why it matters for computation
+how does topology study shapes that survive continuous deformation
+what is the Riemann hypothesis and why is it unproven
+explain how Markov chains model state transitions with memorylessness
+how does game theory predict rational behavior in strategic situations
+what is the Kalman filter and how does it estimate noisy states
+explain how numerical methods approximate solutions to unsolvable equations
+how does combinatorics count arrangements and configurations
+what is fractal geometry and how do fractals have infinite detail
+explain how regression analysis finds relationships in data
+how does the logistic map demonstrate deterministic chaos
+what is group theory and how does it describe symmetry
+explain how wavelets provide time-frequency analysis of signals
+how does tensor calculus generalize vectors to curved spacetime

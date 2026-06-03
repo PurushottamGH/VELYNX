@@ -1,0 +1,57 @@
+{
+  "beliefs": {
+    "a94a8fe5ccb19ba61c4c0873d391e987982fbbd3": {
+      "fact": "test",
+      "layer": null,
+      "score": 0.6,
+      "source": null,
+      "updated_at": "2026-06-01T15:42:23.335943+00:00"
+    },
+    "ec185f4c126f7861d44c4bd447d5955a56367bc6": {
+      "fact": "2+2",
+      "layer": null,
+      "score": 0.6,
+      "source": null,
+      "updated_at": "2026-06-01T15:46:01.387834+00:00"
+    }
+  },
+  "fact_history": {
+    "a94a8fe5ccb19ba61c4c0873d391e987982fbbd3": [
+      {
+        "fact": "test",
+        "layer": null,
+        "score": 0.55,
+        "source": null,
+        "updated_at": "2026-06-01T15:41:37.866530+00:00"
+      },
+      {
+        "fact": "test",
+        "layer": null,
+        "score": 0.6,
+        "source": null,
+        "updated_at": "2026-06-01T15:42:23.335943+00:00"
+      }
+    ],
+    "ec185f4c126f7861d44c4bd447d5955a56367bc6": [
+      {
+        "fact": "2+2",
+        "layer": null,
+        "score": 0.55,
+        "source": null,
+        "updated_at": "2026-06-01T15:43:21.303246+00:00"
+      },
+      {
+        "fact": "2+2",
+        "layer": null,
+        "score": 0.6,
+        "source": null,
+        "updated_at": "2026-06-01T15:46:01.387834+00:00"
+      }
+    ]
+  },
+  "strategy_scores": {
+    "practical": {
+      "broad_retrieval": 0.2
+    }
+  }
+}

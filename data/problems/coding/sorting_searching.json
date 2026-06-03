@@ -1,0 +1,67 @@
+[
+  {
+    "id": "binary-search-001",
+    "type": "coding",
+    "topic": "sorting-searching",
+    "difficulty": 3,
+    "title": "Binary Search",
+    "description": "Given a sorted array and a target, return the index of target, or -1 if not found.",
+    "template": "def binary_search(nums, target):\n    pass",
+    "test_cases": [
+      {"input": "binary_search([-1,0,3,5,9,12], 9)", "output": "4"},
+      {"input": "binary_search([-1,0,3,5,9,12], 2)", "output": "-1"}
+    ],
+    "solution": "def binary_search(nums, target):\n    lo, hi = 0, len(nums) - 1\n    while lo <= hi:\n        mid = (lo + hi) // 2\n        if nums[mid] == target: return mid\n        elif nums[mid] < target: lo = mid + 1\n        else: hi = mid - 1\n    return -1",
+    "techniques": ["binary-search"],
+    "related_topics": ["arrays"]
+  },
+  {
+    "id": "merge-sort-001",
+    "type": "coding",
+    "topic": "sorting-searching",
+    "difficulty": 5,
+    "title": "Merge Sort",
+    "description": "Implement merge sort to sort an array in ascending order.",
+    "template": "def merge_sort(nums):\n    pass",
+    "test_cases": [
+      {"input": "merge_sort([5,2,3,1])", "output": "[1, 2, 3, 5]"},
+      {"input": "merge_sort([5,1,1,2,0,0])", "output": "[0, 0, 1, 1, 2, 5]"}
+    ],
+    "solution": "def merge_sort(nums):\n    if len(nums) <= 1: return nums\n    mid = len(nums) // 2\n    left = merge_sort(nums[:mid])\n    right = merge_sort(nums[mid:])\n    return merge(left, right)\n\ndef merge(a, b):\n    res = []\n    i = j = 0\n    while i < len(a) and j < len(b):\n        if a[i] <= b[j]:\n            res.append(a[i]); i += 1\n        else:\n            res.append(b[j]); j += 1\n    return res + a[i:] + b[j:]",
+    "techniques": ["divide-conquer", "sorting"],
+    "related_topics": ["recursion"]
+  },
+  {
+    "id": "quick-sort-001",
+    "type": "coding",
+    "topic": "sorting-searching",
+    "difficulty": 5,
+    "title": "Quick Sort",
+    "description": "Implement quick sort to sort an array in ascending order.",
+    "template": "def quick_sort(nums):\n    pass",
+    "test_cases": [
+      {"input": "quick_sort([5,2,3,1])", "output": "[1, 2, 3, 5]"},
+      {"input": "quick_sort([3,6,8,10,1,2,1])", "output": "[1, 1, 2, 3, 6, 8, 10]"}
+    ],
+    "solution": "def quick_sort(nums):\n    if len(nums) <= 1: return nums\n    pivot = nums[len(nums)//2]\n    left = [x for x in nums if x < pivot]\n    middle = [x for x in nums if x == pivot]\n    right = [x for x in nums if x > pivot]\n    return quick_sort(left) + middle + quick_sort(right)",
+    "techniques": ["divide-conquer", "sorting"],
+    "related_topics": ["recursion"]
+  },
+  {
+    "id": "search-rotated-001",
+    "type": "coding",
+    "topic": "sorting-searching",
+    "difficulty": 5,
+    "title": "Search in Rotated Sorted Array",
+    "description": "Given a rotated sorted array and a target, return the index of target or -1.",
+    "template": "def search_rotated(nums, target):\n    pass",
+    "test_cases": [
+      {"input": "search_rotated([4,5,6,7,0,1,2], 0)", "output": "4"},
+      {"input": "search_rotated([4,5,6,7,0,1,2], 3)", "output": "-1"},
+      {"input": "search_rotated([1], 0)", "output": "-1"}
+    ],
+    "solution": "def search_rotated(nums, target):\n    lo, hi = 0, len(nums) - 1\n    while lo <= hi:\n        mid = (lo + hi) // 2\n        if nums[mid] == target: return mid\n        if nums[lo] <= nums[mid]:\n            if nums[lo] <= target < nums[mid]: hi = mid - 1\n            else: lo = mid + 1\n        else:\n            if nums[mid] < target <= nums[hi]: lo = mid + 1\n            else: hi = mid - 1\n    return -1",
+    "techniques": ["binary-search"],
+    "related_topics": ["arrays"]
+  }
+]

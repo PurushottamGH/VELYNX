@@ -1,0 +1,20 @@
+{
+  "total_queries": 721,
+  "total_concepts_learned": 17,
+  "total_concepts_updated": 698,
+  "domains_covered": {
+    "physics": 135,
+    "biology": 106,
+    "general": 182,
+    "mathematics": 125,
+    "computer_science": 52,
+    "chemistry": 55,
+    "history": 28,
+    "astronomy": 35,
+    "medicine": 3
+  },
+  "avg_confidence": 0.759708737864078,
+  "learning_rate": 0.0,
+  "session_start": 1779876408.3922396,
+  "gaps_queue_size": 100
+}

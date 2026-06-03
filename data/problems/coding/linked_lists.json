@@ -1,0 +1,85 @@
+[
+  {
+    "id": "linked-list-reverse-001",
+    "type": "coding",
+    "topic": "linked-lists",
+    "difficulty": 3,
+    "title": "Reverse Linked List",
+    "description": "Given a list representing a linked list, reverse it and return the reversed list.",
+    "template": "def reverse_list(head):\n    pass",
+    "test_cases": [
+      {"input": "reverse_list([1,2,3,4,5])", "output": "[5, 4, 3, 2, 1]"},
+      {"input": "reverse_list([1,2])", "output": "[2, 1]"},
+      {"input": "reverse_list([])", "output": "[]"}
+    ],
+    "solution": "def reverse_list(head):\n    return head[::-1]",
+    "techniques": ["two-pointer"],
+    "related_topics": ["linked-lists"]
+  },
+  {
+    "id": "merge-sorted-lists-001",
+    "type": "coding",
+    "topic": "linked-lists",
+    "difficulty": 3,
+    "title": "Merge Two Sorted Lists",
+    "description": "Given two sorted lists, merge them into one sorted list.",
+    "template": "def merge_sorted(l1, l2):\n    pass",
+    "test_cases": [
+      {"input": "merge_sorted([1,2,4], [1,3,4])", "output": "[1, 1, 2, 3, 4, 4]"},
+      {"input": "merge_sorted([], [])", "output": "[]"},
+      {"input": "merge_sorted([], [0])", "output": "[0]"}
+    ],
+    "solution": "def merge_sorted(l1, l2):\n    result = []\n    i = j = 0\n    while i < len(l1) and j < len(l2):\n        if l1[i] <= l2[j]:\n            result.append(l1[i]); i += 1\n        else:\n            result.append(l2[j]); j += 1\n    return result + l1[i:] + l2[j:]",
+    "techniques": ["two-pointer", "merge"],
+    "related_topics": ["linked-lists", "sorting"]
+  },
+  {
+    "id": "linked-list-cycle-001",
+    "type": "coding",
+    "topic": "linked-lists",
+    "difficulty": 3,
+    "title": "Linked List Cycle Detection",
+    "description": "Given a list and a position index (0-based, -1 for no cycle), determine if the list has a cycle.",
+    "template": "def has_cycle(head, pos):\n    pass",
+    "test_cases": [
+      {"input": "has_cycle([3,2,0,-4], 1)", "output": "True"},
+      {"input": "has_cycle([1,2], 0)", "output": "True"},
+      {"input": "has_cycle([1], -1)", "output": "False"}
+    ],
+    "solution": "def has_cycle(head, pos):\n    return pos != -1",
+    "techniques": ["two-pointer"],
+    "related_topics": ["linked-lists"]
+  },
+  {
+    "id": "remove-duplicates-001",
+    "type": "coding",
+    "topic": "linked-lists",
+    "difficulty": 2,
+    "title": "Remove Duplicates from Sorted List",
+    "description": "Given a sorted list, remove duplicates in-place and return the result.",
+    "template": "def remove_duplicates(nums):\n    pass",
+    "test_cases": [
+      {"input": "remove_duplicates([1,1,2])", "output": "[1, 2]"},
+      {"input": "remove_duplicates([0,0,1,1,1,2,2,3,3,4])", "output": "[0, 1, 2, 3, 4]"}
+    ],
+    "solution": "def remove_duplicates(nums):\n    if not nums: return []\n    result = [nums[0]]\n    for n in nums[1:]:\n        if n != result[-1]:\n            result.append(n)\n    return result",
+    "techniques": ["two-pointer"],
+    "related_topics": ["arrays", "linked-lists"]
+  },
+  {
+    "id": "middle-linked-list-001",
+    "type": "coding",
+    "topic": "linked-lists",
+    "difficulty": 2,
+    "title": "Middle of Linked List",
+    "description": "Given a list, return the middle element (or second middle if even length).",
+    "template": "def middle_node(head):\n    pass",
+    "test_cases": [
+      {"input": "middle_node([1,2,3,4,5])", "output": "3"},
+      {"input": "middle_node([1,2,3,4,5,6])", "output": "4"}
+    ],
+    "solution": "def middle_node(head):\n    return head[len(head)//2]",
+    "techniques": ["two-pointer"],
+    "related_topics": ["linked-lists"]
+  }
+]
