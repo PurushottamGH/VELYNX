@@ -93,11 +93,12 @@ class TestTracing:
 # ── Runtime Monitor ──────────────────────────────────────────────
 
 class TestRuntimeMonitor:
-    def test_event_counting(self):
+    @pytest.mark.asyncio
+    async def test_event_counting(self):
         monitor = RuntimeMonitor()
         event = Event(type=EventType.QUERY_RECEIVED, source="test")
-        asyncio.get_event_loop().run_until_complete(monitor.on_event(event))
-        asyncio.get_event_loop().run_until_complete(monitor.on_event(event))
+        await monitor.on_event(event)
+        await monitor.on_event(event)
         stats = monitor.get_stats()
         assert stats["total_events"] == 2
         assert stats["event_counts"]["query_received"] == 2

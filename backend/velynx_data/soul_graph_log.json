@@ -1,0 +1,26 @@
+[
+  {
+    "type": "full_build",
+    "pairs_built": 121,
+    "concepts": 20,
+    "timestamp": "2026-06-07T12:55:45.530752"
+  },
+  {
+    "type": "full_build",
+    "pairs_built": 154,
+    "concepts": 25,
+    "timestamp": "2026-06-07T13:27:58.918766"
+  },
+  {
+    "type": "full_build",
+    "pairs_built": 154,
+    "concepts": 25,
+    "timestamp": "2026-06-07T13:28:38.993892"
+  },
+  {
+    "type": "full_build",
+    "pairs_built": 257,
+    "concepts": 31,
+    "timestamp": "2026-06-09T12:23:59.811708"
+  }
+]

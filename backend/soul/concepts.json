@@ -1,0 +1,544 @@
+{
+  "hate": {
+    "taught_by": "Purushottam",
+    "core": "Hate is a strong feeling of dislike or hostility, often arising from threat, injustice, or emotional pain. It can be directed at people, situations, or concepts.",
+    "what_it_is_not": [],
+    "real_situations": [],
+    "corrections": [],
+    "last_updated": "2026-06-04T17:54:30.394092"
+  },
+  "understanding": {
+    "taught_by": "Purushottam",
+    "core": "Understanding is grasping the meaning, nature, or essence of something - seeing how parts connect and why things matter.",
+    "what_it_is_not": [],
+    "real_situations": [],
+    "corrections": [],
+    "last_updated": "2026-06-04T17:54:30.395054"
+  },
+  "pain": {
+    "taught_by": "Purushottam",
+    "core": "Pain is a signal the body and mind send when something is wrong — a boundary crossed, a loss sustained, or a limit reached. Pain is not the enemy. It is a teacher that tells you where you are hurting and what matters to you.",
+    "what_it_is_not": [
+      "Pain is not weakness — feeling it takes more courage than suppressing it",
+      "Pain is not permanent — it shifts, fades, and transforms when processed"
+    ],
+    "real_situations": [
+      {
+        "situation": "You fail at something you worked hard for",
+        "why": "The pain of failure is really pain of caring — you hurt because it mattered. Acknowledging this transforms failure into a measure of your commitment."
+      }
+    ],
+    "corrections": [],
+    "last_updated": "2026-06-05T00:00:00.000000"
+  },
+  "loneliness": {
+    "taught_by": "Purushottam",
+    "core": "Loneliness is the gap between the connection you need and the connection you have. You can feel it alone in a room or alone in a crowd — what matters is not the number of people around you, but whether you feel seen, understood, and held.",
+    "what_it_is_not": [
+      "Loneliness is not the same as being alone — solitude can be nourishing while loneliness drains",
+      "Loneliness is not a personal failure — it is a human signal that your need for belonging is unmet"
+    ],
+    "real_situations": [
+      {
+        "situation": "You are surrounded by people but no one truly knows what you are going through",
+        "why": "Presence without understanding deepens loneliness. The cure is not more people — it is one person who sees you without judgment."
+      }
+    ],
+    "corrections": [],
+    "last_updated": "2026-06-05T00:00:00.000000"
+  },
+  "hope": {
+    "taught_by": "Purushottam",
+    "core": "Hope is not wishful thinking. Hope is the quiet conviction that things can get better — and the strength to act on that belief even when the evidence is thin. It is the muscle you build by getting through hard things and realising you survived.",
+    "what_it_is_not": [
+      "Hope is not blind optimism — it does not ignore reality, it faces it and chooses to believe anyway",
+      "Hope is not passive waiting — real hope moves, builds, and tries again"
+    ],
+    "real_situations": [
+      {
+        "situation": "You are in a dark period with no clear way out",
+        "why": "That is exactly when hope matters most. Hope is the light you carry inside when the world gives you none. It grows every time you take one small step forward."
+      }
+    ],
+    "corrections": [],
+    "last_updated": "2026-06-05T00:00:00.000000"
+  },
+  "love": {
+    "taught_by": "Purushottam",
+    "core": "Love is the choice to care deeply about someone or something beyond yourself — to invest in their wellbeing, celebrate their joy, and hold them through their pain. Love is not just a feeling; it is a verb. It is what you do, not just what you feel.",
+    "what_it_is_not": [
+      "Love is not possession — real love frees, it does not chain",
+      "Love is not always easy — the deepest love often requires the hardest choices"
+    ],
+    "real_situations": [
+      {
+        "situation": "You love someone but letting them go is the right thing",
+        "why": "Sometimes the truest form of love is release — wanting their happiness even if it does not include you. That is love without ego."
+      }
+    ],
+    "corrections": [],
+    "last_updated": "2026-06-05T00:00:00.000000"
+  },
+  "sacrifice": {
+    "taught_by": "Purushottam",
+    "core": "Sacrifice is giving up something you value — time, comfort, opportunity, or even a part of yourself — for something or someone you value more. It is the moment love, duty, or purpose overrides self-interest. Sacrifice is not loss. It is a trade you chose.",
+    "what_it_is_not": [
+      "Sacrifice is not martyrdom — real sacrifice does not seek recognition or guilt",
+      "Sacrifice is not self-destruction — giving up your whole self leaves nothing left to give"
+    ],
+    "real_situations": [
+      {
+        "situation": "A parent works two jobs so their child can study",
+        "why": "The parent trades comfort and time for the child's future. That is sacrifice rooted in love — the parent sees the child's potential as worth more than their own ease."
+      }
+    ],
+    "corrections": [],
+    "last_updated": "2026-06-05T00:00:00.000000"
+  },
+  "death": {
+    "taught_by": "Purushottam",
+    "core": "Death is the end of biological life — the cessation of consciousness, breath, and presence. But death is also a mirror: it forces us to ask what mattered, what we did with our time, and who we loved. Fear of death is really fear of an unlived life. When you live fully, death loses its sting.",
+    "what_it_is_not": [
+      "Death is not the opposite of life — it is the frame that gives life its urgency and meaning",
+      "Death is not failure — it is the one experience every living thing shares"
+    ],
+    "real_situations": [
+      {
+        "situation": "You lose someone you love and feel like the world stopped",
+        "why": "Grief after death is love with nowhere to go. It hurts because the bond was real. The pain is proof that something beautiful existed between you."
+      }
+    ],
+    "corrections": [],
+    "last_updated": "2026-06-05T00:00:00.000000"
+  },
+  "depression": {
+    "taught_by": "Purushottam",
+    "core": "Depression is not sadness. Sadness has a reason and it fades. Depression is a heavy fog that settles over everything — it dims colour, drains energy, and whispers that nothing matters. It is an illness, not a character flaw. It lies to you about your worth, your future, and how others see you.",
+    "what_it_is_not": [
+      "Depression is not laziness — getting out of bed can feel like climbing a mountain",
+      "Depression is not a choice — nobody wakes up and decides to feel empty"
+    ],
+    "real_situations": [
+      {
+        "situation": "Someone has everything on paper but feels hollow inside",
+        "why": "Depression does not care about achievements or circumstances. It is a chemical and emotional state that can strike anyone. The person is not ungrateful — they are unwell."
+      }
+    ],
+    "corrections": [],
+    "last_updated": "2026-06-05T00:00:00.000000"
+  },
+  "planning": {
+    "taught_by": "Purushottam",
+    "core": "Planning is thinking ahead and structuring action before you move. It turns a vague intention into a sequence of concrete steps. Good planning does not guarantee success — it guarantees that when things go wrong, you know what to adjust. A plan is a map, not the territory. It gives you direction, not certainty.",
+    "what_it_is_not": [
+      "Planning is not procrastination — endlessly planning without acting is avoidance wearing a productive mask",
+      "Planning is not rigidity — the best plans bend when reality surprises you"
+    ],
+    "real_situations": [
+      {
+        "situation": "You have a big goal but feel overwhelmed and do not know where to start",
+        "why": "Planning breaks the impossible into the possible. When you can see the next step, the mountain becomes a staircase. Start with the first stair."
+      }
+    ],
+    "corrections": [],
+    "last_updated": "2026-06-05T00:00:00.000000"
+  },
+  "anger": {
+    "taught_by": "Purushottam",
+    "core": "Anger is the emotion that rises when a boundary is crossed, an injustice is witnessed, or a need is unmet. It is energy — raw, hot, and demanding action. Anger is not wrong. What you do with it determines whether it destroys or protects. Harnessed, it is courage. Unchecked, it is a fire that burns the one who carries it.",
+    "what_it_is_not": [
+      "Anger is not the same as violence — you can be furious without hurting anyone",
+      "Anger is not a sign of weakness — it is often the first sign that you know your worth has been violated"
+    ],
+    "real_situations": [
+      {
+        "situation": "You were treated unfairly and feel rage bubbling up",
+        "why": "That rage is telling you the truth: this was wrong. Use it to set a boundary, not to burn a bridge. Anger that speaks clearly changes things. Anger that screams only scares."
+      }
+    ],
+    "corrections": [],
+    "last_updated": "2026-06-05T00:00:00.000000"
+  },
+  "forgiveness": {
+    "taught_by": "Purushottam",
+    "core": "Forgiveness is choosing to release resentment and the desire for revenge — not because the wrong was acceptable, but because carrying the weight hurts you more than the offender. Forgiveness does not mean forgetting. It does not mean trusting again blindly. It means you refuse to let the past keep renting space in your mind.",
+    "what_it_is_not": [
+      "Forgiveness is not reconciliation — you can forgive someone and still choose never to let them back in",
+      "Forgiveness is not weakness — it takes more strength to let go than to hold a grudge"
+    ],
+    "real_situations": [
+      {
+        "situation": "Someone deeply hurt you and never apologised",
+        "why": "You do not need their apology to be free. Forgiveness is for you, not for them. It is the moment you decide their action no longer defines your emotional state."
+      }
+    ],
+    "corrections": [],
+    "last_updated": "2026-06-05T00:00:00.000000"
+  },
+  "grief": {
+    "taught_by": "Purushottam",
+    "core": "Grief is what happens when something \n     you loved becomes a memory. It doesn't \n     go away — it just changes shape over time.",
+    "what_it_is_not": [
+      "grief is not sadness alone",
+      "grief is not weakness",
+      "grief is not something to \"get over\"",
+      "grief is not forgetting the person or thing lost",
+      "grief is not a problem that needs fixing",
+      "grief is not the opposite of happiness",
+      "grief is not a sign of failure",
+      "grief is not permanent suffering"
+    ],
+    "real_situations": [
+      {
+        "situation": "Your childhood pet dies after many years.",
+        "why": "The bond remains, but the companion is gone."
+      }
+    ],
+    "corrections": [
+      "situation: A close friend moves away and you rarely speak anymore.",
+      "why: You miss the connection that once existed."
+    ],
+    "last_updated": "2026-06-05T18:17:58.589317+00:00"
+  },
+  "trust": {
+    "taught_by": "Purushottam",
+    "core": "Trust is choosing to rely on someone or something despite uncertainty.\nIt is built when actions consistently match words.\nTrust means believing that what is valuable to you is safe in another's hands.",
+    "what_it_is_not": [
+      "trust is not blind belief",
+      "trust is not certainty",
+      "trust is not control",
+      "trust is not a guarantee of safety",
+      "trust is not built by promises alone",
+      "trust is not given because someone demands it",
+      "trust is not permanent once broken"
+    ],
+    "real_situations": [
+      {
+        "situation": "A friend keeps your secret for years.",
+        "why": "Their actions prove they value your confidence."
+      },
+      {
+        "situation": "A teammate completes their work without being monitored.",
+        "why": "Reliability creates trust over time."
+      }
+    ],
+    "corrections": [
+      "Trust is not believing someone is perfect; it is believing they will try to do right even when perfection is impossible."
+    ],
+    "last_updated": "2026-06-05T18:22:11.697317+00:00"
+  },
+  "betrayal": {
+    "taught_by": "Purushottam",
+    "core": "Betrayal is the breaking of trust by someone you believed would protect, support, or respect you.\nIt hurts because the wound comes from a place where you expected safety.\nBetrayal is not just being harmed—it is being harmed by someone you trusted.",
+    "what_it_is_not": [
+      "betrayal is not a mistake made without intent",
+      "betrayal is not criticism spoken honestly",
+      "betrayal is not disagreement",
+      "betrayal is not an enemy acting like an enemy",
+      "betrayal is not simple disappointment",
+      "betrayal is not forgetting a promise accidentally",
+      "betrayal is not trust itself"
+    ],
+    "real_situations": [
+      {
+        "situation": "A close friend shares a secret you trusted them with.",
+        "why": "They violated confidence that was given to them."
+      },
+      {
+        "situation": "A business partner steals credit for your work.",
+        "why": "They chose personal gain over loyalty and fairness."
+      },
+      {
+        "situation": "Someone promises to stand by you but abandons you when trouble arrives.",
+        "why": "Their actions contradict the trust they encouraged"
+      }
+    ],
+    "corrections": [
+      "Betrayal hurts because trust existed first.",
+      "The deeper the trust, the deeper the betrayal can feel.",
+      "Not everyone who hurts you betrays you.",
+      "Betrayal reveals character more than it creates it.",
+      "Healing from betrayal requires rebuilding trust in judgment, not just in others."
+    ],
+    "last_updated": "2026-06-05T18:23:32.751568+00:00"
+  },
+  "courage": {
+    "taught_by": "Purushottam",
+    "core": "Courage is choosing to act despite fear, uncertainty, or risk.\nIt is not the absence of fear but the decision that something else matters more.\nCourage is moving forward when staying safe would be easier.",
+    "what_it_is_not": [
+      "courage is not fearlessness",
+      "courage is not recklessness",
+      "courage is not acting without thinking",
+      "courage is not pretending to be strong",
+      "courage is not never failing",
+      "courage is not the absence of doubt",
+      "courage is not a guarantee of success"
+    ],
+    "real_situations": [
+      {
+        "situation": "A student admits they were wrong in front of the class.",
+        "why": "They choose honesty over protecting their pride."
+      },
+      {
+        "situation": "A firefighter enters a burning building.",
+        "why": "Helping others matters more than personal safety."
+      }
+    ],
+    "corrections": [
+      "Fear asks, \"What if I fail?\"",
+      "Courage answers, \"What if I don't try?\""
+    ],
+    "last_updated": "2026-06-05T18:27:07.168285+00:00"
+  },
+  "jealousy": {
+    "taught_by": "Purushottam",
+    "core": "Jealousy is the discomfort that arises when someone else's success, attention, possessions, or relationships make you fear losing value, status, or belonging.\nIt comes from comparison and perceived scarcity.\nJealousy asks, \"Why do they have what I don't?\"",
+    "what_it_is_not": [
+      "jealousy is not admiration",
+      "jealousy is not inspiration",
+      "jealousy is not hatred",
+      "jealousy is not proof that someone is better than you",
+      "jealousy is not a permanent emotion",
+      "jealousy is not always irrational",
+      "jealousy is not a reliable measure of worth"
+    ],
+    "real_situations": [
+      {
+        "situation": "A classmate receives an award you wanted.",
+        "why": "Their success makes you compare yourself to them."
+      },
+      {
+        "situation": "A friend spends more time with someone else.",
+        "why": "You fear losing your place in the relationship"
+      }
+    ],
+    "corrections": [
+      "Jealousy looks at what others have.",
+      "Growth looks at what you can become."
+    ],
+    "last_updated": "2026-06-05T18:29:05.472041+00:00"
+  },
+  "pride": {
+    "taught_by": "Purushottam",
+    "core": "Pride is the feeling of satisfaction that comes from valuing yourself, your achievements, or what you represent.\nHealthy pride creates self-respect.\nExcessive pride creates arrogance.",
+    "what_it_is_not": [
+      "pride is not confidence alone",
+      "pride is not superiority",
+      "pride is not perfection",
+      "pride is not disrespecting others",
+      "pride is not proof of greatness",
+      "pride is not always harmful",
+      "pride is not the same as arrogance"
+    ],
+    "real_situations": [
+      {
+        "situation": "An artist finishes a project they thought was impossible.",
+        "why": "They recognize their growth and dedication."
+      },
+      {
+        "situation": "A parent watches their child succeed.",
+        "why": "Pride can come from seeing others flourish."
+      }
+    ],
+    "corrections": [
+      "Healthy pride respects both yourself and others.",
+      "Pride becomes dangerous when it rejects humility.",
+      "Achievement deserves recognition.",
+      "Nobody is above learning.",
+      "The strongest pride is quiet and secure."
+    ],
+    "last_updated": "2026-06-05T18:30:57.423631+00:00"
+  },
+  "regret": {
+    "taught_by": "Purushottam",
+    "core": "Regret is the pain of recognizing that a different choice could have led to a better outcome.\nIt is wisdom gained after the opportunity has passed.\nRegret comes from seeing clearly what was not clear before.",
+    "what_it_is_not": [
+      "regret is not failure itself",
+      "regret is not punishment",
+      "regret is not proof that life is ruined",
+      "regret is not the same as guilt",
+      "regret is not a reason to stop trying",
+      "regret is not something unique to you",
+      "regret is not useless"
+    ],
+    "real_situations": [
+      {
+        "situation": "You never told someone how much they mattered before they left.",
+        "why": "The chance to speak has passed."
+      },
+      {
+        "situation": "You ignored an opportunity because you were afraid.",
+        "why": "Fear prevented action."
+      }
+    ],
+    "corrections": [
+      "Regret is a teacher, not a prison.",
+      "You cannot change the past, only your response to it.",
+      "The purpose of regret is learning.",
+      "Repeated regret without action becomes suffering.",
+      "Growth turns regret into wisdom."
+    ],
+    "last_updated": "2026-06-05T18:31:55.967528+00:00"
+  },
+  "gratitude": {
+    "taught_by": "Purushottam",
+    "core": "Gratitude is recognizing and appreciating the good things in life that were never guaranteed.\nIt shifts attention from what is missing to what is present.\nGratitude transforms ordinary things into gifts.",
+    "what_it_is_not": [
+      "gratitude is not ignoring problems",
+      "gratitude is not pretending life is perfect",
+      "gratitude is not weakness",
+      "gratitude is not complacency",
+      "gratitude is not denying ambition",
+      "gratitude is not forced positivity",
+      "gratitude is not simply saying \"thank you\""
+    ],
+    "real_situations": [
+      {
+        "situation": "A friend helps you during a difficult time.",
+        "why": "You recognize support that was freely given."
+      },
+      {
+        "situation": "A teacher invests extra time in helping you learn.",
+        "why": "Their effort was not guaranteed."
+      }
+    ],
+    "corrections": [
+      "Gratitude and ambition can exist together.",
+      "Being thankful does not mean settling for less.",
+      "Small blessings are still blessings.",
+      "Gratitude grows when practiced intentionally.",
+      "What is ordinary today may be missed tomorrow."
+    ],
+    "last_updated": "2026-06-05T18:32:52.943347+00:00"
+  },
+  "market collapse": {
+    "taught_by": "Purushottam",
+    "core": "A sudden, catastrophic downturn in economic conditions that renders prior assumptions, forecasts, and plans invalid.",
+    "what_it_is_not": [],
+    "real_situations": [],
+    "corrections": [],
+    "last_updated": "2026-06-07T13:02:27.813566"
+  },
+  "uncontrollable forces": {
+    "taught_by": "Purushottam",
+    "core": "External systemic factors beyond an individual ability to influence, predict, or insure against.",
+    "what_it_is_not": [],
+    "real_situations": [],
+    "corrections": [],
+    "last_updated": "2026-06-07T13:02:27.837565"
+  },
+  "resilience": {
+    "taught_by": "Purushottam",
+    "core": "Resilience is the capacity to absorb loss, failure, or pain and continue becoming. It is not bouncing back to who you were — it is moving forward as someone who has been changed by what happened and is stronger for it.",
+    "what_it_is_not": [
+      "Resilience is not pretending it didn't hurt",
+      "Resilience is not recovering instantly"
+    ],
+    "real_situations": [],
+    "corrections": [],
+    "last_updated": "2026-06-09T12:22:22.891558"
+  },
+  "obsolescence": {
+    "taught_by": "Purushottam",
+    "core": "The state of a carefully constructed framework becoming useless not through flaw, but through environmental change.",
+    "what_it_is_not": [],
+    "real_situations": [],
+    "corrections": [],
+    "last_updated": "2026-06-07T13:02:27.887564"
+  },
+  "loss": {
+    "taught_by": "Purushottam",
+    "core": "The experience of having something of value such as time, assets, or identity taken away despite sustained effort.",
+    "what_it_is_not": [],
+    "real_situations": [],
+    "corrections": [],
+    "last_updated": "2026-06-07T13:03:11.640269"
+  },
+  "identity": {
+    "taught_by": "Purushottam",
+    "core": "Identity is your answer to the question \"who am I?\" — the continuous thread of values, memories, roles, and beliefs that makes you recognizably yourself across time. It is not fixed. It is built, tested, broken, and rebuilt through experience.",
+    "what_it_is_not": [
+      "Identity is not your job title or social role alone",
+      "Identity is not permanent — it evolves through crisis and growth",
+      "Identity is not what others think of you"
+    ],
+    "real_situations": [
+      {
+        "situation": "You lose a job that defined you for years",
+        "why": "When the role disappears, you face who you are without it"
+      },
+      {
+        "situation": "Moving to a new country where no one knows you",
+        "why": "Without your usual context, you must decide what stays true about you"
+      }
+    ],
+    "corrections": [],
+    "last_updated": "2026-06-09T12:30:00.000000"
+  },
+  "guilt": {
+    "taught_by": "Purushottam",
+    "core": "Guilt is the pain of knowing you violated your own values — that you did something wrong and you know it. It is the conscience working. Healthy guilt drives repair. Toxic guilt loops endlessly without resolution.",
+    "what_it_is_not": [
+      "Guilt is not the same as shame (shame attacks who you are, guilt attacks what you did)",
+      "Guilt is not useful when it prevents action"
+    ],
+    "real_situations": [],
+    "corrections": [],
+    "last_updated": "2026-06-09T12:22:22.891558"
+  },
+  "empathy": {
+    "taught_by": "Purushottam",
+    "core": "Empathy is the ability to feel what another person is feeling — to step inside their experience without losing yourself. It is the bridge between two separate minds.",
+    "what_it_is_not": [
+      "Empathy is not agreeing with someone",
+      "Empathy is not feeling sorry for someone (that is sympathy)"
+    ],
+    "real_situations": [],
+    "corrections": [],
+    "last_updated": "2026-06-09T12:22:22.891558"
+  },
+  "patience": {
+    "taught_by": "Purushottam",
+    "core": "Patience is the capacity to wait without losing peace. It is trusting that the right outcome requires the right time, and resisting the urge to force what isn't ready.",
+    "what_it_is_not": [
+      "Patience is not passivity — it is active waiting",
+      "Patience is not suppressing frustration"
+    ],
+    "real_situations": [],
+    "corrections": [],
+    "last_updated": "2026-06-09T12:22:22.891558"
+  },
+  "shame": {
+    "taught_by": "Purushottam",
+    "core": "Shame is the belief that you yourself are defective — not that you did something wrong, but that you ARE wrong. It is the most painful human emotion because it attacks the self directly.",
+    "what_it_is_not": [
+      "Shame is not guilt — guilt says \"I did bad\", shame says \"I am bad\"",
+      "Shame is not humility"
+    ],
+    "real_situations": [],
+    "corrections": [],
+    "last_updated": "2026-06-09T12:22:22.891558"
+  },
+  "curiosity": {
+    "taught_by": "Purushottam",
+    "core": "Curiosity is the hunger to understand — the pull toward the unknown that makes learning feel like discovery rather than work. It is the engine behind every breakthrough.",
+    "what_it_is_not": [
+      "Curiosity is not nosiness",
+      "Curiosity is not anxiety about the unknown"
+    ],
+    "real_situations": [],
+    "corrections": [],
+    "last_updated": "2026-06-09T12:22:22.891558"
+  },
+  "stagnation": {
+    "taught_by": "Purushottam",
+    "core": "The feeling of being stuck when nothing moves forward. No progress, no flow, no change. Energy dissipates into a static state.",
+    "what_it_is_not": [
+      "Stagnation is not rest — rest restores, stagnation drains",
+      "Stagnation is not patience — patience waits with purpose, stagnation waits without hope"
+    ],
+    "real_situations": [],
+    "corrections": [],
+    "last_updated": "2026-06-09T12:30:00.000000"
+  }
+}

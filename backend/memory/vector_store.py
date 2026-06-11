@@ -18,7 +18,8 @@ warnings.warn(
 logger = logging.getLogger("uvicorn")
 
 
-_MEMORY_PATH = Path("data/neural_links.json")
+# Anchor the legacy memory JSON path to this file location so it works regardless of CWD (Windows/Unix).
+_MEMORY_PATH = (Path(__file__).resolve().parents[1] / "data" / "neural_links.json").resolve()
 _STOPWORDS = {
     "a",
     "an",
@@ -91,9 +92,28 @@ class VectorStore:
         self._state = self._load_state()
 
     def _load_state(self) -> dict:
-        if self.path.exists():
-            return json.loads(self.path.read_text(encoding="utf-8"))
-        return {"episodes": {}, "concepts": {}}
+        """
+        Load legacy memory state.
+
+        This file is considered best-effort/legacy. Always return a dict with both
+        top-level keys to avoid KeyError during recall.
+        """
+        if not self.path.exists():
+            return {"episodes": {}, "concepts": {}}
+
+        try:
+            loaded = json.loads(self.path.read_text(encoding="utf-8"))
+        except Exception:
+            logger.exception("Failed to load legacy vector store state; using empty store: %s", self.path)
+            return {"episodes": {}, "concepts": {}}
+
+        # Backward/forward compatible shape normalization
+        if not isinstance(loaded, dict):
+            return {"episodes": {}, "concepts": {}}
+
+        episodes = loaded.get("episodes") if isinstance(loaded.get("episodes"), dict) else {}
+        concepts = loaded.get("concepts") if isinstance(loaded.get("concepts"), dict) else {}
+        return {"episodes": episodes, "concepts": concepts}
 
     def _persist(self) -> None:
         self.path.parent.mkdir(parents=True, exist_ok=True)
@@ -169,6 +189,27 @@ class VectorStore:
         if not query_tokens:
             return []
 
+        # Definition-like queries ("what does X mean", "what is X", etc.) should prefer
+        # answer token overlap over generic token overlap.
+        lowered = query.lower()
+        definition_intent = any(
+            phrase in lowered
+            for phrase in [
+                "what does",
+                "what do ",
+                "what is",
+                "what's",
+                "what does ",
+                "mean",
+                "meaning",
+                "define",
+                "definition",
+            ]
+        )
+        # If the query strongly looks like a "meaning/definition" request, increase answer influence.
+        answer_overlap_weight = 0.30 if definition_intent else 0.15
+        concept_boost_cap = 2.0 if definition_intent else 1.0
+
         scored: list[MemoryHit] = []
         now = datetime.now(timezone.utc)
         for episode_id, episode in self._state["episodes"].items():
@@ -196,8 +237,8 @@ class VectorStore:
 
             score = (
                 (overlap * 0.35)
-                + (answer_overlap * 0.15)
-                + min(concept_boost, 1.0) * 0.2
+                + (answer_overlap * answer_overlap_weight)
+                + min(concept_boost, concept_boost_cap) * 0.2
                 + float(episode.get("strength", 0.0)) * 0.25
                 + age_bonus * 0.05
             )
@@ -216,6 +257,18 @@ class VectorStore:
 
         scored.sort(key=lambda item: item.score, reverse=True)
         return scored[:limit]
+
+    def add_concept(self, concept: str, metadata: dict | None = None) -> None:
+        """Store concept text as a memory for later recall. Works with DeepLearner."""
+        self.remember(
+            prompt=concept,
+            answer=concept,
+            confidence="PROBABLE",
+            source=metadata.get("source", "") if metadata else "",
+            tags=[],
+            weight=0.15,
+            kind="concept",
+        )
 
     def best_answer(self, query: str) -> dict | None:
         matches = self.recall(query, limit=1)

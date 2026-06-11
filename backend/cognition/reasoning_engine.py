@@ -53,6 +53,7 @@ async def reason(
     monologue_context: str | None = None,
     mode_prompt_addendum: str | None = None,
     temperature_override: float | None = None,
+    resonance_context: str | None = None,
 ) -> ReasoningResult | None:
     """Reason across sources using LLM. Returns None if LLM unavailable."""
     if not llm_client.available:
@@ -61,7 +62,7 @@ async def reason(
     system_prompt = _build_system_prompt(constitution, cognitive_layer)
     if mode_prompt_addendum:
         system_prompt += f"\n\nREASONING MODE:\n{mode_prompt_addendum}"
-    user_prompt = _build_user_prompt(query, sources, memory_context)
+    user_prompt = _build_user_prompt(query, sources, memory_context, resonance_context)
     if monologue_context:
         user_prompt = f"REASONING TRACE:\n{monologue_context}\n\n{user_prompt}"
 
@@ -90,8 +91,13 @@ def _build_system_prompt(constitution: str | None, cognitive_layer: str | None) 
     return _SYSTEM_PROMPT.format(constitution_block=constitution_block)
 
 
-def _build_user_prompt(query: str, sources: list[dict], memory_context: str | None) -> str:
-    parts = [f"QUESTION: {query}\n"]
+def _build_user_prompt(query: str, sources: list[dict], memory_context: str | None, resonance_context: str | None = None) -> str:
+    parts = []
+
+    if resonance_context:
+        parts.append(f"{resonance_context}\n")
+
+    parts.append(f"QUESTION: {query}\n")
 
     if sources:
         parts.append("EVIDENCE:")

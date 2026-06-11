@@ -6,7 +6,7 @@ import math
 from datetime import datetime, timezone
 from typing import Sequence
 
-from memory.memory_schemas import MemoryEntry, RetrievalResult
+from backend.memory.memory_schemas import MemoryEntry, RetrievalResult
 
 # Scoring weights
 _W_SEMANTIC = 0.50

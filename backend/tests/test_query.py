@@ -15,18 +15,24 @@ def test_query_endpoint(monkeypatch) -> None:
         return [
             {
                 "source": "wikipedia",
-                "title": "Test",
-                "snippet": "Snippet",
-                "url": "https://example.com",
+                "title": "Widget Manufacturing",
+                "snippet": "A widget is manufactured using zinc alloy and precision tooling.",
+                "url": "https://example.com/widget",
             }
         ]
 
     monkeypatch.setattr(retrieval_mesh, "retrieve_all", fake_retrieve_all)
+    import app.pipeline as pipeline_module
+    monkeypatch.setattr(pipeline_module, "recall_answer", lambda _q=None: None)
+    from memory.memory_manager import memory_manager as mm_instance
+    async def _no_recall(*a, **kw):
+        return []
+    monkeypatch.setattr(mm_instance, "recall", _no_recall)
 
     async def _post_query() -> httpx.Response:
         transport = httpx.ASGITransport(app=app)
         async with httpx.AsyncClient(transport=transport, base_url="http://testserver") as client:
-            return await client.post("/query", json={"text": "What is VELYNX?"})
+            return await client.post("/query", json={"text": "How are widgets manufactured?"})
 
     response = asyncio.run(_post_query())
 

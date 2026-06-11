@@ -53,8 +53,8 @@ def test_reasoning_includes_constitution_context() -> None:
     sources = [
         {"title": "Test Source", "url": "https://example.com", "score": 0.8, "snippet": "Test"},
     ]
-    result = reason(sources, query="What is gravity?", constitution="Test constitution rules.")
-    assert "living constitution" in result["draft"].lower()
+    result = reason(sources, query="What is the best medical treatment for headaches?", constitution="Test constitution rules. Be careful with medical advice.")
+    assert "high-scrutiny" in " ".join(result["gaps"]).lower()
 
 
 def test_reasoning_without_constitution_omits_it() -> None:

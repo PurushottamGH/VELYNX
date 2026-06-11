@@ -738,5 +738,35 @@
     "sources_found": 6,
     "timestamp": 1780340944.472922,
     "notes": "domain=computer_science"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "failed",
+    "confidence_before": 0.0,
+    "confidence_after": 0.0,
+    "sources_found": 0,
+    "timestamp": 1780581606.632273,
+    "notes": "cannot import name 'knowledge_graph' from 'memory.knowledge_graph' (C:\\Users\\Purushottam\\Documents\\V"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "failed",
+    "confidence_before": 0.0,
+    "confidence_after": 0.0,
+    "sources_found": 0,
+    "timestamp": 1780816892.2263892,
+    "notes": "cannot import name 'knowledge_graph' from 'memory.knowledge_graph' (C:\\Users\\Purushottam\\Documents\\V"
+  },
+  {
+    "event_type": "gap_filled",
+    "concept": "No connected concepts \u2014 needs deeper learning",
+    "result": "failed",
+    "confidence_before": 0.0,
+    "confidence_after": 0.0,
+    "sources_found": 0,
+    "timestamp": 1780817236.0629804,
+    "notes": "cannot import name 'knowledge_graph' from 'memory.knowledge_graph' (C:\\Users\\Purushottam\\Documents\\V"
   }
 ]

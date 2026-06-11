@@ -461,9 +461,10 @@ class VelynxSelfCoder:
             )
 
         # Validate in sandbox: import-test the generated snippet
+        escaped = generated.replace("'", "\\'")
         validation_code = f"""
 import ast, sys
-code = '''{generated.replace("'", "\\'")}'''
+code = '''{escaped}'''
 try:
     ast.parse(code)
     print("SYNTAX_OK")

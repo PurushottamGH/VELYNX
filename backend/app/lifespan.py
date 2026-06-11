@@ -1,6 +1,7 @@
 """Application lifespan — startup and shutdown sequence."""
 from __future__ import annotations
 
+import asyncio
 import logging
 import os
 from contextlib import asynccontextmanager
@@ -33,6 +34,14 @@ def _log_retrieval_sources() -> None:
 @asynccontextmanager
 async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
     _log_retrieval_sources()
+
+    # Initialize brain stem schema (Phase 3+)
+    try:
+        from velynx.graph.living_edges import initialize_schema
+        initialize_schema()
+        logger.info("Brain stem schema initialized")
+    except Exception as exc:
+        logger.warning("Brain stem schema init skipped: %s", exc)
 
     # Initialize database (Phase 4)
     try:
@@ -97,7 +106,24 @@ async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
     except Exception as exc:
         logger.warning("Proactive cognition init skipped: %s", exc)
 
+    # Night Learner — background scheduled learning
+    _night_learner_task = None
+    try:
+        from learning.night_learner import night_learner
+        _night_learner_task = asyncio.create_task(night_learner.start())
+        logger.info("Night learner started")
+    except Exception as exc:
+        logger.warning("Night learner init skipped: %s", exc)
+
     yield
+
+    # Shutdown: night learner
+    if _night_learner_task is not None:
+        _night_learner_task.cancel()
+        try:
+            await _night_learner_task
+        except asyncio.CancelledError:
+            pass
 
     # Shutdown: proactive cognition
     try:

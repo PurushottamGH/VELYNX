@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from models.source import Source
+from backend.models.source import Source
 
 
 class AnswerResponse(BaseModel):
@@ -15,3 +15,6 @@ class AnswerResponse(BaseModel):
     debug: dict | None = None
     dialogue_act: str | None = None
     clarification_needed: bool = False
+    resonance_scores: dict[str, float] = {}
+    epistemic_states: dict[str, str] = {}
+    recalled_memory: dict | None = None

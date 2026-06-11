@@ -1,0 +1,14 @@
+You are the execution agent for VELYNX. OpenCode has expanded the graph to include Physics and Finance domains. Your critical task is to integrate these changes, rebuild the semantic embedding index so FAISS can recognize the new terms, and verify the multi-domain routing.
+
+Task: Re-index vocabulary and verify cross-domain routing.
+
+Requirements:
+1. Apply the graph and bridge updates from OpenCode.
+2. Locate and run your embedding indexing script (e.g., `backend/cognition/embed_index.py` or calling `build_index()`). This is mandatory so that `SentenceTransformer` generates vectors for the new tokens ('entropy', 'depreciation', 'leverage', etc.) and commits them to your local FAISS/vector index.
+3. Write a verification verification block inside `backend/orchestrator.py` or a dedicated test file to run three distinct test strings:
+   - "I feel like everything is winding down and losing energy" -> Verify it triggers 'loss' -> 'entropy' (Physics).
+   - "I am stuck and cannot find any cash flow or movement" -> Verify it triggers 'stagnation' -> 'illiquidity' (Finance).
+4. Run the verification queries and assert that the hot path remains under the 50ms target.
+5. Print the updated total node and edge count from the SQLite or graph telemetry to verify the database grew successfully.
+
+Execute the re-indexing, run the sample lookups, and report back the performance metrics.

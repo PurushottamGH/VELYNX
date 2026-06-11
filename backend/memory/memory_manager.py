@@ -5,7 +5,7 @@ import logging
 from datetime import datetime, timezone, timedelta
 from typing import Any
 
-from memory.memory_schemas import (
+from backend.memory.memory_schemas import (
     EpisodicMemory,
     MemoryEntry,
     MemoryStats,
@@ -13,9 +13,9 @@ from memory.memory_schemas import (
     SemanticMemory,
     WorkingMemory,
 )
-from memory.embedding_service import embedding_service
-from memory.vector_backend import VectorBackend, create_backend
-from memory import retrieval_engine
+from backend.memory.embedding_service import embedding_service
+from backend.memory.vector_backend import VectorBackend, create_backend
+from backend.memory import retrieval_engine
 
 logger = logging.getLogger("uvicorn")
 
@@ -149,6 +149,26 @@ class MemoryManager:
             result.rank = i + 1
 
         return deduped[:limit]
+
+    async def recall_by_tag(
+        self,
+        tag: str,
+        collection: str = "episodic",
+        limit: int = 5,
+    ) -> list[RetrievalResult]:
+        """Recall memories tagged with a specific concept tag."""
+        entries = await self._backend.get_by_tag(collection, tag, limit=limit)
+        results = []
+        for entry in entries:
+            results.append(RetrievalResult(
+                entry=entry,
+                score=entry.importance,
+                rank=0,
+                match_reason=f"concept_tag:{tag}",
+            ))
+        for i, result in enumerate(results):
+            result.rank = i + 1
+        return results
 
     # ── Reinforce ────────────────────────────────────────────────
 

@@ -1,0 +1,13 @@
+You are the execution agent for VELYNX. OpenCode has built `memory_graph.py`. Your job is to integrate this memory core into our interactive REPL HUD so VELYNX remembers the user's state permanently.
+
+Task: Wire `MemoryCore` into the orchestrator and UI.
+
+Requirements:
+1. Open `backend/orchestrator.py`.
+2. Import `MemoryCore` from `backend.memory.memory_graph` and instantiate it globally (e.g., `MEMORY = MemoryCore()`).
+3. Inside the `while True:` loop, right AFTER `compile_path_to_speech()` completes successfully, call `MEMORY.log_experience(cognitive_packet, meta_packet)`. This permanently saves the state of that interaction.
+4. Modify `cross_query()` or the orchestrator so that BEFORE processing a new query, it calls `MEMORY.retrieve_recent_state(limit=1)`. 
+5. Open `backend/cli_ui.py` (The Dashboard) and add a small new UI element in the Header or Left Panel titled "Temporal Context" that displays the last known state (e.g., "Previous State: [Shame] -> [Debugging] (2 hours ago)"). If no memory exists, display "No prior context".
+6. Test it: Run the REPL, type "I am failing", hit enter. Then type "I am trying again", hit enter. Verify that the UI updates to show "failing/shame" as the temporal context for the second query.
+
+Apply the updates and verify the SQLite database writes successfully.

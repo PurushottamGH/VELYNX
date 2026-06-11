@@ -1,0 +1,14 @@
+Task: Force CodeWriter to stop generating boilerplate stubs and write actual implementation logic.
+
+Requirements:
+
+Open backend/agency/code_writer.py.
+
+Locate the method where the prompt is sent to the LLM (likely generate_code or _call_llm).
+
+Update the internal system instructions sent to the LLM to strictly forbid stubs.
+
+Add this explicit instruction to the generation prompt:
+"You are a Senior Software Engineer. You MUST write complete, functional implementation logic. DO NOT output boilerplate stubs, placeholder comments, or print statements repeating the user's prompt. Provide only the raw, executable Python code."
+
+Ensure the file name extraction logic accurately targets what the user asks for (e.g., if the user asks for system_logger.py, the file should be saved as system_logger.py, not the default generated_tool.py).

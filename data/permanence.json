@@ -1,10 +1,24 @@
 {
   "beliefs": {
+    "14a9d766458d6c1fabca3354d7d278f9273e3310": {
+      "fact": "understanding",
+      "layer": null,
+      "score": 0.55,
+      "source": "terminal",
+      "updated_at": "2026-06-04T11:56:45.120030+00:00"
+    },
     "783a254193397ddb0f90adb1c4de826e38c495a6": {
       "fact": "Velynx likes apples",
       "score": 0.55,
       "source": "terminal",
       "updated_at": "2026-05-24T13:22:10.022079+00:00"
+    },
+    "8047184955acdf8ae0c008093d97a4f83cc54136": {
+      "fact": "letters_a_to_b",
+      "layer": null,
+      "score": 0.55,
+      "source": "terminal",
+      "updated_at": "2026-06-04T11:56:06.479464+00:00"
     },
     "a0a3e0d83ad473647dca6158c7ca08783ba1068a": {
       "fact": "addition_two_plus_three",
@@ -14,12 +28,30 @@
     }
   },
   "fact_history": {
+    "14a9d766458d6c1fabca3354d7d278f9273e3310": [
+      {
+        "fact": "understanding",
+        "layer": null,
+        "score": 0.55,
+        "source": "terminal",
+        "updated_at": "2026-06-04T11:56:45.120030+00:00"
+      }
+    ],
     "783a254193397ddb0f90adb1c4de826e38c495a6": [
       {
         "fact": "Velynx likes apples",
         "score": 0.55,
         "source": "terminal",
         "updated_at": "2026-05-24T13:22:10.022079+00:00"
+      }
+    ],
+    "8047184955acdf8ae0c008093d97a4f83cc54136": [
+      {
+        "fact": "letters_a_to_b",
+        "layer": null,
+        "score": 0.55,
+        "source": "terminal",
+        "updated_at": "2026-06-04T11:56:06.479464+00:00"
       }
     ],
     "a0a3e0d83ad473647dca6158c7ca08783ba1068a": [
@@ -33,7 +65,7 @@
   },
   "strategy_scores": {
     "practical": {
-      "broad_retrieval": 0.1
+      "broad_retrieval": 0.15
     }
   }
 }

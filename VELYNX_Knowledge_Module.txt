@@ -1,0 +1,151 @@
+VELYNX Knowledge Module — Step 4 Architecture
+Build three new files. Do not touch any existing files.
+Project context:
+
+backend/soul/soul_graph.py — existing soul graph (SQLite, data/graph.db)
+backend/cognition/scenario_engine.py — existing entry point, parse_scenario(query) -> dict
+backend/cognition/metacog.py — existing metacog wrapper, reflect(query) -> dict
+All new files go in backend/knowledge/
+
+
+File 1: backend/knowledge/__init__.py
+Empty init. One line: """VELYNX Knowledge Module — domain reasoning layer."""
+
+File 2: backend/knowledge/knowledge_graph.py
+python# SQLite-backed domain concept store
+# Separate DB: data/knowledge_graph.db (never touch data/graph.db)
+#
+# Schema:
+# TABLE concepts: id INTEGER PK, name TEXT UNIQUE, domain TEXT, description TEXT
+# TABLE relationships: id INTEGER PK, source TEXT, relation TEXT, target TEXT
+#   relation types: "requires", "produces", "opposes", "enables", "part_of"
+#
+# Seed with these domain concepts on first build:
+#
+# CODING domain:
+#   debugging       — isolating why code behaves unexpectedly
+#   refactoring     — restructuring code without changing behavior
+#   testing         — verifying behavior matches intention
+#   architecture    — structuring systems for change and scale
+#   iteration       — repeated cycles of build-test-improve
+#   deployment      — releasing code to a live environment
+#   optimization    — improving performance within constraints
+#   abstraction     — hiding complexity behind a clean interface
+#   technical debt  — accumulated cost of shortcuts taken earlier
+#   legacy code     — existing code that works but is hard to change
+#
+# LOGIC domain:
+#   proof           — establishing truth through reasoning
+#   inference       — deriving conclusions from evidence
+#   contradiction   — two claims that cannot both be true
+#   assumption      — a belief taken as true without verification
+#   verification    — confirming a claim against evidence
+#
+# SYSTEMS domain:
+#   bottleneck      — the constraint limiting total throughput
+#   failure         — a system not meeting its intended behavior
+#   recovery        — restoring function after failure
+#   fallback        — a backup path when primary fails
+#   feedback loop   — output influencing its own input
+
+class KnowledgeGraph:
+    def __init__(self, db_path: str = None): ...
+    def build(self, force: bool = False) -> None: ...  # seeds concepts + relationships
+    def get_concept(self, name: str) -> dict | None: ...
+    def get_related(self, name: str) -> list[dict]: ...
+    def add_concept(self, name: str, domain: str, description: str) -> None: ...
+    def add_relationship(self, source: str, relation: str, target: str) -> None: ...
+    def all_concepts(self) -> list[str]: ...
+Seed relationships on build:
+debugging    requires    testing
+refactoring  requires    testing
+refactoring  produces    cleaner architecture
+iteration    produces    optimization
+deployment   requires    testing
+failure      requires    recovery
+recovery     enables     iteration
+bottleneck   opposes     optimization
+technical debt opposes   architecture
+feedback loop enables    optimization
+abstraction  enables     architecture
+assumption   opposes     verification
+proof        requires    inference
+
+File 3: backend/knowledge/bridge.py
+python# Bridge nodes: soul concept → knowledge domain concepts
+# These are the cross-graph connections
+
+BRIDGE_NODES: dict[str, list[str]] = {
+    "curiosity":   ["iteration", "inference", "feedback loop"],
+    "shame":       ["failure", "debugging", "refactoring"],
+    "patience":    ["iteration", "testing", "optimization"],
+    "resilience":  ["recovery", "refactoring", "fallback"],
+    "planning":    ["architecture", "abstraction", "assumption"],
+    "trust":       ["verification", "testing", "proof"],
+    "pain":        ["technical debt", "bottleneck", "debugging"],
+    "identity":    ["architecture", "abstraction"],
+    "courage":     ["deployment", "refactoring"],
+    "grief":       ["legacy code", "technical debt"],
+    "anger":       ["bottleneck", "technical debt"],
+    "hope":        ["recovery", "feedback loop"],
+    "understanding": ["inference", "abstraction", "proof"],
+    "regret":      ["technical debt", "assumption"],
+    "forgiveness": ["refactoring", "recovery"],
+}
+
+def get_domain_concepts(soul_concept: str) -> list[str]:
+    """Return domain concepts bridged from a soul concept."""
+    return BRIDGE_NODES.get(soul_concept, [])
+
+def get_soul_concepts(domain_concept: str) -> list[str]:
+    """Reverse bridge — which soul concepts connect to this domain concept."""
+    return [s for s, targets in BRIDGE_NODES.items() if domain_concept in targets]
+
+def bridge_exists(soul_concept: str, domain_concept: str) -> bool:
+    return domain_concept in BRIDGE_NODES.get(soul_concept, [])
+
+File 4: backend/knowledge/knowledge_engine.py
+python# Cross-graph query engine
+# Entry point: cross_query(query) -> dict
+
+def cross_query(query: str) -> dict:
+    """
+    Full cross-graph synthesis:
+    1. Call parse_scenario(query) → soul result
+    2. For each soul concept → get_domain_concepts() → domain concepts
+    3. For each domain concept → knowledge_graph.get_related() → domain relationships
+    4. Build unified arc: soul arc + bridge connections + domain arc
+    5. Return enriched result
+
+    Returns:
+    {
+        "query": str,
+        "soul_result": dict,          # full parse_scenario output
+        "domain_concepts": list[str], # domain concepts reached via bridges
+        "bridge_connections": list,   # [{soul: str, domain: str}]
+        "domain_arc": str,            # e.g. "failure requires recovery, recovery enables iteration"
+        "unified_arc": str,           # soul arc + bridge + domain arc combined
+        "cross_domain": bool          # True if both soul + domain concepts found
+    }
+    """
+
+def _build_domain_arc(domain_concepts: list[str], kg: KnowledgeGraph) -> str:
+    """Build arc string from domain concept relationships."""
+
+def _build_unified_arc(soul_arc: str, bridge_connections: list, domain_arc: str) -> str:
+    """Combine soul arc + bridge + domain arc into one readable synthesis."""
+Output format — deliver in this exact order:
+
+backend/knowledge/__init__.py
+backend/knowledge/knowledge_graph.py — complete, runnable
+backend/knowledge/bridge.py — complete, runnable
+backend/knowledge/knowledge_engine.py — complete, runnable
+Test block — call cross_query("I keep failing at this and I'm starting to doubt myself") and show expected output structure
+
+Constraints:
+
+Zero new dependencies — sqlite3, pathlib, json stdlib only
+Never import from or write to data/graph.db
+knowledge_engine.py imports parse_scenario via: from cognition.scenario_engine import parse_scenario
+No explanations outside code comments
+No preamble, no summary

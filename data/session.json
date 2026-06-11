@@ -1,5 +1,5 @@
 {
-  "current_lesson": null,
+  "current_lesson": "letters_a_to_b",
   "history": [
     {
       "answer": "5",
@@ -16,6 +16,14 @@
       "next_lesson_id": null,
       "prompt": "Velynx likes apples",
       "timestamp": "2026-05-24T13:22:10.024675+00:00"
+    },
+    {
+      "answer": "B",
+      "correct": true,
+      "lesson_id": "letters_a_to_b",
+      "next_lesson_id": "letters_a_to_b",
+      "prompt": "What letter comes after A?",
+      "timestamp": "2026-06-04T11:56:06.491490+00:00"
     }
   ]
 }

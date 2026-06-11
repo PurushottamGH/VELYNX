@@ -61,9 +61,9 @@ def resolve_seed_answer(text: str) -> dict | None:
             return None
         return foundation
 
-    # Only match exact keys, not substring
+    # Match any query that contains a seed key as a word or phrase
     lowered = text.lower().strip()
-    matches = [seed for key, seed in SEED_KNOWLEDGE.items() if key == lowered]
+    matches = [seed for key, seed in SEED_KNOWLEDGE.items() if key in lowered]
     if not matches:
         return None
 

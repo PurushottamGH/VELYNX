@@ -7,9 +7,9 @@ import logging
 from fastapi import APIRouter, Request
 from pydantic import BaseModel
 
-from models.answer import AnswerResponse
-from models.query import Query
-from app.pipeline import answer_question
+from backend.models.answer import AnswerResponse
+from backend.models.query import Query
+from backend.app.pipeline import answer_question
 
 logger = logging.getLogger("uvicorn")
 

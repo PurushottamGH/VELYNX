@@ -8,7 +8,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Protocol, Sequence
 
-from memory.memory_schemas import MemoryEntry
+from backend.memory.memory_schemas import MemoryEntry
 
 logger = logging.getLogger("uvicorn")
 
@@ -26,6 +26,7 @@ class VectorBackend(Protocol):
     async def get_by_id(self, collection: str, entry_id: str) -> MemoryEntry | None: ...
     async def get_by_ids(self, collection: str, entry_ids: list[str]) -> list[MemoryEntry]: ...
     async def get_all(self, collection: str) -> list[MemoryEntry]: ...
+    async def get_by_tag(self, collection: str, tag: str, limit: int = 5) -> list[MemoryEntry]: ...
 
 
 class ChromaVectorBackend:
@@ -155,6 +156,30 @@ class ChromaVectorBackend:
 
         return await asyncio.to_thread(_fetch)
 
+    async def get_by_tag(self, collection: str, tag: str, limit: int = 5) -> list[MemoryEntry]:
+        import asyncio
+
+        col = self._get_collection(collection)
+
+        def _fetch():
+            if col.count() == 0:
+                return []
+            results = col.get(
+                where={"tags": {"$contains": tag}},
+                limit=limit,
+                include=["documents", "metadatas"],
+            )
+            entries = []
+            for id_, doc, meta in zip(
+                results.get("ids", []),
+                results.get("documents", []),
+                results.get("metadatas", []),
+            ):
+                entries.append(_reconstruct_entry(id_, doc, meta))
+            return entries
+
+        return await asyncio.to_thread(_fetch)
+
 
 class JSONVectorBackend:
     """Fallback: stores entries as JSON with numpy embeddings on the side."""
@@ -238,6 +263,15 @@ class JSONVectorBackend:
     async def get_all(self, collection: str) -> list[MemoryEntry]:
         col = self._ensure_collection(collection)
         return [MemoryEntry(**data["entry"]) for data in col.values()]
+
+    async def get_by_tag(self, collection: str, tag: str, limit: int = 5) -> list[MemoryEntry]:
+        col = self._ensure_collection(collection)
+        matches = []
+        for data in col.values():
+            entry = MemoryEntry(**data["entry"])
+            if tag in entry.tags:
+                matches.append(entry)
+        return matches[:limit]
 
 
 def _reconstruct_entry(entry_id: str, document: str, metadata: dict) -> MemoryEntry:

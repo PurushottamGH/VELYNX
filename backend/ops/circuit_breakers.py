@@ -7,7 +7,7 @@ import time
 from collections.abc import Awaitable, Callable
 from typing import Any
 
-from ops import CircuitState
+from backend.ops import CircuitState
 
 logger = logging.getLogger("uvicorn")
 

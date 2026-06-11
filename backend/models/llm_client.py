@@ -7,7 +7,7 @@ import os
 from typing import Any
 
 import httpx
-from ops.circuit_breakers import CircuitOpenError, llm_circuit
+from backend.ops.circuit_breakers import CircuitOpenError, llm_circuit
 from pydantic import BaseModel, Field
 
 logger = logging.getLogger("uvicorn")
@@ -16,7 +16,7 @@ OPENGATEWAY_BASE_URL = os.getenv("OPENGATEWAY_BASE_URL", "https://opengateway.gi
 OPENGATEWAY_API_KEY = os.getenv("OPENGATEWAY_API_KEY", "")
 OPENGATEWAY_MODEL = os.getenv("OPENGATEWAY_MODEL", "mimo-v2.5-pro")
 
-_TIMEOUT = httpx.Timeout(connect=5.0, read=10.0, write=5.0, pool=5.0)
+_TIMEOUT = httpx.Timeout(None)  # No timeout — allow unlimited processing time
 _MAX_RETRIES = 2
 
 
@@ -56,7 +56,10 @@ class LLMClient:
         self.api_key = api_key
         self.model = model
         if not self.api_key:
-            logger.info("No LLM API key configured — using internal reasoning engine")
+            raise ValueError(
+                "API Key missing! Cannot initialize LLMClient.\n"
+                "Set OPENGATEWAY_API_KEY environment variable."
+            )
 
     @property
     def available(self) -> bool:
@@ -67,7 +70,7 @@ class LLMClient:
         messages: list[LLMMessage],
         *,
         temperature: float = 0.3,
-        max_tokens: int = 2048,
+        max_tokens: int | None = None,
         response_format: dict[str, str] | None = None,
     ) -> LLMResponse:
         """Send a chat completion request with circuit breaker and retries."""
@@ -87,7 +90,7 @@ class LLMClient:
         messages: list[LLMMessage],
         *,
         temperature: float = 0.3,
-        max_tokens: int = 2048,
+        max_tokens: int | None = None,
         response_format: dict[str, str] | None = None,
     ) -> LLMResponse:
         """Raw HTTP chat request with retries."""
@@ -100,8 +103,9 @@ class LLMClient:
             "model": self.model,
             "messages": [m.model_dump() for m in messages],
             "temperature": temperature,
-            "max_tokens": max_tokens,
         }
+        if max_tokens is not None:
+            body["max_tokens"] = max_tokens
         if response_format:
             body["response_format"] = response_format
 

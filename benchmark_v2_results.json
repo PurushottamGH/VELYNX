@@ -1,0 +1,219 @@
+[
+  {
+    "id": "Q1",
+    "pass": true,
+    "score": 1,
+    "concepts": [
+      "grief",
+      "loss",
+      "depression",
+      "loneliness",
+      "death"
+    ],
+    "scores": {
+      "grief": 4.869519007205963,
+      "loss": 4.0324405312538145,
+      "depression": 2.1806776404380797,
+      "loneliness": 0.42284539341926575,
+      "death": 0.34134748578071594
+    },
+    "query_type": "scenario",
+    "arc": "Grief contrasts loss. Loss distant depression. Depression contrasts loneliness. Tension present: Grief vs Loss: Grief and Loss pull in different directions",
+    "synth": "Grief contrasts loss. Loss distant depression. Tension present: Grief vs Loss: Grief and Loss pull in different directions",
+    "error": null
+  },
+  {
+    "id": "Q2",
+    "pass": true,
+    "score": 1,
+    "concepts": [
+      "betrayal",
+      "trust"
+    ],
+    "scores": {
+      "betrayal": 3.9330073475837706,
+      "trust": 3.127744448184967
+    },
+    "query_type": "relational",
+    "arc": "Betrayal catalyzes trust",
+    "synth": "Betrayal catalyzes trust",
+    "error": null
+  },
+  {
+    "id": "Q3",
+    "pass": true,
+    "score": 1,
+    "concepts": [
+      "courage",
+      "pain",
+      "resilience"
+    ],
+    "scores": {
+      "courage": 2.7,
+      "pain": 2.1549227237701416,
+      "resilience": 1.8
+    },
+    "query_type": "scenario",
+    "arc": "Courage contrasts pain. Pain contrasts resilience",
+    "synth": "Courage contrasts pain. Pain contrasts resilience",
+    "error": null
+  },
+  {
+    "id": "Q4",
+    "pass": true,
+    "score": 1,
+    "concepts": [
+      "planning",
+      "grief",
+      "loss",
+      "resilience"
+    ],
+    "scores": {
+      "planning": 2.910168397426605,
+      "grief": 0.9,
+      "loss": 0.9,
+      "resilience": 0.3675817847251892
+    },
+    "query_type": "scenario",
+    "arc": "Planning diminishes grief. Grief contrasts loss. Loss requires resilience. Tension present: Grief vs Loss: Grief and Loss pull in different directions",
+    "synth": "Planning diminishes grief. Grief contrasts loss. Tension present: Grief vs Loss: Grief and Loss pull in different directions",
+    "error": null
+  },
+  {
+    "id": "Q5",
+    "pass": true,
+    "score": 1,
+    "concepts": [
+      "love",
+      "sacrifice",
+      "betrayal",
+      "trust",
+      "jealousy"
+    ],
+    "scores": {
+      "love": 3.1362960815429686,
+      "sacrifice": 2.1358116447925566,
+      "betrayal": 0.3779527246952057,
+      "trust": 0.33237355947494507,
+      "jealousy": 0.3215510845184326
+    },
+    "query_type": "scenario",
+    "arc": "Love contrasts sacrifice. Sacrifice contrasts betrayal. Betrayal catalyzes trust. Tension present: Love vs Sacrifice: Love and Sacrifice pull in different directions",
+    "synth": "Love contrasts sacrifice. Sacrifice contrasts betrayal. Tension present: Love vs Sacrifice: Love and Sacrifice pull in different directions",
+    "error": null
+  },
+  {
+    "id": "Q6",
+    "pass": true,
+    "score": 1,
+    "concepts": [
+      "hope",
+      "grief",
+      "loss",
+      "depression",
+      "betrayal"
+    ],
+    "scores": {
+      "hope": 3.970760679244995,
+      "grief": 2.5018803358078,
+      "loss": 0.4196888208389282,
+      "depression": 0.3688422441482544,
+      "betrayal": 0.36770927906036377
+    },
+    "query_type": "direct",
+    "arc": "Hope distant grief. Grief contrasts loss. Loss distant depression. Tension present: Temporal pull: Grief looks back; hope looks forward",
+    "synth": "Hope distant grief. Grief contrasts loss. Tension present: Temporal pull: Grief looks back; hope looks forward",
+    "error": null
+  },
+  {
+    "id": "Q7",
+    "pass": true,
+    "score": 1,
+    "concepts": [
+      "loss",
+      "resilience",
+      "depression",
+      "grief"
+    ],
+    "scores": {
+      "loss": 2.176295816898346,
+      "resilience": 1.2365092873573302,
+      "depression": 0.9,
+      "grief": 0.85
+    },
+    "query_type": "scenario",
+    "arc": "Loss requires resilience. Resilience enables depression. Depression contrasts grief. Tension present: Resilience vs Loss: Resilience and Loss pull in different directions",
+    "synth": "Loss requires resilience. Resilience enables depression. Tension present: Resilience vs Loss: Resilience and Loss pull in different directions",
+    "error": null
+  },
+  {
+    "id": "Q8",
+    "pass": true,
+    "score": 1,
+    "concepts": [
+      "sacrifice",
+      "loneliness",
+      "pain"
+    ],
+    "scores": {
+      "sacrifice": 2.2311855792999267,
+      "loneliness": 1.8,
+      "pain": 1.8
+    },
+    "query_type": "scenario",
+    "arc": "Sacrifice distant loneliness. Loneliness distant pain. Tension present: Pain vs Sacrifice: Pain and Sacrifice pull in different directions",
+    "synth": "Sacrifice distant loneliness. Loneliness distant pain. Tension present: Pain vs Sacrifice: Pain and Sacrifice pull in different directions",
+    "error": null
+  },
+  {
+    "id": "Q9",
+    "pass": true,
+    "score": 1,
+    "concepts": [
+      "forgiveness",
+      "regret",
+      "grief",
+      "hope"
+    ],
+    "scores": {
+      "forgiveness": 4.419752156734466,
+      "regret": 0.3703577518463135,
+      "grief": 0.3148379325866699,
+      "hope": 0.31013309955596924
+    },
+    "query_type": "direct",
+    "arc": "Forgiveness compounds regret. Regret compounds grief. Grief distant hope. Tension present: Temporal pull: Grief looks back; hope looks forward",
+    "synth": "Forgiveness compounds regret. Regret compounds grief",
+    "error": null
+  },
+  {
+    "id": "Q10",
+    "pass": true,
+    "score": 1,
+    "concepts": [
+      "resilience",
+      "loss",
+      "hope",
+      "pain",
+      "love",
+      "planning",
+      "grief"
+    ],
+    "scores": {
+      "resilience": 4.5,
+      "loss": 4.45,
+      "hope": 3.0191725313663484,
+      "pain": 2.8,
+      "love": 2.7,
+      "planning": 2.5500000000000003,
+      "grief": 1.3789202868938446,
+      "pride": 0.9,
+      "death": 0.3295688033103943,
+      "depression": 0.30342942476272583
+    },
+    "query_type": "scenario",
+    "arc": "Resilience enables loss. Loss distant hope. Hope distant pain. Tension present: Resilience vs Loss: Resilience and Loss pull in different directions",
+    "synth": "Resilience enables loss. Loss distant hope. Tension present: Resilience vs Loss: Resilience and Loss pull in different directions",
+    "error": null
+  }
+]

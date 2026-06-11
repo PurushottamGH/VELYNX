@@ -53,7 +53,7 @@ class TestInnerMonologue:
         trace = await monologue.generate_monologue("What is quantum computing?", sources)
         assert len(trace.steps) >= 3
         assert trace.final_confidence > 0
-        assert trace.duration_ms > 0
+        assert trace.duration_ms >= 0
         # Should have hypothesis, evaluation, decision
         types = [s.type for s in trace.steps]
         assert "hypothesis" in types

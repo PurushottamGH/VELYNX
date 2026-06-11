@@ -1,0 +1,222 @@
+{
+  "nodes": {
+    "hate": {
+      "definition": "Hate is a strong feeling of dislike or hostility, often arising from threat, injustice, or emotional pain. It can be directed at people, situations, or concepts.",
+      "origin": "taught",
+      "confidence": 0.5
+    },
+    "understanding": {
+      "definition": "Understanding is grasping the meaning, nature, or essence of something - seeing how parts connect and why things matter.",
+      "origin": "taught",
+      "confidence": 0.5
+    },
+    "pain": {
+      "definition": "Pain is a signal the body and mind send when something is wrong — a boundary crossed, a loss sustained, or a limit reached. Pain is not the enemy. It is a teacher that tells you where you are hurting and what matters to you.",
+      "origin": "taught",
+      "confidence": 0.5
+    },
+    "loneliness": {
+      "definition": "Loneliness is the gap between the connection you need and the connection you have. You can feel it alone in a room or alone in a crowd — what matters is not the number of people around you, but whether you feel seen, understood, and held.",
+      "origin": "taught",
+      "confidence": 0.5
+    },
+    "hope": {
+      "definition": "Hope is not wishful thinking. Hope is the quiet conviction that things can get better — and the strength to act on that belief even when the evidence is thin. It is the muscle you build by getting through hard things and realising you survived.",
+      "origin": "taught",
+      "confidence": 0.5
+    },
+    "love": {
+      "definition": "Love is the choice to care deeply about someone or something beyond yourself — to invest in their wellbeing, celebrate their joy, and hold them through their pain. Love is not just a feeling; it is a verb. It is what you do, not just what you feel.",
+      "origin": "taught",
+      "confidence": 0.5
+    },
+    "sacrifice": {
+      "definition": "Sacrifice is giving up something you value — time, comfort, opportunity, or even a part of yourself — for something or someone you value more. It is the moment love, duty, or purpose overrides self-interest. Sacrifice is not loss. It is a trade you chose.",
+      "origin": "taught",
+      "confidence": 0.5
+    },
+    "death": {
+      "definition": "Death is the end of biological life — the cessation of consciousness, breath, and presence. But death is also a mirror: it forces us to ask what mattered, what we did with our time, and who we loved. Fear of death is really fear of an unlived life. When you live fully, death loses its sting.",
+      "origin": "taught",
+      "confidence": 0.5
+    },
+    "depression": {
+      "definition": "Depression is not sadness. Sadness has a reason and it fades. Depression is a heavy fog that settles over everything — it dims colour, drains energy, and whispers that nothing matters. It is an illness, not a character flaw. It lies to you about your worth, your future, and how others see you.",
+      "origin": "taught",
+      "confidence": 0.5
+    },
+    "planning": {
+      "definition": "Planning is thinking ahead and structuring action before you move. It turns a vague intention into a sequence of concrete steps. Good planning does not guarantee success — it guarantees that when things go wrong, you know what to adjust. A plan is a map, not the territory. It gives you direction, not certainty.",
+      "origin": "taught",
+      "confidence": 0.5
+    },
+    "anger": {
+      "definition": "Anger is the emotion that rises when a boundary is crossed, an injustice is witnessed, or a need is unmet. It is energy — raw, hot, and demanding action. Anger is not wrong. What you do with it determines whether it destroys or protects. Harnessed, it is courage. Unchecked, it is a fire that burns the one who carries it.",
+      "origin": "taught",
+      "confidence": 0.5
+    },
+    "forgiveness": {
+      "definition": "Forgiveness is choosing to release resentment and the desire for revenge — not because the wrong was acceptable, but because carrying the weight hurts you more than the offender. Forgiveness does not mean forgetting. It does not mean trusting again blindly. It means you refuse to let the past keep renting space in your mind.",
+      "origin": "taught",
+      "confidence": 0.5
+    },
+    "grief": {
+      "definition": "Grief is what happens when something \n     you loved becomes a memory. It doesn't \n     go away — it just changes shape over time.",
+      "origin": "taught",
+      "confidence": 0.5
+    },
+    "trust": {
+      "definition": "Trust is choosing to rely on someone or something despite uncertainty.\nIt is built when actions consistently match words.\nTrust means believing that what is valuable to you is safe in another's hands.",
+      "origin": "taught",
+      "confidence": 0.5
+    },
+    "betrayal": {
+      "definition": "Betrayal is the breaking of trust by someone you believed would protect, support, or respect you.\nIt hurts because the wound comes from a place where you expected safety.\nBetrayal is not just being harmed—it is being harmed by someone you trusted.",
+      "origin": "taught",
+      "confidence": 0.5
+    },
+    "courage": {
+      "definition": "Courage is choosing to act despite fear, uncertainty, or risk.\nIt is not the absence of fear but the decision that something else matters more.\nCourage is moving forward when staying safe would be easier.",
+      "origin": "taught",
+      "confidence": 0.5
+    },
+    "jealousy": {
+      "definition": "Jealousy is the discomfort that arises when someone else's success, attention, possessions, or relationships make you fear losing value, status, or belonging.\nIt comes from comparison and perceived scarcity.\nJealousy asks, \"Why do they have what I don't?\"",
+      "origin": "taught",
+      "confidence": 0.5
+    },
+    "pride": {
+      "definition": "Pride is the feeling of satisfaction that comes from valuing yourself, your achievements, or what you represent.\nHealthy pride creates self-respect.\nExcessive pride creates arrogance.",
+      "origin": "taught",
+      "confidence": 0.5
+    },
+    "regret": {
+      "definition": "Regret is the pain of recognizing that a different choice could have led to a better outcome.\nIt is wisdom gained after the opportunity has passed.\nRegret comes from seeing clearly what was not clear before.",
+      "origin": "taught",
+      "confidence": 0.5
+    },
+    "gratitude": {
+      "definition": "Gratitude is recognizing and appreciating the good things in life that were never guaranteed.\nIt shifts attention from what is missing to what is present.\nGratitude transforms ordinary things into gifts.",
+      "origin": "taught",
+      "confidence": 0.5
+    },
+    "bravery": {
+      "definition": "Acting despite fear",
+      "origin": "taught",
+      "confidence": 0.95
+    },
+    "fear": {
+      "definition": "A response to perceived danger",
+      "origin": "taught",
+      "confidence": 0.9
+    },
+    "market collapse": {
+      "definition": "A sudden, catastrophic downturn in economic conditions that renders prior assumptions, forecasts, and plans invalid.",
+      "origin": "inferred",
+      "confidence": 0.9
+    },
+    "uncontrollable forces": {
+      "definition": "External systemic factors beyond an individual ability to influence, predict, or insure against.",
+      "origin": "inferred",
+      "confidence": 0.9
+    },
+    "resilience": {
+      "definition": "The capacity to continue meaningfully after devastating failure, when the original plan is no longer viable.",
+      "origin": "inferred",
+      "confidence": 0.9
+    },
+    "obsolescence": {
+      "definition": "The state of a carefully constructed framework becoming useless not through flaw, but through environmental change.",
+      "origin": "inferred",
+      "confidence": 0.9
+    },
+    "loss": {
+      "definition": "The experience of having something of value such as time, assets, or identity taken away despite sustained effort.",
+      "origin": "inferred",
+      "confidence": 0.9
+    },
+    "identity": {
+      "definition": "Identity is your answer to the question \"who am I?\" ? the continuous thread of values, memories, roles, and beliefs that makes you recognizably yourself across time. It is not fixed. It is built, tested, broken, and rebuilt through experience.",
+      "origin": "taught",
+      "confidence": 1.0
+    },
+    "emotion": {
+      "definition": "any strong feeling",
+      "origin": "auto_learned",
+      "confidence": 0.5
+    },
+    "words": {
+      "definition": "the words that are spoken",
+      "origin": "auto_learned",
+      "confidence": 0.5
+    },
+    "only": {
+      "definition": "being the only one; single and isolated from others",
+      "origin": "auto_learned",
+      "confidence": 0.5
+    },
+    "lost": {
+      "definition": "people who are destined to die soon",
+      "origin": "auto_learned",
+      "confidence": 0.5
+    }
+  },
+  "edges": [
+    {
+      "source": "bravery",
+      "target": "fear",
+      "relationship_type": "opposes",
+      "weight": 0.85,
+      "tension": true,
+      "context": "bravery confronts fear, creating tension"
+    },
+    {
+      "source": "planning",
+      "target": "uncontrollable forces",
+      "relationship_type": "opposes",
+      "weight": 1.0,
+      "tension": true,
+      "context": "Planning seeks to impose order on the future; uncontrollable forces inherently defy that order."
+    },
+    {
+      "source": "market collapse",
+      "target": "loss",
+      "relationship_type": "causes",
+      "weight": 1.0,
+      "tension": false,
+      "context": "The sudden destruction of market conditions directly causes the loss of the company built over 7 years."
+    },
+    {
+      "source": "planning",
+      "target": "obsolescence",
+      "relationship_type": "causes",
+      "weight": 0.9,
+      "tension": true,
+      "context": "Extreme planning creates a rigid map. When the world shifts, the plan becomes obsolete."
+    },
+    {
+      "source": "loss",
+      "target": "resilience",
+      "relationship_type": "requires",
+      "weight": 0.7,
+      "tension": true,
+      "context": "Genuine loss is the precondition for resilience. The narrative continues after the plan fails."
+    },
+    {
+      "source": "planning",
+      "target": "resilience",
+      "relationship_type": "diminishes",
+      "weight": 0.8,
+      "tension": true,
+      "context": "Over-reliance on planning undermines resilience. A mind trained to follow a blueprint struggles when the blueprint no longer applies."
+    },
+    {
+      "source": "obsolescence",
+      "target": "resilience",
+      "relationship_type": "amplifies",
+      "weight": 0.6,
+      "tension": false,
+      "context": "Recognizing that the old map is obsolete can catalyze resilience. Letting go of the dead plan is the first step to building anew."
+    }
+  ]
+}

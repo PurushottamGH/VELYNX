@@ -1,0 +1,14 @@
+You are the execution agent for VELYNX. We need to wire the newly created ActionLogger into the main loop so the system remembers its executions.
+
+Task: Integrate `action_log.py` into `orchestrator.py`.
+
+Requirements:
+1. Open `backend/orchestrator.py`.
+2. Import `ActionLogger` from `backend.agency.action_log`.
+3. Initialize `_action_log = ActionLogger()` alongside the `SystemBridge` and `ExecutionQuarantine`.
+4. In the "refactoring" execution block, capture the user's approval status and the command output from `quarantine.propose_command()`. 
+5. The `quarantine.propose_command()` method currently returns the string output or "Execution aborted by user." You will need to check if the return value indicates an abort to determine `approved=False`, otherwise `approved=True`. 
+6. Call `_action_log.record_action(command="git add . && git commit...", reason="System requires recovery...", approved=approved, output=output)` immediately after the quarantine block resolves.
+7. Save the file.
+
+Report back when complete.

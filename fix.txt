@@ -1,0 +1,41 @@
+It looks like you've hit a **keyword mismatch**.
+
+Because your command was "Check the syntax..." and not a "build" or "write" command, the Reflex Arc didn't trigger. The system fell through to the Cognitive Core (the Brain), which is why you see the UI dashboard.
+
+To fix this, we need to treat "repair" and "check" as first-class reflexes, just like "build."
+
+### Step 1: Add "Repair" to the Reflex Arc
+
+Open `backend/orchestrator.py` and update the `build_keywords` list in your reflex block to include these commands. This ensures that any request to fix a file bypasses the Brain and goes straight to the repair pipeline.
+
+**Update this block in `orchestrator.py`:**
+
+```python
+    # Broaden the keywords to include repair/check logic
+    build_keywords = ["build", "write code", "write a python", "create a", "generate a", "check the syntax", "repair"]
+    
+    if any(keyword in query.lower() for keyword in build_keywords):
+        # ... your existing pipeline code ...
+        continue 
+
+```
+
+### Step 2: The "Immune System" Test
+
+Right now, the code in `generated_tool.py` is **syntactically valid** (it's the boilerplate stub), so `QAEngine` will pass it every time. If you want to see the `AutoFixer` trigger, you have to create a "pathogen" for it to fight.
+
+1. **Break the file:** Open `C:\Users\Purushottam\Documents\VELYNX\experiments\generated_tool.py` in VS Code.
+2. **Delete the colon** on the `def main():` line (make it `def main()` without the colon).
+3. **Save the file.**
+4. **Run the command:** In your terminal, run:
+`python -m backend.orchestrator`
+Type: *"Check the syntax of C:\Users\Purushottam\Documents\VELYNX\experiments\generated_tool.py and repair it."*
+
+### What will happen:
+
+1. **Reflex Trigger:** Because you added "check the syntax" and "repair" to your keywords, the system will instantly trigger the build block.
+2. **QAEngine:** It will run `lint` and report: `❌ [QA] Code failed verification. Syntax Error: ...`
+3. **AutoFixer:** It will see the report, trigger `[FIX ATTEMPTED]`, snapshot the regression, and rewrite the file with the missing colon.
+4. **Health Sentinel:** It will log the repair.
+
+**Go ahead and update your keyword list in `orchestrator.py` and perform the manual break. This is the moment you see your "Immune System" fully functional.** Does it catch the error and repair it as expected?

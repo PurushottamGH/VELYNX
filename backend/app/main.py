@@ -6,10 +6,10 @@ import logging
 from dotenv import load_dotenv
 from fastapi import FastAPI
 
-from app.lifespan import lifespan
-from app.routes_ops import router as ops_router
-from app.routes_query import router as query_router
-from app.routes_eval import router as eval_router
+from backend.app.lifespan import lifespan
+from backend.app.routes_ops import router as ops_router
+from backend.app.routes_query import router as query_router
+from backend.app.routes_eval import router as eval_router
 
 load_dotenv()
 

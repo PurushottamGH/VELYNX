@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import re
 
-from learning.source_trust import load_trust_scores
+from backend.learning.source_trust import load_trust_scores
 
 try:
     from datasketch import MinHash, MinHashLSH

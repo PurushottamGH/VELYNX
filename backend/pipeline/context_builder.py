@@ -17,6 +17,7 @@ class ContextBundle(BaseModel):
     memory_count: int = 0
     conversation_context: str = ""
     beliefs: str = ""
+    resonance_context: str = ""
 
 
 def build_context(
@@ -26,6 +27,7 @@ def build_context(
     constitution: str | None = None,
     conversation_context: str | None = None,
     beliefs: str | None = None,
+    resonance_context: str | None = None,
 ) -> ContextBundle:
     """Assemble context bundle for LLM reasoning."""
     evidence = _format_sources(sources)
@@ -40,6 +42,7 @@ def build_context(
         memory_count=len(memory_hits or []),
         conversation_context=conversation_context or "",
         beliefs=beliefs or "",
+        resonance_context=resonance_context or "",
     )
 
 

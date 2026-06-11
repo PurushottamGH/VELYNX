@@ -69,6 +69,10 @@ def learn_from_feedback(query: str, rating: int, meta: dict | None = None) -> di
             'strategy': strategy,
             'strategy_score': strategy_score[1],
             'confidence': confidence(query, layer=cognitive_layer),
+            'learning': {
+                'learning_context': learning_context,
+                'cognitive_layer': cognitive_layer,
+            },
             'learning_context': learning_context,
             'cognitive_layer': cognitive_layer,
         }
@@ -83,6 +87,12 @@ def learn_from_feedback(query: str, rating: int, meta: dict | None = None) -> di
         'query_type': query_type,
         'strategy': strategy,
         'strategy_score': strategy_score[1],
+        'learning': {
+            'failure': failure,
+            'rule': stored_rule,
+            'learning_context': learning_context,
+            'cognitive_layer': cognitive_layer,
+        },
         'failure': failure,
         'rule': stored_rule,
         'confidence': confidence(query, layer=cognitive_layer),

@@ -174,7 +174,7 @@ class DeepLearner:
     async def _fetch_duckduckgo(self, client: httpx.AsyncClient, topic: str, limit: int = 2) -> list[tuple[str, str]]:
         results = []
         try:
-            from duckduckgo_search import DDGS
+            from ddgs import DDGS
             with DDGS() as ddgs:
                 hits = list(ddgs.text(topic + " explained", max_results=limit + 2))
             for hit in hits:

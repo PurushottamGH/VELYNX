@@ -303,6 +303,21 @@ class ProactiveLearner:
                 if not self._running:
                     break
 
+                # --- Phase 43B: REM Sleep Cycle ---
+                try:
+                    from backend.soul.soul_graph import run_sleep_cycle
+                    import asyncio as _asyncio
+
+                    # Execute the pruning engine in a non-blocking thread
+                    sleep_stats = await _asyncio.to_thread(run_sleep_cycle, decay_rate=0.05, prune_threshold=0.15)
+
+                    # Log the autonomic function so the operator can monitor graph health
+                    if sleep_stats.get('edges_decayed', 0) > 0 or sleep_stats.get('edges_pruned', 0) > 0:
+                        print(f"[VELYNX AUTONOMIC] REM Sleep Complete: Decayed {sleep_stats['edges_decayed']} | Pruned {sleep_stats['edges_pruned']} | Forgotten {sleep_stats['concepts_forgotten']}")
+                except Exception as e:
+                    print(f"[VELYNX AUTONOMIC] Sleep cycle interrupted: {e}")
+                # ----------------------------------
+
                 next_concept = continuous_learner.get_next_to_learn()
                 if next_concept:
                     logger.info("Proactive learning: %r", next_concept[:60])

@@ -1,0 +1,39 @@
+{
+  "concepts": {
+    "hate": {
+      "taught_by": "Purushottam",
+      "core": "Hate is a strong feeling of dislike, hostility, or opposition. It often stems from fear, past hurt, or perceived threat. Hate is not merely disagreement \u2014 it carries emotional intensity that can drive action.",
+      "what_it_is_not": [
+        {
+          "not": "Indifference or neutrality \u2014 hate requires feeling, not absence of feeling",
+          "taught_on": "2026-06-04T18:01:19.293173"
+        }
+      ],
+      "real_situations": [
+        {
+          "situation": "A student hates studying because they failed before and fear failure",
+          "wrong_response": "Ignore the feeling and push harder",
+          "right_response": "Acknowledge the fear, find what failed before, and adjust approach",
+          "why": "Hate often masks fear. Direct confrontation without addressing the root deepens resistance.",
+          "taught_on": "2026-06-04T18:01:19.293173"
+        }
+      ],
+      "corrections": [],
+      "confidence_score": 0.25,
+      "emotional_valence": "negative",
+      "intensity": 8,
+      "related_concepts": [
+        "anger",
+        "fear",
+        "pain",
+        "resistance"
+      ],
+      "tags": [
+        "emotional",
+        "negative",
+        "fear-based"
+      ],
+      "last_updated": "2026-06-04T18:01:19.293173"
+    }
+  }
+}

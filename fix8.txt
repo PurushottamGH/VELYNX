@@ -1,0 +1,22 @@
+Task: Integrate HealthSentinel into the backend/orchestrator.py main loop.
+
+Requirements:
+
+Import: Add from backend.agency.health_sentinel import HealthSentinel at the top.
+
+Initialization: Instantiate _health_sentinel = HealthSentinel() alongside your other agents.
+
+Gatekeeping Logic: Wrap the entire "Write-Verify-Report" pipeline inside a stability check.
+
+Python
+    if "build" in query.lower() or "write code" in query.lower() or any(keyword in query.lower() for keyword in ["write a python", "create a", "generate a"]):
+        # Stability Gate
+        if not _health_sentinel.is_system_stable():
+            print("🛑 [HealthSentinel] CRITICAL: System unstable. Build halted.")
+            continue
+            
+        # ... [Existing Pipeline Logic] ...
+        # (Your existing CodeWriter -> QAEngine -> AutoFixer logic here)
+        
+        continue # Maintain Reflex Arc
+Post-Pipeline Update: At the end of the AutoFixer repair block, call _health_sentinel.log_event("repair", status) to update the health log.

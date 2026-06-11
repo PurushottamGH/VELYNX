@@ -4,10 +4,10 @@ import asyncio
 import time
 from typing import Callable
 
-from pipeline import truth_filter
-from retrieval import arxiv_client, brave_client, searxng_client, tavily_client, wiki_client
-from retrieval import duckduckgo_client
-from retrieval import browser as browser_client
+from backend.pipeline import truth_filter
+from backend.retrieval import arxiv_client, brave_client, searxng_client, tavily_client, wiki_client
+from backend.retrieval import duckduckgo_client
+from backend.retrieval import browser as browser_client
 
 _CACHE_TTL_SECONDS = 180
 _CACHE: dict[str, tuple[float, list[dict], dict]] = {}

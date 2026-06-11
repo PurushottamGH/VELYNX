@@ -4,7 +4,7 @@ import re
 
 import httpx
 
-from pipeline import retrieval_mesh, truth_filter
+from backend.pipeline import retrieval_mesh, truth_filter
 
 
 def _tokens(text: str) -> list[str]:

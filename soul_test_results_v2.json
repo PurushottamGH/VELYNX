@@ -1,0 +1,104 @@
+[
+  {
+    "query": "What is grief?",
+    "answer": "Grief is what happens when something \n     you loved becomes a memory. It doesn't \n     go away \u00e2\u20ac\u201d it just changes shape over time.\n\nIt is not: grief is not sadness alone, grief is not weakness, grief is not something to \"get over\"\n\nIn reality: The bond remains, but the companion is gone.\n\n(Taught by Purushottam)",
+    "answer_preview": "Grief is what happens when something \n     you loved becomes a memory. It doesn't \n     go away \u00e2\u20ac\u201d it just changes shape over time.\n\nIt is not: grief is not sadness alone, grief is not weakness, grief is not something to \"get over\"\n\nIn reality: The bond remains, but the companion is gone.\n\n(Taught ...",
+    "confidence": "CERTAIN",
+    "path": "soul_lookup",
+    "soul_concepts_debug": [
+      "grief"
+    ],
+    "soul_count": 1,
+    "soul_used": true,
+    "confidence_clamped": false,
+    "elapsed_s": 0.01,
+    "token_matches": [
+      "grief"
+    ]
+  },
+  {
+    "query": "What is betrayal?",
+    "answer": "Betrayal is the breaking of trust by someone you believed would protect, support, or respect you.\nIt hurts because the wound comes from a place where you expected safety.\nBetrayal is not just being harmed\u00e2\u20ac\u201dit is being harmed by someone you trusted.\n\nIt is not: betrayal is not a mistake made without intent, betrayal is not criticism spoken honestly, betrayal is not disagreement\n\nIn reality: They violated confidence that was given to them.\n\n(Taught by Purushottam)",
+    "answer_preview": "Betrayal is the breaking of trust by someone you believed would protect, support, or respect you.\nIt hurts because the wound comes from a place where you expected safety.\nBetrayal is not just being harmed\u00e2\u20ac\u201dit is being harmed by someone you trusted.\n\nIt is not: betrayal is not a mistake made without...",
+    "confidence": "CERTAIN",
+    "path": "soul_lookup",
+    "soul_concepts_debug": [
+      "betrayal"
+    ],
+    "soul_count": 1,
+    "soul_used": true,
+    "confidence_clamped": false,
+    "elapsed_s": 0.01,
+    "token_matches": [
+      "betrayal"
+    ]
+  },
+  {
+    "query": "How does grief relate to hope?",
+    "answer": "Hope is not wishful thinking. Hope is the quiet conviction that things can get better \u00e2\u20ac\u201d and the strength to act on that belief even when the evidence is thin. It is the muscle you build by getting through hard things and realising you survived.\n\nIt is not: Hope is not blind optimism \u00e2\u20ac\u201d it does not ignore reality, it faces it and chooses to believe anyway, Hope is not passive waiting \u00e2\u20ac\u201d real hope moves, builds, and tries again\n\nIn reality: That is exactly when hope matters most. Hope is the light you carry inside when the world gives you none. It grows every time you take one small step forward.\n\n(Taught by Purushottam)\n\nGrief is what happens when something \n     you loved becomes a memory. It doesn't \n     go away \u00e2\u20ac\u201d it just changes shape over time.\n\nIt is not: grief is not sadness alone, grief is not weakness, grief is not something to \"get over\"\n\nIn reality: The bond remains, but the companion is gone.\n\n(Taught by Purushottam)\n\n\u2500\u2500 Relationship \u2500\u2500\n\nHope and grief are deeply connected human experiences. Hope shapes how we experience grief, and understanding both together gives a fuller picture of the human condition than either alone.",
+    "answer_preview": "Hope is not wishful thinking. Hope is the quiet conviction that things can get better \u00e2\u20ac\u201d and the strength to act on that belief even when the evidence is thin. It is the muscle you build by getting through hard things and realising you survived.\n\nIt is not: Hope is not blind optimism \u00e2\u20ac\u201d it does no...",
+    "confidence": "CERTAIN",
+    "path": "soul_lookup",
+    "soul_concepts_debug": [
+      "hope",
+      "grief"
+    ],
+    "soul_count": 2,
+    "soul_used": true,
+    "confidence_clamped": false,
+    "elapsed_s": 0.01,
+    "token_matches": [
+      "grief",
+      "hope"
+    ]
+  },
+  {
+    "query": "Can someone feel love and betrayal at the same time?",
+    "answer": "Love is the choice to care deeply about someone or something beyond yourself \u00e2\u20ac\u201d to invest in their wellbeing, celebrate their joy, and hold them through their pain. Love is not just a feeling; it is a verb. It is what you do, not just what you feel.\n\nIt is not: Love is not possession \u00e2\u20ac\u201d real love frees, it does not chain, Love is not always easy \u00e2\u20ac\u201d the deepest love often requires the hardest choices\n\nIn reality: Sometimes the truest form of love is release \u00e2\u20ac\u201d wanting their happiness even if it does not include you. That is love without ego.\n\n(Taught by Purushottam)\n\nBetrayal is the breaking of trust by someone you believed would protect, support, or respect you.\nIt hurts because the wound comes from a place where you expected safety.\nBetrayal is not just being harmed\u00e2\u20ac\u201dit is being harmed by someone you trusted.\n\nIt is not: betrayal is not a mistake made without intent, betrayal is not criticism spoken honestly, betrayal is not disagreement\n\nIn reality: They violated confidence that was given to them.\n\n(Taught by Purushottam)\n\n\u2500\u2500 Relationship \u2500\u2500\n\nLove and betrayal are deeply connected human experiences. Love shapes how we experience betrayal, and understanding both together gives a fuller picture of the human condition than either alone.",
+    "answer_preview": "Love is the choice to care deeply about someone or something beyond yourself \u00e2\u20ac\u201d to invest in their wellbeing, celebrate their joy, and hold them through their pain. Love is not just a feeling; it is a verb. It is what you do, not just what you feel.\n\nIt is not: Love is not possession \u00e2\u20ac\u201d real love ...",
+    "confidence": "CERTAIN",
+    "path": "soul_lookup",
+    "soul_concepts_debug": [
+      "love",
+      "betrayal"
+    ],
+    "soul_count": 2,
+    "soul_used": true,
+    "confidence_clamped": false,
+    "elapsed_s": 0.03,
+    "token_matches": [
+      "betrayal",
+      "love"
+    ]
+  },
+  {
+    "query": "A man forgave someone who never apologized. What is he feeling?",
+    "answer": "Forgiveness is choosing to release resentment and the desire for revenge \u00e2\u20ac\u201d not because the wrong was acceptable, but because carrying the weight hurts you more than the offender. Forgiveness does not mean forgetting. It does not mean trusting again blindly. It means you refuse to let the past keep renting space in your mind.\n\nIt is not: Forgiveness is not reconciliation \u00e2\u20ac\u201d you can forgive someone and still choose never to let them back in, Forgiveness is not weakness \u00e2\u20ac\u201d it takes more strength to let go than to hold a grudge\n\nIn reality: You do not need their apology to be free. Forgiveness is for you, not for them. It is the moment you decide their action no longer defines your emotional state.\n\n(Taught by Purushottam)",
+    "answer_preview": "Forgiveness is choosing to release resentment and the desire for revenge \u00e2\u20ac\u201d not because the wrong was acceptable, but because carrying the weight hurts you more than the offender. Forgiveness does not mean forgetting. It does not mean trusting again blindly. It means you refuse to let the past keep...",
+    "confidence": "CERTAIN",
+    "path": "soul_lookup",
+    "soul_concepts_debug": [
+      "forgiveness"
+    ],
+    "soul_count": 1,
+    "soul_used": true,
+    "confidence_clamped": false,
+    "elapsed_s": 0.02,
+    "token_matches": []
+  },
+  {
+    "query": "Someone plans carefully for years then loses everything. Walk me through their inner state.",
+    "answer": "Planning is thinking ahead and structuring action before you move. It turns a vague intention into a sequence of concrete steps. Good planning does not guarantee success \u00e2\u20ac\u201d it guarantees that when things go wrong, you know what to adjust. A plan is a map, not the territory. It gives you direction, not certainty.\n\nIt is not: Planning is not procrastination \u00e2\u20ac\u201d endlessly planning without acting is avoidance wearing a productive mask, Planning is not rigidity \u00e2\u20ac\u201d the best plans bend when reality surprises you\n\nIn reality: Planning breaks the impossible into the possible. When you can see the next step, the mountain becomes a staircase. Start with the first stair.\n\n(Taught by Purushottam)",
+    "answer_preview": "Planning is thinking ahead and structuring action before you move. It turns a vague intention into a sequence of concrete steps. Good planning does not guarantee success \u00e2\u20ac\u201d it guarantees that when things go wrong, you know what to adjust. A plan is a map, not the territory. It gives you direction, ...",
+    "confidence": "CERTAIN",
+    "path": "soul_lookup",
+    "soul_concepts_debug": [
+      "planning"
+    ],
+    "soul_count": 1,
+    "soul_used": true,
+    "confidence_clamped": false,
+    "elapsed_s": 0.03,
+    "token_matches": []
+  }
+]

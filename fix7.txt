@@ -1,0 +1,62 @@
+It looks like we have a **Logic Trap**.
+
+Your code structure is correct, but your **input matching** is too strict. In your most recent test, you typed:
+`"Write a Python script that calculates factorial..."`
+
+Your code is currently checking for:
+`if "build" in query.lower() or "write code" in query.lower():`
+
+Because the string "Write a Python script" does not contain the exact phrases "build" or "write code", the `if` block is failing to trigger. The system thinks you didn't ask for a build, so it falls through to the Cognitive Core (the "Brain"), which then renders the UI dashboard.
+
+**This is why the Reflex Arc isn't firing.**
+
+### The Fix: Broaden the Reflexes
+
+We need to make the matching more inclusive so it catches any natural language variation of a build request.
+
+Ask **CommandCode** to perform a specific update to the `orchestrator.py` matching logic. Use this prompt:
+
+---
+
+**Prompt for CommandCode:**
+
+> **Task:** Relax the input matching logic in `backend/orchestrator.py` to be more inclusive.
+> **Requirements:**
+> 1. Locate the "build/write code" reflex block at the top of the loop.
+> 2. Update the `if` condition to catch broader intents. Change it to:
+> ```python
+> # Check for broader build/code intent
+> build_keywords = ["build", "write code", "write a python", "create a", "generate a"]
+> if any(keyword in query.lower() for keyword in build_keywords):
+>     # ... (keep existing logic)
+> 
+> ```
+> 
+> 
+> 3. **Force UI Suppression:** Explicitly wrap the dashboard rendering call in an `else` block to guarantee it cannot fire if a reflex block is matched:
+> ```python
+> # ── 1. REFLEX LAYER ──
+> # (Your reflex blocks with 'continue')
+> 
+> # ── 2. COGNITIVE LAYER ──
+> # Only render UI if no reflex was triggered
+> else:
+>     result = velynx_respond(query)
+>     layout = dashboard.render_response(...)
+>     console.print(layout)
+> 
+> ```
+> 
+> 
+> 4. Ensure the `continue` in the reflex blocks still exists so the `else` is strictly bypassed.
+> 
+> 
+
+---
+
+### Why this solves it:
+
+1. **Broader Matching:** By using `any(...)` with a list of keywords, "Write a Python script" will now trigger the "build" reflex, even if it doesn't contain the specific word "build."
+2. **Explicit `else` block:** By putting the rendering logic in an `else` block, you create a "hard wall." If the script enters the reflex `if` block, it is physically impossible for the dashboard to render because the code execution will `continue` to the next loop iteration before reaching the `else` branch.
+
+**Run this patch, and then try your factorial request again.** It should trigger the `[⚠ CODE WRITE OVERRIDE]` instantly, with zero UI dashboard interference.
