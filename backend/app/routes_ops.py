@@ -85,6 +85,25 @@ async def ops_status() -> dict:
     return await runtime_supervisor.get_status()
 
 
+@router.get("/ops/curiosity")
+async def ops_curiosity() -> dict:
+    """Curiosity subsystem snapshot (Phase 59.2).
+
+    Surfaces VELYNX's autonomous "subconscious": the goal-manager tallies, the
+    currently PENDING and ACTIVE curiosity goals, and the background executor's
+    high-level metrics (running state, last-run time, last cycle outcome).
+    """
+    from backend.agency.curiosity import GoalStatus, goal_manager
+    from backend.agency.curiosity_executor import curiosity_executor
+
+    return {
+        "stats": goal_manager.stats(),
+        "pending_goals": [g.to_dict() for g in goal_manager.all(GoalStatus.PENDING)],
+        "active_goals": [g.to_dict() for g in goal_manager.all(GoalStatus.ACTIVE)],
+        "executor": curiosity_executor.get_status(),
+    }
+
+
 @router.get("/runtime/stats")
 async def runtime_stats() -> dict:
     """Runtime event statistics."""

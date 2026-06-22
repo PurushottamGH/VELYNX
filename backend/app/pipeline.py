@@ -1,352 +1,493 @@
-"""Core query pipeline — the answer_question() function and helpers."""
+"""Core query pipeline — the answer_question() orchestrator.
+
+answer_question() imports and delegates to specialised modules under
+``backend/pipeline/`` for all concrete work.  This file owns only:
+  1. Module-level engine singletons (KG, ReasoningEngine, AnswerSynthesizer).
+  2. The request-scoped orchestration flow.
+  3. Wiring that is inherently cross-cutting (conversation state, reflection
+     dispatch, continuous learning, plasticity, curiosity).
+"""
 from __future__ import annotations
 
 import asyncio
-import json
 import logging
-import os
-import sqlite3
-import time
 from pathlib import Path
 
-from nltk.stem import PorterStemmer
-
+from backend.cognition.answer_synthesizer import AnswerSynthesizer
+from backend.cognition.reasoning_engine import ReasoningEngine
 from backend.learning.curriculum import resolve_chat_answer
 from backend.learning.knowledge_tutor import resolve_learning_answer
 from backend.memory.memory_manager import memory_manager
-from backend.memory.vector_store import recall_answer
 from backend.models.answer import AnswerResponse
 from backend.models.source import Source
-from backend.models.llm_client import llm_client
+# Existing backend/pipeline/* sub-modules (contradiction, intent etc.).
 from backend.pipeline import (
     contradiction,
     intent_engine,
     seed_knowledge,
-    reasoning_core,
     retrieval_mesh,
-    synthesizer,
     truth_filter,
 )
-from backend.reflection.reflection_engine import reflection_engine
-from backend.soul.soul_graph import apply_plasticity
-
+# Newly extracted micro-modules — each owns a single concern.
+from backend.pipeline.knowledge_router import handle_kg_fast_path
+from backend.pipeline.persistence import persist_local, record_memory_turn
+from backend.pipeline.reasoning_wiring import (
+    SYNTH_CONFIDENCE_MAP,
+    compute_thermodynamic_state,
+    contains_unresolved_pronoun,
+    extract_query_concepts,
+    retrieve_triples,
+)
+from backend.knowledge.world_model_context import schema_context_for_concepts
+from backend.memory.working_memory import working_memory_manager
+from backend.knowledge.normalizer import concept_normalizer
+from backend.knowledge.predicate_resolver import extract_predicate
+from backend.pipeline.agentic_loop import agentic_controller
+from backend.pipeline.reflection_router import run_reflection
+from backend.pipeline.reflex import is_declarative_statement, reflex_response
+from backend.pipeline.resonance import build_resonance_context, fetch_episodic_recall
+from backend.pipeline.self_router import handle_self_query
+# Phase 61: Episodic Narrative Memory (record history + narrate causal chains).
+from backend.memory.episodic import (
+    EpisodeKind,
+    episodic_manager,
+    episodic_narrative_handler,
+    extract_learning_subject,
+    narrative_compressor,
+)
+# Phase 60.2: Self-Referential introspection (router + aggregator + composer).
+from backend.cognition.self_model import (
+    QueryType,
+    extract_target_entity,
+    is_negative_epistemic_query,
+    self_context_aggregator,
+    self_query_router,
+    self_referential_graph,
+    self_response_composer,
+)
+from backend.pipeline.soul_router import soul_lookup, soul_lookup_legacy
 # Phase 11: Conversational Cognition
-from conversation.working_memory import conversation_buffer, ConversationTurn
-from conversation.monologue import inner_monologue
 from conversation.beliefs import belief_store
 from conversation.dialogue_manager import dialogue_manager
-from conversation.reasoning_modes import select_reasoning_mode, get_mode_config
+from conversation.monologue import inner_monologue
+from conversation.reasoning_modes import get_mode_config, select_reasoning_mode
+from conversation.working_memory import ConversationTurn, conversation_buffer
 
 logger = logging.getLogger("uvicorn")
 
-SOUL_PATH = Path(__file__).parent.parent / "soul" / "concepts.json"
-SOUL_EDGE_PATH = Path(__file__).parent.parent.parent / "data" / "concepts.json"
-_STEMMER = PorterStemmer()
-
-# Pre-compute stems for all soul concept names on module load
-_SOUL_CONCEPT_STEMS: dict[str, str] = {}
-_SOUL_EDGES: list[dict] = []
+# ── Native deterministic cognitive engines (no LLMs) ──────────────────────────
+# A single ReasoningEngine + AnswerSynthesizer pair is reused across requests.
+# The symbolic knowledge graph supplies deterministic (subject, predicate,
+# object) triples for graph traversal. All three are LLM-free.
 try:
-    if SOUL_PATH.exists():
-        raw = json.loads(SOUL_PATH.read_text())
-        for name in raw:
-            _SOUL_CONCEPT_STEMS[name] = _STEMMER.stem(name)
-    if SOUL_EDGE_PATH.exists():
-        edge_data = json.loads(SOUL_EDGE_PATH.read_text())
-        _SOUL_EDGES = edge_data.get("edges", [])
-except Exception:
-    pass
+    from backend.knowledge.knowledge_graph import KnowledgeGraph as _SymbolicKnowledgeGraph
 
+    _symbolic_kg = _SymbolicKnowledgeGraph()
+    _symbolic_kg.build()  # idempotent: seeds concepts/relationships only if empty
+except Exception as _exc:  # pragma: no cover - defensive, never block startup
+    logger.warning("Symbolic knowledge graph unavailable: %s", _exc)
+    _symbolic_kg = None
 
-def _stem_match(query_word: str, concept_name: str) -> bool:
-    """Return True if the query word stems to the same root as the concept."""
-    s_q = _STEMMER.stem(query_word.strip(",.!?;:'\"()[]{}"))
-    s_c = _SOUL_CONCEPT_STEMS.get(concept_name, "")
-    if not s_q or not s_c:
-        return False
-    return s_q == s_c or (len(s_q) >= 4 and s_q[:4] == s_c[:4])
+_reasoning_engine = ReasoningEngine(_symbolic_kg, None)
+_answer_synthesizer = AnswerSynthesizer()
 
+# Phase 62 — install the World Model registry so entity mentions inject their
+# inheritance-resolved schema into the reasoning context. Defensive: a failure
+# here leaves injection a no-op (schema_context_for_concepts returns []) rather
+# than blocking startup.
+try:
+    from backend.knowledge.world_model_context import install_default_registry
 
-def _get_edge_synthesis(matched: list[str]) -> str | None:
-    """If >1 concept matched, look for edges connecting them and synthesize."""
-    if len(matched) < 2:
-        return None
-    pairs = set()
-    for e in _SOUL_EDGES:
-        src = e.get("source", "")
-        tgt = e.get("target", "")
-        if src in matched and tgt in matched:
-            pairs.add((src, tgt, e.get("relationship_type", ""), e.get("context", "")))
-    if not pairs:
-        # No explicit edges — generate a default bridging synthesis
-        parts = []
-        for i in range(len(matched) - 1):
-            parts.append(
-                f"{matched[i].capitalize()} and {matched[i+1]} are deeply connected human "
-                f"experiences. {matched[i].capitalize()} shapes how we experience "
-                f"{matched[i+1]}, and understanding both together gives a fuller "
-                f"picture of the human condition than either alone."
-            )
-        return "\n\n".join(parts)
-    # Build from found edges
-    lines = []
-    for src, tgt, rtype, ctx in pairs:
-        lines.append(f"{src.capitalize()} {rtype} {tgt}: {ctx}")
-    return "\n\n".join(lines)
-
-
-def _build_soul_block(concept: str, data: dict) -> str:
-    """Build a formatted soul response from a single concept's data."""
-    core = data.get("core", "").strip()
-    if not core:
-        return ""
-    parts = [core]
-    not_list = data.get("what_it_is_not", [])
-    if not_list:
-        parts.append("It is not: " + ", ".join(not_list[:3]))
-    situations = data.get("real_situations", [])
-    if situations:
-        s = situations[0]
-        parts.append(f"In reality: {s.get('why', '')}")
-    taught_by = data.get("taught_by", "")
-    if taught_by:
-        parts.append(f"(Taught by {taught_by})")
-    return "\n\n".join(p for p in parts if p)
-
-
-# ── VELYNX V2 soul pipeline ──────────────────────────────────────────────────
-
-
-def _soul_lookup(query: str) -> dict | None:
-    """
-    V2 soul lookup using scenario engine + soul graph + embedding index.
-    Handles direct, relational, and scenario-type queries that the legacy
-    _soul_lookup may miss (e.g. "A man forgave someone who never apologized").
-    """
-    try:
-        from cognition.scenario_engine import parse_scenario
-        from soul.soul_graph import synthesize, get_edges, get_tensions
-    except Exception:
-        return None
-
-    result = parse_scenario(query)
-    if not result["concepts"]:
-        return None
-
-    soul_path = SOUL_PATH
-    if not soul_path.exists():
-        return None
-    soul = json.loads(soul_path.read_text())
-
-    qtype = result["query_type"]
-
-    # Build concept data with edges/tensions
-    concept_data = []
-    for concept in result["concepts"][:3]:
-        entry = soul.get(concept, {})
-        concept_data.append({
-            "name": concept,
-            "entry": entry,
-            "edges": get_edges(concept),
-            "tensions": get_tensions(concept),
-        })
-
-    if qtype == "direct" and len(result["concepts"]) == 1:
-        c = concept_data[0]
-        entry = c["entry"]
-        if isinstance(entry, dict):
-            response = entry.get("definition", entry.get("core", str(entry)))
-        else:
-            response = str(entry)
-    elif qtype in ("relational", "scenario"):
-        response = result["arc"]
-        if not response:
-            names = [c["name"] for c in concept_data]
-            response = synthesize(names)
-            # synthesize() returns a generic stub when no edges exist —
-            # fall through to legacy which builds richer formatted blocks
-            if response and response.startswith("These concepts are deeply connected"):
-                response = ""
-    else:
-        response = result["arc"] or str(concept_data[0]["entry"])
-
-    if not response:
-        return None
-
-    return {
-        "answer": response,
-        "concepts": result["concepts"],
-        "arc": result["arc"],
-        "soul_used": True,
-        "v2": True,
-        "scores": result.get("scores", {}),
-    }
-
-
-def _soul_lookup_legacy(query: str) -> dict | None:
-    """
-    Legacy soul lookup using Porter stemming on query words and concept names.
-
-    This is the original V1 implementation, preserved as a fallback.
-    "forgave"  -> stem "forgiv" matches "forgiveness" -> stem "forgiv".
-    Returns a dict with:
-      - answer:      str  (combined soul definitions + any edge synthesis)
-      - concepts:    list[str]  (all matched concept names)
-      - soul_used:   True
-    Returns None if nothing matches.
-    """
-    try:
-        if not SOUL_PATH.exists():
-            return None
-
-        soul = json.loads(SOUL_PATH.read_text())
-        query_words = query.lower().split()
-
-        matched_concepts: list[str] = []
-        for concept_name, data in soul.items():
-            # 1) exact substring (fast path — keeps old behaviour)
-            if concept_name in query.lower():
-                matched_concepts.append(concept_name)
-                continue
-            # 2) stem match on any query word
-            for qw in query_words:
-                if _stem_match(qw, concept_name):
-                    matched_concepts.append(concept_name)
-                    break
-
-        if not matched_concepts:
-            return None
-
-        # Deduplicate while preserving order
-        seen: set[str] = set()
-        ordered: list[str] = []
-        for c in matched_concepts:
-            if c not in seen:
-                seen.add(c)
-                ordered.append(c)
-
-        # Build answer blocks for each matched concept
-        blocks: list[str] = []
-        for c in ordered:
-            block = _build_soul_block(c, soul[c])
-            if block:
-                blocks.append(block)
-
-        # If >1 concept matched, add edge synthesis
-        synth = _get_edge_synthesis(ordered)
-        if synth:
-            blocks.append("── Relationship ──")
-            blocks.append(synth)
-
-        answer = "\n\n".join(blocks)
-
-        return {
-            "answer": answer,
-            "concepts": ordered,
-            "soul_used": True,
-        }
-
-    except Exception:
-        return None
-
-
-async def _record_memory_turn(query: str, response: dict, source: str, tags: list[str] | None = None, concept_tags: list[str] | None = None) -> None:
-    confidence = str(response.get("confidence") or "UNKNOWN")
-    if confidence == "UNKNOWN":
-        return
-    try:
-        combined_tags = (tags or []) + (concept_tags or [])
-        await memory_manager.store_episodic(
-            query,
-            str(response.get("answer") or ""),
-            confidence=confidence,
-            source=source,
-            tags=combined_tags,
-            kind=source,
-            importance=0.7 if confidence == "CERTAIN" else 0.5,
-        )
-    except Exception as exc:
-        logger.debug("Memory store skipped: %s", exc)
-
-
-def _looks_like_memory_request(text: str) -> bool:
-    lowered = text.lower()
-    return any(
-        phrase in lowered
-        for phrase in [
-            "remember",
-            "what did you say",
-            "as you said",
-            "last time",
-            "earlier",
-            "repeat",
-            "recall",
-        ]
-    )
-
-
-def _self_query(text: str) -> bool:
-    lowered = text.lower()
-    return any(p in lowered for p in [
-        "what do you know", "describe yourself", "what are you",
-        "how are you", "who are you", "what can you do",
-        "what do you remember", "are you healthy",
-    ])
-
-
-def _format_self_snapshot(snap: dict) -> str:
-    k = snap["knowledge"]
-    l = snap["learning"]
-    lines = [
-        f"I've learned {k['total_learned']} concepts across {len(k['top_domains'])} domains.",
-        f"My knowledge graph has {k['triples']} relationships connecting what I know.",
-        f"I've answered {l['total_queries']} questions so far (avg confidence: {l['avg_confidence']:.0%}).",
-    ]
-    if snap["soul"]:
-        lines.append(f"Purushottam has taught me about: {', '.join(snap['soul'])}.")
-    if k["weak_topics"]:
-        lines.append(f"Areas I'm uncertain about: {', '.join(k['weak_topics'][:5])}.")
-    lines.append(f"My health is {snap['health']}, uptime {snap['uptime_sec']:.0f}s.")
-    return " ".join(lines)
-
-
-_KG_DB = Path(__file__).parent.parent / "velynx_data" / "knowledge_graph" / "graph.db"
+    install_default_registry()
+except Exception as _exc:  # pragma: no cover - never block startup
+    logger.warning("World model registry unavailable: %s", _exc)
 
 # Phase 45: Per-session curiosity state
 _curiosity_session_state: dict = {}
 
 
-def _persist_local(query: str, answer: str, confidence: str, session_id: str | None = None) -> None:
-    if not _KG_DB.exists():
-        return
+def _format_consolidation_contradictions(raw) -> list[str]:
+    """Render ConsolidationReport.contradictions (list[dict]) to list[str].
+
+    ``AnswerResponse.contradictions`` is typed ``list[str]``; the consolidator
+    emits a list of dicts shaped like
+    ``{"subject", "relation", "old_object", "new_object", "type", "resolution"}``
+    (see ``backend.knowledge.consolidator``). We render each into a single
+    human-readable line, e.g.::
+
+        "User's favorite movie: 'Interstellar' -> 'Avatar' (overwrite)"
+
+    so the value satisfies the model's type AND gives the live-fire harness a
+    non-empty, meaningful ``contradictions`` list to flag. Defensive: tolerates
+    missing keys and non-dict entries, and never raises.
+    """
+    out: list[str] = []
+    for c in raw or []:
+        if isinstance(c, dict):
+            subject = c.get("subject", "?")
+            relation = c.get("relation", "")
+            old = c.get("old_object", "?")
+            new = c.get("new_object", "?")
+            resolution = c.get("resolution")
+            slot = f"{subject} {relation}".strip()
+            line = f"{slot}: {old!r} -> {new!r}"
+            if resolution:
+                line += f" ({resolution})"
+            out.append(line)
+        elif c:
+            out.append(str(c))
+    return out
+
+
+def _turn_concepts_for_memory(text: str, resp: AnswerResponse, injected: list[str]) -> list[str]:
+    """Collect the concepts to remember for this turn, normalized.
+
+    Source priority:
+      1. Subjects/objects of any facts just learned (``debug.learned_triples``)
+         — the richest, most reliable signal on the knowledge-acquisition path.
+      2. Concepts already resolved/injected for this turn (carry referents
+         forward so a chain of pronouns keeps its antecedent).
+      3. A lightweight keyword extraction from the user's text as a fallback,
+         so even a plain question still leaves a topical breadcrumb.
+    All values pass through the Phase-54 normalizer so the buffer holds the same
+    canonical surface forms the graph and read-path use.
+    """
+    concepts: list[str] = []
+
+    debug = resp.debug if isinstance(resp.debug, dict) else {}
+    for triple in debug.get("learned_triples") or []:
+        try:
+            subj, _rel, obj = triple[0], triple[1], triple[2]
+        except Exception:
+            continue
+        concepts.append(concept_normalizer.normalize(subj))
+        concepts.append(concept_normalizer.normalize(obj))
+
+    concepts.extend(injected or [])
+
     try:
-        db = sqlite3.connect(str(_KG_DB))
-        db.execute("CREATE TABLE IF NOT EXISTS sessions (session_id TEXT, query TEXT, answer TEXT, confidence TEXT, timestamp REAL)")
-        ts = time.time()
-        db.execute(
-            "INSERT OR REPLACE INTO understandings (topic, summary, confidence, query_count, timestamp) "
-            "VALUES (?, ?, ?, COALESCE((SELECT query_count FROM understandings WHERE topic=?), 0) + 1, ?)",
-            (query[:80], answer[:500], confidence, query[:80], ts),
-        )
-        db.execute(
-            "INSERT OR REPLACE INTO sessions (session_id, query, answer, confidence, timestamp) "
-            "VALUES (?, ?, ?, ?, ?)",
-            (session_id or "default", query[:200], answer[:500], confidence, ts),
-        )
-        db.commit()
-        db.close()
+        for kw in intent_engine._keywords(text) or []:
+            concepts.append(concept_normalizer.normalize(kw, preserve_case=True))
     except Exception:
         pass
 
+    return [c for c in concepts if c]
+
+
+def handle_self_referential(text: str) -> AnswerResponse | None:
+    """Phase 60.2 — answer a SELF_REFERENTIAL query by introspection.
+
+    Classifies the query frame; only a SELF_REFERENTIAL query that names an
+    explicit target entity ("what do you / don't you know about X") is handled
+    here. We compile the entity's Epistemic State via the Phase 60.1 aggregator
+    and render it with the deterministic :class:`SelfResponseComposer`, returning
+    the string DIRECTLY — bypassing semantic search, retrieval and synthesis.
+
+    Returns ``None`` to fall through to the standard pipeline when the query is
+    not self-referential, or is self-referential but names no entity (e.g. a
+    purely personal "where is my favourite cafe?" — left to the normal path so
+    agentic planning and personal-fact handling are preserved).
+    """
+    try:
+        route = self_query_router.classify(text)
+    except Exception as exc:
+        logger.debug("Self-query routing failed for %r: %s", text[:40], exc)
+        return None
+
+    if route != QueryType.SELF_REFERENTIAL.value:
+        return None
+
+    entity = extract_target_entity(text)
+    if not entity:
+        # Self-referential but no explicit topic entity — defer to the standard
+        # pipeline (covers personal "my ..." queries and agentic multi-hop goals).
+        return None
+
+    try:
+        # Component 4: keep VELYNX's canonical self node present (idempotent).
+        self_referential_graph.ensure_self_node()
+        # Component 5: aggregate epistemic state and render it deterministically.
+        # A negated framing ("what do you NOT know about X") is rendered gaps-
+        # first by the composer, so it needs a distinct paragraph from the
+        # positive "what do you know about X" framing.
+        ctx = self_context_aggregator.aggregate(entity)
+        is_negative = is_negative_epistemic_query(text)
+        answer = self_response_composer.compose(ctx, is_negative_query=is_negative)
+    except Exception as exc:
+        logger.warning("Self-referential introspection failed for %r: %s", entity, exc)
+        return None
+
+    logger.info(
+        "Self-referential introspection: entity=%r route=%s negative=%s",
+        entity, route, is_negative,
+    )
+    return AnswerResponse(
+        query=text,
+        answer=answer,
+        confidence="CERTAIN",
+        source="self_referential",
+        sources=[],
+        contradictions=[],
+        gaps=ctx.epistemic_state.get("unknown", []),
+        citations=[],
+        tone="introspective",
+        debug={
+            "self_referential": True,
+            "route": route,
+            "negative_query": is_negative,
+            "target_entity": ctx.target_entity,
+            "self_context": ctx.to_dict(),
+        },
+    )
+
+
+def handle_narrative_query(text: str) -> AnswerResponse | None:
+    """Phase 61 — answer "How did you learn about X?" from episodic memory.
+
+    Detects an autobiographical "how did you learn / come to know X" question,
+    then asks the :class:`NarrativeCompressor` to traverse the causal episode
+    chain (failure -> goal -> knowledge-acquired) and render a deterministic
+    story. Returns ``None`` (fall through to the normal pipeline) when the query
+    is not an episodic-history question.
+    """
+    try:
+        # Gate on the autobiographical "how did you learn X" shape so normal
+        # questions fall straight through to the standard pipeline.
+        if not extract_learning_subject(text):
+            return None
+        answer = episodic_narrative_handler.narrate(text)
+    except Exception as exc:
+        logger.debug("Episodic narrative failed for %r: %s", text[:40], exc)
+        return None
+
+    if not answer:
+        return None
+
+    logger.info("Episodic narrative answered: %r", text[:60])
+    return AnswerResponse(
+        query=text,
+        answer=answer,
+        confidence="CERTAIN",
+        source="episodic_memory",
+        sources=[],
+        contradictions=[],
+        gaps=[],
+        citations=[],
+        tone="narrative",
+        debug={"episodic_narrative": True},
+    )
+
 
 async def answer_question(text: str, session_id: str | None = None) -> AnswerResponse:
-    """Core query pipeline — processes a question through the full VELYNX stack."""
+    """Public query entry point with Phase 55 working-memory integration.
+
+    Wraps :func:`_answer_question_impl` so short-term memory is handled in ONE
+    place regardless of which internal branch answers the turn (reflex,
+    knowledge-acquisition commit, learning tutor, KG fast-path, symbolic
+    reasoning, ...). Responsibilities:
+
+    * Resolve referential pronouns: if the message contains "it"/"there"/... and
+      the session has active concepts, those concepts are the resolved
+      antecedent and are exposed as ``debug.working_memory.injected_concepts``.
+      (The impl additionally folds them into ``extract_query_concepts`` so the
+      reasoning path actually retrieves on them when it is the branch taken.)
+    * Record this turn's concepts into the rolling buffer so the NEXT turn has
+      an antecedent — done for every turn, every path, fixing the commit-path
+      short-circuit where the early return previously skipped the update.
+    * Attach a ``working_memory`` debug payload (turn_count, pronoun_detected,
+      injected_concepts, active_topics) to the response.
+
+    The user's ``query`` is never rewritten — resolution is an internal
+    expansion, not a mutation of the caller's words.
+    """
     sid = session_id or "default"
+
+    # Snapshot the buffer state BEFORE this turn so injection reflects prior
+    # turns only (the current turn hasn't been recorded yet).
+    active_topics = working_memory_manager.get_active_concepts(sid)
+    pronoun_detected = contains_unresolved_pronoun(text)
+    injected_concepts = list(active_topics) if (pronoun_detected and active_topics) else []
+
+    resp = await _answer_question_impl(text, session_id)
+
+    # Record this turn's concepts so the next turn can resolve back to them.
+    working_memory_manager.update(sid, _turn_concepts_for_memory(text, resp, injected_concepts))
+
+    wm_debug = {
+        "turn_count": working_memory_manager.turn_count(sid),
+        "pronoun_detected": pronoun_detected,
+        "injected_concepts": injected_concepts,
+        "active_topics": active_topics,
+    }
+    try:
+        if isinstance(resp.debug, dict):
+            resp.debug.setdefault("working_memory", wm_debug)
+        else:
+            resp.debug = {"working_memory": wm_debug}
+    except Exception:
+        logger.debug("Failed to attach working_memory debug payload", exc_info=True)
+
+    return resp
+
+
+async def _answer_question_impl(text: str, session_id: str | None = None) -> AnswerResponse:
+    """Core query pipeline — processes a question through the full VELYNX stack.
+
+    Wrapped by :func:`answer_question`, which layers Phase 55 working-memory
+    bookkeeping (pronoun resolution context + per-turn recording + the
+    ``debug.working_memory`` payload) uniformly across every return path.
+    """
+    sid = session_id or "default"
+
+    # ── Reflex layer — instant, graph-bypassing responses ──────────
+    reflex = reflex_response(text)
+    if reflex is not None:
+        logger.info("Reflex hit (%s) for %r", reflex.debug.get("reflex"), text[:40])
+        return reflex
+
+    # ── Knowledge Acquisition layer (Phase 53) ─────────────────────
+    if is_declarative_statement(text):
+        try:
+            from backend.knowledge.fact_extractor import extract_and_store_facts
+
+            learned = extract_and_store_facts(text)
+        except Exception as exc:
+            logger.warning("Knowledge acquisition failed for %r: %s", text[:40], exc)
+            learned = []
+
+        if learned:
+            logger.info("Knowledge acquisition: learned %d triple(s) for %r",
+                        len(learned), text[:40])
+
+            # ── Phase 53.1: Knowledge Consolidation ────────────────
+            # ── Phase 59.1: Curiosity Execution Loop ───────────────
+            # Consolidate the freshly-learned triples into the active KG and,
+            # once that lands, scan the updated graph for attribute gaps and
+            # autonomously pursue them via the Phase 58 planner. Dispatched as a
+            # single fire-and-forget task so it never blocks this user turn.
+            #
+            # In TEST MODE we still consolidate (tests depend on it) but DO NOT
+            # run the proactive curiosity loop — it would otherwise wake up mid-
+            # test, get curious about freshly-taught entities, and write back
+            # into the graph, creating race conditions / pollution.
+            # Capture any functional-predicate contradictions the consolidator
+            # flags so the TEACH response can surface them (the live-fire harness
+            # checks ``resp.contradictions``). Initialized before the dispatch so
+            # it is always defined, even if dispatch raises. Rendered to strings
+            # because AnswerResponse.contradictions is typed ``list[str]`` while
+            # ConsolidationReport.contradictions is a ``list[dict]``; passing the
+            # dicts straight through would fail Pydantic validation.
+            contradictions_found: list[str] = []
+            try:
+                import os as _os
+
+                # Consolidate SYNCHRONOUSLY on the TEACH turn (both test and live
+                # mode) so the freshly-detected functional-predicate contradiction
+                # is attached to THIS teach response. The contradiction is a
+                # property of the act of teaching a conflicting value — the
+                # subsequent retrieval QUERY ("what is my favorite movie?") never
+                # runs consolidation, so it can never carry the signal. The live-
+                # fire harness therefore asserts the contradiction on the TEACH
+                # turn (see backend/tests/live_fire_harness.py).
+                from backend.knowledge.consolidator import consolidate_pending_async
+
+                report = await consolidate_pending_async()
+                contradictions_found = _format_consolidation_contradictions(
+                    getattr(report, "contradictions", None)
+                )
+
+                # In live (non-test) mode, still pursue autonomous curiosity on
+                # the now-updated graph — but DON'T re-consolidate (we just did
+                # it synchronously above), so dispatch with consolidate=False as
+                # a fire-and-forget task that never blocks this user turn.
+                if not _os.environ.get("VELYNX_TEST_MODE"):
+                    from backend.agency.curiosity_executor import consolidate_and_explore
+
+                    asyncio.create_task(consolidate_and_explore(consolidate=False))
+            except Exception as exc:
+                logger.warning("Consolidation/curiosity dispatch failed for %r: %s",
+                               text[:40], exc)
+
+            # ── Phase 55: Working Memory ───────────────────────────
+            # NOTE: the buffer is updated for EVERY turn (including this
+            # short-circuiting commit path) by the ``answer_question`` wrapper,
+            # which reads ``debug.learned_triples`` below to recover the
+            # subject/object concepts just learned. Keeping the bookkeeping in
+            # one place guarantees a follow-up like "where is it?" always finds
+            # an antecedent, no matter which branch answered the turn.
+
+            # ── Phase 61: Episodic memory ──────────────────────────
+            # A user-taught fact is a consequential life event. Record a
+            # KNOWLEDGE_ACQUIRED episode; the manager links it (by entity) to any
+            # prior GOAL_CREATED episode, so "How did you learn X?" can replay the
+            # full goal -> learned chain. Best-effort.
+            try:
+                subject = str(learned[0][0]) if learned and learned[0] else ""
+                if subject:
+                    episodic_manager.record_knowledge_acquired(
+                        subject,
+                        triples=[list(t) for t in learned],
+                        summary=f"I was told: {text.strip()}",
+                        session_id=sid,
+                        source="user",
+                    )
+            except Exception as exc:
+                logger.debug("Episodic: knowledge-acquired logging failed: %s", exc)
+
+            # ── Phase 61: Goal satisfaction ────────────────────────
+            # A user-taught fact may resolve an outstanding curiosity goal. Mark
+            # any matching PENDING goal SATISFIED (PENDING -> SATISFIED) and let
+            # the curiosity layer log a KNOWLEDGE_ACQUIRED episode tagged to the
+            # goal's entity/attribute, so "How did you learn X?" can replay the
+            # full failure -> gap -> acquisition chain. This runs on the request
+            # path (independent of the background curiosity executor, which is
+            # suppressed in TEST MODE). Best-effort.
+            try:
+                from backend.agency.curiosity import mark_goals_satisfied_from_triples
+
+                mark_goals_satisfied_from_triples(
+                    [list(t) for t in learned], session_id=sid,
+                )
+            except Exception as exc:
+                logger.debug("Curiosity: goal-satisfaction from triples failed: %s", exc)
+
+            return AnswerResponse(
+                query=text,
+                answer="I have committed that to memory.",
+                confidence="CERTAIN",
+                source="knowledge_acquisition",
+                sources=[],
+                contradictions=contradictions_found,
+                gaps=[],
+                citations=[],
+                tone="friendly",
+                debug={
+                    "knowledge_acquisition": True,
+                    "learned_triples": [list(t) for t in learned],
+                },
+            )
+
+    # ── Episodic narrative (Phase 61) ──────────────────────────────
+    # "How did you learn about X?" is answered from VELYNX's own history by
+    # replaying the causal episode chain — before any external retrieval.
+    narrative = handle_narrative_query(text)
+    if narrative is not None:
+        return narrative
+
+    # ── Self-referential introspection (Phase 60.2) ────────────────
+    # "What do you / don't you know about X" is a question about VELYNX's OWN
+    # knowledge, not the world. Route it through the self-model: compile X's
+    # Epistemic State and render it deterministically, bypassing the standard
+    # semantic-search / retrieval / synthesis path entirely.
+    self_ref = handle_self_referential(text)
+    if self_ref is not None:
+        return self_ref
+
     conv_context = conversation_buffer.get_context_window(sid, max_turns=8)
     working_ctx = conversation_buffer.get_working_context(sid)
-
     # ── Priority classification (informational only) ──────────────
     from cognition.priority_router import classify as get_priority
+
     _priority = get_priority(text)
 
     # Phase 11D: Dialogue analysis
@@ -365,133 +506,75 @@ async def answer_question(text: str, session_id: str | None = None) -> AnswerRes
             clarification_needed=True,
         )
 
-    # ── Soul concepts — resonance activated ──────────────
-    soul_answer = _soul_lookup(text)  # V2: scenario engine + soul graph
+    # ── Soul concepts — resonance activated ───────────────────────
+    soul_answer = soul_lookup(text)  # V2: scenario engine + soul graph
     if not soul_answer:
-        soul_answer = _soul_lookup_legacy(text)  # Legacy: stem matching + edge synthesis
+        soul_answer = soul_lookup_legacy(text)  # Legacy: stem matching + edge synthesis
+
     resonance_context = ""
     top_concepts: list[str] = []
     resonance_scores: dict[str, float] = {}
     epistemic_states: dict[str, str] = {}
     recalled_memory: dict | None = None
-    if soul_answer:
-        scores = soul_answer.get("scores", {})
-        if scores:
-            # --- Phase 46: Epistemic Honesty Injection ---
-            from backend.soul.soul_graph import get_epistemic_state
-            top_concepts = list(scores.keys())[:5]
-            epistemic_states = get_epistemic_state(top_concepts)
-            resonance_scores = {c: round(scores[c], 3) for c in top_concepts}
 
-            enriched_scores = []
-            for c in top_concepts:
-                score = resonance_scores[c]
-                state = epistemic_states.get(c, "UNKNOWN")
-                enriched_scores.append(f"{c}:{score} ({state})")
+    resonance_context, top_concepts, resonance_scores, epistemic_states = (
+        build_resonance_context(soul_answer)
+    )
 
-            resonance_context = (
-                "SYSTEM [RESONANCE FIELD ACTIVE]: The user's query activated "
-                "the following deep cognitive concepts: " + ", ".join(enriched_scores)
-                + "\nCRITICAL INSTRUCTION: If a concept is marked INFERRED or UNCERTAIN, "
-                "you MUST explicitly communicate this doubt to the user "
-                "(e.g. 'I am inferring this, but I am not certain...'). "
-                "Do not state uncertain concepts as absolute facts."
-            )
-            # ---------------------------------------------
+    # --- Phase 47: Episodic Recall ---
+    recalled_memory, resonance_context = await fetch_episodic_recall(
+        memory_manager, top_concepts, resonance_context
+    )
 
-    # --- Phase 47: Episodic Recall — fetch memory tagged with primary concept ---
-    if top_concepts and resonance_context:
-        primary_concept = top_concepts[0]
-        try:
-            past_eps = await asyncio.wait_for(
-                memory_manager.recall_by_tag(primary_concept, limit=1),
-                timeout=3.0,
-            )
-            if past_eps:
-                past_prompt = past_eps[0].entry.metadata.get("prompt", "")
-                past_answer = past_eps[0].entry.metadata.get("answer", "")[:200]
-                recalled_memory = {
-                    "concept": primary_concept,
-                    "prompt": past_prompt,
-                    "answer": past_answer,
-                }
-                episodic_context = (
-                    f"\nEPISODIC RECALL: The last time you discussed '{primary_concept}', "
-                    f"the user said: '{past_prompt}'. "
-                    f"You answered: '{past_answer}'. "
-                    f"Use this to contextualize your response."
-                )
-                resonance_context += episodic_context
-        except asyncio.TimeoutError:
-            logger.debug("Episodic recall timed out (3s)")
-        except Exception as exc:
-            logger.debug("Episodic recall failed: %s", exc)
-    # -----------------------------------------------------------------
+    # ── Self-model ────────────────────────────────────────────────
+    self_response = await handle_self_query(text)
+    if self_response is not None:
+        return self_response
 
-    # ── Self-model — 'what do you know', 'describe yourself' ─
-    if _self_query(text):
-        try:
-            from cognition.self_model import self_model
-            snap = await self_model.snapshot()
-            answer = _format_self_snapshot(snap)
-            return AnswerResponse(
-                query=text,
-                answer=answer,
-                confidence="CERTAIN",
-                source="self_model",
-                sources=[],
-                contradictions=[],
-                gaps=[],
-                citations=[],
-                tone="direct",
-            )
-        except Exception as exc:
-            logger.debug("self_model skipped: %s", exc)
+    # ── Agentic planning (Phase 57) ───────────────────────────────
+    # Multi-hop goals (e.g. "population of the city where my favorite coffee
+    # shop is located") cannot be answered by a single retrieval. When the
+    # deterministic gate fires, decompose the goal into an explicit DAG and
+    # execute it, bypassing the single-pass reasoning block below. The plan is
+    # attached to the debug payload for inspection.
+    if agentic_controller.should_plan(text):
+        plan = agentic_controller.formulate_plan(text)
+        logger.info("Agentic planning engaged for %r: %d-step plan", text[:60], len(plan.steps))
+        synthesis = await agentic_controller.execute_plan(plan)
+        agentic_answer = {
+            "answer": synthesis["answer"],
+            "confidence": synthesis["confidence"],
+            "citations": synthesis.get("citations", []),
+            "gaps": [],
+            "tone": "analytical",
+            "source": "agentic",
+            "debug": {"agentic": True, "plan": plan.to_dict()},
+        }
+        await record_memory_turn(text, agentic_answer, "agentic", ["agentic", "planning"])
+        return AnswerResponse(
+            query=text,
+            answer=agentic_answer["answer"],
+            confidence=agentic_answer["confidence"],
+            sources=[],
+            contradictions=[],
+            gaps=[],
+            citations=agentic_answer["citations"],
+            tone="analytical",
+            debug=agentic_answer["debug"],
+        )
 
-    # ── Knowledge Graph fast path ──────────────
-    if not resonance_context:
-        try:
-            from memory.knowledge_graph import knowledge_graph
-            kg_node = knowledge_graph.lookup(text, threshold=0.3)
-            if kg_node and kg_node.effective_confidence >= 0.3:
-                import html as _html
-                import re as _re
-                clean_summary = _html.unescape(kg_node.summary)
-                clean_summary = _re.sub(r"\(pronunciation[^)]*\)", "", clean_summary)
-                clean_summary = _re.sub(r"\s+", " ", clean_summary).strip()
-                conf = "CERTAIN" if kg_node.effective_confidence >= 0.85 else (
-                    "PROBABLE" if kg_node.effective_confidence >= 0.65 else (
-                    "DEBATED" if kg_node.effective_confidence >= 0.40 else "LOW"))
-                kg_result = {
-                    "answer": clean_summary,
-                    "confidence": conf,
-                    "sources": [],
-                    "gaps": [],
-                    "citations": [f"[KG] Learned from {kg_node.source_count} source(s)"],
-                    "tone": "human",
-                    "debug": {"kg_hit": True, "concept": kg_node.concept, "domain": kg_node.domain},
-                }
-                await _record_memory_turn(text, kg_result, "knowledge_graph", ["kg", "terminal"])
-                return AnswerResponse(
-                    query=text,
-                    answer=clean_summary,
-                    confidence=conf,
-                    sources=[],
-                    contradictions=[],
-                    gaps=[],
-                    citations=kg_result["citations"],
-                    tone="human",
-                    debug=kg_result["debug"],
-                )
-        except Exception:
-            pass
+    # ── Knowledge Graph fast path ──────────────────────────────────
+    kg_response = await handle_kg_fast_path(text, resonance_context)
+    if kg_response is not None:
+        return kg_response
 
+    # ── Learning tutor / curriculum / seed knowledge ──────────────
     learning = await resolve_learning_answer(text)
     if learning is not None:
         tags = ["deterministic", "terminal"]
         if learning.get("cognitive_layers"):
             tags.extend(learning.get("cognitive_layers"))
-        await _record_memory_turn(text, learning, "learning_tutor", tags)
+        await record_memory_turn(text, learning, "learning_tutor", tags)
         return AnswerResponse(
             query=text,
             answer=learning["answer"],
@@ -516,7 +599,7 @@ async def answer_question(text: str, session_id: str | None = None) -> AnswerRes
 
     local = resolve_chat_answer(text)
     if local is not None:
-        await _record_memory_turn(text, local, "curriculum", ["curriculum", "terminal"])
+        await record_memory_turn(text, local, "curriculum", ["curriculum", "terminal"])
         return AnswerResponse(
             query=text,
             answer=local["answer"],
@@ -531,7 +614,7 @@ async def answer_question(text: str, session_id: str | None = None) -> AnswerRes
 
     seeded = seed_knowledge.resolve_seed_answer(text)
     if seeded is not None:
-        await _record_memory_turn(text, seeded, "seed_knowledge", ["seeded", "terminal"])
+        await record_memory_turn(text, seeded, "seed_knowledge", ["seeded", "terminal"])
         return AnswerResponse(
             query=text,
             answer=seeded["answer"],
@@ -544,11 +627,11 @@ async def answer_question(text: str, session_id: str | None = None) -> AnswerRes
             debug={"seeded": True, "seed_keys": seeded["seed_keys"]},
         )
 
-    # Semantic recall (new system) — with hard timeout
+    # ── Semantic recall (with hard timeout) ────────────────────────
     semantic_results = []
     try:
         semantic_results = await asyncio.wait_for(
-            memory_manager.recall(text, limit=1, kinds=["episodic"]),
+            memory_manager.recall(text, limit=1, kinds=["episodic", "semantic"]),
             timeout=3.0,
         )
     except asyncio.TimeoutError:
@@ -556,74 +639,73 @@ async def answer_question(text: str, session_id: str | None = None) -> AnswerRes
     except Exception as exc:
         logger.debug("Semantic recall failed: %s", exc)
 
-    # Legacy recall (backward compat)
-    remembered = recall_answer(text)
-    memory_debug = (remembered or {}).get("debug") or {}
-    memory_meta = memory_debug.get("memory") or {}
-    memory_kind = str(memory_meta.get("kind") or "")
-
-    # Prefer legacy associative memory for definition-like prompts even when the
-    # user isn't explicitly asking to "remember/recall".
-    # This avoids cases where generic retrieval/LLM answers unrelated "meanings".
-    definition_intent = any(
-        phrase in text.lower()
-        for phrase in [
-            "what does",
-            "what do ",
-            "what is",
-            "what's",
-            "mean ",
-            "meaning",
-            "define",
-            "definition",
-        ]
-    )
-
-    # Prefer semantic hit if it scores high enough
-    if semantic_results and semantic_results[0].score >= 0.65:
+    # Semantic recall — KG provenance tagging (Phase 53.1)
+    if semantic_results and semantic_results[0].score >= 0.72:
         hit = semantic_results[0]
-        remembered = {
-            "answer": f"I remember this: {hit.entry.metadata.get('answer', hit.entry.text)}",
-            "confidence": hit.entry.confidence,
-            "citations": [],
-            "gaps": [],
-            "tone": "human",
-            "debug": {"memory": {"kind": hit.entry.kind, "score": hit.score, "match_reason": hit.match_reason}},
-        }
 
-    # If this looks like a definition request and we have a legacy hit, return it.
-    # Use a soft threshold based on legacy scoring done in vector_store.
-    if remembered is not None and definition_intent:
-        mem = (remembered.get("debug") or {}).get("memory") or {}
-        legacy_score = float(mem.get("score") or 0.0)
-        if legacy_score >= 0.35:
-            await _record_memory_turn(text, remembered, "memory", ["associative", "terminal"])
-            return AnswerResponse(
-                query=text,
-                answer=remembered["answer"],
-                confidence=remembered["confidence"],
-                sources=[],
-                contradictions=[],
-                gaps=remembered.get("gaps", []),
-                citations=remembered.get("citations", []),
-                tone=remembered.get("tone", "human"),
-                debug=remembered.get("debug", {}),
-            )
-
-    if remembered is not None and (_looks_like_memory_request(text) or memory_kind == "feedback"):
-        await _record_memory_turn(text, remembered, "memory", ["associative", "terminal"])
-        return AnswerResponse(
-            query=text,
-            answer=remembered["answer"],
-            confidence=remembered["confidence"],
-            sources=[],
-            contradictions=[],
-            gaps=remembered.get("gaps", []),
-            citations=remembered.get("citations", []),
-            tone=remembered.get("tone", "human"),
-            debug=remembered.get("debug", {}),
+        entry_source = getattr(hit.entry, "source", "") or ""
+        entry_rels = (hit.entry.metadata or {}).get("relationships") or []
+        fact_text = hit.entry.text
+        is_kg_fact = (
+            entry_source == "consolidation"
+            or "->" in fact_text
+            or any("->" in str(r) for r in entry_rels)
         )
 
+        if is_kg_fact:
+            kg_confidence = "CERTAIN" if hit.score >= 0.9 else "PROBABLE"
+            kg_answer = f"{fact_text} [KG]"
+            kg_debug = {
+                "kg_hit": True,
+                "kg": {
+                    "fact": fact_text,
+                    "relationships": entry_rels,
+                    "score": hit.score,
+                    "source": entry_source or "knowledge_graph",
+                },
+                "reasoning_trace": [
+                    f"knowledge_graph: {fact_text} (score={hit.score:.3f})"
+                ],
+                "memory": {
+                    "kind": hit.entry.kind,
+                    "score": hit.score,
+                    "match_reason": hit.match_reason,
+                },
+            }
+            kg_remembered = {
+                "answer": kg_answer,
+                "confidence": kg_confidence,
+                "citations": ["[KG]"],
+                "gaps": [],
+                "tone": "human",
+                "source": "knowledge_graph",
+                "debug": kg_debug,
+            }
+            await record_memory_turn(
+                text, kg_remembered, "knowledge_graph", ["knowledge_graph", "kg"]
+            )
+            return AnswerResponse(
+                query=text,
+                answer=kg_answer,
+                confidence=kg_confidence,
+                source="knowledge_graph",
+                sources=[],
+                contradictions=[],
+                gaps=[],
+                citations=["[KG]"],
+                tone="human",
+                debug=kg_debug,
+            )
+
+        # ── Non-KG (episodic/associative) hit: fall through ────
+        remembered = {
+            "answer": hit.entry.metadata.get("answer", hit.entry.text),
+            "confidence": hit.entry.confidence,
+            "kind": hit.entry.kind,
+            "score": hit.score,
+        }
+
+    # ── Intent decomposition & retrieval ──────────────────────────
     intent = intent_engine.decompose_query(text)
     dimensions = intent.get("dimensions", {})
     weights = intent.get("weights", {})
@@ -656,94 +738,110 @@ async def answer_question(text: str, session_id: str | None = None) -> AnswerRes
         )
     except asyncio.TimeoutError:
         from conversation.monologue import MonologueTrace
+
         monologue_trace = MonologueTrace(steps=[], summary_value=None, confidence=0.5)
         logger.debug("Monologue timed out (3s)")
 
-    draft = None
-    if llm_client.available:
-        try:
-            from pipeline.context_builder import build_context
-            ctx = build_context(
-                text, filtered,
-                constitution=intent.get("constitution"),
-                conversation_context=conv_context if conv_context else None,
-                beliefs=belief_store.get_all_active_summary() or None,
-                resonance_context=resonance_context or None,
-            )
-            from cognition.reasoning_engine import reason as llm_reason
-            reasoning_result = await asyncio.wait_for(
-                llm_reason(
-                    text,
-                    filtered,
-                    constitution=intent.get("constitution"),
-                    cognitive_layer=cognitive_layer,
-                    memory_context=ctx.memory_context if ctx.memory_context else None,
-                    monologue_context=monologue_trace.summary() or None,
-                    mode_prompt_addendum=mode_config.system_prompt_addendum,
-                    temperature_override=0.3 + mode_config.temperature_adjustment,
-                    resonance_context=ctx.resonance_context or None,
-                ),
-                timeout=12.0,
-            )
-            if reasoning_result is not None:
-                draft = {
-                    "draft": reasoning_result.answer,
-                    "confidence": reasoning_result.confidence,
-                    "citations": reasoning_result.citations,
-                    "gaps": reasoning_result.gaps,
-                    "cognitive_layer": cognitive_layer,
-                    "debug": {
-                        "llm": {
-                            "reasoning": reasoning_result.reasoning_content,
-                            "token_usage": reasoning_result.token_usage,
-                            "raw": reasoning_result.raw_response,
-                        }
-                    },
-                }
-        except Exception as exc:
-            logger.info("LLM reasoning unavailable, using internal engine: %s", exc)
+    # ── Native symbolic reasoning (no LLMs) ───────────────────────────────
+    # Phase 55 — Working Memory injection. Pull this session's recently
+    # discussed concepts; extract_query_concepts only folds them in when the
+    # message has an unresolved pronoun ("where is it?"), resolving the
+    # referent to the previous turn's topic. Buffer bookkeeping + the
+    # ``working_memory`` debug payload are handled uniformly by the
+    # ``answer_question`` wrapper so EVERY return path is covered.
+    wm_concepts = working_memory_manager.get_active_concepts(sid)
+    query_concepts = extract_query_concepts(
+        text, intent, top_concepts, working_memory_concepts=wm_concepts
+    )
+    retrieved_triples = retrieve_triples(query_concepts, _symbolic_kg, query=text)
+    thermodynamic_state = compute_thermodynamic_state(conflicts, len(filtered))
 
-    if draft is None:
-        draft = reasoning_core.reason(
-            filtered,
-            query=text,
-            constitution=intent.get("constitution"),
-            cognitive_layer=cognitive_layer,
+    # Phase 62 — World Model schema injection. If any extracted concept names a
+    # registered Entity (e.g. "Blender"), pull its fully evaluated profile —
+    # every own + inherited attribute with defaults filled — rendered to text.
+    # These blocks are folded into ``episodic_context`` below so the reasoner
+    # and the LLM synthesiser receive the entity's structured attributes
+    # (license_model: GPL, vendor: Blender Foundation, ...) instead of the bare
+    # token. Lookups are memoised per entity, so this adds no live-loop latency.
+    try:
+        world_model_context = schema_context_for_concepts(query_concepts)
+    except Exception as exc:  # injection must never break the answer path
+        world_model_context = []
+        logger.debug("World model injection skipped: %s", exc)
+
+    # Predicate grounding for contradiction scoping. Lift the user's relation
+    # verb ("Who *created* Blender?" -> "create") so the reasoner only flags —
+    # and only penalizes confidence for — conflicts on THAT predicate. Unrelated
+    # "[be]" disagreements on the same entity must not tank the answering edge.
+    try:
+        query_predicate = extract_predicate(text)
+    except Exception:
+        query_predicate = ""
+
+    # Episodic context = recent recall + any explicitly recalled turn.
+    episodic_context: list[str] = []
+    # Phase 62 — prepend World Model schema blocks so the entity's structured,
+    # inheritance-resolved attributes lead the context the reasoner/synthesiser
+    # consume (they are higher-signal than free-form recall for typed entities).
+    episodic_context.extend(world_model_context)
+    for hit in semantic_results or []:
+        try:
+            episodic_context.append(hit.entry.metadata.get("answer") or hit.entry.text)
+        except Exception:
+            continue
+    if recalled_memory:
+        episodic_context.append(
+            f"{recalled_memory.get('prompt', '')} {recalled_memory.get('answer', '')}".strip()
         )
-    final = synthesizer.synthesize(draft, query=text)
+
+    logger.info(
+        "Symbolic reasoning: %d concept(s), %d triple(s), thermo=%.2f",
+        len(query_concepts), len(retrieved_triples), thermodynamic_state,
+    )
+
+    reasoning_trace = _reasoning_engine.reason(
+        query_concepts=query_concepts,
+        retrieved_triples=retrieved_triples,
+        episodic_context=episodic_context,
+        thermodynamic_state=thermodynamic_state,
+        query_predicate=query_predicate,
+    )
+
+    # ── Synthesize the symbolic trace into natural language ───────────────
+    synth_result = await _answer_synthesizer.synthesize(text, reasoning_trace)
+
+    mapped_confidence = SYNTH_CONFIDENCE_MAP.get(
+        synth_result.confidence_label, "UNKNOWN"
+    )
+    final = {
+        "answer": synth_result.text,
+        "confidence": mapped_confidence,
+        "gaps": list(reasoning_trace.unresolved_concepts),
+        "citations": [f"[KG] {s}" for s in synth_result.sources],
+        "tone": "scientific",
+        "sources": [],
+        "debug": {"reasoning_trace": reasoning_trace.to_dict()},
+    }
 
     # Phase 3: Reflection (with timeout)
-    reasoning_content = draft.get("debug", {}).get("llm", {}).get("reasoning", "")
-    try:
-        reflection_result = await asyncio.wait_for(
-            reflection_engine.reflect(
-                query=text,
-                answer=final.get("answer", ""),
-                sources=filtered,
-                reasoning_content=reasoning_content,
-                confidence=final.get("confidence", "UNKNOWN"),
-            ),
-            timeout=5.0,
-        )
-    except asyncio.TimeoutError:
-        from reflection import AuditResult, ConfidenceEstimate
-        from reflection.reflection_engine import ReflectionResult
-        reflection_result = ReflectionResult(
-            audit=AuditResult(issues=[], overall_quality=0.5, hallucination_risk=0.5, reasoning_coherence=0.5),
-            confidence_estimate=ConfidenceEstimate(initial=0.5, calibrated=0.5, calibration_delta=0.0, rationale="reflection timed out"),
-            improvements=[],
-            memory_priority=0.3,
-            reasoning_quality=0.5,
-        )
+    reasoning_content = "; ".join(str(p) for p in reasoning_trace.paths[:3])
+    reflection_result = await run_reflection(
+        query=text,
+        answer=final.get("answer", ""),
+        sources=filtered,
+        reasoning_content=reasoning_content,
+        confidence=final.get("confidence", "UNKNOWN"),
+    )
 
     tags = ["retrieval", "terminal"]
     if cognitive_layer:
         tags.append(str(cognitive_layer))
-    await _record_memory_turn(text, final, "retrieval", tags, concept_tags=top_concepts[:3])
+    await record_memory_turn(text, final, "retrieval", tags, concept_tags=top_concepts[:3])
 
     # Phase 14: Wire continuous learner
     try:
         from learning.continuous_learner import continuous_learner
+
         await continuous_learner.learn_from_query(
             query=text,
             sources=filtered if filtered else sources,
@@ -783,13 +881,14 @@ async def answer_question(text: str, session_id: str | None = None) -> AnswerRes
     ))
 
     # Phase 4: Persist locally
-    _persist_local(text, str(final.get("answer", "")),
-                   str(final.get("confidence", "UNKNOWN")), session_id)
+    persist_local(text, str(final.get("answer", "")),
+                  str(final.get("confidence", "UNKNOWN")), session_id)
 
     # Auto-save every answered query to KG
     conf_label = final.get("confidence", "UNKNOWN")
     if conf_label not in ("LOW", "UNKNOWN"):
         from memory.knowledge_graph import KnowledgeGraph
+
         knowledge_graph = KnowledgeGraph()
         await knowledge_graph.store_answer(
             query=text,
@@ -811,20 +910,20 @@ async def answer_question(text: str, session_id: str | None = None) -> AnswerRes
         if item.get("url")
     ]
 
-    # ── Fix 3: Soul confidence calibration ──
-    # If the full pipeline ran (soul wasn't used) and the draft says CERTAIN,
-    # clamp to LOW. The pipeline cannot be CERTAIN without soul anchoring.
+    # ── Confidence calibration ──
     final_confidence = final.get("confidence", "UNKNOWN")
     if final_confidence == "CERTAIN":
         final_confidence = "LOW"
 
     # --- Phase 42: Synaptic Plasticity Trigger ---
     if soul_answer and soul_answer.get('concepts') and final_confidence in ("CERTAIN", "PROBABLE"):
+        from backend.soul.soul_graph import apply_plasticity
+
         asyncio.to_thread(apply_plasticity, soul_answer.get('scores', {}), source_quality=0.6)
-    # ---------------------------------------------
 
     # --- Phase 45: Curiosity Engine — inject one question per session ---
     from velynx.graph.curiosity_engine import select_curiosity_question
+
     _session_state = _curiosity_session_state.setdefault(sid, {"has_asked": False})
     curiosity_q = select_curiosity_question(
         _session_state.get("has_asked", False),
@@ -833,13 +932,30 @@ async def answer_question(text: str, session_id: str | None = None) -> AnswerRes
     if curiosity_q:
         final["answer"] += curiosity_q
         _session_state["has_asked"] = True
-    # -----------------------------------------------------------
 
     # --- Phase 48: Metacognitive Penalty Trigger ---
     if soul_answer and soul_answer.get("concepts") and final_confidence in ("LOW", "UNKNOWN"):
         from backend.soul.soul_graph import apply_metacognitive_penalty
-        asyncio.to_thread(apply_metacognitive_penalty, soul_answer["concepts"])
-    # -----------------------------------------------
+
+        await asyncio.to_thread(apply_metacognitive_penalty, soul_answer["concepts"])
+
+    # --- Phase 61: Episodic memory — record the failure to answer ---
+    # Reaching the symbolic terminal path with low/unknown confidence means
+    # VELYNX could not satisfactorily answer. Record a QUERY_FAILURE episode so
+    # the Curiosity Engine's later GOAL_CREATED (and any eventual
+    # KNOWLEDGE_ACQUIRED) can be causally chained back to this moment. We tag it
+    # with the most specific query concept as the entity. Best-effort.
+    if final_confidence in ("LOW", "UNKNOWN"):
+        try:
+            fail_entity = query_concepts[-1] if query_concepts else ""
+            episodic_manager.record_query_failure(
+                text,
+                entity=fail_entity,
+                session_id=sid,
+                confidence=final_confidence,
+            )
+        except Exception as exc:
+            logger.debug("Episodic: query-failure logging failed: %s", exc)
 
     debug_info = {
         "intent": intent,
@@ -850,8 +966,8 @@ async def answer_question(text: str, session_id: str | None = None) -> AnswerRes
         "soul_used": False,
         "confidence_clamped": final_confidence != final.get("confidence", "UNKNOWN"),
     }
-    if draft.get("debug"):
-        debug_info["llm"] = draft["debug"].get("llm", {})
+    if final.get("debug"):
+        debug_info["reasoning_trace"] = final["debug"].get("reasoning_trace", {})
     debug_info["reflection"] = reflection_result.model_dump()
     debug_info["monologue"] = monologue_trace.model_dump()
     debug_info["reasoning_mode"] = reasoning_mode.value

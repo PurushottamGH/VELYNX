@@ -125,9 +125,17 @@ class ConversationBuffer:
         """Get the number of turns in a session."""
         return len(self._sessions.get(session_id, []))
 
-    def clear(self, session_id: str) -> None:
-        """Clear a session's buffer."""
-        self._sessions.pop(session_id, None)
+    def clear(self, session_id: str | None = None) -> None:
+        """Clear one session's buffer, or ALL sessions when ``session_id`` is None.
+
+        Clearing all is used to reset in-memory conversation state between
+        live-fire runs — a disk wipe cannot reach this RAM buffer, so without it
+        a fact stated in a prior turn ("Avatar") survives and resurfaces.
+        """
+        if session_id is None:
+            self._sessions.clear()
+        else:
+            self._sessions.pop(session_id, None)
 
     def _extract_topics(self, turns: list[ConversationTurn]) -> list[str]:
         """Extract active topics from conversation turns."""

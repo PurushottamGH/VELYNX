@@ -52,7 +52,7 @@ class EmbeddingService:
             raise RuntimeError("Embedding disabled by VELYNX_SKIP_EMBEDDING")
         if self._model is None:
             # Reuse the shared singleton from gpu_embedder to avoid loading the model twice
-            from memory.gpu_embedder import get_cached_model
+            from backend.memory.gpu_embedder import get_cached_model
             model, _device = get_cached_model()
             self._model = model
         return self._model

@@ -12,9 +12,9 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("uvicorn")
 
-OPENGATEWAY_BASE_URL = os.getenv("OPENGATEWAY_BASE_URL", "https://opengateway.gitlawb.com/v1")
-OPENGATEWAY_API_KEY = os.getenv("OPENGATEWAY_API_KEY", "")
-OPENGATEWAY_MODEL = os.getenv("OPENGATEWAY_MODEL", "mimo-v2.5-pro")
+OPENGATEWAY_BASE_URL = os.getenv("OPENGATEWAY_BASE_URL", "http://localhost:11434/v1")
+OPENGATEWAY_API_KEY = os.getenv("OPENGATEWAY_API_KEY", "ollama")  # dummy — Ollama ignores it
+OPENGATEWAY_MODEL = os.getenv("OPENGATEWAY_MODEL", "llama3.1")    # any locally pulled model
 
 _TIMEOUT = httpx.Timeout(None)  # No timeout — allow unlimited processing time
 _MAX_RETRIES = 2
@@ -56,10 +56,8 @@ class LLMClient:
         self.api_key = api_key
         self.model = model
         if not self.api_key:
-            raise ValueError(
-                "API Key missing! Cannot initialize LLMClient.\n"
-                "Set OPENGATEWAY_API_KEY environment variable."
-            )
+            self.api_key = "ollama"
+            logger.warning("No API key set — defaulting to local Ollama dummy key.")
 
     @property
     def available(self) -> bool:

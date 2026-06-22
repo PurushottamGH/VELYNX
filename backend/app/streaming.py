@@ -15,7 +15,6 @@ from conversation.monologue import inner_monologue
 from conversation.beliefs import belief_store
 from conversation.dialogue_manager import dialogue_manager
 from conversation.reasoning_modes import select_reasoning_mode, get_mode_config
-from models.llm_client import llm_client, LLMMessage
 from models.source import Source
 
 logger = logging.getLogger("uvicorn")
@@ -109,48 +108,17 @@ async def stream_query(
                 })
             yield _sse("pipeline_stage", {"stage": "monologue", "status": "complete"})
 
-            # Reasoning (LLM)
+            # Reasoning (internal deterministic engine — no LLM)
             yield _sse("pipeline_stage", {"stage": "reasoning", "status": "active"})
             cognitive_layer = intent.get("cognitive_layer")
 
-            draft = None
-            if llm_client.available:
-                try:
-                    from pipeline.context_builder import build_context
-                    from cognition.reasoning_engine import reason as llm_reason
-                    ctx = build_context(
-                        text, filtered,
-                        constitution=intent.get("constitution"),
-                        conversation_context=conv_context if conv_context else None,
-                        beliefs=belief_store.get_all_active_summary() or None,
-                    )
-                    reasoning_result = await llm_reason(
-                        text, filtered,
-                        constitution=intent.get("constitution"),
-                        cognitive_layer=cognitive_layer,
-                        memory_context=ctx.memory_context if ctx.memory_context else None,
-                        monologue_context=monologue_trace.summary() or None,
-                        mode_prompt_addendum=mode_config.system_prompt_addendum,
-                        temperature_override=0.3 + mode_config.temperature_adjustment,
-                    )
-                    if reasoning_result is not None:
-                        draft = {
-                            "draft": reasoning_result.answer,
-                            "confidence": reasoning_result.confidence,
-                            "citations": reasoning_result.citations,
-                            "gaps": reasoning_result.gaps,
-                        }
-                except Exception as exc:
-                    logger.info("LLM reasoning unavailable in stream, using internal engine: %s", exc)
-
-            if draft is None:
-                from pipeline import reasoning_core
-                draft = reasoning_core.reason(
-                    filtered,
-                    query=text,
-                    constitution=intent.get("constitution"),
-                    cognitive_layer=cognitive_layer,
-                )
+            from pipeline import reasoning_core
+            draft = reasoning_core.reason(
+                filtered,
+                query=text,
+                constitution=intent.get("constitution"),
+                cognitive_layer=cognitive_layer,
+            )
 
             yield _sse("pipeline_stage", {"stage": "reasoning", "status": "complete"})
 

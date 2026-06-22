@@ -21,114 +21,27 @@ import ast
 import shutil
 import subprocess
 import sys
-import textwrap
 from pathlib import Path
 
-import sys, os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-from models.llm_client import LLMMessage, llm_client
+
 
 BACKEND_ROOT = Path(__file__).parent
 
 
 class SelfCoder:
-    """VELYNX's self-modification engine.  All LLM calls go through llm_client."""
+    """VELYNX's self-modification engine — MEMORY-ONLY MODE (no LLM)."""
 
     DRY_RUN = False
 
     # ── Public API ──────────────────────────────────────────────────────
 
     async def diagnose(self, query: str) -> str | None:
-        """Find which file has the bug.  Returns relative path inside backend/ or None."""
-        if not llm_client.available:
-            return None
-
-        file_list = "\n".join(self._list_backend_files())
-
-        prompt = f"""You are a codebase diagnostic tool.  Given a bug description, identify which backend file is most likely responsible.
-
-Bug description: "{query}"
-
-Available files:
-{file_list}
-
-Respond in JSON only:
-{{"target_file": "path/to/file.py", "reason": "short explanation"}}"""
-
-        try:
-            resp = await llm_client.chat(
-                [LLMMessage(role="user", content=prompt)],
-                temperature=0.1,
-                max_tokens=200,
-            )
-            data = llm_client.parse_json_content(resp)
-            if data and "target_file" in data:
-                candidate = data["target_file"]
-                if self._resolve_path(candidate):
-                    return candidate
-        except Exception:
-            pass
-
+        """LLM-free: returns None. No external model to diagnose code."""
         return None
 
     async def patch(self, file: str, instruction: str) -> str | None:
-        """Rewrite file via LLM using the given instruction.  Returns the new source code, or None on failure.
-
-        The file is NOT written to disk here — that happens in commit().
-        """
-        target = self._resolve_path(file)
-        if target is None:
-            return None
-        if not target.exists():
-            return None
-
-        original = target.read_text()
-
-        prompt = f"""Rewrite the Python file below according to this instruction:
-
-INSTRUCTION: {instruction}
-
-ORIGINAL FILE:
-```python
-{original[:6000]}
-```
-
-Rules:
-- Return ONLY the complete corrected Python file. No explanation, no markdown, no fences.
-- Do not change any logic unrelated to the instruction.
-- Keep all existing imports and class structure.
-- The file must be syntactically valid Python 3.10+."""
-
-        try:
-            resp = await llm_client.chat(
-                [LLMMessage(role="user", content=prompt)],
-                temperature=0.05,
-                max_tokens=4000,
-            )
-            new_code = resp.content.strip()
-        except Exception:
-            return None
-
-        # Strip markdown fences if LLM added them
-        if new_code.startswith("```"):
-            lines = new_code.splitlines()
-            new_code = "\n".join(l for l in lines if not l.startswith("```"))
-
-        # Syntax check before returning
-        try:
-            ast.parse(new_code)
-        except SyntaxError:
-            return None
-
-        if self.DRY_RUN:
-            return new_code
-
-        # Create backup, then write
-        bak = target.with_suffix(target.suffix + ".bak")
-        shutil.copy2(target, bak)
-        target.write_text(new_code)
-
-        return new_code
+        """LLM-free: returns None. No external model to generate patches."""
+        return None
 
     def validate(self, file: str) -> bool:
         """Run ast.parse() + pytest against the file.  Returns True if all pass."""

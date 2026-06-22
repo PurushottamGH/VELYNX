@@ -8,8 +8,6 @@ from datetime import datetime, timezone
 
 from pydantic import BaseModel, Field
 
-from models.llm_client import LLMMessage, llm_client
-
 logger = logging.getLogger("uvicorn")
 
 
@@ -19,28 +17,6 @@ def _new_id() -> str:
 
 def _now() -> datetime:
     return datetime.now(timezone.utc)
-
-
-_MONOLOGUE_SYSTEM_PROMPT = """You are VELYNX's internal reasoning engine. Think step by step about this question. This reasoning is private — the user will not see it.
-
-Analyze:
-1. What is the user really asking?
-2. What do the sources tell me?
-3. What are the possible answers?
-4. What are the weaknesses in my reasoning?
-5. What is my confidence at each step?
-
-Respond in VALID JSON:
-{{
-  "steps": [
-    {{"type": "hypothesis", "content": "...", "confidence": 0.7}},
-    {{"type": "evaluation", "content": "...", "confidence": 0.8}},
-    {{"type": "decision", "content": "...", "confidence": 0.85}}
-  ],
-  "final_confidence": 0.85
-}}
-
-Step types: hypothesis, evaluation, dead_end, alternative, decision"""
 
 
 class MonologueStep(BaseModel):
@@ -71,7 +47,7 @@ class MonologueTrace(BaseModel):
 
 
 class InnerMonologue:
-    """Generates private reasoning traces using LLM or deterministic fallback."""
+    """Generates private reasoning traces deterministically (no LLM)."""
 
     async def generate_monologue(
         self,
@@ -80,74 +56,11 @@ class InnerMonologue:
         conversation_context: str = "",
         reasoning_mode: str = "",
     ) -> MonologueTrace:
-        """Generate an inner monologue trace for a query."""
+        """Generate an inner monologue trace for a query (deterministic)."""
         start = time.monotonic()
-
-        # Try LLM-based monologue
-        if llm_client.available:
-            try:
-                trace = await self._llm_monologue(query, sources, conversation_context, reasoning_mode)
-                trace.duration_ms = (time.monotonic() - start) * 1000
-                return trace
-            except Exception as exc:
-                logger.debug("LLM monologue unavailable, using deterministic: %s", exc)
-
-        # Deterministic fallback
         trace = self._deterministic_monologue(query, sources, conversation_context, reasoning_mode)
         trace.duration_ms = (time.monotonic() - start) * 1000
         return trace
-
-    async def _llm_monologue(
-        self,
-        query: str,
-        sources: list[dict],
-        conversation_context: str,
-        reasoning_mode: str,
-    ) -> MonologueTrace:
-        """Generate monologue using LLM."""
-        # Build evidence summary
-        evidence_parts = []
-        for i, s in enumerate(sources[:5], 1):
-            title = s.get("title") or s.get("url") or f"Source {i}"
-            snippet = (s.get("snippet") or "")[:300]
-            evidence_parts.append(f"[{i}] {title}: {snippet}")
-        evidence = "\n".join(evidence_parts) if evidence_parts else "No sources available."
-
-        user_prompt = f"QUESTION: {query}\n\nEVIDENCE:\n{evidence}"
-        if conversation_context:
-            user_prompt += f"\n\nCONVERSATION CONTEXT:\n{conversation_context[:1000]}"
-        if reasoning_mode:
-            user_prompt += f"\n\nREASONING MODE: {reasoning_mode}"
-
-        messages = [
-            LLMMessage(role="system", content=_MONOLOGUE_SYSTEM_PROMPT),
-            LLMMessage(role="user", content=user_prompt),
-        ]
-
-        response = await llm_client.chat(
-            messages,
-            temperature=0.4,
-            max_tokens=1024,
-            response_format={"type": "json_object"},
-        )
-
-        parsed = llm_client.parse_json_content(response)
-        if not parsed:
-            raise ValueError("Failed to parse monologue JSON")
-
-        steps = []
-        for s in parsed.get("steps", []):
-            steps.append(MonologueStep(
-                type=s.get("type", "evaluation"),
-                content=s.get("content", ""),
-                confidence=float(s.get("confidence", 0.5)),
-            ))
-
-        return MonologueTrace(
-            steps=steps,
-            final_confidence=float(parsed.get("final_confidence", 0.5)),
-            reasoning_mode_used=reasoning_mode,
-        )
 
     def _deterministic_monologue(
         self,

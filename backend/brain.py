@@ -11,7 +11,6 @@ from typing import Any
 
 from backend.memory.knowledge_graph import KnowledgeGraph
 from backend.memory.vector_store import VectorStore
-from backend.learning.deep_learner import DeepLearner
 from backend.cognition.reasoning_engine import ReasoningEngine
 from backend.cognition.answer_synthesizer import AnswerSynthesizer
 from backend.self_coder import SelfCoder
@@ -52,7 +51,6 @@ class VelynxBrain:
     def __init__(self):
         self.kg    = KnowledgeGraph()
         self.vs    = VectorStore()
-        self.learn = DeepLearner(self.kg, self.vs)
         self.reason = ReasoningEngine(self.kg, self.vs)
         self.synth  = AnswerSynthesizer(self.kg)
         self.coder  = SelfCoder()
@@ -123,39 +121,34 @@ class VelynxBrain:
     async def _do_answer(self, query: str, context: dict | None) -> BrainResult:
         result = BrainResult(intent=Intent.ANSWER)
 
-        for attempt in range(self.MAX_RETRY + 1):
-            # 1. Fast path: check knowledge graph first
-            kg_hit = await self.kg.fast_query(query)
-            if kg_hit and kg_hit.confidence >= self.QUALITY_THRESHOLD:
-                result.answer      = kg_hit.answer
-                result.confidence  = kg_hit.confidence
-                result.sources     = kg_hit.sources
-                return result
+        # Fast path: check knowledge graph first
+        kg_hit = await self.kg.fast_query(query)
+        if kg_hit and kg_hit.confidence >= self.QUALITY_THRESHOLD:
+            result.answer      = kg_hit.answer
+            result.confidence  = kg_hit.confidence
+            result.sources     = kg_hit.sources
+            return result
 
-            # 2. Vector similarity search
-            vec_results = await self.vs.search(query, top_k=5)
+        # Vector similarity search
+        vec_results = await self.vs.search(query, top_k=5)
 
-            # 3. Reasoning chain
-            chain = await self.reason.build_chain(query, vec_results, context)
-            result.reasoning_chain = chain.steps
+        # Reasoning chain
+        chain = await self.reason.build_chain(query, vec_results, context)
+        result.reasoning_chain = chain.steps
 
-            # 4. Synthesize
-            answer = await self.synth.synthesize(query, chain, vec_results)
-            result.answer     = answer.text
-            result.confidence = answer.confidence
-            result.sources    = answer.sources
+        # Synthesize
+        answer = await self.synth.synthesize(query, chain, vec_results)
+        result.answer     = answer.text
+        result.confidence = answer.confidence
+        result.sources    = answer.sources
 
-            # 5. Quality gate
-            if result.confidence >= self.QUALITY_THRESHOLD:
-                break
-
-            # 6. Gate failed → learn more, retry
-            if attempt < self.MAX_RETRY:
-                await self.learn.fill_gap(query)
-
-        # 7. Store good answers back to KG
+        # Store good answers back to KG
         if result.confidence >= self.QUALITY_THRESHOLD:
             await self.kg.store_answer(query, result.answer, result.confidence, result.sources)
+
+        # Enforce honesty: if no KG hit and low confidence, admit ignorance
+        if result.confidence < 0.30:
+            result.answer = "I don't have enough evidence to answer that."
 
         return result
 

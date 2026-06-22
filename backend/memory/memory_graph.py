@@ -13,6 +13,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Generator
 
+from backend.memory import _sqlite
+
 DB_PATH = Path(__file__).parent.parent.parent / "data" / "memory_graph.db"
 
 HEALING_THRESHOLD = 0.15
@@ -65,8 +67,7 @@ class MemoryCore:
 
     @contextlib.contextmanager
     def _connect(self) -> Generator[sqlite3.Connection, None, None]:
-        conn = sqlite3.connect(str(self.db_path))
-        conn.row_factory = sqlite3.Row
+        conn = _sqlite.connect(self.db_path, row_factory=sqlite3.Row)
         try:
             yield conn
             conn.commit()

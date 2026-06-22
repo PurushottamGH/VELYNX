@@ -10,7 +10,12 @@ sys.path.append(str(Path(__file__).resolve().parent / "backend"))
 from app.pipeline import answer_question
 from cli import main as backend_cli_main
 from pipeline.reasoning_core import reason as _reason
-from learning.deep_learner import DeepLearner
+# DeepLearner is an optional dependency. Import it lazily/defensively so the CLI
+# can boot even when the deep_learner module (or its deps) is unavailable.
+try:
+    from learning.deep_learner import DeepLearner
+except Exception:  # pragma: no cover - optional dependency
+    DeepLearner = None
 from cognition.sim_engine import SimEngine
 from memory.knowledge_graph import KnowledgeGraph
 
@@ -39,6 +44,10 @@ def _run_direct_question(question: str) -> int:
             print("Usage: python velynx_cli.py learn: <topic>")
             return 1
         print(f"Learning about: {topic}")
+
+        if DeepLearner is None:
+            print("Error: DeepLearner is unavailable; the 'learn:' command is disabled.")
+            return 1
 
         # Initialize required components
         kg = KnowledgeGraph()

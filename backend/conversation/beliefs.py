@@ -151,6 +151,16 @@ class BeliefStore:
                     return b
         return None
 
+    def clear(self) -> None:
+        """Drop ALL beliefs, resetting the store to empty.
+
+        This store is never persisted to disk, so a database wipe leaves these
+        beliefs intact in RAM; an explicit clear is the only way to forget them
+        within a live process (e.g. the live-fire harness resetting state
+        between runs so a taught-then-wiped fact cannot resurface).
+        """
+        self._beliefs.clear()
+
 
 # Module-level singleton
 belief_store = BeliefStore()

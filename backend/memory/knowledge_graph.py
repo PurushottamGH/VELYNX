@@ -22,13 +22,39 @@ from contextlib import contextmanager
 import aiosqlite
 import asyncio
 
+from backend.memory import _sqlite
+
 logger = logging.getLogger("velynx.knowledge_graph")
 
-_DATA_DIR = Path(os.getenv("VELYNX_DATA_DIR", ".")) / "velynx_data" / "knowledge_graph"
+# Anchor the raw-triples store to the BACKEND ROOT (an absolute path derived
+# from this file's location) rather than the process CWD. Previously this used
+# ``Path(os.getenv("VELYNX_DATA_DIR", "."))`` — a CWD-RELATIVE default — so the
+# exact graph.db written depended on where the process was launched:
+#   * harness from repo root   -> <ROOT>/velynx_data/knowledge_graph/graph.db
+#   * harness from backend/    -> <ROOT>/backend/velynx_data/knowledge_graph/graph.db
+# That divergence let a "ghost" fact (e.g. "Avatar") survive in one location
+# while scripts/wipe_db.py cleared the other. ``VELYNX_DATA_DIR`` is still
+# honoured when explicitly set (production override), but the DEFAULT is now the
+# deterministic, CWD-independent backend root — matching the episodic store
+# (backend/memory/episodic.py) which already anchors to ``BACKEND_ROOT``.
+BACKEND_ROOT = Path(__file__).resolve().parent.parent
+_DATA_DIR = Path(os.getenv("VELYNX_DATA_DIR", str(BACKEND_ROOT))) / "velynx_data" / "knowledge_graph"
 _DATA_DIR.mkdir(parents=True, exist_ok=True)
-_DB_PATH = _DATA_DIR / "graph.db"
+# Routed to a throwaway test database under VELYNX_TEST_MODE so the async
+# (aiosqlite) writers and `self.db_path` never touch the live graph. No-op in
+# production. See backend.memory._sqlite.resolve_db_path.
+_DB_PATH = _sqlite.resolve_db_path(_DATA_DIR / "graph.db")
 
-# SQL schema
+# Runtime path diagnostic — emit the ABSOLUTE path of the raw-triples graph DB
+# the runtime has resolved, so a live-fire run can be compared against the path
+# scripts/wipe_db.py targets. Logged at INFO; also printed when VELYNX_DEBUG_DB
+# is set so it surfaces even when the harness silences loggers.
+logger.info("Raw knowledge-graph DB resolved to: %s", Path(_DB_PATH).resolve())
+if os.getenv("VELYNX_DEBUG_DB"):
+    print(f"[VELYNX_DEBUG_DB] raw knowledge_graph DB -> {Path(_DB_PATH).resolve()}")
+
+# SQL schema. Fresh databases get the UNIQUE(subject, relation, object)
+# constraint inline so duplicate triples are rejected at the storage layer.
 _SCHEMA_BASE = """
 CREATE TABLE IF NOT EXISTS triples (
     id INTEGER PRIMARY KEY,
@@ -37,7 +63,8 @@ CREATE TABLE IF NOT EXISTS triples (
     object TEXT NOT NULL,
     confidence REAL,
     source TEXT,
-    timestamp REAL
+    timestamp REAL,
+    UNIQUE(subject, relation, object)
 );
 
 CREATE TABLE IF NOT EXISTS understandings (
@@ -47,9 +74,14 @@ CREATE TABLE IF NOT EXISTS understandings (
 );
 """
 
+# A unique index enforces the same (subject, relation, object) constraint on
+# pre-existing databases whose `triples` table was created before the inline
+# UNIQUE clause existed. Combined with INSERT OR IGNORE, this makes triple
+# storage idempotent regardless of which writer inserts them.
 _SCHEMA_INDEXES = """
 CREATE INDEX IF NOT EXISTS idx_triples_subject ON triples(subject);
 CREATE INDEX IF NOT EXISTS idx_triples_object ON triples(object);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_triples_unique ON triples(subject, relation, object);
 CREATE INDEX IF NOT EXISTS idx_understandings_confidence ON understandings(confidence);
 """
 
@@ -63,7 +95,7 @@ class KnowledgeGraph:
         # Ensure directory exists
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
 
-        with sqlite3.connect(self.db_path) as conn:
+        with _sqlite.connect(self.db_path) as conn:
             # Run base schema first (CREATE TABLE IF NOT EXISTS)
             conn.executescript(_SCHEMA_BASE)
             conn.commit()
@@ -71,19 +103,34 @@ class KnowledgeGraph:
         # Migrate any missing columns before creating indexes on them
         self._migrate_schema()
 
-        with sqlite3.connect(self.db_path) as conn:
+        with _sqlite.connect(self.db_path) as conn:
             # Now safe to create indexes that reference migrated columns
             conn.executescript(_SCHEMA_INDEXES)
             conn.commit()
 
     def _migrate_schema(self):
         """Add any missing columns from schema upgrades."""
-        with sqlite3.connect(self.db_path) as conn:
+        with _sqlite.connect(self.db_path) as conn:
             cols = {row[1] for row in conn.execute("PRAGMA table_info(understandings)")}
             if "confidence" not in cols:
                 conn.execute("ALTER TABLE understandings ADD COLUMN confidence REAL NOT NULL DEFAULT 0.5")
             if "query_count" not in cols:
                 conn.execute("ALTER TABLE understandings ADD COLUMN query_count INTEGER NOT NULL DEFAULT 0")
+            conn.commit()
+
+        # Collapse any pre-existing duplicate triples so the UNIQUE index can be
+        # created on legacy databases. Keeps the lowest-id row of each
+        # (subject, relation, object) group; idempotent on already-clean DBs.
+        with _sqlite.connect(self.db_path) as conn:
+            conn.execute(
+                """
+                DELETE FROM triples
+                WHERE id NOT IN (
+                    SELECT MIN(id) FROM triples
+                    GROUP BY subject, relation, object
+                )
+                """
+            )
             conn.commit()
 
     async def load(self):
@@ -107,6 +154,7 @@ class KnowledgeGraph:
         """Store an answer in the knowledge graph."""
         topic = query[:80]
         async with aiosqlite.connect(str(self.db_path)) as db:
+            await _sqlite.apply_async_pragmas(db)
             await db.execute(
                 "INSERT OR REPLACE INTO understandings (topic, summary, confidence, query_count, timestamp) "
                 "VALUES (?, ?, ?, COALESCE((SELECT query_count FROM understandings WHERE topic=?), 0) + 1, ?)",
@@ -115,10 +163,16 @@ class KnowledgeGraph:
             await db.commit()
 
     async def add_triple(self, triple):
-        """Add a triple to the knowledge graph."""
+        """Add a triple to the knowledge graph.
+
+        Uses INSERT OR IGNORE against the UNIQUE(subject, relation, object)
+        constraint so repeated assertions of the same fact are no-ops rather
+        than accumulating duplicate rows.
+        """
         async with aiosqlite.connect(str(self.db_path)) as db:
+            await _sqlite.apply_async_pragmas(db)
             await db.execute(
-                "INSERT INTO triples (subject, relation, object, confidence, source, timestamp) VALUES (?, ?, ?, ?, ?, ?)",
+                "INSERT OR IGNORE INTO triples (subject, relation, object, confidence, source, timestamp) VALUES (?, ?, ?, ?, ?, ?)",
                 (triple.subject, triple.relation, triple.obj, triple.confidence, triple.source, time.time())
             )
             await db.commit()
@@ -126,6 +180,7 @@ class KnowledgeGraph:
     async def get_understanding(self, topic):
         """Get understanding for a topic."""
         async with aiosqlite.connect(str(self.db_path)) as db:
+            await _sqlite.apply_async_pragmas(db)
             async with db.execute(
                 "SELECT summary FROM understandings WHERE topic = ?", (topic,)
             ) as cursor:
@@ -135,6 +190,7 @@ class KnowledgeGraph:
     async def store_understanding(self, topic, summary):
         """Store understanding for a topic."""
         async with aiosqlite.connect(str(self.db_path)) as db:
+            await _sqlite.apply_async_pragmas(db)
             await db.execute(
                 "INSERT OR REPLACE INTO understandings (topic, summary, confidence, query_count, timestamp) VALUES (?, ?, COALESCE((SELECT confidence FROM understandings WHERE topic = ?), 0.5), COALESCE((SELECT query_count FROM understandings WHERE topic = ?), 0), ?)",
                 (topic, summary, topic, topic, time.time())
@@ -147,7 +203,7 @@ class KnowledgeGraph:
         If query is empty, scans all understandings for weak spots.
         """
         gaps: list[str] = []
-        with sqlite3.connect(str(self.db_path)) as db:
+        with _sqlite.connect(str(self.db_path)) as db:
             if query:
                 row = db.execute(
                     "SELECT topic, confidence, query_count FROM understandings WHERE topic = ?",
@@ -182,7 +238,7 @@ class KnowledgeGraph:
 
     def get_low_confidence_nodes(self, threshold: float = 0.4) -> list[tuple[str, float]]:
         """Return topics with confidence below threshold."""
-        with sqlite3.connect(str(self.db_path)) as db:
+        with _sqlite.connect(str(self.db_path)) as db:
             rows = db.execute(
                 "SELECT topic, confidence FROM understandings WHERE confidence < ? ORDER BY confidence ASC",
                 (threshold,)
@@ -191,7 +247,7 @@ class KnowledgeGraph:
 
     def prune_low_value_nodes(self, confidence_threshold: float = 0.2) -> int:
         """Remove understandings with confidence below threshold and query_count == 0."""
-        with sqlite3.connect(str(self.db_path)) as db:
+        with _sqlite.connect(str(self.db_path)) as db:
             cursor = db.execute(
                 "DELETE FROM understandings WHERE confidence < ? AND query_count = 0",
                 (confidence_threshold,)

@@ -9,18 +9,19 @@ Hardware Target: Local Processing (GTX 1070 / Windows 11)
 
 import sqlite3
 import os
+from pathlib import Path
 from datetime import datetime
 from typing import Dict, Any, Optional
 
+from backend.memory._sqlite import connect as open_connection
+from backend.memory._sqlite import canonical_db_path, resolve_db_path
 
-DB_DIR = ".velynx_data"
 DB_NAME = "brain_stem.db"
-DB_PATH = os.path.join(DB_DIR, DB_NAME)
+DB_PATH = str(resolve_db_path(canonical_db_path(DB_NAME)))
 
 def get_db_connection() -> sqlite3.Connection:
-    os.makedirs(DB_DIR, exist_ok=True)
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
+    os.makedirs(Path(DB_PATH).parent, exist_ok=True)
+    conn = open_connection(DB_PATH, row_factory=sqlite3.Row)
     return conn
 
 def initialize_schema():

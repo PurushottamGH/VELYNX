@@ -1,0 +1,32 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+
+  "plugin": [
+    "@zhafron/opencode-kiro-auth"
+  ],
+
+  "provider": {
+    "kiro": {
+      "models": {
+        "claude-opus-4-7": {
+          "name": "Claude Opus 4.7"
+        }
+      }
+    },
+
+    "openai": {
+      "options": {
+        "baseURL": "https://zenmux.ai/api/v1",
+        "apiKey": "{env:ZENMUX_API_KEY}"
+      },
+      "models": {
+        "glm-5.2": {
+          "name": "GLM 5.2 Free",
+          "id": "z-ai/glm-5.2-free"
+        }
+      }
+    }
+  },
+
+  "model": "openai/glm-5.2"
+}

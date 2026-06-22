@@ -12,21 +12,24 @@ import hashlib
 from pathlib import Path
 from datetime import datetime
 
+from backend.memory._sqlite import connect as open_connection
+from backend.memory._sqlite import canonical_db_path, resolve_db_path
+
 SOUL_PATH = Path(__file__).parent / "concepts.json"
-SOUL_DB = Path(__file__).parent.parent.parent / "backend" / "velynx_data" / "soul_graph" / "graph.db"
-GRAPH_LOG = Path(__file__).parent.parent.parent / "backend" / "velynx_data" / "soul_graph_log.json"
+SOUL_DB = resolve_db_path(Path(__file__).parent.parent.parent / "backend" / "velynx_data" / "soul_graph" / "graph.db")
+GRAPH_LOG = resolve_db_path(Path(__file__).parent.parent.parent / "backend" / "velynx_data" / "soul_graph_log.json")
 
 from velynx.graph.living_edges import add_living_edge, reinforce_edge, challenge_edge
 
 # Phase 38C: Brain Stem traversal
-BRAIN_STEM_DB = ".velynx_data/brain_stem.db"
+# Resolved via the shared canonical resolver so this module and
+# cognition/predictive_core.py provably open the SAME absolute brain_stem.db
+# regardless of CWD (the live-fire "ghost memory" drift fix).
+BRAIN_STEM_DB = "brain_stem.db"
 
 def get_db_connection() -> sqlite3.Connection:
-    base_dir = os.path.abspath(os.path.dirname(__file__))
-    project_root = os.path.dirname(os.path.dirname(base_dir))
-    target_db = os.path.join(project_root, BRAIN_STEM_DB)
-    conn = sqlite3.connect(target_db)
-    conn.row_factory = sqlite3.Row
+    target_db = str(canonical_db_path(BRAIN_STEM_DB))
+    conn = open_connection(target_db, row_factory=sqlite3.Row)
     return conn
 
 
@@ -44,7 +47,7 @@ def save_soul(soul: dict):
 
 def _get_conn():
     SOUL_DB.parent.mkdir(parents=True, exist_ok=True)
-    conn = sqlite3.connect(str(SOUL_DB))
+    conn = open_connection(str(SOUL_DB))
     c = conn.cursor()
     c.execute("""CREATE TABLE IF NOT EXISTS soul_edges (
         id TEXT PRIMARY KEY,

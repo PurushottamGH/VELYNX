@@ -118,8 +118,8 @@
         "ca7033b4c39db5d4d3086267b538555b340e0e6f",
         "08a684bb4e61e7a4726bc1b2f430b84cf74a2424"
       ],
-      "last_seen": "2026-06-09T17:34:21.232253+00:00",
-      "weight": 19.64
+      "last_seen": "2026-06-19T17:35:21.692930+00:00",
+      "weight": 19.99
     },
     "2006": {
       "episodes": [
@@ -181,8 +181,8 @@
         "c78891e57013481b23172ae4f0f7db8c47a79d33",
         "ca7033b4c39db5d4d3086267b538555b340e0e6f"
       ],
-      "last_seen": "2026-06-09T17:34:21.232253+00:00",
-      "weight": 18.76
+      "last_seen": "2026-06-19T17:35:21.692930+00:00",
+      "weight": 19.11
     },
     "4": {
       "episodes": [
@@ -211,8 +211,8 @@
         "4cfd2c632eb80dd1a847479aa6b41b8c5fd12090",
         "9f8421ced70ed3d720c6bb02f01dcea9069f84f9"
       ],
-      "last_seen": "2026-06-09T17:34:21.232253+00:00",
-      "weight": 8.86
+      "last_seen": "2026-06-19T17:35:21.692930+00:00",
+      "weight": 9.21
     },
     "57412": {
       "episodes": [
@@ -887,8 +887,8 @@
       "episodes": [
         "56b97d3101c6f03a60058819fdf154accbdda443"
       ],
-      "last_seen": "2026-06-09T17:34:21.627868+00:00",
-      "weight": 9.45
+      "last_seen": "2026-06-19T17:35:27.177896+00:00",
+      "weight": 9.8
     },
     "communicates": {
       "episodes": [
@@ -1448,8 +1448,8 @@
         "50146313b34d3db770fa19cab775b5ebfeb0b861",
         "6417dad85a81951eec16e3794641f95d2ccdab7c"
       ],
-      "last_seen": "2026-06-09T17:34:21.627868+00:00",
-      "weight": 15.05
+      "last_seen": "2026-06-19T17:35:27.177896+00:00",
+      "weight": 15.4
     },
     "excellent": {
       "episodes": [
@@ -3306,8 +3306,8 @@
       "episodes": [
         "56b97d3101c6f03a60058819fdf154accbdda443"
       ],
-      "last_seen": "2026-06-09T17:34:21.627868+00:00",
-      "weight": 9.45
+      "last_seen": "2026-06-19T17:35:27.177896+00:00",
+      "weight": 9.8
     },
     "sky": {
       "episodes": [
@@ -3651,8 +3651,8 @@
         "56b97d3101c6f03a60058819fdf154accbdda443",
         "28e123b2d8041c081a9bab3efe9c31d3fb80f1c0"
       ],
-      "last_seen": "2026-06-09T17:34:21.627868+00:00",
-      "weight": 18.65
+      "last_seen": "2026-06-19T17:35:27.177896+00:00",
+      "weight": 19.0
     },
     "tests": {
       "episodes": [
@@ -4651,7 +4651,7 @@
         "feedback",
         "practical"
       ],
-      "updated_at": "2026-06-09T17:34:21.627868+00:00"
+      "updated_at": "2026-06-19T17:35:27.177896+00:00"
     },
     "58793067b26a4310aa7269aa5dcf5ec2f58dc29e": {
       "answer": "The speed of light in vacuum is exactly 299,792,458 meters per second (approximately 3 \u00d7 10\u2078 m/s). This is denoted by the symbol 'c' and is a fundamental constant in physics. According to Einstein's special relativity, the speed of light is the same for all observers regardless of their relative motion.",
@@ -5154,7 +5154,7 @@
         "feedback",
         "practical"
       ],
-      "updated_at": "2026-06-09T17:34:21.232253+00:00"
+      "updated_at": "2026-06-19T17:35:21.692930+00:00"
     },
     "a72dc2df81bf9ff9c249b708bd5d3779e08eea33": {
       "answer": "5 + 7 + 3 + 2 + 1 = 18.",

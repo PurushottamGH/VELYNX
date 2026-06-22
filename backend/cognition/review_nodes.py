@@ -22,6 +22,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
+from backend.memory._sqlite import connect as open_connection
 from rich.console import Console
 from rich.panel import Panel
 from rich.prompt import Prompt
@@ -39,7 +40,7 @@ console = Console()
 
 def _db_conn():
     KNOWLEDGE_DB_PATH.parent.mkdir(parents=True, exist_ok=True)
-    conn = sqlite3.connect(str(KNOWLEDGE_DB_PATH))
+    conn = open_connection(str(KNOWLEDGE_DB_PATH))
     c = conn.cursor()
     c.execute("""CREATE TABLE IF NOT EXISTS concepts (
         id INTEGER PRIMARY KEY AUTOINCREMENT,

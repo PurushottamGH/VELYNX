@@ -15,7 +15,7 @@ if _backend_root not in sys.path:
 from knowledge.knowledge_engine import cross_query
 from cognition.metacog import reflect
 from knowledge.voice_engine import compile_path_to_speech
-from models.llm_client import LLMMessage, llm_client
+# LLM-free: llm_client removed
 from rich.console import Console
 from rich.status import Status
 from cli_ui import VelynxDashboard
@@ -28,8 +28,11 @@ from agency.quality_assurance import QAEngine
 from agency.auto_fixer import AutoFixer
 from agency.health_sentinel import HealthSentinel
 
+# Phase 50 predictive core (seeded on warmup)
+from cognition.predictive_core import seed_concept_states_from_soul, seed_transition_rules_from_living_edges
+
 MEMORY = MemoryCore()
-_code_writer = CodeWriter(llm_client=llm_client)
+_code_writer = None
 _vocal_tract: VocalTract | None = None
 _bridge: SystemBridge | None = None
 _quarantine: ExecutionQuarantine | None = None
@@ -42,6 +45,9 @@ def warmup_system() -> float:
     happens at boot time, not on the first real user query (~22s → sub-50ms)."""
     global _warmed_up
     t0 = time.perf_counter()
+    # Phase 50: seed predictive tables on first boot
+    seed_concept_states_from_soul()
+    seed_transition_rules_from_living_edges()
     velynx_respond("warmup")  # triggers model load, DB init, index load
     elapsed_ms = (time.perf_counter() - t0) * 1000
     _warmed_up = True

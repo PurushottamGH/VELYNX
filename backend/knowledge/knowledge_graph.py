@@ -1,7 +1,12 @@
+import os
 import sqlite3
 from pathlib import Path
 
-DB_PATH = Path(__file__).parent.parent.parent / "data" / "knowledge_graph.db"
+from backend.memory._sqlite import resolve_db_path
+
+DB_PATH = resolve_db_path(
+    Path(__file__).resolve().parent.parent.parent / "data" / "knowledge_graph.db"
+)
 
 SEED_CONCEPTS = [
     # ── CODING ──────────────────────────────────────────────
@@ -76,14 +81,22 @@ SEED_RELATIONSHIPS = [
 ]
 
 
+from backend.memory._sqlite import connect as open_connection
+
+
 class KnowledgeGraph:
     def __init__(self, db_path: str = None):
         self.db_path = Path(db_path) if db_path else DB_PATH
+        # Runtime path diagnostic: emit the ABSOLUTE symbolic-KG DB path so a
+        # live-fire run can be compared against scripts/wipe_db.py's targets.
+        # Printed when VELYNX_DEBUG_DB is set so it surfaces even though the
+        # harness silences loggers during a run.
+        if os.getenv("VELYNX_DEBUG_DB"):
+            print(f"[VELYNX_DEBUG_DB] symbolic knowledge_graph DB -> {self.db_path.resolve()}")
 
     def _get_conn(self):
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
-        conn = sqlite3.connect(str(self.db_path))
-        conn.row_factory = sqlite3.Row
+        conn = open_connection(str(self.db_path), row_factory=sqlite3.Row)
         c = conn.cursor()
         c.execute("""CREATE TABLE IF NOT EXISTS concepts (
             id INTEGER PRIMARY KEY AUTOINCREMENT,

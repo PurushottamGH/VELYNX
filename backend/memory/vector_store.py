@@ -63,12 +63,10 @@ def _normalize(text: str) -> str:
 
 
 def _confidence_label(score: float) -> str:
-    if score >= 0.8:
+    if score >= 0.9:
         return "CERTAIN"
-    if score >= 0.55:
+    if score >= 0.72:
         return "PROBABLE"
-    if score >= 0.35:
-        return "DEBATED"
     return "UNKNOWN"
 
 

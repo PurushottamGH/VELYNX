@@ -9,15 +9,14 @@ import sqlite3
 import datetime
 import os
 
-BRAIN_STEM_DB = ".velynx_data/brain_stem.db"
+from backend.memory._sqlite import connect as open_connection
+from backend.memory._sqlite import canonical_db_path, resolve_db_path
+
+BRAIN_STEM_DB = str(resolve_db_path(canonical_db_path("brain_stem.db")))
 
 
 def get_db_connection() -> sqlite3.Connection:
-    base_dir = os.path.abspath(os.path.dirname(__file__))
-    project_root = os.path.dirname(os.path.dirname(base_dir))
-    target_db = os.path.join(project_root, BRAIN_STEM_DB)
-    conn = sqlite3.connect(target_db)
-    conn.row_factory = sqlite3.Row
+    conn = open_connection(BRAIN_STEM_DB, row_factory=sqlite3.Row)
     return conn
 
 
@@ -119,6 +118,7 @@ def select_curiosity_question(session_has_asked: bool, resonance_scores: dict) -
     """
     Selects one relevant question per session.
     """
+    initialize_curiosity_schema()
     if session_has_asked:
         return ""
 

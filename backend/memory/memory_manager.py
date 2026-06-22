@@ -14,12 +14,27 @@ from backend.memory.memory_schemas import (
     WorkingMemory,
 )
 from backend.memory.embedding_service import embedding_service
-from backend.memory.vector_backend import VectorBackend, create_backend
+from backend.memory.vector_backend import StateVectorBackend, VectorBackend, create_backend
 from backend.memory import retrieval_engine
+from backend.memory.retrieval_engine import _state_query_to_vector
 
 logger = logging.getLogger("uvicorn")
 
 _COLLECTIONS = ("episodic", "semantic", "working")
+
+
+def _to_serializable(embedding):
+    """Convert a numpy embedding to a plain list of Python floats.
+
+    The JSON-backed vector store cannot serialize numpy float32 scalars, so any
+    array-like embedding must be coerced to native Python types before upsert.
+    Already-list or None values pass through untouched.
+    """
+    if embedding is None:
+        return None
+    if hasattr(embedding, "tolist"):
+        return embedding.tolist()
+    return embedding
 
 
 class MemoryManager:
@@ -54,7 +69,7 @@ class MemoryManager:
             metadata={"prompt": prompt, "answer": answer, "episode_kind": kind},
         )
         embedding = await self._embedding.embed(entry.text)
-        await self._backend.upsert("episodic", entry, embedding)
+        await self._backend.upsert("episodic", entry, _to_serializable(embedding))
 
         return EpisodicMemory(
             entry=entry,
@@ -81,13 +96,60 @@ class MemoryManager:
             metadata={"concept": concept, "relationships": relationships or []},
         )
         embedding = await self._embedding.embed(text)
-        await self._backend.upsert("semantic", entry, embedding)
+        await self._backend.upsert("semantic", entry, _to_serializable(embedding))
 
         return SemanticMemory(
             entry=entry,
             concept=concept,
             relationships=relationships or [],
         )
+
+    # ── Targeted semantic lookup / deletion (Phase 56 belief revision) ──
+
+    async def find_semantic_memories(
+        self, query_text: str, *, limit: int = 50, min_score: float = 0.0
+    ) -> list[MemoryEntry]:
+        """Return semantic entries most similar to ``query_text`` (full entries).
+
+        Uses the backend's dense-vector ``search`` rather than ``get_all`` so a
+        targeted fact is reliably retrieved regardless of how large the
+        collection has grown (``get_all`` is subject to backend pagination and
+        can silently omit the very row we need to revise). An exact-text fact
+        embeds to ~identical vectors and lands at the top of the results.
+
+        Returns ``[]`` when the embedding service is unavailable.
+        """
+        if not self._embedding.available:
+            logger.warning(
+                "Embedding service unavailable — cannot search semantic memories for %r",
+                query_text[:60],
+            )
+            return []
+        embedding = _to_serializable(await self._embedding.embed(query_text))
+        hits = await self._backend.search("semantic", embedding, limit=limit)
+        ids = [h[0] for h in hits if (h[1] if len(h) > 1 else 1.0) >= min_score]
+        if not ids:
+            return []
+        return await self._backend.get_by_ids("semantic", ids)
+
+    async def delete_semantic(self, ids: str | list[str]) -> int:
+        """Delete semantic memories by id, pushing the delete down to the backend.
+
+        Accepts a single id or a list. Returns the number actually deleted.
+        Failures are logged loudly (``logger.exception``) and re-raised so a
+        deletion that silently no-ops can never masquerade as success.
+        """
+        if isinstance(ids, str):
+            ids = [ids]
+        deleted = 0
+        for entry_id in ids:
+            try:
+                await self._backend.delete("semantic", entry_id)
+                deleted += 1
+            except Exception:
+                logger.exception("delete_semantic failed for id=%r", entry_id)
+                raise
+        return deleted
 
     async def store_working(
         self,
@@ -107,7 +169,7 @@ class MemoryManager:
             metadata={"priority": priority},
         )
         embedding = await self._embedding.embed(text)
-        await self._backend.upsert("working", entry, embedding)
+        await self._backend.upsert("working", entry, _to_serializable(embedding))
 
         return WorkingMemory(entry=entry, priority=priority)
 
@@ -118,13 +180,31 @@ class MemoryManager:
         query: str,
         limit: int = 5,
         kinds: list[str] | None = None,
+        fallback_chain: list[str] | None = None,
     ) -> list[RetrievalResult]:
-        """Recall memories across all kinds, ranked by multi-signal scoring."""
+        """Recall memories across all kinds, ranked by multi-signal scoring.
+
+        When *fallback_chain* is provided, collections are tried in the given
+        order and results accumulate from all of them.  Recognised values:
+
+        * ``"semantic"`` — dense-embedding search over episodic/semantic/working
+          (the ``_backend`` configured via ``VELYNX_MEMORY_BACKEND``).
+        * ``"state"``    — concept-cosine search over the SQLite ``memory_log``
+          table (the ``StateVectorBackend``).
+        * ``"tag"``      — tag-based lookup via ``recall_by_tag()``.
+
+        If *fallback_chain* is omitted, only the *kinds* argument (defaulting to
+        all three dense-embedding collections) is used — preserving the existing
+        behaviour.
+        """
+        if fallback_chain is not None:
+            return await self._recall_with_fallback(query, limit, fallback_chain)
+
         if not self._embedding.available:
             logger.warning("Embedding service not available, skipping semantic recall")
             return []
 
-        query_embedding = await self._embedding.embed(query)
+        query_embedding = _to_serializable(await self._embedding.embed(query))
         target_kinds = kinds or list(_COLLECTIONS)
 
         all_results: list[RetrievalResult] = []
@@ -138,6 +218,61 @@ class MemoryManager:
         all_results.sort(key=lambda r: r.score, reverse=True)
 
         # Deduplicate
+        seen: set[str] = set()
+        deduped: list[RetrievalResult] = []
+        for result in all_results:
+            if result.entry.id not in seen:
+                seen.add(result.entry.id)
+                deduped.append(result)
+
+        for i, result in enumerate(deduped[:limit]):
+            result.rank = i + 1
+
+        return deduped[:limit]
+
+    async def _recall_with_fallback(
+        self,
+        query: str,
+        limit: int,
+        fallback_chain: list[str],
+    ) -> list[RetrievalResult]:
+        """Dispatch across the backends listed in *fallback_chain*."""
+        all_results: list[RetrievalResult] = []
+        query_concepts = _state_query_to_vector(query)
+
+        for stage in fallback_chain:
+            stage = stage.strip().lower()
+
+            if stage == "semantic":
+                if not self._embedding.available:
+                    continue
+                query_embedding = _to_serializable(await self._embedding.embed(query))
+                for kind in _COLLECTIONS:
+                    results = await retrieval_engine.retrieve(
+                        query_embedding, self._backend, kind, limit=limit,
+                    )
+                    all_results.extend(results)
+
+            elif stage == "state":
+                sb = StateVectorBackend()
+                results = await retrieval_engine.retrieve(
+                    query_embedding=[],  # unused for "state"
+                    backend=self._backend,
+                    collection="state",
+                    limit=limit,
+                    query_concepts=query_concepts,
+                    state_backend=sb,
+                )
+                all_results.extend(results)
+
+            elif stage == "tag":
+                for tag_candidate in query_concepts:
+                    tagged = await self.recall_by_tag(tag_candidate, limit=limit)
+                    all_results.extend(tagged)
+
+        # Global re-rank
+        all_results.sort(key=lambda r: r.score, reverse=True)
+
         seen: set[str] = set()
         deduped: list[RetrievalResult] = []
         for result in all_results:
@@ -184,7 +319,7 @@ class MemoryManager:
         entry.updated_at = datetime.now(timezone.utc)
 
         embedding = await self._embedding.embed(entry.text)
-        await self._backend.upsert(collection, entry, embedding)
+        await self._backend.upsert(collection, entry, _to_serializable(embedding))
         return True
 
     # ── Decay ────────────────────────────────────────────────────
@@ -211,7 +346,7 @@ class MemoryManager:
                     entry.importance *= 0.9
                     entry.updated_at = now
                     embedding = await self._embedding.embed(entry.text)
-                    await self._backend.upsert(collection, entry, embedding)
+                    await self._backend.upsert(collection, entry, _to_serializable(embedding))
                     stats["decayed"] += 1
 
                 # Evict very old, very low importance

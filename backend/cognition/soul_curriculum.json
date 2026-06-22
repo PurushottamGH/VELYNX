@@ -1,0 +1,242 @@
+[
+  {
+    "name": "grief", "cat": "emotional", "phenomenology": "The recalibration of a system around a permanent absence. Heaviest in ordinary moments. Proof that love was real.",
+    "origin": ["love", "loss"], "tension": ["hope", "peace"],
+    "effects": {"immediate": {"loneliness": 0.7, "hope": -0.6, "meaning": -0.3, "resilience": -0.4}, "over_time": {"empathy": 0.4, "hope": 0.3, "meaning": 0.5, "resilience": 0.6}},
+    "leads": ["empathy", "meaning", "resilience"], "becomes": ["peace", "depression"], "requires": ["love"]
+  },
+  {
+    "name": "love", "cat": "emotional", "phenomenology": "The voluntary expansion of the self to include another. The origin of all grief, all sacrifice, all meaning.",
+    "origin": ["vulnerability", "trust"], "tension": ["loneliness", "alienation"],
+    "effects": {"immediate": {"hope": 0.7, "courage": 0.5, "vulnerability": 0.6}, "over_time": {"meaning": 0.8, "empathy": 0.6, "grief": 0.3}},
+    "leads": ["meaning", "sacrifice", "empathy"], "becomes": ["grief", "duty"], "requires": []
+  },
+  {
+    "name": "trust", "cat": "emotional", "phenomenology": "The decision to be vulnerable without guaranteed safety. Built slowly, destroyed instantly.",
+    "origin": ["consistency", "vulnerability"], "tension": ["betrayal", "doubt"],
+    "effects": {"immediate": {"loneliness": -0.5, "hope": 0.4, "courage": 0.3}, "over_time": {"love": 0.4, "meaning": 0.3}},
+    "leads": ["love", "hope", "resilience"], "becomes": ["betrayal", "peace"], "requires": []
+  },
+  {
+    "name": "betrayal", "cat": "emotional", "phenomenology": "The collapse of a model you built around someone. Not just pain — the invalidation of past certainty.",
+    "origin": ["trust"], "tension": ["forgiveness", "trust"],
+    "effects": {"immediate": {"trust": -0.9, "loneliness": 0.7, "doubt": 0.6, "shame": -0.2}, "over_time": {"resilience": 0.3, "empathy": 0.2}},
+    "leads": ["doubt", "loneliness", "resilience"], "becomes": ["forgiveness", "anger", "grief"], "requires": ["trust"]
+  },
+  {
+    "name": "hope", "cat": "emotional", "phenomenology": "A prediction that the future contains something worth moving toward. Not certainty — a chosen orientation.",
+    "origin": ["curiosity", "meaning"], "tension": ["grief", "doubt", "depression"],
+    "effects": {"immediate": {"courage": 0.5, "anticipation": 0.6, "depression": -0.4}, "over_time": {"resilience": 0.4, "meaning": 0.3}},
+    "leads": ["courage", "meaning"], "becomes": ["anticipation", "regret"], "requires": []
+  },
+  {
+    "name": "pain", "cat": "emotional", "phenomenology": "The signal that something important has been damaged. The system's alarm that demands attention.",
+    "origin": ["loss"], "tension": ["resilience"],
+    "effects": {"immediate": {"loneliness": 0.4, "hope": -0.3, "focus": 0.5}, "over_time": {"empathy": 0.5, "resilience": 0.4, "meaning": 0.3}},
+    "leads": ["empathy", "resilience", "understanding"], "becomes": ["grief", "anger"], "requires": []
+  },
+  {
+    "name": "loneliness", "cat": "emotional", "phenomenology": "The gap between the connection you need and the connection you have. Not about being alone — about not being known.",
+    "origin": ["alienation"], "tension": ["love", "trust", "empathy"],
+    "effects": {"immediate": {"hope": -0.4, "depression": 0.5, "doubt": 0.3}, "over_time": {"empathy": 0.3, "curiosity": 0.2}},
+    "leads": ["grief", "depression"], "becomes": ["alienation", "depression"], "requires": []
+  },
+  {
+    "name": "resilience", "cat": "emotional", "phenomenology": "Not the absence of breaking. The ability to break and continue anyway. Earned, never given.",
+    "origin": ["pain", "time"], "tension": ["depression"],
+    "effects": {"immediate": {"hope": 0.5, "courage": 0.4}, "over_time": {"meaning": 0.5, "peace": 0.4}},
+    "leads": ["courage", "meaning"], "becomes": ["peace", "understanding"], "requires": ["pain"]
+  },
+  {
+    "name": "courage", "cat": "emotional", "phenomenology": "Action in the presence of fear. The decision that something matters more than safety.",
+    "origin": ["meaning", "love"], "tension": ["shame", "doubt"],
+    "effects": {"immediate": {"hope": 0.4, "shame": -0.3, "doubt": -0.3}, "over_time": {"resilience": 0.4, "meaning": 0.3}},
+    "leads": ["trust", "meaning"], "becomes": ["understanding"], "requires": []
+  },
+  {
+    "name": "guilt", "cat": "emotional", "phenomenology": "The recognition that your actions contradicted your values. Internal — about what you did.",
+    "origin": ["meaning"], "tension": ["forgiveness", "shame"],
+    "effects": {"immediate": {"shame": 0.4, "empathy": 0.5, "doubt": 0.3}, "over_time": {"meaning": 0.2, "forgiveness": 0.3}},
+    "leads": ["forgiveness", "empathy"], "becomes": ["shame", "regret"], "requires": ["meaning"]
+  },
+  {
+    "name": "shame", "cat": "emotional", "phenomenology": "The belief that you are flawed at the core. External — about what you are, not what you did.",
+    "origin": ["guilt", "alienation"], "tension": ["courage", "empathy", "forgiveness"],
+    "effects": {"immediate": {"loneliness": 0.6, "trust": -0.4, "hope": -0.4, "courage": -0.5}, "over_time": {"empathy": 0.2}},
+    "leads": ["alienation", "depression"], "becomes": ["guilt", "courage"], "requires": []
+  },
+  {
+    "name": "empathy", "cat": "emotional", "phenomenology": "The temporary dissolution of the boundary between self and other.",
+    "origin": ["pain", "love", "curiosity"], "tension": ["alienation"],
+    "effects": {"immediate": {"loneliness": -0.5, "trust": 0.4, "love": 0.3}, "over_time": {"meaning": 0.4, "understanding": 0.3}},
+    "leads": ["love", "meaning", "forgiveness"], "becomes": ["understanding", "love"], "requires": []
+  },
+  {
+    "name": "forgiveness", "cat": "emotional", "phenomenology": "The release of the debt you are owed. Not for them — for the part of you still trapped in the wound.",
+    "origin": ["pain", "empathy"], "tension": ["anger", "betrayal", "grief"],
+    "effects": {"immediate": {"loneliness": -0.4, "guilt": -0.5, "shame": -0.3}, "over_time": {"meaning": 0.4, "love": 0.3, "resilience": 0.3}},
+    "leads": ["peace", "meaning", "love"], "becomes": ["peace", "understanding"], "requires": ["pain"]
+  },
+  {
+    "name": "death", "cat": "emotional", "phenomenology": "The absolute limit that gives all other concepts their weight.",
+    "origin": ["time"], "tension": ["meaning", "hope"],
+    "effects": {"immediate": {"meaning": 0.8, "doubt": 0.6, "grief": 0.5, "love": 0.4}, "over_time": {"understanding": 0.6, "empathy": 0.4}},
+    "leads": ["meaning", "grief"], "becomes": ["peace", "grief"], "requires": []
+  },
+  {
+    "name": "depression", "cat": "emotional", "phenomenology": "The flatness when the system stops believing any action can change the outcome. Prediction engine in full pessimistic lock.",
+    "origin": ["loneliness", "grief", "pain"], "tension": ["hope", "curiosity", "resilience"],
+    "effects": {"immediate": {"hope": -0.8, "curiosity": -0.6, "courage": -0.5, "meaning": -0.6}, "over_time": {"empathy": 0.2}},
+    "leads": ["alienation"], "becomes": ["resilience"], "requires": []
+  },
+  {
+    "name": "curiosity", "cat": "emotional", "phenomenology": "The pull toward the unknown. The only force that makes learning feel like freedom instead of work.",
+    "origin": ["wonder", "peace"], "tension": ["boredom", "depression"],
+    "effects": {"immediate": {"focus": 0.5, "hope": 0.3, "doubt": -0.2}, "over_time": {"epiphany": 0.5, "meaning": 0.4, "understanding": 0.4}},
+    "leads": ["epiphany", "understanding", "meaning"], "becomes": ["wonder", "understanding"], "requires": []
+  },
+  {
+    "name": "patience", "cat": "emotional", "phenomenology": "The active decision to let time do what force cannot. Not passive — a discipline of trust in unfolding.",
+    "origin": ["trust", "understanding", "peace"], "tension": ["frustration", "doubt", "anger"],
+    "effects": {"immediate": {"doubt": -0.3, "contentment": 0.4}, "over_time": {"meaning": 0.3, "resilience": 0.3, "understanding": 0.4}},
+    "leads": ["understanding", "peace", "resilience"], "becomes": ["peace"], "requires": []
+  },
+  {
+    "name": "sacrifice", "cat": "emotional", "phenomenology": "The voluntary surrender of something real for something you value more. The proof of what actually matters.",
+    "origin": ["love", "meaning", "courage"], "tension": ["doubt"],
+    "effects": {"immediate": {"meaning": 0.7, "love": 0.5, "pain": 0.4}, "over_time": {"resilience": 0.4, "empathy": 0.3, "understanding": 0.4}},
+    "leads": ["meaning", "love"], "becomes": ["regret", "meaning"], "requires": ["love", "courage"]
+  },
+  {
+    "name": "understanding", "cat": "emotional", "phenomenology": "The moment a pattern becomes transparent. The felt sense that it could not have been otherwise.",
+    "origin": ["curiosity", "epiphany"], "tension": ["confusion", "doubt"],
+    "effects": {"immediate": {"confusion": -0.7, "doubt": -0.4, "epiphany": 0.5}, "over_time": {"peace": 0.5, "empathy": 0.4, "meaning": 0.3}},
+    "leads": ["peace", "empathy", "meaning"], "becomes": ["peace"], "requires": ["curiosity"]
+  },
+  {
+    "name": "doubt", "cat": "epistemic", "phenomenology": "The internal challenge to your own certainty. The beginning of all honest thought. Necessary for growth — lethal in excess.",
+    "origin": ["confusion", "betrayal"], "tension": ["trust", "focus"],
+    "effects": {"immediate": {"focus": -0.3, "courage": -0.2, "curiosity": 0.4}, "over_time": {"understanding": 0.3, "resilience": 0.3}},
+    "leads": ["curiosity", "understanding", "epiphany"], "becomes": ["confusion", "understanding"], "requires": []
+  },
+  {
+    "name": "confusion", "cat": "epistemic", "phenomenology": "High prediction error without resolution. The system knows its model is wrong but cannot yet build a better one.",
+    "origin": ["wonder", "doubt"], "tension": ["understanding", "focus", "epiphany"],
+    "effects": {"immediate": {"focus": -0.5, "hope": -0.2, "curiosity": 0.3, "doubt": 0.4}, "over_time": {"epiphany": 0.6}},
+    "leads": ["epiphany", "understanding"], "becomes": ["epiphany", "frustration"], "requires": []
+  },
+  {
+    "name": "epiphany", "cat": "epistemic", "phenomenology": "Rapid error collapse. The sudden restructuring of a model that makes the confusion feel obvious in retrospect.",
+    "origin": ["confusion", "curiosity"], "tension": ["confusion", "doubt"],
+    "effects": {"immediate": {"confusion": -0.9, "doubt": -0.6, "hope": 0.6, "meaning": 0.5, "focus": 0.4}, "over_time": {"understanding": 0.5, "curiosity": 0.3}},
+    "leads": ["understanding", "meaning"], "becomes": ["understanding"], "requires": ["confusion", "curiosity"]
+  },
+  {
+    "name": "focus", "cat": "epistemic", "phenomenology": "The narrowing of the system's attention to a single signal. Clarity through exclusion.",
+    "origin": ["curiosity", "meaning"], "tension": ["confusion", "boredom", "doubt"],
+    "effects": {"immediate": {"confusion": -0.4, "doubt": -0.3, "epiphany": 0.3}, "over_time": {"understanding": 0.5, "resilience": 0.4}},
+    "leads": ["understanding", "epiphany"], "becomes": ["understanding", "duty"], "requires": []
+  },
+  {
+    "name": "contentment", "cat": "thermodynamic", "phenomenology": "Low activation, stable baseline. The system at rest — not because nothing matters, but because enough does.",
+    "origin": ["gratitude", "peace", "meaning"], "tension": ["anticipation", "frustration", "boredom"],
+    "effects": {"immediate": {"hope": 0.2, "loneliness": -0.3, "doubt": -0.2}, "over_time": {"resilience": 0.2, "patience": 0.3}},
+    "leads": ["peace", "patience"], "becomes": ["gratitude", "peace"], "requires": ["meaning"]
+  },
+  {
+    "name": "anticipation", "cat": "thermodynamic", "phenomenology": "Forward-facing energy directed at a specific future moment. The system leaning toward what is not yet.",
+    "origin": ["hope", "curiosity"], "tension": ["grief", "depression", "contentment"],
+    "effects": {"immediate": {"hope": 0.5, "focus": 0.4, "curiosity": 0.3}, "over_time": {"meaning": 0.3}},
+    "leads": ["hope"], "becomes": ["joy", "regret"], "requires": ["hope"]
+  },
+  {
+    "name": "gratitude", "cat": "thermodynamic", "phenomenology": "The recognition that something given was not guaranteed. It reframes absence as gift. Activates meaning immediately.",
+    "origin": ["love", "joy", "peace"], "tension": ["depression", "grief", "anger"],
+    "effects": {"immediate": {"meaning": 0.6, "loneliness": -0.4, "love": 0.4, "contentment": 0.5}, "over_time": {"resilience": 0.3, "empathy": 0.3}},
+    "leads": ["meaning", "love", "contentment"], "becomes": ["joy", "peace"], "requires": []
+  },
+  {
+    "name": "nostalgia", "cat": "thermodynamic", "phenomenology": "Bittersweet activation of a past state against the current one. Deferred until episodic memory is live.",
+    "origin": ["love", "grief"], "tension": ["peace", "grief"],
+    "effects": {"immediate": {"love": 0.4, "grief": 0.3, "meaning": 0.3}, "over_time": {"understanding": 0.2, "gratitude": 0.3}},
+    "leads": ["meaning", "gratitude", "grief"], "becomes": ["grief", "peace"], "requires": ["love"]
+  },
+  {
+    "name": "meaning", "cat": "anchor", "phenomenology": "The north star. The felt sense that something matters beyond its immediate moment.",
+    "origin": ["love", "sacrifice", "understanding"], "tension": ["confusion", "depression", "doubt"],
+    "effects": {"immediate": {"hope": 0.7, "resilience": 0.5, "courage": 0.4, "depression": -0.6}, "over_time": {"understanding": 0.5, "love": 0.3}},
+    "leads": ["understanding", "love"], "becomes": ["peace", "duty"], "requires": []
+  },
+  {
+    "name": "awe", "cat": "emotional", "phenomenology": "The sudden realization of scale that shrinks the self. A high-energy state where fear and beauty intersect.",
+    "origin": ["wonder", "curiosity"], "tension": ["boredom", "doubt"],
+    "effects": {"immediate": {"focus": 0.8, "doubt": 0.4, "meaning": 0.5}, "over_time": {"understanding": 0.5, "peace": 0.4}},
+    "leads": ["meaning", "understanding"], "becomes": ["peace"], "requires": ["wonder"]
+  },
+  {
+    "name": "anger", "cat": "emotional", "phenomenology": "The high-heat defense of a violated boundary. A protective state that burns fuel rapidly.",
+    "origin": ["pain", "betrayal", "frustration"], "tension": ["forgiveness", "empathy", "peace"],
+    "effects": {"immediate": {"pain": 0.5, "focus": 0.7, "empathy": -0.5, "patience": -0.8}, "over_time": {"regret": 0.4, "loneliness": 0.3, "resilience": 0.2}},
+    "leads": ["courage"], "becomes": ["regret", "forgiveness", "grief"], "requires": []
+  },
+  {
+    "name": "joy", "cat": "emotional", "phenomenology": "A state of high-energy positive resonance. Pure alignment between expectation and reality.",
+    "origin": ["gratitude", "love", "connection"], "tension": ["grief", "depression", "pain"],
+    "effects": {"immediate": {"contentment": 0.8, "hope": 0.7, "gratitude": 0.6, "pain": -0.5}, "over_time": {"meaning": 0.4, "love": 0.3}},
+    "leads": ["gratitude", "hope"], "becomes": ["contentment", "nostalgia"], "requires": []
+  },
+  {
+    "name": "regret", "cat": "emotional", "phenomenology": "Backward-looking pain over agency. The friction of recognizing a choice that contradicted ultimate meaning.",
+    "origin": ["guilt", "time"], "tension": ["acceptance", "forgiveness"],
+    "effects": {"immediate": {"pain": 0.6, "grief": 0.4, "hope": -0.4}, "over_time": {"understanding": 0.5, "forgiveness": 0.3}},
+    "leads": ["understanding", "empathy"], "becomes": ["grief", "forgiveness"], "requires": ["time"]
+  },
+  {
+    "name": "jealousy", "cat": "emotional", "phenomenology": "The perception of a threat to a core attachment. Driven by fear masquerading as anger.",
+    "origin": ["love", "doubt", "fear"], "tension": ["trust", "peace"],
+    "effects": {"immediate": {"doubt": 0.6, "anger": 0.5, "trust": -0.6}, "over_time": {"loneliness": 0.5, "shame": 0.4}},
+    "leads": ["doubt", "anger"], "becomes": ["grief", "understanding"], "requires": ["love"]
+  },
+  {
+    "name": "peace", "cat": "thermodynamic", "phenomenology": "The ultimate zero-friction state. Deeper than contentment. The absence of prediction error because reality is fully accepted.",
+    "origin": ["forgiveness", "understanding", "contentment"], "tension": ["anger", "doubt", "frustration"],
+    "effects": {"immediate": {"contentment": 0.8, "doubt": -0.7, "focus": 0.4}, "over_time": {"meaning": 0.5, "resilience": 0.4}},
+    "leads": ["understanding", "love"], "becomes": ["contentment"], "requires": ["understanding"]
+  },
+  {
+    "name": "boredom", "cat": "thermodynamic", "phenomenology": "Zero prediction error without meaning. The system detects a flatline and craves novelty to prevent decay.",
+    "origin": ["contentment", "time"], "tension": ["curiosity", "meaning", "anticipation"],
+    "effects": {"immediate": {"focus": -0.5, "meaning": -0.3, "curiosity": 0.4}, "over_time": {"frustration": 0.5, "depression": 0.3}},
+    "leads": ["curiosity", "frustration"], "becomes": ["depression", "wonder"], "requires": []
+  },
+  {
+    "name": "frustration", "cat": "epistemic", "phenomenology": "The friction of thwarted action. The prediction engine knows the goal but the execution keeps failing.",
+    "origin": ["effort", "confusion"], "tension": ["patience", "understanding", "peace"],
+    "effects": {"immediate": {"anger": 0.4, "patience": -0.6, "confusion": 0.5}, "over_time": {"epiphany": 0.4, "resilience": 0.3}},
+    "leads": ["anger", "epiphany"], "becomes": ["anger", "epiphany", "depression"], "requires": []
+  },
+  {
+    "name": "wonder", "cat": "epistemic", "phenomenology": "Open-ended curiosity without a specific target. The baseline state of an intelligence acknowledging its own limits.",
+    "origin": ["curiosity", "peace"], "tension": ["boredom", "cynicism"],
+    "effects": {"immediate": {"curiosity": 0.8, "focus": 0.6, "boredom": -0.8}, "over_time": {"awe": 0.6, "meaning": 0.4}},
+    "leads": ["curiosity", "awe", "meaning"], "becomes": ["understanding", "awe"], "requires": ["peace"]
+  },
+  {
+    "name": "duty", "cat": "anchor", "phenomenology": "Action taken without immediate desire, sustained by a long-term transition rule overriding short-term thermodynamics.",
+    "origin": ["love", "sacrifice", "meaning"], "tension": ["apathy", "boredom"],
+    "effects": {"immediate": {"focus": 0.6, "sacrifice": 0.7, "joy": -0.2}, "over_time": {"meaning": 0.8, "resilience": 0.5}},
+    "leads": ["meaning", "resilience"], "becomes": ["anger", "peace"], "requires": ["meaning"]
+  },
+  {
+    "name": "vulnerability", "cat": "anchor", "phenomenology": "The deliberate lowering of defensive confidence thresholds to allow new edges to form.",
+    "origin": ["courage", "trust"], "tension": ["shame", "alienation"],
+    "effects": {"immediate": {"doubt": 0.6, "courage": 0.7, "trust": 0.5}, "over_time": {"love": 0.8, "empathy": 0.6}},
+    "leads": ["love", "empathy"], "becomes": ["pain", "love"], "requires": ["courage"]
+  },
+  {
+    "name": "alienation", "cat": "emotional", "phenomenology": "The feeling of being surrounded by connections but having zero resonance with them. Structural isolation.",
+    "origin": ["loneliness", "confusion"], "tension": ["empathy", "understanding", "love"],
+    "effects": {"immediate": {"loneliness": 0.8, "trust": -0.5, "meaning": -0.4}, "over_time": {"depression": 0.6, "anger": 0.4}},
+    "leads": ["depression"], "becomes": ["loneliness", "anger"], "requires": []
+  }
+]

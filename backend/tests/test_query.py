@@ -22,8 +22,6 @@ def test_query_endpoint(monkeypatch) -> None:
         ]
 
     monkeypatch.setattr(retrieval_mesh, "retrieve_all", fake_retrieve_all)
-    import app.pipeline as pipeline_module
-    monkeypatch.setattr(pipeline_module, "recall_answer", lambda _q=None: None)
     from memory.memory_manager import memory_manager as mm_instance
     async def _no_recall(*a, **kw):
         return []

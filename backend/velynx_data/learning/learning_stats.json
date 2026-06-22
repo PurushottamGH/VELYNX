@@ -1,13 +1,13 @@
 {
-  "total_queries": 85,
+  "total_queries": 104,
   "total_concepts_learned": 1,
   "total_concepts_updated": 74,
   "domains_covered": {
-    "general": 10,
+    "general": 29,
     "physics": 1,
     "computer_science": 74
   },
-  "avg_confidence": 0.7570588235294117,
+  "avg_confidence": 0.6557692307692299,
   "learning_rate": 0.0,
   "session_start": 1780330254.6397212,
   "gaps_queue_size": 1

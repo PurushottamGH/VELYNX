@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "description": "VELYNX Governed Concept Lexicon — maps cognitive concepts to trigger words for perception activation.",
+  "lexicon": {
+    "meaning": ["purpose", "meaning", "significance", "worth", "reason", "value"],
+    "resilience": ["survived", "recovered", "overcame", "endured", "tough", "strength", "resilient"],
+    "hope": ["hope", "optimistic", "future", "wish", "dream"],
+    "despair": ["hopeless", "despair", "defeated", "empty", "pointless"],
+    "love": ["love", "friend", "family", "bond", "connection", "care", "adore"],
+    "trust": ["trust", "rely", "faith", "confidence", "believe", "safe", "secure"],
+    "pain": ["pain", "hurt", "suffering", "destroy", "loss", "broken", "wound"],
+    "grief": ["grief", "loss", "mourn", "miss", "absence", "sorrow", "lost", "death", "goodbye"],
+    "confusion": ["confuse", "lost", "unsure", "baffle", "blur", "mess"],
+    "doubt": ["uncertain", "maybe", "conflicted", "question", "waver", "hesitate"],
+    "curiosity": ["wonder", "explore", "discover", "learn", "ask", "curious"],
+    "focus": ["focus", "concentrate", "attention", "clarity", "zone", "working", "task"],
+    "vulnerability": ["vulnerability", "vulnerable", "open", "exposed", "fragile"]
+  }
+}

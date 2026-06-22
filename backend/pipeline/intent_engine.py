@@ -94,15 +94,82 @@ def _classify_domains(tokens: list[str]) -> list[str]:
     return matches
 
 
+# A run of capitalised tokens (optionally joined by a connective like "of"/"the"
+# inside the span, e.g. "Bank of America") is ONE entity, not several. The
+# capture is anchored on a capitalised head token and greedily absorbs adjacent
+# capitalised tokens — this is what keeps "Driftwood OS" together instead of
+# splitting it into ["Driftwood", "OS"] and letting the trailing token win as the
+# "most specific" concept (the Interaction #21 truncation bug, where "Driftwood
+# OS" collapsed to the entity "os").
+_PROPER_NOUN_RE = re.compile(r"\b[A-Z][A-Za-z0-9]*\b")
+# Short connective words allowed to sit *between* two capitalised tokens of one
+# named entity without breaking the phrase ("Bank of America", "Game of Thrones").
+# A trailing/leading connective is never kept — only one that bridges two
+# capitalised tokens.
+_PROPER_NOUN_INFIX = frozenset({"of", "the", "and", "for", "de", "van", "von", "da"})
+
+
+def _group_proper_noun_phrases(text: str) -> list[str]:
+    """Group consecutive capitalised tokens into multi-word named entities.
+
+    "Who created Driftwood OS?"        -> ["Driftwood OS"]
+    "Where is Bank of America located?" -> ["Bank of America"]
+    "Ada Lovelace met Charles Babbage." -> ["Ada Lovelace", "Charles Babbage"]
+
+    Adjacent capitalised tokens (allowing a single lowercase connective like
+    "of"/"the" between two of them) are merged. A lone capitalised word still
+    comes back as a one-element phrase, so single-entity queries are unchanged.
+    The sentence-initial word is intentionally NOT special-cased away here —
+    interrogatives ("Who", "What") are stripped downstream by the query
+    drop-term filter, and over-keeping them is harmless because they are not
+    stored entities.
+    """
+    matches = list(_PROPER_NOUN_RE.finditer(text))
+    phrases: list[str] = []
+    current: list[str] = []
+    last_end = -1
+    for m in matches:
+        word = m.group(0)
+        gap = text[last_end:m.start()] if last_end >= 0 else ""
+        # Continue the current phrase when the previous capitalised token is
+        # separated only by whitespace, or by a single allowed connective word.
+        bridges = gap.strip().lower()
+        if current and (bridges == "" or bridges in _PROPER_NOUN_INFIX):
+            if bridges:
+                current.append(gap.strip())
+            current.append(word)
+        else:
+            if current:
+                phrases.append(" ".join(current))
+            current = [word]
+        last_end = m.end()
+    if current:
+        phrases.append(" ".join(current))
+    # Trim any phrase that is purely a connective leftover, and de-dup.
+    cleaned = [p.strip() for p in phrases if p.strip()]
+    return list(dict.fromkeys(cleaned))
+
+
 def _extract_entities(text: str) -> dict:
-    entities: dict = {"numbers": [], "years": [], "proper_nouns": [], "quoted": []}
+    entities: dict = {
+        "numbers": [],
+        "years": [],
+        "proper_nouns": [],
+        "proper_noun_phrases": [],
+        "quoted": [],
+    }
 
     entities["numbers"] = re.findall(r"\b\d+(?:\.\d+)?\b", text)
     entities["years"] = re.findall(r"\b(18|19|20)\d{2}\b", text)
     entities["quoted"] = re.findall(r"\"([^\"]+)\"", text)
 
+    # Singletons (unchanged — kept for backward compatibility with any consumer
+    # that reads proper_nouns directly).
     tokens = re.findall(r"\b[A-Z][a-zA-Z0-9]+\b", text)
     entities["proper_nouns"] = list(dict.fromkeys(tokens))
+
+    # Multi-word grouping — the truncation fix. "Driftwood OS" stays one entity.
+    entities["proper_noun_phrases"] = _group_proper_noun_phrases(text)
     return entities
 
 

@@ -14,3 +14,7 @@ backend_backup_phase35/
 /data/chroma_db/
 /models/
 /velynx_output/
+
+# Throwaway databases from VELYNX_TEST_MODE test isolation
+backend/tests/data/_isolated/
+nul
