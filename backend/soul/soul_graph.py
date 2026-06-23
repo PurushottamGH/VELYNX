@@ -118,8 +118,18 @@ def build_soul_graph(force: bool = False):
 def build_pair(a: str, b: str):
     """Build edges between exactly two concepts. Called after teaching.
 
-    Checks each direction independently — existing edges are preserved,
-    missing directions are filled in, so partial edges don't cause duplication.
+    Writes into the unified ``living_edges`` Brain Stem store — the SAME table
+    the read path (:func:`get_edges`, :func:`find_path`, :func:`get_tensions`,
+    :func:`synthesize`) queries via :func:`get_db_connection`. Prior to the
+    Phase-62 unification this wrote to the standalone ``soul_edges`` table in
+    ``SOUL_DB``, which the readers never consulted, so auto-linked edges were
+    permanently invisible to traversal. See ``velynx/graph/living_edges.py``
+    for the canonical schema and writer (:func:`add_living_edge`).
+
+    Each direction is checked independently against ``living_edges`` so existing
+    edges are preserved and only missing directions are filled in. The
+    ``UNIQUE(source, relation, target, context)`` constraint plus
+    ``INSERT OR IGNORE`` in ``add_living_edge`` make repeat calls idempotent.
     """
     try:
         from cognition.embed_index import concept_similarity, classify_edge_type, build_index
@@ -128,37 +138,41 @@ def build_pair(a: str, b: str):
 
     soul = load_soul()
     build_index()
-    conn = _get_conn()
 
-    has_forward = _edge_exists(conn, a, b)
-    has_reverse = _edge_exists(conn, b, a)
+    has_forward = _living_edge_exists(a, b)
+    has_reverse = _living_edge_exists(b, a)
 
     if has_forward and has_reverse:
-        conn.close()
         print(f"  [{a}] --[{b}] (edges already exist, skipped)")
         return
 
     score = concept_similarity(a, b)
+
+    # Below the relational floor the two concepts are not meaningfully related;
+    # do not pollute the graph with noise edges (mirrors build_soul_graph()).
+    if score < 0.20:
+        print(f"  [{a}] --[{b}] (score={score:.2f} below floor, skipped)")
+        return
+
     etype = classify_edge_type(a, b, score)
     rev_typ = _reverse_type(etype)
     reason = _generate_reason(a, b, etype, score, soul)
     rev_rsn = _generate_reason(b, a, rev_typ, score, soul)
 
+    # initial_quality is the embedding similarity — a strong semantic match
+    # seeds a more confident edge. Clamp into (0, 1] for the Bayesian prior.
+    quality = max(0.05, min(1.0, score))
+
     if not has_forward:
-        _write_edge(conn, soul, a, b, etype, score, reason)
+        add_living_edge(a, etype, b, context=reason, initial_quality=quality)
         print(f"  [{a}] --{etype}--> [{b}]")
     if not has_reverse:
-        _write_edge(conn, soul, b, a, rev_typ, score, rev_rsn)
+        add_living_edge(b, rev_typ, a, context=rev_rsn, initial_quality=quality)
         print(f"  [{b}] --{rev_typ}--> [{a}]")
 
     tension = _detect_tension(a, b, etype, soul)
     if tension:
-        _write_tension(conn, soul, a, b, tension)
-
-    conn.commit()
-    conn.close()
-
-    if tension:
+        _write_living_tension(a, b, tension)
         print(f"  Tension: {tension['name']}")
 
 
@@ -196,6 +210,8 @@ def find_path(start: str, end: str, max_hops: int = 3) -> list[str]:
 
 def get_edges(concept: str) -> list[dict]:
     """Retrieves all active, non-contested outbound edges for a concept from Brain Stem, sorted by weight."""
+    from velynx.graph.living_edges import initialize_schema
+    initialize_schema()
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute('''
@@ -211,6 +227,8 @@ def get_edges(concept: str) -> list[dict]:
 
 def get_tensions(concept: str) -> list[dict]:
     """Retrieves all contested or inverse relationships from Brain Stem for truth-tension generation."""
+    from velynx.graph.living_edges import initialize_schema
+    initialize_schema()
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute('''
@@ -268,10 +286,51 @@ def synthesize(concepts: list[str]) -> str:
 
 
 def _edge_exists(conn, a: str, b: str) -> bool:
-    """Return True if any directed edge exists from a to b."""
+    """Return True if any directed edge exists from a to b in the legacy
+    ``soul_edges`` table. Retained for :func:`build_soul_graph` and the
+    ``migrate_flat_edges`` legacy-migration path; the live write path
+    (:func:`build_pair`) now uses :func:`_living_edge_exists`."""
     c = conn.cursor()
     c.execute("SELECT 1 FROM soul_edges WHERE from_concept=? AND to_concept=?", (a, b))
     return c.fetchone() is not None
+
+
+def _living_edge_exists(a: str, b: str) -> bool:
+    """Return True if any directed edge a→b already exists in the unified
+    ``living_edges`` Brain Stem store (any relation/context)."""
+    from velynx.graph.living_edges import initialize_schema
+    initialize_schema()
+    conn = get_db_connection()
+    try:
+        row = conn.execute(
+            "SELECT 1 FROM living_edges WHERE source = ? AND target = ? LIMIT 1",
+            (a, b),
+        ).fetchone()
+        return row is not None
+    finally:
+        conn.close()
+
+
+def _write_living_tension(a: str, b: str, tension: dict) -> None:
+    """Record a detected semantic tension in the unified Brain Stem store.
+
+    ``get_tensions`` surfaces tensions as ``living_edges`` rows whose
+    ``status='contested'``. We therefore add a dedicated ``tension`` edge and
+    immediately challenge it so the Bayesian state flips to ``contested`` —
+    without touching the primary semantic edges, which must remain ``active``
+    so :func:`get_edges` / :func:`find_path` still traverse them.
+    """
+    severity = float(tension.get("severity", 0.5))
+    context = tension.get("name", "tension")
+    # Forward + reverse tension edges so get_tensions(a) and get_tensions(b)
+    # both surface the relationship.
+    add_living_edge(a, "tension", b, context=context, initial_quality=severity)
+    add_living_edge(b, "tension", a, context=context, initial_quality=severity)
+    # A single challenge at >= the seeding quality drives challenged_count >=
+    # reinforced_count, which _calculate_confidence_and_status maps to
+    # status='contested'.
+    challenge_edge(a, "tension", b, context=context, source_quality=max(severity, 0.9))
+    challenge_edge(b, "tension", a, context=context, source_quality=max(severity, 0.9))
 
 
 def _write_edge(conn, soul: dict, frm: str, to: str, etype: str, weight: float, reason: str):

@@ -2,11 +2,11 @@
 Phase 63 — Expanded Ontology Integrity Suite
 =============================================
 
-Proves the structural integrity of ``world_ontology_expanded.json`` before it is
-merged into production. Validates the four new branches — ``Organization``,
-``Location``, ``Concept``, and the ``Entity`` root promotion — against the
-Schema Gatekeeper's four-stage classifier (entity resolution, predicate mapping,
-schema membership, value validation).
+Proves the structural integrity of the 17-type ``world_ontology.json`` baseline.
+Validates the four new branches — ``Organization``, ``Location``, ``Concept``,
+and the ``Entity`` root promotion — against the Schema Gatekeeper's four-stage
+classifier (entity resolution, predicate mapping, schema membership, value
+validation).
 
 Coverage
 --------
@@ -23,70 +23,42 @@ Coverage
   declared attributes and constraints.
 * **Open-world safety** — untyped subjects, free-form predicates, and unknown
   entities are always accepted (no pre-Phase-63 regressions).
-* **Registry integrity** — all 18 types and 8 instances load without errors.
+* **Registry integrity** — all 17 physical types and 9 instances load without
+  errors.
 
-Fixtures follow the standard VELYNX_TEST_MODE="1" convention. The module-level
-``VELYNX_ONTOLOGY_PATH`` environment variable ensures the gatekeeper and loader
-both read from the expanded JSON, not the production file.
+The tests use the default ``install_combined_registry()`` fixture. The 17-type
+ontology is now the permanent baseline at ``backend/data/world_ontology.json``
+— no monkeypatching or env-var overrides are needed.
 """
 from __future__ import annotations
 
-import os
-import sys
 from pathlib import Path
 
 import pytest
 
-# ══════════════════════════════════════════════════════════════════════════════
-# Module-level bootstrap — must run before any backend imports.
-# ══════════════════════════════════════════════════════════════════════════════
-os.environ.setdefault("VELYNX_TEST_MODE", "1")
+# ── Bootstrap ────────────────────────────────────────────────────────────────────
 
-EXPANDED_PATH = Path(__file__).resolve().parent.parent / "data" / "world_ontology_expanded.json"
-os.environ["VELYNX_ONTOLOGY_PATH"] = str(EXPANDED_PATH)
-
-
-# ── Helpers ────────────────────────────────────────────────────────────────────
-
-def _install_expanded_registry():
-    """Build the combined registry from the expanded ontology and install it
-    process-wide. Also force the schema gatekeeper to reload its predicate_map
-    from the same expanded JSON so all four classifier stages operate on the
-    new data.
-
-    Returns the installed ``WorldModelRegistry``.
-    """
-    import backend.knowledge.ontology_loader as loader_mod
-    import backend.knowledge.schema_gatekeeper as gk_mod
-    from backend.knowledge.world_model_context import set_registry
-
-    # Point both modules at the expanded ontology so the gatekeeper's
-    # predicate_map reads from the same file as the loader.
-    expanded = Path(EXPANDED_PATH)
-    loader_mod.DEFAULT_ONTOLOGY_PATH = expanded
-    gk_mod.DEFAULT_ONTOLOGY_PATH = expanded
-    gk_mod.reload_predicate_map()
-
-    reg = loader_mod.load_combined_registry(path=expanded)
-    set_registry(reg)
-    return reg
+# Resolve the canonical ontology path explicitly — the promoted 17-type baseline
+# at backend/data/world_ontology.json. No env-var override, no monkeypatching.
+ONTOLOGY_PATH = Path(__file__).resolve().parent.parent / "data" / "world_ontology.json"
 
 
 # ── Fixtures ────────────────────────────────────────────────────────────────────
 
 @pytest.fixture(scope="module")
 def registry():
-    """Module-scoped: install the combined registry from expanded JSON once."""
-    return _install_expanded_registry()
+    """Module-scoped: install the combined registry from the canonical ontology JSON."""
+    from backend.knowledge.ontology_loader import install_combined_registry
+
+    return install_combined_registry(path=ONTOLOGY_PATH)
 
 
 @pytest.fixture(scope="module")
 def gatekeeper():
-    """Return the schema gatekeeper module after it has been pointed at the
-    expanded ontology. The registry must be installed first so entity resolution
-    works.
-    """
+    """Return the schema gatekeeper module. The registry must be installed first
+    so entity resolution works."""
     from backend.knowledge import schema_gatekeeper as gk
+
     return gk
 
 
@@ -94,7 +66,7 @@ def gatekeeper():
 def empire_state(registry):
     """The canonical multi-inheritance instance: Building + PhysicalObject facet."""
     entity = registry.get_entity("Empire State Building")
-    assert entity is not None, "Empire State Building not found in expanded registry"
+    assert entity is not None, "Empire State Building not found in registry"
     return entity
 
 
@@ -102,7 +74,7 @@ def empire_state(registry):
 def tesla(registry):
     """Canonical Vehicle + Electronics facet instance."""
     entity = registry.get_entity("Tesla Model 3")
-    assert entity is not None, "Tesla Model 3 not found in expanded registry"
+    assert entity is not None, "Tesla Model 3 not found in registry"
     return entity
 
 
@@ -134,7 +106,7 @@ class TestRegistryIntegrity:
     ]
 
     def test_all_physical_types_present(self, registry):
-        """Every type declared in the expanded JSON must be registered."""
+        """Every type declared in the ontology must be registered."""
         registered = set(registry.types())
         for tname in self.EXPECTED_PHYSICAL_TYPES:
             assert tname in registered, (
@@ -254,10 +226,6 @@ class TestCoordinateBounds:
             ("Mount Everest", "lon", "-180"),
         ]
         accepted, rejected = gatekeeper.validate_triples(triples)
-        # Note: Mount Everest accepts these via the gatekeeper, but the entity
-        # itself would reject them on set() — the gatekeeper only checks the
-        # type's schema range, not the actual location on Earth. Range min/max
-        # constraints are respected.
         assert len(accepted) == 4, (
             f"Boundary coordinates should be accepted: rejected={rejected}"
         )
@@ -312,16 +280,17 @@ class TestEnumViolations:
         assert len(rejected) == 1
 
     def test_invalid_agency_type_rejected(self, gatekeeper):
-        """'covert_ops' is NOT a valid agency_type on GovernmentAgency."""
-        # First, the gatekeeper needs a typed entity of GovernmentAgency.
-        # United Nations is typed Organization (not GovernmentAgency) via the
-        # registry. We test via direct entity resolution — the gatekeeper
-        # resolves UN -> Organization, and agency_type is on GovernmentAgency
-        # which is NOT in UN's resolved schema (no GovernmentAgency facet).
-        # The rejection is UNKNOWN_ATTRIBUTE, which is also valid behavior.
-        # Instead, let's test with a known enum on a base type.
-        pass  # Covered by mobility_type and industry above; agency_type would
-              # need a GovernmentAgency-typed instance to test the enum path.
+        """'covert_ops' is NOT a valid agency_type on GovernmentAgency.
+
+        United Nations is typed Organization (not GovernmentAgency) via the
+        registry. Testing via direct entity resolution — the gatekeeper
+        resolves UN → Organization, and agency_type is on GovernmentAgency
+        which is NOT in UN's resolved schema (no GovernmentAgency facet).
+        The rejection is UNKNOWN_ATTRIBUTE, which is also valid behavior.
+        Covered by mobility_type and industry above; agency_type would
+        need a GovernmentAgency-typed instance to test the enum path.
+        """
+        pass
 
     def test_invalid_evidence_level_rejected(self, gatekeeper):
         """'proven' is NOT a valid evidence_level enum on Theory."""
@@ -617,8 +586,6 @@ class TestConceptTree:
 
     def test_theory_defaults(self, registry):
         """Theory defaults: falsifiable=True, evidence_level='hypothesis'."""
-        from backend.knowledge.world_model_schema import Entity, EntityType, AttributeSchema
-
         theory_type = registry.get_type("Theory")
         assert theory_type is not None
 
@@ -753,7 +720,7 @@ class TestSchemaMembershipRejection:
 # ══════════════════════════════════════════════════════════════════════════════
 
 class TestPredicateMapCoverage:
-    """Prove key expanded predicate mappings from the expanded JSON are loaded
+    """Prove key expanded predicate mappings from the ontology JSON are loaded
     and resolve correctly through the gatekeeper."""
 
     def test_organization_predicates(self, gatekeeper):
@@ -813,10 +780,9 @@ class TestPredicateMapCoverage:
     def test_date_pattern_enforcement(self, gatekeeper):
         """Attributes with regex pattern must reject malformed dates."""
         # date_of_birth on Person: pattern ^\d{4}-\d{2}-\d{2}$
-        # The gatekeeper needs a Person-typed entity. The expanded ontology
-        # doesn't ship a Person instance, so the entity resolution stage
-        # would accept (open-world). Let's test with the existing Paris
-        # Agreement expiration_date which also has the date pattern.
+        # The ontology doesn't ship a Person instance, so the entity resolution
+        # stage would accept (open-world). Test with Paris Agreement
+        # expiration_date which also has the date pattern.
         # expiration_date pattern: ^\d{4}-\d{2}-\d{2}$
         triples = [("Paris Agreement", "expires_on", "not-a-date")]
         accepted, rejected = gatekeeper.validate_triples(triples)

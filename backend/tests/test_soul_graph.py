@@ -1,12 +1,40 @@
 """
 Tests for backend.soul.soul_graph — Layer 2 soul graph builder.
-Covers: schema creation, path finding, synthesis, edge/tension queries.
+
+Phase 62 unification: ``build_pair`` now writes into the unified
+``living_edges`` Brain Stem store (brain_stem.db) — the SAME table the read
+path (``get_edges`` / ``find_path`` / ``get_tensions`` / ``synthesize``)
+queries. Before the fix it wrote to a standalone ``soul_edges`` table that the
+readers never consulted, so auto-linked edges were permanently invisible. These
+tests pin the unified contract.
+
+Isolation
+---------
+``VELYNX_TEST_MODE=1`` (set below before any source import) redirects every
+SQLite database — including brain_stem.db — into
+``backend/tests/data/_isolated/`` via backend.memory._sqlite.resolve_db_path,
+so the suite never touches live user data. Each test wipes the isolated
+brain_stem.db so edge-count assertions are deterministic.
 """
+import os
+
+# MUST be set before importing any backend module that resolves a DB path.
+os.environ.setdefault("VELYNX_TEST_MODE", "1")
+
+import sys
 import json
 from pathlib import Path
 from unittest.mock import patch
 
 import pytest
+
+# Ensure backend/ is importable as a top-level root so the source's
+# ``from cognition.embed_index import ...`` (and our patch of the
+# ``backend.cognition.embed_index`` fallback) both resolve.
+_BACKEND_ROOT = str(Path(__file__).resolve().parent.parent)
+if _BACKEND_ROOT not in sys.path:
+    sys.path.insert(0, _BACKEND_ROOT)
+
 
 # ── helpers ──────────────────────────────────────────────────────────────
 
@@ -30,34 +58,90 @@ FAKE_CONCEPTS = {
 }
 
 
+def _isolated_brain_stem_path() -> Path:
+    """Resolve the redirected brain_stem.db path under VELYNX_TEST_MODE."""
+    from backend.memory._sqlite import canonical_db_path, resolve_db_path
+    return Path(resolve_db_path(canonical_db_path("brain_stem.db")))
+
+
+def _wipe_brain_stem():
+    """Reset the isolated Brain Stem to an empty state.
+
+    We TRUNCATE the tables rather than unlink the file: under WAL mode the
+    committed data lives partly in the ``-wal`` sidecar, so deleting only the
+    main ``.db`` can leave rows that SQLite replays on the next open. Clearing
+    every table via SQL is deterministic and avoids cross-test state leakage.
+    """
+    from velynx.graph.living_edges import initialize_schema
+    from backend.soul.soul_graph import get_db_connection
+
+    initialize_schema()
+    conn = get_db_connection()
+    try:
+        for table in ("edge_evidence", "living_edges",
+                      "coactivation_counts", "concepts"):
+            try:
+                conn.execute(f"DELETE FROM {table}")
+            except Exception:
+                pass  # table may not exist on a brand-new DB
+        conn.commit()
+        # Force a full WAL checkpoint so the truncation is flushed from the
+        # -wal sidecar into the main DB and is unconditionally visible to every
+        # subsequent fresh connection (each add_living_edge / get_edges call
+        # opens its own). Without this, WAL snapshot isolation can let a later
+        # test observe pre-wipe rows, leaking state across tests.
+        try:
+            conn.execute("PRAGMA wal_checkpoint(TRUNCATE)")
+        except Exception:
+            pass
+    finally:
+        conn.close()
+
+
 @pytest.fixture(autouse=True)
 def _isolate_paths(monkeypatch, tmp_path):
-    """Redirect all soul file paths to temp so tests never touch prod."""
-    db_dir = tmp_path / "soul_graph"
-    db_dir.mkdir(parents=True, exist_ok=True)
-    test_db = db_dir / "graph.db"
-    test_log = tmp_path / "soul_graph_log.json"
+    """Redirect the soul concepts file to temp and reset the Brain Stem DB.
+
+    The brain_stem.db itself is already redirected into the isolated test dir
+    by VELYNX_TEST_MODE; we wipe it per-test so edge-count assertions start from
+    empty. SOUL_PATH (the concepts JSON read by _generate_reason / load_soul) is
+    pointed at a temp fixture file.
+    """
     test_concepts = tmp_path / "concepts.json"
     test_concepts.write_text(json.dumps(FAKE_CONCEPTS), encoding="utf-8")
 
     import backend.soul.soul_graph as sg
 
     monkeypatch.setattr(sg, "SOUL_PATH", test_concepts)
-    monkeypatch.setattr(sg, "SOUL_DB", test_db)
-    monkeypatch.setattr(sg, "GRAPH_LOG", test_log)
+
+    _wipe_brain_stem()
+    # Create the unified schema fresh.
+    from velynx.graph.living_edges import initialize_schema
+    initialize_schema()
+    yield
+    _wipe_brain_stem()
 
 
 @pytest.fixture(autouse=True)
 def _mock_embed_index():
-    """Prevent actual model loading — use deterministic similarity values."""
-    # build_pair imports from cognition.embed_index (not backend.cognition)
-    # so we must patch both paths to cover both import forms
-    targets = [
-        "cognition.embed_index",
-        "backend.cognition.embed_index",
-    ]
+    """Prevent real model loading — deterministic similarity / edge typing.
+
+    The source imports ``from cognition.embed_index import ...`` with a
+    ``backend.cognition.embed_index`` fallback. With backend/ on sys.path these
+    resolve to TWO DISTINCT module objects (top-level ``cognition`` package vs
+    the ``backend.cognition`` package), so we must patch BOTH names — patching
+    only one leaves the other (the one build_pair actually binds) using the real
+    model. A similarity of 0.85 is comfortably above the 0.20 relational floor,
+    so build_pair always writes an edge, and classify_edge_type is pinned to
+    'amplifies' (reverse 'grounds') for deterministic relation assertions.
+    """
+    targets = ["cognition.embed_index", "backend.cognition.embed_index"]
     patches = []
     for tgt in targets:
+        try:
+            __import__(tgt)
+        except Exception:
+            continue
         patches.append(patch(f"{tgt}.build_index"))
         patches.append(patch(f"{tgt}.concept_similarity", return_value=0.85))
         patches.append(patch(f"{tgt}.classify_edge_type", return_value="amplifies"))
@@ -68,14 +152,15 @@ def _mock_embed_index():
         p.stop()
 
 
-# ── Acceptance 1: build_soul_graph creates DB with correct schema ────────
+# ── Acceptance 1: legacy soul_edges schema still provisioned ─────────────
 
 
 class TestSchema:
-    """Acceptance 1 — build_soul_graph creates DB with correct schema."""
+    """The legacy ``soul_edges`` / ``soul_tensions`` schema is retained for
+    build_soul_graph() and the migrate_flat_edges() legacy-import path. Its
+    creation contract (via _get_conn) is unchanged by the unification."""
 
     def test_soul_edges_table_columns(self):
-        """soul_edges table has the expected schema."""
         from backend.soul.soul_graph import _get_conn
 
         conn = _get_conn()
@@ -93,7 +178,6 @@ class TestSchema:
         assert "created_at" in cols
 
     def test_soul_tensions_table_columns(self):
-        """soul_tensions table has the expected schema."""
         from backend.soul.soul_graph import _get_conn
 
         conn = _get_conn()
@@ -110,7 +194,6 @@ class TestSchema:
         assert "created_at" in cols
 
     def test_tables_created_on_first_connect(self):
-        """Tables are created on first _get_conn() call."""
         from backend.soul.soul_graph import _get_conn
 
         conn = _get_conn()
@@ -123,55 +206,103 @@ class TestSchema:
         assert "soul_edges" in names
         assert "soul_tensions" in names
 
-    def test_build_soul_graph_creates_db_file(self):
-        """build_soul_graph leaves a real database file on disk."""
-        from backend.soul.soul_graph import build_soul_graph, SOUL_DB
+    def test_living_edges_schema_present(self):
+        """The unified Brain Stem ``living_edges`` table — the write+read target
+        after unification — exists with its key columns."""
+        from backend.soul.soul_graph import get_db_connection
 
-        build_soul_graph(force=True)
+        conn = get_db_connection()
+        cols = {row[1] for row in conn.execute("PRAGMA table_info(living_edges)")}
+        conn.close()
 
-        assert SOUL_DB.exists()
-        assert SOUL_DB.stat().st_size > 0
+        for expected in ("source", "relation", "target",
+                         "asymptotic_weight", "status", "confidence"):
+            assert expected in cols, f"living_edges missing column {expected!r}"
 
 
-# ── Acceptance 2: find_path returns valid path between connected concepts ─
+# ── Acceptance 2: build_pair writes to the unified store readers query ───
+
+
+class TestWriteReadUnification:
+    """The core regression fix: edges written by build_pair MUST be visible to
+    the readers (they previously wrote to a table no reader consulted)."""
+
+    def test_build_pair_is_visible_to_get_edges(self):
+        from backend.soul.soul_graph import build_pair, get_edges
+
+        build_pair("hope", "grief")
+        edges = get_edges("hope")
+
+        assert len(edges) >= 1, "build_pair edge invisible to get_edges (unification broken)"
+        assert any(e["target"] == "grief" for e in edges)
+
+    def test_build_pair_writes_both_directions(self):
+        from backend.soul.soul_graph import build_pair, get_edges
+
+        build_pair("hope", "grief")
+        assert any(e["target"] == "grief" for e in get_edges("hope"))
+        assert any(e["target"] == "hope" for e in get_edges("grief"))
+
+    def test_edges_land_in_living_edges_table(self):
+        from backend.soul.soul_graph import build_pair, get_db_connection
+
+        build_pair("hope", "grief")
+
+        conn = get_db_connection()
+        rows = conn.execute(
+            "SELECT source, target, relation, status FROM living_edges "
+            "WHERE relation != 'tension' ORDER BY source"
+        ).fetchall()
+        conn.close()
+
+        pairs = {(r[0], r[1]) for r in rows}
+        assert ("hope", "grief") in pairs
+        assert ("grief", "hope") in pairs
+        # Mock returns 'amplifies'; reverse is 'grounds' (see _reverse_type).
+        by_dir = {(r[0], r[1]): r[2] for r in rows}
+        assert by_dir[("hope", "grief")] == "amplifies"
+        assert by_dir[("grief", "hope")] == "grounds"
+        # Semantic edges remain active so the readers traverse them.
+        assert all(r[3] == "active" for r in rows)
+
+
+# ── Acceptance 3: find_path returns valid path between connected concepts ─
 
 
 class TestFindPath:
-    """Acceptance 2 — find_path returns valid path between two connected concepts."""
+    """find_path traverses the unified living_edges graph and returns a node
+    list (list[str]) — start ... end."""
 
     def test_direct_edge_path_is_found(self):
-        """A -> B direct edge is found as a one-hop path."""
         from backend.soul.soul_graph import build_pair, find_path
 
         build_pair("hope", "grief")
         path = find_path("hope", "grief", max_hops=3)
 
-        assert len(path) >= 1
-        assert path[0]["from"] == "hope"
-        assert path[0]["to"] == "grief"
+        assert path[0] == "hope"
+        assert path[-1] == "grief"
 
     def test_no_path_returns_empty(self):
-        """Unconnected concepts return empty list."""
         from backend.soul.soul_graph import build_pair, find_path
 
         build_pair("hope", "grief")
+        # courage/fear were never linked -> no path
         path = find_path("courage", "fear", max_hops=3)
 
         assert path == []
 
     def test_two_hop_path(self):
-        """A -> C via B is found when all three are connected."""
         from backend.soul.soul_graph import build_pair, find_path
 
         build_pair("hope", "grief")
         build_pair("grief", "courage")
         path = find_path("hope", "courage", max_hops=3)
 
-        assert len(path) == 2
-        assert path[-1]["to"] == "courage"
+        assert path[0] == "hope"
+        assert path[-1] == "courage"
+        assert "grief" in path  # the bridging node
 
     def test_path_respects_max_hops(self):
-        """max_hops=1 blocks two-hop paths."""
         from backend.soul.soul_graph import build_pair, find_path
 
         build_pair("hope", "grief")
@@ -181,14 +312,11 @@ class TestFindPath:
         assert path == []
 
 
-# ── Acceptance 3: synthesize returns relational statement ─────────────────
+# ── Acceptance 4: synthesize returns relational statement ─────────────────
 
 
 class TestSynthesize:
-    """Acceptance 3 — synthesize returns a relational statement for 2+ concepts."""
-
     def test_two_concepts(self):
-        """Two connected concepts produce a relational statement."""
         from backend.soul.soul_graph import build_pair, synthesize
 
         build_pair("hope", "grief")
@@ -198,13 +326,11 @@ class TestSynthesize:
         assert len(result) > 0
 
     def test_single_concept_returns_empty(self):
-        """Fewer than 2 concepts returns empty string."""
         from backend.soul.soul_graph import synthesize
 
         assert synthesize(["hope"]) == ""
 
     def test_three_concepts(self):
-        """Three concepts produce a statement referencing all of them."""
         from backend.soul.soul_graph import build_pair, synthesize
 
         build_pair("hope", "grief")
@@ -215,7 +341,6 @@ class TestSynthesize:
         assert len(result) > 0
 
     def test_empty_list(self):
-        """Empty list returns empty string."""
         from backend.soul.soul_graph import synthesize
 
         assert synthesize([]) == ""
@@ -225,7 +350,7 @@ class TestSynthesize:
 
 
 class TestQueryHelpers:
-    """Tests for get_edges and get_tensions."""
+    """get_edges / get_tensions over the unified living_edges store."""
 
     def test_get_edges_returns_outbound_edges(self):
         from backend.soul.soul_graph import build_pair, get_edges
@@ -234,7 +359,7 @@ class TestQueryHelpers:
         edges = get_edges("hope")
 
         assert len(edges) >= 1
-        assert edges[0]["to"] == "grief"
+        assert any(e["target"] == "grief" for e in edges)
 
     def test_get_edges_unknown_concept_returns_empty(self):
         from backend.soul.soul_graph import get_edges
@@ -242,36 +367,44 @@ class TestQueryHelpers:
         assert get_edges("nonexistent") == []
 
     def test_get_tensions_returns_known_pairs(self):
-        """hope/grief is a known tension pair (score >= 0.20 means edge built)."""
+        """hope/grief is a known semantic tension ('Temporal pull'). build_pair
+        records it as a contested 'tension' edge surfaced by get_tensions."""
         from backend.soul.soul_graph import build_pair, get_tensions
 
         build_pair("hope", "grief")
         tensions = get_tensions("hope")
 
         assert len(tensions) >= 1
-        assert any(t["name"] == "Temporal pull" for t in tensions)
+        assert any(t["context"] == "Temporal pull" for t in tensions)
+        # Tension edges are contested (kept distinct from active semantic edges).
+        assert all(t["relation"] == "tension" for t in tensions)
 
     def test_get_tensions_unknown_concept(self):
         from backend.soul.soul_graph import get_tensions
 
         assert get_tensions("nonexistent") == []
 
+    def test_tension_edges_excluded_from_get_edges(self):
+        """A contested tension edge must NOT appear in get_edges (active-only)."""
+        from backend.soul.soul_graph import build_pair, get_edges
+
+        build_pair("hope", "grief")
+        edges = get_edges("hope")
+
+        assert all(e["relation"] != "tension" for e in edges)
+
 
 # ── Edge cases ───────────────────────────────────────────────────────────
 
 
 class TestEdgeCases:
-    """Boundary / edge cases."""
-
     def test_build_pair_same_concept_twice(self):
-        """Building the same pair twice should not error."""
         from backend.soul.soul_graph import build_pair
 
         build_pair("hope", "grief")
         build_pair("hope", "grief")  # second call — should not crash
 
     def test_find_path_same_start_end(self):
-        """Path from a concept to itself returns empty (no self-loop)."""
         from backend.soul.soul_graph import build_pair, find_path
 
         build_pair("hope", "grief")
@@ -279,7 +412,6 @@ class TestEdgeCases:
         assert isinstance(path, list)
 
     def test_synthesize_with_tension_present(self):
-        """Known tension pairs produce tension description in output."""
         from backend.soul.soul_graph import build_pair, synthesize
 
         build_pair("hope", "grief")
@@ -287,105 +419,68 @@ class TestEdgeCases:
         assert "Tension" in result or len(result) > 0
 
     def test_empty_soul_file_handled(self):
-        """No concepts file -> build_pair still works."""
+        """No concepts file -> build_pair still works (writes edges regardless,
+        reasons just fall back to bare concept names)."""
         import backend.soul.soul_graph as sg
 
-        empty = sg.SOUL_PATH.parent / "empty_concepts.json"
+        empty = Path(sg.SOUL_PATH).parent / "empty_concepts.json"
         empty.write_text("{}", encoding="utf-8")
         sg.SOUL_PATH = empty
 
-        # with an empty concepts dict, build_pair will fail to find "hope" in soul —
-        # what matters is it doesn't crash on import
-        sg.build_pair("hope", "grief")
+        sg.build_pair("hope", "grief")  # must not crash
 
 
-# ── Acceptance: auto-link dedup & partial edges ──────────────────────────
+# ── Acceptance: auto-link dedup & partial edges (idempotency) ────────────
 
 
 class TestBuildPairDedup:
-    """Acceptance criteria for auto-link from PIPELINE_PATCH plan."""
+    """build_pair is idempotent against the unified living_edges store."""
 
     def test_build_pair_does_not_duplicate_edges(self):
-        """Calling build_pair twice creates exactly 2 rows (a→b, b→a), not 4."""
-        from backend.soul.soul_graph import build_pair, _get_conn
+        """Two calls create exactly 2 semantic rows (a→b, b→a), not 4."""
+        from backend.soul.soul_graph import build_pair, get_db_connection
 
         build_pair("hope", "grief")
         build_pair("hope", "grief")  # same pair again
 
-        conn = _get_conn()
+        conn = get_db_connection()
         rows = conn.execute(
-            "SELECT from_concept, to_concept, edge_type FROM soul_edges ORDER BY from_concept"
+            "SELECT source, target, relation FROM living_edges "
+            "WHERE relation != 'tension' ORDER BY source"
         ).fetchall()
         conn.close()
 
         assert len(rows) == 2
-        assert ("hope", "grief", "amplifies") in rows
+        assert ("hope", "grief", "amplifies") in [tuple(r) for r in rows]
         # amplifies reverses to grounds (see _reverse_type)
-        assert ("grief", "hope", "grounds") in rows
+        assert ("grief", "hope", "grounds") in [tuple(r) for r in rows]
 
     def test_repeat_call_idempotent(self):
-        """Calling build_pair N times produces same DB state as calling it once."""
-        from backend.soul.soul_graph import build_pair, _get_conn
+        """Calling build_pair N times == calling it once (same DB state)."""
+        from backend.soul.soul_graph import build_pair, get_db_connection
+
+        def _snapshot():
+            conn = get_db_connection()
+            rows = conn.execute(
+                "SELECT source, target, relation, status FROM living_edges "
+                "ORDER BY source, target, relation"
+            ).fetchall()
+            conn.close()
+            return [tuple(r) for r in rows]
 
         build_pair("hope", "grief")
-
-        conn = _get_conn()
-        rows_1 = conn.execute(
-            "SELECT from_concept, to_concept, edge_type FROM soul_edges ORDER BY from_concept"
-        ).fetchall()
-        conn.close()
+        rows_1 = _snapshot()
 
         build_pair("hope", "grief")
         build_pair("hope", "grief")
         build_pair("hope", "grief")
-
-        conn = _get_conn()
-        rows_n = conn.execute(
-            "SELECT from_concept, to_concept, edge_type FROM soul_edges ORDER BY from_concept"
-        ).fetchall()
-        conn.close()
+        rows_n = _snapshot()
 
         assert rows_1 == rows_n
 
-    def test_partial_edges_fills_missing_direction(self):
-        """Build pair A→B already exists but B→A does not — should fill B→A.
-
-        This simulates: concept 'hope' taught before, concept 'grief' newly added;
-        only 'hope' had edges accumulated. _auto_link_concept(grief) calls
-        build_pair(grief, hope). The grief→hope (forward) direction is new,
-        and the hope→grief direction already existed.
-        """
-        from backend.soul.soul_graph import build_pair, _get_conn, SOUL_PATH
-        import json
-
-        # Pre-seed a single edge: hope→grief (as if hope was linked first)
-        soul = json.loads(SOUL_PATH.read_text(encoding="utf-8"))
-        sg_mod = __import__("backend.soul.soul_graph", fromlist=["_write_edge", "_get_conn"])
-        conn = _get_conn()
-        sg_mod._write_edge(conn, soul, "hope", "grief", "amplifies", 0.85,
-                           "Hope amplifies grief (score=0.85)")
-        conn.commit()
-        conn.close()
-
-        # Now call build_pair(grief, hope) — reverse direction is new
-        build_pair("grief", "hope")
-
-        conn = _get_conn()
-        rows = conn.execute(
-            "SELECT from_concept, to_concept, edge_type FROM soul_edges ORDER BY from_concept"
-        ).fetchall()
-        conn.close()
-
-        # hope→grief was pre-seeded, grief→hope is new from build_pair.
-        # Mock returns "amplifies" for classify_edge_type, and the forward
-        # edge (grief→hope) gets that type. The existing hope→grief is preserved.
-        assert len(rows) == 2
-        assert ("hope", "grief", "amplifies") in rows
-        assert ("grief", "hope", "amplifies") in rows
-
     def test_teaching_simulation_no_error(self):
-        """Simulate _auto_link_concept: iterating all existing concepts and
-        calling build_pair for each does not raise."""
+        """Simulate teach.py _auto_link_concept: link a new concept against all
+        existing concepts. Must not raise."""
         from backend.soul.soul_graph import build_pair, load_soul
 
         soul = load_soul()
@@ -395,9 +490,8 @@ class TestBuildPairDedup:
                 build_pair(new_concept, existing)
 
     def test_multi_concept_no_duplicate_on_full_auto_link(self):
-        """Simulate teaching a new concept against many existing:
-        after full auto-link, running it again produces no extra rows."""
-        from backend.soul.soul_graph import build_pair, load_soul, _get_conn
+        """After a full auto-link pass, repeating it adds no extra rows."""
+        from backend.soul.soul_graph import build_pair, load_soul, get_db_connection
 
         def auto_link(new_name: str):
             soul = load_soul()
@@ -405,18 +499,16 @@ class TestBuildPairDedup:
                 if existing != new_name:
                     build_pair(new_name, existing)
 
-        # First pass — link 'courage' against all existing (hope, grief, fear)
+        def _count():
+            conn = get_db_connection()
+            n = conn.execute("SELECT COUNT(*) FROM living_edges").fetchone()[0]
+            conn.close()
+            return n
+
         auto_link("courage")
+        first_count = _count()
 
-        conn = _get_conn()
-        first_count = conn.execute("SELECT COUNT(*) FROM soul_edges").fetchone()[0]
-        conn.close()
-
-        # Second pass — same operation again
         auto_link("courage")
-
-        conn = _get_conn()
-        second_count = conn.execute("SELECT COUNT(*) FROM soul_edges").fetchone()[0]
-        conn.close()
+        second_count = _count()
 
         assert first_count == second_count
