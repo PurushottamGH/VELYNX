@@ -1,0 +1,12 @@
+n facts: 11
+Tesla Model 3 -[ is_a ]-> Vehicle 0.95
+Vehicle -[ is_a ]-> PhysicalObject 0.95
+Tesla Model 3 -[ is_a ]-> Electronics 0.95
+Tesla Model 3 -[ mobility_type ]-> wheeled 0.95
+Tesla Model 3 -[ max_speed_kph ]-> 261.0 0.95
+Tesla Model 3 -[ passenger_capacity ]-> 5 0.95
+Tesla Model 3 -[ propulsion ]-> electric 0.95
+Tesla Model 3 -[ power_source ]-> battery 0.95
+Tesla Model 3 -[ voltage ]-> 400.0 0.95
+Tesla Model 3 -[ has_screen ]-> true 0.95
+Tesla Model 3 -[ manufacturer ]-> Tesla 0.95

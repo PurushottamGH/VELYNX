@@ -1,0 +1,33 @@
+extract_predicate: ''
+resolve(have): 'have'
+resolve(has): 'has'
+predicates_match(have, has): False
+registry installed: True
+entity: Entity(name='Tesla Model 3', type=EntityType(name='Vehicle', parent=EntityType(name='PhysicalObject', parent=None, attributes={'mass_kg': AttributeSchema(name='mass_kg', datatype=<class 'float'>, default=None, required=False, description='Rest mass in kilograms.', constraints={'min': 0}), 'location': AttributeSchema(name='location', datatype=<class 'str'>, default=None, required=False, description='Where the object currently is (free text or coordinate).', constraints={}), 'material': AttributeSchema(name='material', datatype=<class 'str'>, default=None, required=False, description='Dominant constituent material.', constraints={})}, facets=[], disjoint_with=[], description='Any entity that occupies space and has mass. The taxonomic root of the physical world model.'), attributes={'mobility_type': AttributeSchema(name='mobility_type', datatype=<class 'str'>, default=None, required=True, description='How the vehicle moves.', constraints={'enum': ['wheeled', 'tracked', 'winged', 'waterborne', 'railed', 'legged']}), 'max_speed_kph': AttributeSchema(name='max_speed_kph', datatype=<class 'float'>, default=None, required=False, description='Rated top speed in kilometres per hour.', constraints={'min': 0, 'max': 30000, 'unit': 'kph'}), 'passenger_capacity': AttributeSchema(name='passenger_capacity', datatype=<class 'int'>, default=None, required=False, description='Designed occupant count.', constraints={'min': 0, 'max': 10000}), 'propulsion': AttributeSchema(name='propulsion', datatype=<class 'str'>, default=None, required=False, description='Source of motive power.', constraints={'enum': ['combustion', 'electric', 'hybrid', 'muscle', 'sail', 'jet', 'rocket']})}, facets=[], disjoint_with=['Person'], description='A conveyance that moves people or cargo.'), attributes={'mobility_type': 'wheeled', 'propulsion': 'electric', 'passenger_capacity': 5, 'max_speed_kph': 261.0, 'power_source': 'battery', 'voltage': 400.0, 'has_screen': True, 'manufacturer': 'Tesla', 'mass_kg': None, 'location': None, 'material': None}, facets=[EntityType(name='Electronics', parent=EntityType(name='PhysicalObject', parent=None, attributes={'mass_kg': AttributeSchema(name='mass_kg', datatype=<class 'float'>, default=None, required=False, description='Rest mass in kilograms.', constraints={'min': 0}), 'location': AttributeSchema(name='location', datatype=<class 'str'>, default=None, required=False, description='Where the object currently is (free text or coordinate).', constraints={}), 'material': AttributeSchema(name='material', datatype=<class 'str'>, default=None, required=False, description='Dominant constituent material.', constraints={})}, facets=[], disjoint_with=[], description='Any entity that occupies space and has mass. The taxonomic root of the physical world model.'), attributes={'power_source': AttributeSchema(name='power_source', datatype=<class 'str'>, default=None, required=True, description='How it draws electrical power.', constraints={'enum': ['battery', 'mains', 'solar', 'kinetic', 'external']}), 'voltage': AttributeSchema(name='voltage', datatype=<class 'float'>, default=None, required=False, description='Operating voltage in volts.', constraints={'min': 0, 'max': 100000, 'unit': 'V'}), 'has_screen': AttributeSchema(name='has_screen', datatype=<class 'bool'>, default=False, required=False, description='Whether it has a display surface.', constraints={}), 'manufacturer': AttributeSchema(name='manufacturer', datatype=<class 'str'>, default=None, required=False, description='Original equipment manufacturer or brand.', constraints={})}, facets=[], disjoint_with=['Person'], description='An object whose primary function depends on controlled electric current.')])
+resolved schema keys: ['mass_kg', 'location', 'material', 'mobility_type', 'max_speed_kph', 'passenger_capacity', 'propulsion', 'power_source', 'voltage', 'has_screen', 'manufacturer']
+    mass_kg = None
+    location = None
+    material = None
+    mobility_type = 'wheeled'
+    max_speed_kph = 261.0
+    passenger_capacity = 5
+    propulsion = 'electric'
+    power_source = 'battery'
+    voltage = 400.0
+    has_screen = True
+    manufacturer = 'Tesla'
+type: Vehicle ancestors: ['PhysicalObject']
+facets: ['Electronics']
+---- schema_context_for_concepts ----
+[World Model] Tesla Model 3 — type Vehicle (a kind of PhysicalObject). Also: Electronics.
+  • mass_kg: unknown
+  • location: unknown
+  • material: unknown
+  • mobility_type: wheeled
+  • max_speed_kph: 261.0
+  • passenger_capacity: 5
+  • propulsion: electric
+  • power_source: battery
+  • voltage: 400.0
+  • has_screen: true
+  • manufacturer: Tesla

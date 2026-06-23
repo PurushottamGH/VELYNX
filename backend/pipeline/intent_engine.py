@@ -108,6 +108,65 @@ _PROPER_NOUN_RE = re.compile(r"\b[A-Z][A-Za-z0-9]*\b")
 # capitalised tokens.
 _PROPER_NOUN_INFIX = frozenset({"of", "the", "and", "for", "de", "van", "von", "da"})
 
+# Phase 62.1 — Model-designator absorption. A proper-noun phrase is frequently
+# followed by an alphanumeric model number that is NOT itself capitalised-only
+# and so is missed by ``_PROPER_NOUN_RE`` (e.g. "Tesla Model 3", "iPhone 15",
+# "Mazda RX 7"). Without absorbing it, "Tesla Model 3" truncates to
+# "Tesla Model" and never matches the world-model entity. This token must look
+# like a model designator: a short run containing at least one digit
+# (e.g. "3", "3X", "90D", "15") OR a single capital letter trim ("S", "X") — the
+# latter handled by the existing PROPER_NOUN_RE, so here we target the numeric
+# forms. We deliberately keep it SHORT (<=4 chars) so we never swallow full
+# numbers like years (handled separately) or large quantities.
+_MODEL_DESIGNATOR_RE = re.compile(r"^[A-Za-z]?\d+[A-Za-z]?\d*$")
+# Guard: a trailing numeral that is actually a QUANTITY (followed by one of
+# these nouns) must NOT be absorbed — "a Tesla Model 3 times", "3 days",
+# "3 people". If the token immediately AFTER the candidate model number is one
+# of these unit/quantity words, the numeral is a count, not a model designator.
+_QUANTITY_FOLLOWERS = frozenset({
+    "time", "times", "day", "days", "week", "weeks", "month", "months",
+    "year", "years", "hour", "hours", "minute", "minutes", "second", "seconds",
+    "people", "person", "cars", "units", "copies", "pieces", "items",
+    "dollars", "miles", "km", "kilometers", "kilometres", "meters", "metres",
+    "percent", "%",
+})
+
+
+def _trailing_model_designator(text: str, phrase_end: int) -> str:
+    """Return a model-number token immediately following a phrase, or "".
+
+    Scans from ``phrase_end`` (the offset just past the last capitalised token
+    of a proper-noun phrase) for a contiguous alphanumeric model designator
+    ("3", "15", "3X", "90D"). Returns it WITHOUT surrounding whitespace so the
+    caller can append it to the phrase ("Tesla Model" + "3" -> "Tesla Model 3").
+
+    Guards (returns "" — i.e. do NOT absorb — when any fails):
+      * Only a single whitespace-separated token gap is allowed between the
+        phrase and the candidate (so "Tesla Model and 3" is not joined).
+      * The candidate must match ``_MODEL_DESIGNATOR_RE`` (contains a digit).
+      * The token FOLLOWING the candidate must not be a quantity/unit noun —
+        this is the "I saw a Tesla Model 3 times" guard: there "3" is a count.
+    """
+    # Grab the immediate gap + next token.
+    m = re.match(r"(\s+)(\S+)", text[phrase_end:])
+    if not m:
+        return ""
+    gap, candidate = m.group(1), m.group(2)
+    # Only a simple single-space gap bridges (no commas / connectives).
+    if gap.strip() != "":
+        return ""
+    # Strip trailing punctuation ("3?" -> "3", "3." -> "3") for the test, but
+    # return the cleaned token so we don't drag punctuation into the entity.
+    cleaned = candidate.rstrip("?.!,;:")
+    if not _MODEL_DESIGNATOR_RE.match(cleaned):
+        return ""
+    # Quantity guard: peek at the token AFTER the candidate.
+    after_off = phrase_end + m.end()
+    nxt = re.match(r"\s+([A-Za-z%]+)", text[after_off:])
+    if nxt and nxt.group(1).lower() in _QUANTITY_FOLLOWERS:
+        return ""
+    return cleaned
+
 
 def _group_proper_noun_phrases(text: str) -> list[str]:
     """Group consecutive capitalised tokens into multi-word named entities.
@@ -115,18 +174,25 @@ def _group_proper_noun_phrases(text: str) -> list[str]:
     "Who created Driftwood OS?"        -> ["Driftwood OS"]
     "Where is Bank of America located?" -> ["Bank of America"]
     "Ada Lovelace met Charles Babbage." -> ["Ada Lovelace", "Charles Babbage"]
+    "Does a Tesla Model 3 have wheels?" -> ["Does", "Tesla Model 3"]
 
     Adjacent capitalised tokens (allowing a single lowercase connective like
     "of"/"the" between two of them) are merged. A lone capitalised word still
     comes back as a one-element phrase, so single-entity queries are unchanged.
-    The sentence-initial word is intentionally NOT special-cased away here —
-    interrogatives ("Who", "What") are stripped downstream by the query
-    drop-term filter, and over-keeping them is harmless because they are not
-    stored entities.
+    A trailing alphanumeric model designator ("3", "15", "3X") immediately
+    following a phrase is absorbed (Phase 62.1) so "Tesla Model 3" stays whole
+    and matches the world-model entity — but only when it is not a quantity
+    ("Tesla Model 3 times" keeps "Tesla Model"). The sentence-initial word is
+    intentionally NOT special-cased away here — interrogatives ("Who", "What")
+    are stripped downstream by the query drop-term filter, and over-keeping them
+    is harmless because they are not stored entities.
     """
     matches = list(_PROPER_NOUN_RE.finditer(text))
+    # Track (phrase_text, end_offset) so we can scan for a trailing model number.
     phrases: list[str] = []
+    phrase_ends: list[int] = []
     current: list[str] = []
+    current_end = -1
     last_end = -1
     for m in matches:
         word = m.group(0)
@@ -141,12 +207,22 @@ def _group_proper_noun_phrases(text: str) -> list[str]:
         else:
             if current:
                 phrases.append(" ".join(current))
+                phrase_ends.append(current_end)
             current = [word]
         last_end = m.end()
+        current_end = m.end()
     if current:
         phrases.append(" ".join(current))
+        phrase_ends.append(current_end)
+
+    # Phase 62.1 — absorb a trailing model designator into each phrase.
+    absorbed: list[str] = []
+    for phrase, end in zip(phrases, phrase_ends):
+        suffix = _trailing_model_designator(text, end)
+        absorbed.append(f"{phrase} {suffix}" if suffix else phrase)
+
     # Trim any phrase that is purely a connective leftover, and de-dup.
-    cleaned = [p.strip() for p in phrases if p.strip()]
+    cleaned = [p.strip() for p in absorbed if p.strip()]
     return list(dict.fromkeys(cleaned))
 
 

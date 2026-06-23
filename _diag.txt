@@ -1,0 +1,11 @@
+C:\Users\Purushottam\Documents\VELYNX\.venv\Scripts\python.exe
+C:\Users\Purushottam\AppData\Local\Programs\Python\Python311\python.exe
+ Volume in drive C has no label.
+ Volume Serial Number is 0EF6-EE3E
+
+ Directory of c:\Users\Purushottam\Documents\VELYNX\.venv314\Scripts
+
+24.05.26  04.01 PM           241,152 python.exe
+               1 File(s)        241,152 bytes
+               0 Dir(s)  309,592,391,680 bytes free
+Python 3.14.5

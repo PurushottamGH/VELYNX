@@ -1,0 +1,3 @@
+intent keys: ['query', 'constitution', 'dimensions', 'domains', 'entities', 'weights', 'strategy', 'cognitive_layer']
+entities: {'numbers': ['3'], 'years': [], 'proper_nouns': ['Does', 'Tesla', 'Model'], 'proper_noun_phrases': ['Does', 'Tesla Model 3'], 'quoted': []}
+query_concepts: ['Tesla Model 3', 'wheels']

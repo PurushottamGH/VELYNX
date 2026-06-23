@@ -38,7 +38,10 @@ from backend.pipeline.reasoning_wiring import (
     extract_query_concepts,
     retrieve_triples,
 )
-from backend.knowledge.world_model_context import schema_context_for_concepts
+from backend.knowledge.world_model_context import (
+    schema_context_for_concepts,
+    world_model_facts_for_concepts,
+)
 from backend.memory.working_memory import working_memory_manager
 from backend.knowledge.normalizer import concept_normalizer
 from backend.knowledge.predicate_resolver import extract_predicate
@@ -783,6 +786,17 @@ async def _answer_question_impl(text: str, session_id: str | None = None) -> Ans
         world_model_context = []
         logger.debug("World model injection skipped: %s", exc)
 
+    # Phase 62.1 — structured ontology triples for the SAME concepts. Unlike the
+    # text blocks above (which only bias scalar salience as episodic_context),
+    # these flow into the reasoner's fact pool as first-class edges so inherited
+    # attributes (e.g. mobility_type=wheeled) participate in pathfinding and let
+    # the engine answer inheritance questions it was never explicitly taught.
+    try:
+        world_model_facts = world_model_facts_for_concepts(query_concepts)
+    except Exception as exc:  # injection must never break the answer path
+        world_model_facts = []
+        logger.debug("World model fact injection skipped: %s", exc)
+
     # Predicate grounding for contradiction scoping. Lift the user's relation
     # verb ("Who *created* Blender?" -> "create") so the reasoner only flags —
     # and only penalizes confidence for — conflicts on THAT predicate. Unrelated
@@ -819,6 +833,7 @@ async def _answer_question_impl(text: str, session_id: str | None = None) -> Ans
         episodic_context=episodic_context,
         thermodynamic_state=thermodynamic_state,
         query_predicate=query_predicate,
+        world_model_facts=world_model_facts,
     )
 
     # ── Synthesize the symbolic trace into natural language ───────────────

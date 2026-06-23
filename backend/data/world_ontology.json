@@ -1,13 +1,21 @@
 {
-  "_comment": "VELYNX Phase 62 — Foundational Ontology. The single data-driven source of truth for the physical world model. Loaded by backend/knowledge/ontology_loader.py into the WorldModelRegistry at startup. Adding a category = editing this file, not touching Python. The software taxonomy (Software/DesktopApplication/ThreeDModelingApp) is loaded separately by build_3d_software_world() and absorbed into the same registry, so the two coexist.",
-  "version": 1,
-  "root": "PhysicalObject",
+  "_comment": "VELYNX Phase 62+ — Expanded Foundational Ontology. Extends the Phase 62 core (PhysicalObject, Vehicle, Electronics, Person) with three new structural layers: Organization (companies, agencies, institutions), Location (geographic + built spaces), and Concept (abstract ideas, plans, theories, agreements). Entity is promoted to the new taxonomic root. The predicate_map is expanded with ~80 new NL→attribute mappings covering the full surface. All structural additions maintain compatibility with the Facet system (type-level + instance-level) and the Schema Gatekeeper's four-stage classifier. The software taxonomy (Software/DesktopApplication/ThreeDModelingApp) is still loaded separately by build_3d_software_world() and absorbed at runtime.",
+  "version": 2,
+  "root": "Entity",
   "types": {
-    "PhysicalObject": {
+    "Entity": {
       "parent": null,
       "facets": [],
       "disjoint_with": [],
-      "description": "Any entity that occupies space and has mass. The taxonomic root of the physical world model.",
+      "description": "The ultimate abstract root of the VELYNX world model. Every typed entity — physical, organizational, geographic, or conceptual — inherits from here. Carries no attributes of its own; exists to anchor the top-level categories as siblings rather than unrelated trees.",
+      "attributes": {}
+    },
+
+    "PhysicalObject": {
+      "parent": "Entity",
+      "facets": [],
+      "disjoint_with": ["Concept"],
+      "description": "Any entity that occupies space and has mass. A direct child of Entity; sibling to Organization, Location, and Concept.",
       "attributes": {
         "mass_kg": {
           "datatype": "float",
@@ -36,7 +44,7 @@
     "Vehicle": {
       "parent": "PhysicalObject",
       "facets": [],
-      "disjoint_with": ["Person"],
+      "disjoint_with": ["Person", "Location"],
       "description": "A conveyance that moves people or cargo.",
       "attributes": {
         "mobility_type": {
@@ -77,7 +85,7 @@
     "Electronics": {
       "parent": "PhysicalObject",
       "facets": [],
-      "disjoint_with": ["Person"],
+      "disjoint_with": ["Person", "Location"],
       "description": "An object whose primary function depends on controlled electric current.",
       "attributes": {
         "power_source": {
@@ -116,7 +124,7 @@
     "Person": {
       "parent": "PhysicalObject",
       "facets": [],
-      "disjoint_with": ["Vehicle", "Electronics"],
+      "disjoint_with": ["Vehicle", "Electronics", "Organization"],
       "description": "A human being.",
       "attributes": {
         "age": {
@@ -139,6 +147,455 @@
           "default": null,
           "constraints": { "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
           "description": "ISO-8601 date of birth (YYYY-MM-DD)."
+        },
+        "employer": {
+          "datatype": "str",
+          "required": false,
+          "default": null,
+          "constraints": {},
+          "description": "Name of the organisation the person works for."
+        },
+        "nationality": {
+          "datatype": "str",
+          "required": false,
+          "default": null,
+          "constraints": {},
+          "description": "Country of citizenship or national affiliation."
+        },
+        "residence_location": {
+          "datatype": "str",
+          "required": false,
+          "default": null,
+          "constraints": {},
+          "description": "City or region where the person lives."
+        }
+      }
+    },
+
+    "Organization": {
+      "parent": "Entity",
+      "facets": [],
+      "disjoint_with": ["Person", "PhysicalObject", "Location"],
+      "description": "A structured group of people with a collective purpose — a company, agency, institution, or association. Not a physical object; it is a legal or social construct.",
+      "attributes": {
+        "founded_year": {
+          "datatype": "int",
+          "required": false,
+          "default": null,
+          "constraints": { "min": 0, "max": 2100 },
+          "description": "Calendar year the organisation was established."
+        },
+        "employee_count": {
+          "datatype": "int",
+          "required": false,
+          "default": null,
+          "constraints": { "min": 0 },
+          "description": "Approximate number of people the organisation employs."
+        },
+        "industry": {
+          "datatype": "str",
+          "required": false,
+          "default": null,
+          "constraints": {
+            "enum": ["technology", "finance", "healthcare", "education", "manufacturing", "retail", "energy", "transportation", "media", "government", "nonprofit", "legal", "agriculture", "construction", "hospitality"]
+          },
+          "description": "Primary sector of economic or institutional activity."
+        },
+        "headquarters_location": {
+          "datatype": "str",
+          "required": false,
+          "default": null,
+          "constraints": {},
+          "description": "City and country of the principal office."
+        },
+        "revenue_usd": {
+          "datatype": "float",
+          "required": false,
+          "default": null,
+          "constraints": { "min": 0 },
+          "description": "Annual revenue in US dollars (approximate)."
+        },
+        "website": {
+          "datatype": "str",
+          "required": false,
+          "default": null,
+          "constraints": {},
+          "description": "Primary public-facing web domain."
+        },
+        "legal_structure": {
+          "datatype": "str",
+          "required": false,
+          "default": null,
+          "constraints": {
+            "enum": ["corporation", "llc", "partnership", "sole_proprietorship", "nonprofit", "government_agency", "cooperative", "public_company", "private_company"]
+          },
+          "description": "Legal form under which the organisation operates."
+        }
+      }
+    },
+
+    "Company": {
+      "parent": "Organization",
+      "facets": [],
+      "disjoint_with": [],
+      "description": "A for-profit commercial organisation.",
+      "attributes": {
+        "ticker_symbol": {
+          "datatype": "str",
+          "required": false,
+          "default": null,
+          "constraints": {},
+          "description": "Stock exchange ticker, if publicly traded."
+        },
+        "market_cap_usd": {
+          "datatype": "float",
+          "required": false,
+          "default": null,
+          "constraints": { "min": 0 },
+          "description": "Market capitalisation in US dollars."
+        }
+      }
+    },
+
+    "GovernmentAgency": {
+      "parent": "Organization",
+      "facets": [],
+      "disjoint_with": [],
+      "description": "A department, bureau, or body operating under governmental authority.",
+      "attributes": {
+        "jurisdiction": {
+          "datatype": "str",
+          "required": false,
+          "default": null,
+          "constraints": {
+            "enum": ["federal", "state", "provincial", "municipal", "international", "tribal", "regional"]
+          },
+          "description": "Level of government the agency operates under."
+        },
+        "agency_type": {
+          "datatype": "str",
+          "required": false,
+          "default": null,
+          "constraints": {
+            "enum": ["executive", "legislative", "judicial", "regulatory", "military", "intelligence", "public_service", "research", "emergency_services"]
+          },
+          "description": "Functional category of the agency."
+        }
+      }
+    },
+
+    "EducationalInstitution": {
+      "parent": "Organization",
+      "facets": [],
+      "disjoint_with": [],
+      "description": "A school, college, university, or training body.",
+      "attributes": {
+        "accreditation": {
+          "datatype": "str",
+          "required": false,
+          "default": null,
+          "constraints": {},
+          "description": "Accrediting body or standard."
+        },
+        "student_count": {
+          "datatype": "int",
+          "required": false,
+          "default": null,
+          "constraints": { "min": 0 },
+          "description": "Enrolled student population."
+        }
+      }
+    },
+
+    "Location": {
+      "parent": "Entity",
+      "facets": [],
+      "disjoint_with": ["Person", "Vehicle", "Electronics", "Organization", "Concept"],
+      "description": "A place — geographic, built, or natural — defined by spatial coordinates and/or regional context.",
+      "attributes": {
+        "coordinates_lat": {
+          "datatype": "float",
+          "required": false,
+          "default": null,
+          "constraints": { "min": -90, "max": 90, "unit": "degrees" },
+          "description": "Latitude in decimal degrees (WGS 84)."
+        },
+        "coordinates_lon": {
+          "datatype": "float",
+          "required": false,
+          "default": null,
+          "constraints": { "min": -180, "max": 180, "unit": "degrees" },
+          "description": "Longitude in decimal degrees (WGS 84)."
+        },
+        "elevation_m": {
+          "datatype": "float",
+          "required": false,
+          "default": null,
+          "constraints": {},
+          "description": "Elevation above sea level in metres."
+        },
+        "country": {
+          "datatype": "str",
+          "required": false,
+          "default": null,
+          "constraints": {},
+          "description": "Sovereign state or territory containing the location."
+        },
+        "population": {
+          "datatype": "int",
+          "required": false,
+          "default": null,
+          "constraints": { "min": 0 },
+          "description": "Resident or visiting population."
+        },
+        "area_sqkm": {
+          "datatype": "float",
+          "required": false,
+          "default": null,
+          "constraints": { "min": 0 },
+          "description": "Surface area in square kilometres."
+        },
+        "climate_zone": {
+          "datatype": "str",
+          "required": false,
+          "default": null,
+          "constraints": {
+            "enum": ["tropical", "arid", "temperate", "continental", "polar", "mediterranean", "subtropical", "highland", "oceanic", "monsoon"]
+          },
+          "description": "Köppen-derived climate classification."
+        }
+      }
+    },
+
+    "Building": {
+      "parent": "Location",
+      "facets": [],
+      "disjoint_with": [],
+      "description": "A permanent structure with walls and a roof, occupying a specific geographic location. Instance-level PhysicalObject facet recommended for entities that also carry mass, material, or other physical attributes.",
+      "attributes": {
+        "floors": {
+          "datatype": "int",
+          "required": false,
+          "default": null,
+          "constraints": { "min": 1 },
+          "description": "Number of above-ground storeys."
+        },
+        "building_type": {
+          "datatype": "str",
+          "required": false,
+          "default": null,
+          "constraints": {
+            "enum": ["residential", "commercial", "industrial", "institutional", "mixed_use", "monument", "transportation", "religious", "educational", "government"]
+          },
+          "description": "Primary use classification."
+        },
+        "year_built": {
+          "datatype": "int",
+          "required": false,
+          "default": null,
+          "constraints": { "min": 0, "max": 2100 },
+          "description": "Year construction was completed."
+        }
+      }
+    },
+
+    "City": {
+      "parent": "Location",
+      "facets": [],
+      "disjoint_with": [],
+      "description": "A large, permanently settled human settlement with defined administrative boundaries.",
+      "attributes": {
+        "mayor": {
+          "datatype": "str",
+          "required": false,
+          "default": null,
+          "constraints": {},
+          "description": "Name of the current chief executive or mayor."
+        },
+        "timezone_name": {
+          "datatype": "str",
+          "required": false,
+          "default": null,
+          "constraints": {
+            "enum": ["UTC-12", "UTC-11", "UTC-10", "UTC-9", "UTC-8", "UTC-7", "UTC-6", "UTC-5", "UTC-4", "UTC-3", "UTC-2", "UTC-1", "UTC+0", "UTC+1", "UTC+2", "UTC+3", "UTC+4", "UTC+5", "UTC+6", "UTC+7", "UTC+8", "UTC+9", "UTC+10", "UTC+11", "UTC+12"]
+          },
+          "description": "IANA-derived timezone offset."
+        }
+      }
+    },
+
+    "NaturalFeature": {
+      "parent": "Location",
+      "facets": [],
+      "disjoint_with": [],
+      "description": "A naturally occurring geographic feature — mountain, river, forest, desert, ocean, or similar.",
+      "attributes": {
+        "feature_type": {
+          "datatype": "str",
+          "required": true,
+          "default": null,
+          "constraints": {
+            "enum": ["mountain", "volcano", "river", "lake", "ocean", "sea", "desert", "forest", "glacier", "canyon", "waterfall", "cave", "reef", "island", "peninsula", "plateau", "valley", "wetland", "tundra", "geyser"]
+          },
+          "description": "Geomorphological classification."
+        },
+        "geological_era": {
+          "datatype": "str",
+          "required": false,
+          "default": null,
+          "constraints": {
+            "enum": ["precambrian", "paleozoic", "mesozoic", "cenozoic", "quaternary"]
+          },
+          "description": "Dominant geological era of formation."
+        }
+      }
+    },
+
+    "Concept": {
+      "parent": "Entity",
+      "facets": [],
+      "disjoint_with": ["PhysicalObject", "Organization", "Location"],
+      "description": "An abstract idea, notion, or intellectual construct that has no inherent physical form.",
+      "attributes": {
+        "creator": {
+          "datatype": "str",
+          "required": false,
+          "default": null,
+          "constraints": {},
+          "description": "Person or group who originated or formalised the concept."
+        },
+        "creation_date": {
+          "datatype": "str",
+          "required": false,
+          "default": null,
+          "constraints": { "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+          "description": "ISO-8601 date the concept was first articulated (YYYY-MM-DD)."
+        },
+        "domain": {
+          "datatype": "str",
+          "required": false,
+          "default": null,
+          "constraints": {
+            "enum": ["philosophy", "science", "mathematics", "law", "art", "economics", "politics", "technology", "education", "sociology", "linguistics", "medicine", "engineering", "psychology", "history", "theology", "literature"]
+          },
+          "description": "Intellectual domain or discipline."
+        },
+        "status": {
+          "datatype": "str",
+          "required": false,
+          "default": "proposed",
+          "constraints": {
+            "enum": ["proposed", "accepted", "debated", "superseded", "rejected", "experimental", "canonical", "speculative"]
+          },
+          "description": "Current standing within the relevant community of practice."
+        },
+        "confidence": {
+          "datatype": "float",
+          "required": false,
+          "default": null,
+          "constraints": { "min": 0, "max": 1 },
+          "description": "Subjective belief confidence in the concept's validity (0–1)."
+        }
+      }
+    },
+
+    "Plan": {
+      "parent": "Concept",
+      "facets": [],
+      "disjoint_with": [],
+      "description": "A proposed sequence of actions intended to achieve a goal.",
+      "attributes": {
+        "deadline": {
+          "datatype": "str",
+          "required": false,
+          "default": null,
+          "constraints": { "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+          "description": "ISO-8601 target completion date (YYYY-MM-DD)."
+        },
+        "priority": {
+          "datatype": "str",
+          "required": false,
+          "default": "medium",
+          "constraints": {
+            "enum": ["critical", "high", "medium", "low", "deferred"]
+          },
+          "description": "Urgency ranking relative to other plans."
+        },
+        "completed": {
+          "datatype": "bool",
+          "required": false,
+          "default": false,
+          "constraints": {},
+          "description": "Whether the plan has been fully executed."
+        }
+      }
+    },
+
+    "Theory": {
+      "parent": "Concept",
+      "facets": [],
+      "disjoint_with": [],
+      "description": "A systematically organised body of knowledge or explanatory framework, often empirically tested.",
+      "attributes": {
+        "falsifiable": {
+          "datatype": "bool",
+          "required": false,
+          "default": true,
+          "constraints": {},
+          "description": "Whether the theory makes claims that can be empirically disproven."
+        },
+        "evidence_level": {
+          "datatype": "str",
+          "required": false,
+          "default": "hypothesis",
+          "constraints": {
+            "enum": ["speculation", "hypothesis", "supported", "well_supported", "consensus", "law", "disproven"]
+          },
+          "description": "Strength of corroborating evidence."
+        },
+        "citations": {
+          "datatype": "list",
+          "required": false,
+          "default": [],
+          "constraints": {},
+          "description": "Key references or works associated with the theory."
+        }
+      }
+    },
+
+    "Agreement": {
+      "parent": "Concept",
+      "facets": [],
+      "disjoint_with": [],
+      "description": "A negotiated and typically binding arrangement between two or more parties.",
+      "attributes": {
+        "parties": {
+          "datatype": "list",
+          "required": true,
+          "default": null,
+          "constraints": {},
+          "description": "Names of the signatory parties."
+        },
+        "effective_date": {
+          "datatype": "str",
+          "required": false,
+          "default": null,
+          "constraints": { "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+          "description": "ISO-8601 date the agreement took effect (YYYY-MM-DD)."
+        },
+        "expiration_date": {
+          "datatype": "str",
+          "required": false,
+          "default": null,
+          "constraints": { "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+          "description": "ISO-8601 date the agreement expires (YYYY-MM-DD)."
+        },
+        "legally_binding": {
+          "datatype": "bool",
+          "required": false,
+          "default": true,
+          "constraints": {},
+          "description": "Whether the agreement is enforceable under law."
         }
       }
     }
@@ -182,17 +639,148 @@
     "date_of_birth":   "date_of_birth",
     "born_on":         "date_of_birth",
     "birthday":        "date_of_birth",
+    "works_at":        "employer",
+    "works_for":       "employer",
+    "employed_by":     "employer",
+    "employer":        "employer",
+    "nationality":     "nationality",
+    "citizen_of":      "nationality",
+    "from_country":    "nationality",
+    "lives_in":        "residence_location",
+    "resides_in":      "residence_location",
+    "residence":       "residence_location",
 
     "has_legs":        "leg_count",
     "legs":            "leg_count",
     "leg_count":       "leg_count",
     "has_wings":       "wing_count",
     "wings":           "wing_count",
-    "wing_count":      "wing_count"
+    "wing_count":      "wing_count",
+
+    "founded":         "founded_year",
+    "founded_in":      "founded_year",
+    "established":     "founded_year",
+    "year_founded":    "founded_year",
+    "has_employees":   "employee_count",
+    "employees":       "employee_count",
+    "employee_count":  "employee_count",
+    "staff":           "employee_count",
+    "industry":        "industry",
+    "sector":          "industry",
+    "in_industry":     "industry",
+    "headquarters":    "headquarters_location",
+    "headquartered_in": "headquarters_location",
+    "based_in":        "headquarters_location",
+    "revenue":         "revenue_usd",
+    "annual_revenue":  "revenue_usd",
+    "revenue_usd":     "revenue_usd",
+    "website":         "website",
+    "homepage":        "website",
+    "legal_structure": "legal_structure",
+    "structure":       "legal_structure",
+    "incorporation":   "legal_structure",
+
+    "ticker":          "ticker_symbol",
+    "ticker_symbol":   "ticker_symbol",
+    "stock_symbol":    "ticker_symbol",
+    "market_cap":      "market_cap_usd",
+    "market_cap_usd":  "market_cap_usd",
+
+    "jurisdiction":    "jurisdiction",
+    "operates_under":  "jurisdiction",
+    "agency_type":     "agency_type",
+
+    "accreditation":   "accreditation",
+    "accredited_by":   "accreditation",
+    "student_count":   "student_count",
+    "students":        "student_count",
+    "enrollment":      "student_count",
+
+    "latitude":        "coordinates_lat",
+    "lat":             "coordinates_lat",
+    "coordinates_lat": "coordinates_lat",
+    "longitude":       "coordinates_lon",
+    "lon":             "coordinates_lon",
+    "lng":             "coordinates_lon",
+    "coordinates_lon": "coordinates_lon",
+    "coordinates":     "coordinates_lat",
+    "at_coordinates":  "coordinates_lat",
+    "geo_position":    "coordinates_lat",
+    "elevation":       "elevation_m",
+    "elevation_m":     "elevation_m",
+    "altitude":        "elevation_m",
+    "above_sea_level": "elevation_m",
+    "country":         "country",
+    "in_country":      "country",
+    "population":      "population",
+    "has_population":  "population",
+    "area":            "area_sqkm",
+    "area_sqkm":       "area_sqkm",
+    "size_sqkm":       "area_sqkm",
+    "climate":         "climate_zone",
+    "climate_zone":    "climate_zone",
+
+    "floors":          "floors",
+    "storeys":         "floors",
+    "has_floors":      "floors",
+    "building_type":   "building_type",
+    "year_built":      "year_built",
+    "built_in":        "year_built",
+    "constructed":     "year_built",
+
+    "mayor":           "mayor",
+    "timezone":        "timezone_name",
+    "timezone_name":   "timezone_name",
+
+    "feature_type":    "feature_type",
+    "geological_era":  "geological_era",
+    "geology_era":     "geological_era",
+
+    "creator":         "creator",
+    "created_by":      "creator",
+    "invented_by":     "creator",
+    "author":          "creator",
+    "creation_date":   "creation_date",
+    "created_on":      "creation_date",
+    "date_created":    "creation_date",
+    "domain":          "domain",
+    "field":           "domain",
+    "discipline":      "domain",
+    "status":          "status",
+    "concept_status":  "status",
+    "confidence":      "confidence",
+    "belief":          "confidence",
+
+    "deadline":        "deadline",
+    "due_date":        "deadline",
+    "due_by":          "deadline",
+    "priority":        "priority",
+    "urgency":         "priority",
+    "completed":       "completed",
+    "is_complete":     "completed",
+    "finished":        "completed",
+
+    "falsifiable":     "falsifiable",
+    "evidence_level":  "evidence_level",
+    "evidence":        "evidence_level",
+    "citations":       "citations",
+    "references":      "citations",
+
+    "parties":         "parties",
+    "signatories":     "parties",
+    "signed_by":       "parties",
+    "effective_date":  "effective_date",
+    "effective":       "effective_date",
+    "in_effect_from":  "effective_date",
+    "expiration_date": "expiration_date",
+    "expires":         "expiration_date",
+    "expires_on":      "expiration_date",
+    "legally_binding": "legally_binding",
+    "binding":         "legally_binding"
   },
 
   "instances": {
-    "_comment": "Ready-to-query canonical instances the ontology ships with. Declared here (data-driven) rather than wired in Python so the demo set is editable without code changes. Phase 63 can add more without touching the loader.",
+    "_comment": "Ready-to-query canonical instances the ontology ships with. Declared here (data-driven) rather than wired in Python so the demo set is editable without code changes. Expanded in Phase 62+ to include representatives from every new structural layer.",
 
     "Tesla Model 3": {
       "type": "Vehicle",
@@ -207,6 +795,133 @@
         "voltage": 400.0,
         "has_screen": true,
         "manufacturer": "Tesla"
+      }
+    },
+
+    "United Nations": {
+      "type": "Organization",
+      "facets": [],
+      "description": "Canonical international organisation — demonstrates the Organization base type.",
+      "attributes": {
+        "founded_year": 1945,
+        "employee_count": 44000,
+        "industry": "government",
+        "headquarters_location": "New York, USA",
+        "legal_structure": "government_agency"
+      }
+    },
+
+    "Google Inc.": {
+      "type": "Company",
+      "facets": [],
+      "description": "Canonical technology company — demonstrates the Company subtype with ticker + market cap.",
+      "attributes": {
+        "founded_year": 1998,
+        "employee_count": 180000,
+        "industry": "technology",
+        "headquarters_location": "Mountain View, California, USA",
+        "revenue_usd": 307000000000.0,
+        "website": "https://about.google",
+        "legal_structure": "public_company",
+        "ticker_symbol": "GOOGL",
+        "market_cap_usd": 2100000000000.0
+      }
+    },
+
+    "Mount Everest": {
+      "type": "NaturalFeature",
+      "facets": [],
+      "description": "Canonical mountain — demonstrates NaturalFeature with coordinates, elevation, and geological classification.",
+      "attributes": {
+        "coordinates_lat": 27.9881,
+        "coordinates_lon": 86.9250,
+        "elevation_m": 8848.86,
+        "country": "Nepal / China",
+        "climate_zone": "highland",
+        "feature_type": "mountain",
+        "geological_era": "cenozoic"
+      }
+    },
+
+    "Paris": {
+      "type": "City",
+      "facets": [],
+      "description": "Canonical city — demonstrates City with mayor, timezone, population, and coordinates.",
+      "attributes": {
+        "coordinates_lat": 48.8566,
+        "coordinates_lon": 2.3522,
+        "country": "France",
+        "population": 2161000,
+        "area_sqkm": 105.4,
+        "climate_zone": "temperate",
+        "mayor": "Anne Hidalgo",
+        "timezone_name": "UTC+1"
+      }
+    },
+
+    "Empire State Building": {
+      "type": "Building",
+      "facets": ["PhysicalObject"],
+      "description": "Canonical building with a PhysicalObject facet — demonstrates how a location-anchored entity also carries physical-world attributes (mass, material, location) without multiple inheritance. Building is-a Location → Entity; the PhysicalObject facet contributes mass_kg, material, and free-text location.",
+      "attributes": {
+        "coordinates_lat": 40.7484,
+        "coordinates_lon": -73.9857,
+        "elevation_m": 33.0,
+        "country": "USA",
+        "floors": 102,
+        "year_built": 1931,
+        "building_type": "commercial",
+        "mass_kg": 331000000.0,
+        "material": "steel / limestone",
+        "location": "350 Fifth Avenue, Midtown Manhattan, New York City"
+      }
+    },
+
+    "Theory of Relativity": {
+      "type": "Theory",
+      "facets": [],
+      "description": "Canonical scientific theory — demonstrates Theory with creator, evidence level, citations, and falsifiability.",
+      "attributes": {
+        "creator": "Albert Einstein",
+        "creation_date": "1905-06-30",
+        "domain": "science",
+        "status": "canonical",
+        "confidence": 0.99,
+        "falsifiable": true,
+        "evidence_level": "consensus",
+        "citations": ["Einstein, A. (1905) 'Zur Elektrodynamik bewegter Körper', Annalen der Physik", "Einstein, A. (1916) 'Die Grundlage der allgemeinen Relativitätstheorie', Annalen der Physik"]
+      }
+    },
+
+    "VELYNX Phase 63 Roadmap": {
+      "type": "Plan",
+      "facets": [],
+      "description": "Canonical plan — demonstrates Plan with deadline, priority, and completion status.",
+      "attributes": {
+        "creator": "VELYNX Core Team",
+        "creation_date": "2026-06-23",
+        "domain": "technology",
+        "status": "proposed",
+        "confidence": 0.85,
+        "deadline": "2026-08-01",
+        "priority": "high",
+        "completed": false
+      }
+    },
+
+    "Paris Agreement": {
+      "type": "Agreement",
+      "facets": [],
+      "description": "Canonical international treaty — demonstrates Agreement with parties, effective/expiration dates, and legally binding status.",
+      "attributes": {
+        "creator": "UNFCCC",
+        "creation_date": "2015-12-12",
+        "domain": "politics",
+        "status": "accepted",
+        "confidence": 1.0,
+        "parties": ["195 UNFCCC member states + European Union"],
+        "effective_date": "2016-11-04",
+        "legally_binding": true
       }
     }
   }

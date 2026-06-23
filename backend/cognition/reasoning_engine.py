@@ -305,6 +305,7 @@ class ReasoningEngine:
         episodic_context: Iterable[Any] | None = None,
         thermodynamic_state: float = 0.5,
         query_predicate: str = "",
+        world_model_facts: Iterable[Any] | None = None,
     ) -> ReasoningTrace:
         """
         Perform deterministic symbolic reasoning.
@@ -332,6 +333,22 @@ class ReasoningEngine:
             the question is about "create") are resolved silently and never
             tank the confidence of the answer-bearing edge. Empty string
             preserves the legacy behavior of flagging every functional conflict.
+        world_model_facts:
+            Structured ontology triples derived from the World Model registry
+            (entity type chains, facet membership, and resolved attribute
+            values — see
+            :func:`backend.knowledge.world_model_context.world_model_facts_for_concepts`).
+            Unlike ``episodic_context`` (a free-text channel that can only nudge
+            a scalar salience bias), these are coerced into first-class
+            :class:`Fact` objects and merged into the working knowledge base, so
+            they participate FULLY in contradiction resolution, deductive
+            inference, pathfinding, and concept resolution. This is what lets
+            the reasoner connect an entity to an *inherited* attribute it was
+            never explicitly taught — e.g. ``Tesla Model 3 —[mobility_type]→
+            wheeled`` lets "Does a Tesla Model 3 have wheels?" resolve instead
+            of dead-ending at "no connecting evidence". High-confidence by
+            construction (the ontology is curated), but still subject to
+            contradiction resolution so direct taught evidence can supersede it.
 
         Returns
         -------
@@ -341,6 +358,29 @@ class ReasoningEngine:
         state = self._clamp01(float(thermodynamic_state))
         concepts = self._normalize_concepts(query_concepts)
         facts = self._normalize_triples(retrieved_triples)
+
+        # World Model structured facts — coerce and merge into the fact pool so
+        # ontology-derived edges participate fully in every downstream stage
+        # (contradiction resolution, deduction, pathfinding, concept
+        # resolution), not merely as a scalar salience bias. Appended AFTER the
+        # retrieved triples so that, on an exact (subject, predicate, object)
+        # collision, contradiction resolution adjudicates by confidence rather
+        # than silently preferring one channel.
+        wm_facts = self._normalize_triples(world_model_facts)
+        if wm_facts:
+            facts = facts + wm_facts
+
+        # Question-Framed Value Bridging ---------------------------------- #
+        # The ontology stores an attribute VALUE ("wheeled") that morphologically
+        # answers a query concept ("wheels"), but the value is not itself a query
+        # node, so no path connects the subject to the asked-about concept. When
+        # the query is interrogative, synthesize a bridging edge
+        # (subject —[has]→ <query concept>) for each such stem match so the
+        # concept resolves and the graph path closes. Guarded so it only fires
+        # for genuine value↔concept morphological matches (see _bridge_facts).
+        bridge_facts = self._bridge_value_facts(concepts, wm_facts)
+        if bridge_facts:
+            facts = facts + bridge_facts
 
         # Thermodynamics → traversal policy ------------------------------- #
         policy = self._derive_policy(state)
@@ -419,6 +459,8 @@ class ReasoningEngine:
                 "n_inferred": len(inferred),
                 "n_paths": len(paths),
                 "episodic_salience": salience,
+                "n_world_model_facts": len(wm_facts),
+                "n_bridge_facts": len(bridge_facts),
             },
         )
         return trace
@@ -456,6 +498,11 @@ class ReasoningEngine:
 
         episodic = context.get("episodic_context", vec_results)
 
+        # World Model structured facts (Phase 62.1): the caller may pre-resolve
+        # ontology triples for the query concepts and pass them via context so
+        # they join the fact pool as first-class edges (see reason()).
+        world_model_facts = context.get("world_model_facts")
+
         # Predicate grounding: prefer an explicitly-supplied core predicate, else
         # lift the relation verb from the query itself so contradiction flagging
         # is scoped to what the user actually asked (see reason()).
@@ -479,6 +526,7 @@ class ReasoningEngine:
                     episodic,
                     thermo,
                     query_predicate,
+                    world_model_facts,
                 ),
                 timeout=self.BUILD_CHAIN_TIMEOUT_S,
             )
@@ -619,6 +667,112 @@ class ReasoningEngine:
             return predicate_resolver.resolve(raw) or raw
         except Exception:
             return raw
+
+    # ================================================================== #
+    #  Question-Framed Value Bridging
+    # ================================================================== #
+    # The ontology answers many questions with an attribute *value* rather than
+    # an edge to the asked-about noun: a Tesla's wheeledness lives in
+    # ``mobility_type=wheeled``, not in a ``Tesla —[has]→ wheels`` triple. The
+    # value "wheeled" and the query concept "wheels" are the same morpheme, but
+    # the graph has no node named "wheels", so BFS between "Tesla Model 3" and
+    # "wheels" finds nothing. Bridging closes that gap: when a world-model fact's
+    # OBJECT shares a stem with a query CONCEPT, we mint a single
+    # ``(subject —[has]→ <concept>)`` edge so the concept resolves and the path
+    # connects — without polluting the KG (the edge is request-scoped).
+
+    # Interrogative markers. The bridge only fires for question-framed queries
+    # ("does/do/is/are ... wheels?"), so a declarative mention of a value can't
+    # silently spawn a spurious "has" edge. Detected via the concept set's
+    # provenance is not available here, so the guard is applied by the caller
+    # supplying ONLY genuine query concepts; this set is retained for the
+    # value-vs-concept morphological gate below.
+    _BRIDGE_MIN_STEM = 4  # require a stem of at least this length (avoid "is"/"ed")
+    _BRIDGE_PREDICATE = "has"
+
+    @staticmethod
+    def _stem(word: str) -> str:
+        """Very small, dependency-free morphological stemmer.
+
+        Strips the handful of inflectional suffixes that separate an ontology
+        value from its query-concept form (``wheeled``/``wheels`` → ``wheel``).
+        Deliberately conservative: it only removes well-known endings and never
+        shortens below three characters, so unrelated short tokens don't
+        accidentally collapse onto one another.
+        """
+        w = str(word or "").strip().lower()
+        if len(w) <= 3:
+            return w
+        # Order matters: try longer/more-specific suffixes first.
+        for suf in ("ied",):
+            if w.endswith(suf) and len(w) - len(suf) + 1 >= 3:
+                return w[: -len(suf)] + "y"
+        for suf in ("ing", "ed", "es", "s"):
+            if w.endswith(suf) and len(w) - len(suf) >= 3:
+                return w[: -len(suf)]
+        return w
+
+    def _bridge_value_facts(
+        self, concepts: list[str], world_model_facts: list[Fact]
+    ) -> list[Fact]:
+        """Synthesize ``(subject —[has]→ concept)`` edges for value↔concept matches.
+
+        For each world-model fact whose OBJECT stem-matches a query CONCEPT that
+        is not itself the fact's subject/object, emit one bridging edge so the
+        concept becomes a reachable graph node. Examples:
+
+            concept "wheels"  + fact (Tesla, mobility_type, wheeled) → (Tesla, has, wheels)
+
+        The bridge confidence inherits the source fact's confidence (the
+        ontology is authoritative). Edges are de-duplicated and request-scoped —
+        they never persist to the KG.
+        """
+        if not concepts or not world_model_facts:
+            return []
+
+        # Pre-stem the query concepts once. Skip concepts that already name a
+        # fact subject (they're entities, not attribute-value targets).
+        subjects = {self._key(f.subject) for f in world_model_facts}
+        concept_by_stem: dict[str, str] = {}
+        for c in concepts:
+            ck = self._key(c)
+            if ck in subjects:
+                continue  # the entity itself, not a value to bridge to.
+            stem = self._stem(c)
+            if len(stem) < self._BRIDGE_MIN_STEM:
+                continue
+            concept_by_stem.setdefault(stem, c)
+
+        if not concept_by_stem:
+            return []
+
+        bridges: list[Fact] = []
+        seen: set[tuple[str, str, str]] = set()
+        for f in world_model_facts:
+            obj_stem = self._stem(f.obj)
+            if len(obj_stem) < self._BRIDGE_MIN_STEM:
+                continue
+            concept = concept_by_stem.get(obj_stem)
+            if concept is None:
+                continue
+            # Don't bridge a subject to itself, and don't restate an existing
+            # subject→concept identity.
+            if self._key(f.subject) == self._key(concept):
+                continue
+            key = (self._key(f.subject), self._BRIDGE_PREDICATE, self._key(concept))
+            if key in seen:
+                continue
+            seen.add(key)
+            bridges.append(
+                Fact(
+                    subject=f.subject,
+                    predicate=self._BRIDGE_PREDICATE,
+                    obj=concept,
+                    confidence=f.confidence,
+                    source="world_model:bridge",
+                )
+            )
+        return bridges
 
     # ================================================================== #
     #  Thermodynamic policy

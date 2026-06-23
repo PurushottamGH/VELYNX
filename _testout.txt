@@ -1,0 +1,281 @@
+[1m============================= test session starts =============================[0m
+platform win32 -- Python 3.14.5, pytest-8.1.1, pluggy-1.6.0 -- c:\Users\Purushottam\Documents\VELYNX\.venv314\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: c:\Users\Purushottam\Documents\VELYNX
+plugins: anyio-4.13.0
+[1mcollecting ... [0mcollected 15 items
+
+backend/tests/test_inheritance_inference.py::TestSchemaReadPath::test_vehicle_attributes_inherited [32mPASSED[0m[32m [  6%][0m
+backend/tests/test_inheritance_inference.py::TestSchemaReadPath::test_physical_object_attributes_inherited [32mPASSED[0m[32m [ 13%][0m
+backend/tests/test_inheritance_inference.py::TestSchemaReadPath::test_electronics_facet_attributes_present [32mPASSED[0m[32m [ 20%][0m
+backend/tests/test_inheritance_inference.py::TestSchemaReadPath::test_facet_membership_announced [32mPASSED[0m[32m [ 26%][0m
+backend/tests/test_inheritance_inference.py::TestSchemaReadPath::test_resolved_schema_depth [32mPASSED[0m[32m [ 33%][0m
+backend/tests/test_inheritance_inference.py::TestSchemaReadPath::test_non_faceted_entity_unaffected [32mPASSED[0m[32m [ 40%][0m
+backend/tests/test_inheritance_inference.py::TestGatekeeperWritePath::test_rejects_unknown_attribute [32mPASSED[0m[32m [ 46%][0m
+backend/tests/test_inheritance_inference.py::TestGatekeeperWritePath::test_rejects_constraint_violation [32mPASSED[0m[32m [ 53%][0m
+backend/tests/test_inheritance_inference.py::TestGatekeeperWritePath::test_accepts_schema_valid_attribute [32mPASSED[0m[32m [ 60%][0m
+backend/tests/test_inheritance_inference.py::TestGatekeeperWritePath::test_accepts_freeform_observation [32mPASSED[0m[32m [ 66%][0m
+backend/tests/test_inheritance_inference.py::TestGatekeeperWritePath::test_untyped_entity_passes_through [32mPASSED[0m[32m [ 73%][0m
+backend/tests/test_inheritance_inference.py::TestLiveReasoningPath::test_has_wheels_inferable_from_context [32mPASSED[0m[32m [ 80%][0m
+backend/tests/test_inheritance_inference.py::TestLiveReasoningPath::test_electric_propulsion_inferable [32mPASSED[0m[32m [ 86%][0m
+backend/tests/test_inheritance_inference.py::TestLiveReasoningPath::test_inheritance_chain_depth [32mPASSED[0m[32m [ 93%][0m
+backend/tests/test_inheritance_inference.py::TestLiveReasoningPath::test_live_pipeline_wheels_query [31mFAILED[0m[31m [100%][0m
+
+================================== FAILURES ===================================
+[31m[1m____________ TestLiveReasoningPath.test_live_pipeline_wheels_query ____________[0m
+
+self = <test_inheritance_inference.TestLiveReasoningPath object at 0x000001F31ADA03E0>
+
+    [0m[37m@pytest[39;49;00m.mark.slow[90m[39;49;00m
+    [94mdef[39;49;00m[90m [39;49;00m[92mtest_live_pipeline_wheels_query[39;49;00m([96mself[39;49;00m):[90m[39;49;00m
+    [90m    [39;49;00m[33m"""[39;49;00m
+    [33m    LIVE INTEGRATION: teach nothing about wheels, then ask.[39;49;00m
+    [33m    The pipeline must answer affirmatively using schema context alone.[39;49;00m
+    [33m[39;49;00m
+    [33m    Marked slow — skipped in fast CI, run explicitly with the full suite.[39;49;00m
+    [33m[39;49;00m
+    [33m    Execution: pytest-asyncio is NOT a dependency of this repo, so we drive[39;49;00m
+    [33m    the coroutine to completion with ``asyncio.run`` from a sync test (the[39;49;00m
+    [33m    same convention as backend/tests/test_episodic_memory.py) rather than[39;49;00m
+    [33m    relying on a @pytest.mark.asyncio plugin that would otherwise leave the[39;49;00m
+    [33m    coroutine un-awaited (a silent false pass).[39;49;00m
+    [33m    """[39;49;00m[90m[39;49;00m
+        [94mfrom[39;49;00m[90m [39;49;00m[04m[96mbackend[39;49;00m[04m[96m.[39;49;00m[04m[96mapp[39;49;00m[04m[96m.[39;49;00m[04m[96mpipeline[39;49;00m[90m [39;49;00m[94mimport[39;49;00m answer_question[90m[39;49;00m
+    [90m[39;49;00m
+        resp = asyncio.run(answer_question([33m"[39;49;00m[33mDoes a Tesla Model 3 have wheels?[39;49;00m[33m"[39;49;00m))[90m[39;49;00m
+    [90m[39;49;00m
+        [90m# The answer must contain a positive signal[39;49;00m[90m[39;49;00m
+        answer_lower = resp.answer.lower()[90m[39;49;00m
+        positive_signals = [[33m"[39;49;00m[33myes[39;49;00m[33m"[39;49;00m, [33m"[39;49;00m[33mwheel[39;49;00m[33m"[39;49;00m, [33m"[39;49;00m[33mwheeled[39;49;00m[33m"[39;49;00m, [33m"[39;49;00m[33mdoes have[39;49;00m[33m"[39;49;00m, [33m"[39;49;00m[33mhas wheels[39;49;00m[33m"[39;49;00m][90m[39;49;00m
+        [94massert[39;49;00m [96many[39;49;00m(s [95min[39;49;00m answer_lower [94mfor[39;49;00m s [95min[39;49;00m positive_signals), ([90m[39;49;00m
+            [33mf[39;49;00m[33m"[39;49;00m[33mLIVE INFERENCE FAILURE: pipeline did not affirm wheels.[39;49;00m[33m\n[39;49;00m[33m"[39;49;00m[90m[39;49;00m
+            [33mf[39;49;00m[33m"[39;49;00m[33mAnswer: [39;49;00m[33m{[39;49;00mresp.answer[33m}[39;49;00m[33m\n[39;49;00m[33m"[39;49;00m[90m[39;49;00m
+            [33mf[39;49;00m[33m"[39;49;00m[33mConfidence: [39;49;00m[33m{[39;49;00mresp.confidence[33m}[39;49;00m[33m\n[39;49;00m[33m"[39;49;00m[90m[39;49;00m
+            [33mf[39;49;00m[33m"[39;49;00m[33mDebug keys: [39;49;00m[33m{[39;49;00m[96mlist[39;49;00m(resp.debug.keys())[90m [39;49;00m[94mif[39;49;00m[90m [39;49;00mresp.debug[90m [39;49;00m[94melse[39;49;00m[90m [39;49;00m[33m'[39;49;00m[33mnone[39;49;00m[33m'[39;49;00m[33m}[39;49;00m[33m"[39;49;00m[90m[39;49;00m
+        )[90m[39;49;00m
+    [90m[39;49;00m
+        [90m# Confidence must not be LOW/UNKNOWN — it should know this[39;49;00m[90m[39;49;00m
+>       [94massert[39;49;00m resp.confidence [95mnot[39;49;00m [95min[39;49;00m ([33m"[39;49;00m[33mLOW[39;49;00m[33m"[39;49;00m, [33m"[39;49;00m[33mUNKNOWN[39;49;00m[33m"[39;49;00m), ([90m[39;49;00m
+            [33mf[39;49;00m[33m"[39;49;00m[33mPipeline answered with low confidence: [39;49;00m[33m{[39;49;00mresp.confidence[33m}[39;49;00m[33m\n[39;49;00m[33m"[39;49;00m[90m[39;49;00m
+            [33mf[39;49;00m[33m"[39;49;00m[33mThis suggests schema context was not injected into reasoning.[39;49;00m[33m"[39;49;00m[90m[39;49;00m
+        )[90m[39;49;00m
+[1m[31mE       AssertionError: Pipeline answered with low confidence: UNKNOWN[0m
+[1m[31mE         This suggests schema context was not injected into reasoning.[0m
+[1m[31mE       assert 'UNKNOWN' not in ('LOW', 'UNKNOWN')[0m
+[1m[31mE        +  where 'UNKNOWN' = AnswerResponse(query='Does a Tesla Model 3 have wheels?', answer="Logic path broken at concepts 'Tesla Model 3', 'wheels' — no connecting evidence found.", confidence='UNKNOWN', sources=[Source(url='https://en.wikipedia.org/wiki/Tesla_Model_3', title='Tesla Model 3', snippet='The Tesla Model 3 is a battery electric powered mid-size sedan with a fastback body style built by Tesla, Inc., introduced in 2017. The vehicle is marketed', source='wikipedia', score=1.0), Source(url='https://en.wikipedia.org/wiki/Tesla_Model_S', title='Tesla Model S', snippet="The Tesla Model S is a battery-electric, four-door full-size car that was produced by the American automaker Tesla from 2012 to 2026. The automaker's second", source='wikipedia', score=1.0), Source(url='https://en.wikipedia.org/wiki/Tesla_Cybertruck', title='Tesla Cybertruck', snippet='The Tesla Cybertruck is a battery-electric full-size pickup truck manufactured by Tesla, Inc. since 2023. It was presented as a prototype concept in November', source='wikipedia', score=1.0), Source(url='https://duckduckgo.com/Nikola_Tesla', title='Nikola Tesla A Serbian-American engineer, futurist, and inventor.', snippet='Nikola Tesla A Serbian-Ameri...el 3 have wheels?', 'confidence': 0.5, 'timestamp': datetime.datetime(2026, 6, 23, 15, 15, 39, 280126, tzinfo=datetime.timezone.utc)}, {'step_id': '37dcdbad9341', 'type': 'evaluation', 'content': 'Found 6 sources with average relevance 0.75', 'confidence': 0.8493333333333334, 'timestamp': datetime.datetime(2026, 6, 23, 15, 15, 39, 280224, tzinfo=datetime.timezone.utc)}, {'step_id': '1dd93ca246c7', 'type': 'decision', 'content': 'Strong evidence available — can provide a confident answer', 'confidence': 0.75, 'timestamp': datetime.datetime(2026, 6, 23, 15, 15, 39, 280258, tzinfo=datetime.timezone.utc)}], 'final_confidence': 0.75, 'reasoning_mode_used': 'analytical', 'duration_ms': 0.3006999995704973}, 'reasoning_mode': 'analytical', 'dialogue': {'act': <DialogueAct.NEW_TOPIC: 'new_topic'>, 'state': <DialogueState.EXPLORING: 'exploring'>, 'needs_clarification': False, 'clarification_prompt': '', 'topic_shift_detected': False, 'implicit_reference_resolved': False, 'should_push_back': False, 'confidence': 0.8}, 'working_memory': {'turn_count': 2, 'active_topics': []}}, dialogue_act='new_topic', clarification_needed=False, resonance_scores={}, epistemic_states={}, recalled_memory=None).confidence[0m
+
+[1m[31mbackend\tests\test_inheritance_inference.py[0m:234: AssertionError
+---------------------------- Captured stderr call -----------------------------
+\rLoading weights:   0%|          | 0/103 [00:00<?, ?it/s]\rLoading weights:  70%|\u2588\u2588\u2588\u2588\u2588\u2588\u2589   | 72/103 [00:00<00:00, 703.79it/s]\rLoading weights: 100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 103/103 [00:00<00:00, 756.70it/s]\n\rLoading weights:   0%|          | 0/103 [00:00<?, ?it/s]\rLoading weights:  89%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2589 | 92/103 [00:00<00:00, 919.16it/s]\rLoading weights: 100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 103/103 [00:00<00:00, 936.03it/s]
+------------------------------ Captured log call ------------------------------
+[33mWARNING [0m uvicorn:vector_backend.py:565 ChromaDB init failed (No module named 'chromadb'), falling back to JSON backend
+[31m[1mERROR   [0m asyncio:base_events.py:1886 Task exception was never retrieved
+future: <Task finished name='Task-8' coro=<Connection.run() done, defined at c:\Users\Purushottam\Documents\VELYNX\.venv314\Lib\site-packages\playwright\_impl\_connection.py:305> exception=FileNotFoundError(2, 'The system cannot find the file specified', None, 2, None)>
+Traceback (most recent call last):
+  File "c:\Users\Purushottam\Documents\VELYNX\.venv314\Lib\site-packages\playwright\_impl\_connection.py", line 312, in run
+    await self._transport.connect()
+  File "c:\Users\Purushottam\Documents\VELYNX\.venv314\Lib\site-packages\playwright\_impl\_transport.py", line 133, in connect
+    raise exc
+  File "c:\Users\Purushottam\Documents\VELYNX\.venv314\Lib\site-packages\playwright\_impl\_transport.py", line 120, in connect
+    self._proc = await asyncio.create_subprocess_exec(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "C:\Users\Purushottam\AppData\Roaming\uv\python\cpython-3.14-windows-x86_64-none\Lib\asyncio\subprocess.py", line 224, in create_subprocess_exec
+    transport, protocol = await loop.subprocess_exec(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        stderr=stderr, **kwds)
+        ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Purushottam\AppData\Roaming\uv\python\cpython-3.14-windows-x86_64-none\Lib\asyncio\base_events.py", line 1809, in subprocess_exec
+    transport = await self._make_subprocess_transport(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        protocol, popen_args, False, stdin, stdout, stderr,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        bufsize, **kwargs)
+        ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Purushottam\AppData\Roaming\uv\python\cpython-3.14-windows-x86_64-none\Lib\asyncio\windows_events.py", line 401, in _make_subprocess_transport
+    transp = _WindowsSubprocessTransport(self, protocol, args, shell,
+                                         stdin, stdout, stderr, bufsize,
+                                         waiter=waiter, extra=extra,
+                                         **kwargs)
+  File "C:\Users\Purushottam\AppData\Roaming\uv\python\cpython-3.14-windows-x86_64-none\Lib\asyncio\base_subprocess.py", line 40, in __init__
+    self._start(args=args, shell=shell, stdin=stdin, stdout=stdout,
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                stderr=stderr, bufsize=bufsize, **kwargs)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Purushottam\AppData\Roaming\uv\python\cpython-3.14-windows-x86_64-none\Lib\asyncio\windows_events.py", line 879, in _start
+    self._proc = windows_utils.Popen(
+                 ~~~~~~~~~~~~~~~~~~~^
+        args, shell=shell, stdin=stdin, stdout=stdout, stderr=stderr,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        bufsize=bufsize, **kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Purushottam\AppData\Roaming\uv\python\cpython-3.14-windows-x86_64-none\Lib\asyncio\windows_utils.py", line 161, in __init__
+    super().__init__(args, stdin=stdin_rfd, stdout=stdout_wfd,
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                     stderr=stderr_wfd, **kwds)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Purushottam\AppData\Roaming\uv\python\cpython-3.14-windows-x86_64-none\Lib\subprocess.py", line 1039, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        pass_fds, cwd, env,
+                        ^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+                        gid, gids, uid, umask,
+                        ^^^^^^^^^^^^^^^^^^^^^^
+                        start_new_session, process_group)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Purushottam\AppData\Roaming\uv\python\cpython-3.14-windows-x86_64-none\Lib\subprocess.py", line 1553, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+                             # no special security
+                             ^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+                             cwd,
+                             ^^^^
+                             startupinfo)
+                             ^^^^^^^^^^^^
+FileNotFoundError: [WinError 2] The system cannot find the file specified
+[31m[1mERROR   [0m asyncio:base_events.py:1886 Task exception was never retrieved
+future: <Task finished name='Task-9' coro=<Connection.run() done, defined at c:\Users\Purushottam\Documents\VELYNX\.venv314\Lib\site-packages\playwright\_impl\_connection.py:305> exception=FileNotFoundError(2, 'The system cannot find the file specified', None, 2, None)>
+Traceback (most recent call last):
+  File "c:\Users\Purushottam\Documents\VELYNX\.venv314\Lib\site-packages\playwright\_impl\_connection.py", line 312, in run
+    await self._transport.connect()
+  File "c:\Users\Purushottam\Documents\VELYNX\.venv314\Lib\site-packages\playwright\_impl\_transport.py", line 133, in connect
+    raise exc
+  File "c:\Users\Purushottam\Documents\VELYNX\.venv314\Lib\site-packages\playwright\_impl\_transport.py", line 120, in connect
+    self._proc = await asyncio.create_subprocess_exec(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "C:\Users\Purushottam\AppData\Roaming\uv\python\cpython-3.14-windows-x86_64-none\Lib\asyncio\subprocess.py", line 224, in create_subprocess_exec
+    transport, protocol = await loop.subprocess_exec(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        stderr=stderr, **kwds)
+        ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Purushottam\AppData\Roaming\uv\python\cpython-3.14-windows-x86_64-none\Lib\asyncio\base_events.py", line 1809, in subprocess_exec
+    transport = await self._make_subprocess_transport(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        protocol, popen_args, False, stdin, stdout, stderr,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        bufsize, **kwargs)
+        ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Purushottam\AppData\Roaming\uv\python\cpython-3.14-windows-x86_64-none\Lib\asyncio\windows_events.py", line 401, in _make_subprocess_transport
+    transp = _WindowsSubprocessTransport(self, protocol, args, shell,
+                                         stdin, stdout, stderr, bufsize,
+                                         waiter=waiter, extra=extra,
+                                         **kwargs)
+  File "C:\Users\Purushottam\AppData\Roaming\uv\python\cpython-3.14-windows-x86_64-none\Lib\asyncio\base_subprocess.py", line 40, in __init__
+    self._start(args=args, shell=shell, stdin=stdin, stdout=stdout,
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                stderr=stderr, bufsize=bufsize, **kwargs)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Purushottam\AppData\Roaming\uv\python\cpython-3.14-windows-x86_64-none\Lib\asyncio\windows_events.py", line 879, in _start
+    self._proc = windows_utils.Popen(
+                 ~~~~~~~~~~~~~~~~~~~^
+        args, shell=shell, stdin=stdin, stdout=stdout, stderr=stderr,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        bufsize=bufsize, **kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Purushottam\AppData\Roaming\uv\python\cpython-3.14-windows-x86_64-none\Lib\asyncio\windows_utils.py", line 161, in __init__
+    super().__init__(args, stdin=stdin_rfd, stdout=stdout_wfd,
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                     stderr=stderr_wfd, **kwds)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Purushottam\AppData\Roaming\uv\python\cpython-3.14-windows-x86_64-none\Lib\subprocess.py", line 1039, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        pass_fds, cwd, env,
+                        ^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+                        gid, gids, uid, umask,
+                        ^^^^^^^^^^^^^^^^^^^^^^
+                        start_new_session, process_group)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Purushottam\AppData\Roaming\uv\python\cpython-3.14-windows-x86_64-none\Lib\subprocess.py", line 1553, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+                             # no special security
+                             ^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+                             cwd,
+                             ^^^^
+                             startupinfo)
+                             ^^^^^^^^^^^^
+FileNotFoundError: [WinError 2] The system cannot find the file specified
+[31m[1mERROR   [0m asyncio:base_events.py:1886 Task exception was never retrieved
+future: <Task finished name='Task-10' coro=<Connection.run() done, defined at c:\Users\Purushottam\Documents\VELYNX\.venv314\Lib\site-packages\playwright\_impl\_connection.py:305> exception=FileNotFoundError(2, 'The system cannot find the file specified', None, 2, None)>
+Traceback (most recent call last):
+  File "c:\Users\Purushottam\Documents\VELYNX\.venv314\Lib\site-packages\playwright\_impl\_connection.py", line 312, in run
+    await self._transport.connect()
+  File "c:\Users\Purushottam\Documents\VELYNX\.venv314\Lib\site-packages\playwright\_impl\_transport.py", line 133, in connect
+    raise exc
+  File "c:\Users\Purushottam\Documents\VELYNX\.venv314\Lib\site-packages\playwright\_impl\_transport.py", line 120, in connect
+    self._proc = await asyncio.create_subprocess_exec(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "C:\Users\Purushottam\AppData\Roaming\uv\python\cpython-3.14-windows-x86_64-none\Lib\asyncio\subprocess.py", line 224, in create_subprocess_exec
+    transport, protocol = await loop.subprocess_exec(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        stderr=stderr, **kwds)
+        ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Purushottam\AppData\Roaming\uv\python\cpython-3.14-windows-x86_64-none\Lib\asyncio\base_events.py", line 1809, in subprocess_exec
+    transport = await self._make_subprocess_transport(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        protocol, popen_args, False, stdin, stdout, stderr,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        bufsize, **kwargs)
+        ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Purushottam\AppData\Roaming\uv\python\cpython-3.14-windows-x86_64-none\Lib\asyncio\windows_events.py", line 401, in _make_subprocess_transport
+    transp = _WindowsSubprocessTransport(self, protocol, args, shell,
+                                         stdin, stdout, stderr, bufsize,
+                                         waiter=waiter, extra=extra,
+                                         **kwargs)
+  File "C:\Users\Purushottam\AppData\Roaming\uv\python\cpython-3.14-windows-x86_64-none\Lib\asyncio\base_subprocess.py", line 40, in __init__
+    self._start(args=args, shell=shell, stdin=stdin, stdout=stdout,
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                stderr=stderr, bufsize=bufsize, **kwargs)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Purushottam\AppData\Roaming\uv\python\cpython-3.14-windows-x86_64-none\Lib\asyncio\windows_events.py", line 879, in _start
+    self._proc = windows_utils.Popen(
+                 ~~~~~~~~~~~~~~~~~~~^
+        args, shell=shell, stdin=stdin, stdout=stdout, stderr=stderr,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        bufsize=bufsize, **kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Purushottam\AppData\Roaming\uv\python\cpython-3.14-windows-x86_64-none\Lib\asyncio\windows_utils.py", line 161, in __init__
+    super().__init__(args, stdin=stdin_rfd, stdout=stdout_wfd,
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                     stderr=stderr_wfd, **kwds)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Purushottam\AppData\Roaming\uv\python\cpython-3.14-windows-x86_64-none\Lib\subprocess.py", line 1039, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        pass_fds, cwd, env,
+                        ^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+                        gid, gids, uid, umask,
+                        ^^^^^^^^^^^^^^^^^^^^^^
+                        start_new_session, process_group)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Purushottam\AppData\Roaming\uv\python\cpython-3.14-windows-x86_64-none\Lib\subprocess.py", line 1553, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+                             # no special security
+                             ^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+                             cwd,
+                             ^^^^
+                             startupinfo)
+                             ^^^^^^^^^^^^
+FileNotFoundError: [WinError 2] The system cannot find the file specified
+[36m[1m=========================== short test summary info ===========================[0m
+[31mFAILED[0m backend/tests/test_inheritance_inference.py::[1mTestLiveReasoningPath::test_live_pipeline_wheels_query[0m - AssertionError: Pipeline answered with low confidence: UNKNOWN
+[31m================== [31m[1m1 failed[0m, [32m14 passed[0m[31m in 210.50s (0:03:30)[0m[31m ===================[0m

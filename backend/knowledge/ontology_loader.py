@@ -207,14 +207,33 @@ def load_ontology(path: Path = DEFAULT_ONTOLOGY_PATH) -> tuple[WorldModelRegistr
 
     # Demo entities declared in the JSON let the ontology ship ready-to-query
     # canonical instances (Tesla Model 3) without Python wiring. The JSON shapes
-    # ``instances`` as a name-keyed dict (with a ``_comment`` key we skip).
+    # ``instances`` as a name-keyed mapping (with a ``_comment`` key we skip).
+    # Two value forms are accepted so the ontology can stay terse where no
+    # attributes/facets are needed:
+    #   * structured dict: {"type": "Vehicle", "facets": [...], "attributes": {...}}
+    #   * bare string shorthand: "Vehicle"  (== {"type": "Vehicle"}, no facets/attrs)
     instances = data.get("instances") or {}
     for inst_name, inst in instances.items():
-        if inst_name == "_comment" or not isinstance(inst, dict):
+        if inst_name == "_comment":
             continue
-        type_name = inst["type"]
-        attrs = inst.get("attributes") or {}
-        facets = inst.get("facets") or []
+        if isinstance(inst, str):
+            # Bare-string shorthand: the value is just the type name.
+            type_name = inst
+            attrs: dict = {}
+            facets: list = []
+        elif isinstance(inst, dict):
+            type_name = inst.get("type")
+            if not type_name:
+                raise SchemaError(
+                    f"instance {inst_name!r} is missing required 'type' field"
+                )
+            attrs = inst.get("attributes") or {}
+            facets = inst.get("facets") or []
+        else:
+            raise SchemaError(
+                f"instance {inst_name!r} must be a type-name string or a dict, "
+                f"got {type(inst).__name__}"
+            )
         reg.instantiate(inst_name, type_name, attributes=attrs, facets=facets)
 
     logger.info(

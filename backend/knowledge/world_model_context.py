@@ -48,7 +48,7 @@ Design notes
 from __future__ import annotations
 
 import threading
-from typing import Iterable, List, Optional
+from typing import Any, Dict, Iterable, List, Optional
 
 from backend.knowledge.world_model_schema import Entity, WorldModelRegistry
 
@@ -60,6 +60,7 @@ _LOCK = threading.Lock()
 _REGISTRY: Optional[WorldModelRegistry] = None
 _NAME_INDEX: dict[str, str] = {}          # casefolded name -> canonical entity name
 _RENDER_CACHE: dict[str, str] = {}        # casefolded name -> rendered profile
+_FACTS_CACHE: dict[str, list[dict]] = {}  # casefolded name -> structured triples
 
 
 def set_registry(registry: Optional[WorldModelRegistry]) -> None:
@@ -69,11 +70,12 @@ def set_registry(registry: Optional[WorldModelRegistry]) -> None:
     lookup re-renders against the new registry. Passing ``None`` disables
     injection (the pipeline reverts to pre-Phase-62 behaviour).
     """
-    global _REGISTRY, _NAME_INDEX, _RENDER_CACHE
+    global _REGISTRY, _NAME_INDEX, _RENDER_CACHE, _FACTS_CACHE
     with _LOCK:
         _REGISTRY = registry
         _NAME_INDEX = {}
         _RENDER_CACHE = {}
+        _FACTS_CACHE = {}
         if registry is not None:
             for name in registry.entities():
                 _NAME_INDEX[name.casefold()] = name
@@ -115,9 +117,18 @@ def _resolve_entity(concept: str) -> Optional[Entity]:
 def _render_profile(entity: Entity) -> str:
     """Render an entity's fully evaluated profile into a compact text block.
 
-    Includes the type and its ancestor chain, then every resolved attribute
-    (own + inherited, defaults filled) in schema-declared order. Booleans are
-    lowercased and lists are comma-joined so the LLM reads clean values.
+    Includes the type and its ancestor chain, any instance/type facets, then
+    every resolved attribute (own + inherited + faceted, defaults filled) in
+    schema-declared order. Booleans are lowercased and lists are comma-joined so
+    the LLM reads clean values.
+
+    The attribute set is taken from the ENTITY's resolved schema
+    (``entity._resolved_schema()``), not ``entity.type.resolved_attributes()``.
+    The latter only covers the type's inheritance chain (plus type-level facets)
+    and silently drops *instance-level* facets — e.g. a Tesla Model 3 typed as
+    Vehicle but carrying an Electronics facet would lose power_source / voltage /
+    has_screen / manufacturer. Rendering from the entity schema keeps faceted
+    attributes visible (Phase 62 multi-category fix).
     """
     ancestors = entity.type.ancestors()
     if ancestors:
@@ -128,10 +139,16 @@ def _render_profile(entity: Entity) -> str:
     else:
         type_line = f"{entity.name} — type {entity.type.name}."
 
+    # Surface instance facets so the reasoner knows the object spans categories
+    # (e.g. "also Electronics"), not just its primary type chain.
+    facet_names = [f.name for f in getattr(entity, "facets", []) or []]
+    if facet_names:
+        type_line += f" Also: {', '.join(facet_names)}."
+
     lines: List[str] = [f"[World Model] {type_line}"]
-    # resolved_attributes() walks the inheritance chain; iterate in its declared
-    # order so inherited roots (license_model, ...) precede leaf slots.
-    for attr_name in entity.type.resolved_attributes():
+    # Render from the ENTITY's resolved schema so instance-level facet slots
+    # (power_source, voltage, ...) are included alongside the inheritance chain.
+    for attr_name in entity._resolved_schema():
         value = entity.get(attr_name)
         lines.append(f"  \u2022 {attr_name}: {_format_value(value)}")
     return "\n".join(lines)
@@ -205,10 +222,158 @@ def schema_context_for_concepts(
     return out
 
 
+# ── Structured fact channel (Phase 62.1) ─────────────────────────────────────
+# The reasoner is a *graph* engine: it can only traverse, adjudicate, and
+# resolve concepts that arrive as (subject, predicate, object) triples. The
+# rendered profile above is high-signal for the LLM synthesiser, but to the
+# reasoner it is opaque free text — it lands in the ``episodic_context`` channel
+# where it can only nudge a scalar salience bias and never participate in
+# pathfinding. So an inherited fact like ``mobility_type=wheeled`` could be
+# *displayed* but never *reasoned over*: "Does a Tesla Model 3 have wheels?"
+# died at "no connecting evidence" because Tesla and wheels were never linked by
+# an edge.
+#
+# This builder is the structural fix: it projects an entity's fully-resolved
+# schema into first-class triples that flow into the engine's fact pool (see
+# ``ReasoningEngine.reason(world_model_facts=...)``). Three kinds of edge are
+# emitted:
+#
+#   * Type chain        (entity, is_a, Vehicle), (Vehicle, is_a, PhysicalObject)
+#   * Facet membership  (entity, is_a, Electronics)
+#   * Attribute values  (entity, mobility_type, wheeled), (entity, propulsion, electric)
+#
+# Every edge is high-confidence (0.95) because the ontology is a curated,
+# authoritative source — these are not noisy web extractions. Attributes whose
+# resolved value is ``None`` (unknown) are skipped: an absent value is not a
+# fact and would only add a dead-end node.
+
+# Confidence assigned to ontology-derived facts. High, because the World Model
+# registry is curated/authoritative — but capped below 1.0 so direct, taught
+# evidence can still supersede it during contradiction resolution.
+_WORLD_MODEL_FACT_CONFIDENCE = 0.95
+
+
+def _facts_for_entity(entity: Entity) -> list[dict]:
+    """Project an entity's resolved schema into structured triple dicts.
+
+    Returns dicts shaped ``{subject, predicate, object, confidence, source}`` —
+    exactly what :meth:`ReasoningEngine._coerce_fact` consumes — so this module
+    stays free of any reasoning-engine import (no coupling, no cycle).
+    """
+    facts: list[dict] = []
+    name = entity.name
+
+    def _emit(subject: str, predicate: str, obj: str) -> None:
+        s, o = str(subject).strip(), str(obj).strip()
+        if not s or not predicate or not o:
+            return
+        facts.append({
+            "subject": s,
+            "predicate": predicate,
+            "object": o,
+            "confidence": _WORLD_MODEL_FACT_CONFIDENCE,
+            "source": "world_model",
+        })
+
+    # 1) Type chain: entity -> its type -> each ancestor, as is_a edges.
+    #    ancestors() is ordered nearest-first (e.g. ['PhysicalObject']); prefix
+    #    the entity's own type so the full chain Tesla -> Vehicle -> PhysicalObject
+    #    materialises as consecutive transitive edges.
+    type_chain = [entity.type.name, *entity.type.ancestors()]
+    prev = name
+    for type_name in type_chain:
+        _emit(prev, "is_a", type_name)
+        prev = type_name
+
+    # 2) Facet membership: the entity ALSO is_a each facet category it carries
+    #    (e.g. a Tesla typed Vehicle that is also Electronics).
+    for facet in getattr(entity, "facets", []) or []:
+        _emit(name, "is_a", facet.name)
+
+    # 3) Resolved attribute values: one edge per attribute that has a concrete
+    #    (non-None) value. The predicate IS the attribute name so the reasoner
+    #    can answer relation-specific questions; the object is the value.
+    for attr_name in entity._resolved_schema():
+        value = entity.get(attr_name)
+        if value is None:
+            continue  # unknown -> not a fact, skip the dead-end node.
+        if isinstance(value, bool):
+            obj = "true" if value else "false"
+        elif isinstance(value, (list, tuple, set)):
+            # Emit one edge per list member so each value is an addressable node.
+            for member in value:
+                _emit(name, attr_name, str(member))
+            continue
+        else:
+            obj = str(value)
+        _emit(name, attr_name, obj)
+
+    return facts
+
+
+def facts_for_concept(concept: str) -> Optional[list[dict]]:
+    """Return the cached structured triples for *concept*, or ``None``.
+
+    Hot-path entry point mirroring :func:`profile_for_concept`: a casefolded
+    name miss rejects without taking the lock, and the projected fact list is
+    memoised per entity (invalidated only by ``set_registry``).
+    """
+    if not concept:
+        return None
+    key = concept.strip().casefold()
+    if key not in _NAME_INDEX:
+        return None  # cheap reject: not an entity.
+
+    cached = _FACTS_CACHE.get(key)
+    if cached is not None:
+        return cached
+
+    entity = _resolve_entity(concept)
+    if entity is None:
+        return None
+    built = _facts_for_entity(entity)
+    with _LOCK:
+        if key in _NAME_INDEX:
+            _FACTS_CACHE[key] = built
+    return built
+
+
+def world_model_facts_for_concepts(
+    concepts: Iterable[str], limit: int = 8
+) -> List[dict]:
+    """Resolve a concept list to a flat list of structured world-model triples.
+
+    The structured counterpart of :func:`schema_context_for_concepts`: instead
+    of rendered text blocks for the synthesiser, it returns first-class triples
+    for the reasoning engine's fact pool. De-duplicates entities, preserves
+    concept order, and caps the number of *entities* contributing facts at
+    *limit*. Returns ``[]`` when no registry is installed or no concept names a
+    known entity — a safe no-op on every non-entity query.
+    """
+    out: List[dict] = []
+    seen: set[str] = set()
+    n_entities = 0
+    for concept in concepts or []:
+        key = (concept or "").strip().casefold()
+        if not key or key in seen:
+            continue
+        triples = facts_for_concept(concept)
+        if not triples:
+            continue
+        seen.add(key)
+        out.extend(triples)
+        n_entities += 1
+        if limit and n_entities >= limit:
+            break
+    return out
+
+
 __all__ = [
     "set_registry",
     "get_registry",
     "install_default_registry",
     "profile_for_concept",
     "schema_context_for_concepts",
+    "facts_for_concept",
+    "world_model_facts_for_concepts",
 ]
