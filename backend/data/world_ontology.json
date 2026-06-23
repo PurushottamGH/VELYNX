@@ -1,0 +1,213 @@
+{
+  "_comment": "VELYNX Phase 62 — Foundational Ontology. The single data-driven source of truth for the physical world model. Loaded by backend/knowledge/ontology_loader.py into the WorldModelRegistry at startup. Adding a category = editing this file, not touching Python. The software taxonomy (Software/DesktopApplication/ThreeDModelingApp) is loaded separately by build_3d_software_world() and absorbed into the same registry, so the two coexist.",
+  "version": 1,
+  "root": "PhysicalObject",
+  "types": {
+    "PhysicalObject": {
+      "parent": null,
+      "facets": [],
+      "disjoint_with": [],
+      "description": "Any entity that occupies space and has mass. The taxonomic root of the physical world model.",
+      "attributes": {
+        "mass_kg": {
+          "datatype": "float",
+          "required": false,
+          "default": null,
+          "constraints": { "min": 0 },
+          "description": "Rest mass in kilograms."
+        },
+        "location": {
+          "datatype": "str",
+          "required": false,
+          "default": null,
+          "constraints": {},
+          "description": "Where the object currently is (free text or coordinate)."
+        },
+        "material": {
+          "datatype": "str",
+          "required": false,
+          "default": null,
+          "constraints": {},
+          "description": "Dominant constituent material."
+        }
+      }
+    },
+
+    "Vehicle": {
+      "parent": "PhysicalObject",
+      "facets": [],
+      "disjoint_with": ["Person"],
+      "description": "A conveyance that moves people or cargo.",
+      "attributes": {
+        "mobility_type": {
+          "datatype": "str",
+          "required": true,
+          "default": null,
+          "constraints": {
+            "enum": ["wheeled", "tracked", "winged", "waterborne", "railed", "legged"]
+          },
+          "description": "How the vehicle moves."
+        },
+        "max_speed_kph": {
+          "datatype": "float",
+          "required": false,
+          "default": null,
+          "constraints": { "min": 0, "max": 30000, "unit": "kph" },
+          "description": "Rated top speed in kilometres per hour."
+        },
+        "passenger_capacity": {
+          "datatype": "int",
+          "required": false,
+          "default": null,
+          "constraints": { "min": 0, "max": 10000 },
+          "description": "Designed occupant count."
+        },
+        "propulsion": {
+          "datatype": "str",
+          "required": false,
+          "default": null,
+          "constraints": {
+            "enum": ["combustion", "electric", "hybrid", "muscle", "sail", "jet", "rocket"]
+          },
+          "description": "Source of motive power."
+        }
+      }
+    },
+
+    "Electronics": {
+      "parent": "PhysicalObject",
+      "facets": [],
+      "disjoint_with": ["Person"],
+      "description": "An object whose primary function depends on controlled electric current.",
+      "attributes": {
+        "power_source": {
+          "datatype": "str",
+          "required": true,
+          "default": null,
+          "constraints": {
+            "enum": ["battery", "mains", "solar", "kinetic", "external"]
+          },
+          "description": "How it draws electrical power."
+        },
+        "voltage": {
+          "datatype": "float",
+          "required": false,
+          "default": null,
+          "constraints": { "min": 0, "max": 100000, "unit": "V" },
+          "description": "Operating voltage in volts."
+        },
+        "has_screen": {
+          "datatype": "bool",
+          "required": false,
+          "default": false,
+          "constraints": {},
+          "description": "Whether it has a display surface."
+        },
+        "manufacturer": {
+          "datatype": "str",
+          "required": false,
+          "default": null,
+          "constraints": {},
+          "description": "Original equipment manufacturer or brand."
+        }
+      }
+    },
+
+    "Person": {
+      "parent": "PhysicalObject",
+      "facets": [],
+      "disjoint_with": ["Vehicle", "Electronics"],
+      "description": "A human being.",
+      "attributes": {
+        "age": {
+          "datatype": "int",
+          "required": false,
+          "default": null,
+          "constraints": { "min": 0, "max": 150 },
+          "description": "Age in years."
+        },
+        "occupation": {
+          "datatype": "str",
+          "required": false,
+          "default": null,
+          "constraints": {},
+          "description": "Primary vocation."
+        },
+        "date_of_birth": {
+          "datatype": "str",
+          "required": false,
+          "default": null,
+          "constraints": { "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+          "description": "ISO-8601 date of birth (YYYY-MM-DD)."
+        }
+      }
+    }
+  },
+
+  "predicate_map": {
+    "_comment": "Surface predicate (as it appears in an extracted triple's relation slot, lowercased) -> canonical schema attribute key. The schema gatekeeper uses this to decide whether a TEACH targets a typed attribute. A predicate present here but whose attribute is NOT on the target entity's resolved schema triggers an UNKNOWN_ATTRIBUTE rejection (e.g. 'has legs' -> leg_count is mapped, but leg_count is not on Vehicle, so 'My Tesla has 5000 legs' is rejected structurally). Predicates absent from this map are treated as free-form and always accepted (open-world).",
+
+    "mass_kg":         "mass_kg",
+    "mass":            "mass_kg",
+    "weighs":          "mass_kg",
+    "weight":          "mass_kg",
+    "located":         "location",
+    "located_in":      "location",
+    "location":        "location",
+    "made_of":         "material",
+    "material":        "material",
+
+    "mobility_type":   "mobility_type",
+    "max_speed":       "max_speed_kph",
+    "max_speed_kph":   "max_speed_kph",
+    "top_speed":       "max_speed_kph",
+    "passenger_capacity": "passenger_capacity",
+    "seats":           "passenger_capacity",
+    "propulsion":      "propulsion",
+    "powered_by":      "propulsion",
+
+    "power_source":    "power_source",
+    "voltage":         "voltage",
+    "has_screen":      "has_screen",
+    "screen":          "has_screen",
+    "manufacturer":    "manufacturer",
+    "made_by":         "manufacturer",
+    "built_by":        "manufacturer",
+    "brand":           "manufacturer",
+
+    "age":             "age",
+    "years_old":       "age",
+    "occupation":      "occupation",
+    "works_as":        "occupation",
+    "date_of_birth":   "date_of_birth",
+    "born_on":         "date_of_birth",
+    "birthday":        "date_of_birth",
+
+    "has_legs":        "leg_count",
+    "legs":            "leg_count",
+    "leg_count":       "leg_count",
+    "has_wings":       "wing_count",
+    "wings":           "wing_count",
+    "wing_count":      "wing_count"
+  },
+
+  "instances": {
+    "_comment": "Ready-to-query canonical instances the ontology ships with. Declared here (data-driven) rather than wired in Python so the demo set is editable without code changes. Phase 63 can add more without touching the loader.",
+
+    "Tesla Model 3": {
+      "type": "Vehicle",
+      "facets": ["Electronics"],
+      "description": "The canonical Phase 62 multi-category instance: a Vehicle that also carries Electronics attributes (power_source, voltage, has_screen, manufacturer) via an instance-level facet. Demonstrates that facets let an object belong to multiple categories without multiple inheritance's diamond problem.",
+      "attributes": {
+        "mobility_type": "wheeled",
+        "propulsion": "electric",
+        "passenger_capacity": 5,
+        "max_speed_kph": 261.0,
+        "power_source": "battery",
+        "voltage": 400.0,
+        "has_screen": true,
+        "manufacturer": "Tesla"
+      }
+    }
+  }
+}

@@ -95,12 +95,26 @@ _answer_synthesizer = AnswerSynthesizer()
 # inheritance-resolved schema into the reasoning context. Defensive: a failure
 # here leaves injection a no-op (schema_context_for_concepts returns []) rather
 # than blocking startup.
+#
+# Phase 62 (foundational ontology): the runtime registry now combines the
+# data-driven physical taxonomy (PhysicalObject/Vehicle/Electronics/Person,
+# loaded from backend/data/world_ontology.json) with the existing 3D-software
+# taxonomy (Software/DesktopApplication/ThreeDModelingApp) into one registry,
+# so the two coexist. The combined registry also backs the schema gatekeeper
+# that validates TEACH commands. install_combined_registry degrades to
+# install_default_registry (software-only) if the ontology file is missing.
 try:
-    from backend.knowledge.world_model_context import install_default_registry
+    from backend.knowledge.ontology_loader import install_combined_registry
 
-    install_default_registry()
+    install_combined_registry()
 except Exception as _exc:  # pragma: no cover - never block startup
-    logger.warning("World model registry unavailable: %s", _exc)
+    logger.warning("Combined ontology unavailable; trying software-only: %s", _exc)
+    try:
+        from backend.knowledge.world_model_context import install_default_registry
+
+        install_default_registry()
+    except Exception as _exc2:  # pragma: no cover - never block startup
+        logger.warning("World model registry unavailable: %s", _exc2)
 
 # Phase 45: Per-session curiosity state
 _curiosity_session_state: dict = {}

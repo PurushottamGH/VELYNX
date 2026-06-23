@@ -462,6 +462,22 @@ def extract_and_store_facts(text: str) -> List[Tuple[str, str, str]]:
     extractable was found (the caller should fall through to normal reasoning).
     Never raises on extraction/storage errors — failures are logged and treated
     as "no facts learned".
+
+    Phase 62 — **schema gatekeeper**: before storage, extracted triples are run
+    through :func:`backend.knowledge.schema_gatekeeper.validate_triples`, which
+    classifies each as ACCEPT or REJECT against the registered world-model
+    schema. Only ACCEPTED triples reach the ``triples`` table. REJECTED triples
+    (e.g. "My Tesla has 5000 legs" — a recognised predicate hitting a slot the
+    entity doesn't have) are logged and buffered in :data:`_LAST_REJECTIONS`
+    (read via :func:`last_rejections`) but do NOT change this function's return
+    shape, which stays ``List[Tuple[str, str, str]]``.
+
+    Open-world guarantee: the gatekeeper ONLY rejects a recognised predicate
+    that violates a TYPED entity's schema. Untyped subjects, unknown predicates,
+    and free-form facts ALWAYS accept — so every pre-Phase-62 TEACH continues to
+    land in the triples table unchanged. If the gatekeeper or the world-model
+    registry is unavailable, the whole step degrades to "accept all", preserving
+    the prior behaviour exactly.
     """
     try:
         triples = extract_triples(text)
@@ -472,18 +488,66 @@ def extract_and_store_facts(text: str) -> List[Tuple[str, str, str]]:
     if not triples:
         return []
 
+    # ── Phase 62: schema validation gate ──────────────────────────────────
+    # Lazily imported + fully defensive: any failure (no registry, malformed
+    # ontology, classifier bug) collapses to "accept all" so the free-form KG
+    # write path never regresses. The signature is unchanged on purpose — see
+    # the module docstring of schema_gatekeeper for the open-world contract.
+    accepted = triples
     try:
-        stored = _store_triples(triples)
+        from backend.knowledge.schema_gatekeeper import validate_triples
+
+        accepted, rejections = validate_triples(triples)
+        if rejections:
+            _LAST_REJECTIONS.clear()
+            _LAST_REJECTIONS.extend(rejections)
+            for rej in rejections:
+                logger.info(
+                    "Schema gatekeeper rejected (%s): %r — %s",
+                    rej.reason_code, rej.triple, rej.message,
+                )
+        else:
+            _LAST_REJECTIONS.clear()
     except Exception as exc:
-        logger.warning("Fact storage failed (%d triples): %s", len(triples), exc)
+        # Never let the gatekeeper block a TEACH. Accept everything and proceed.
+        logger.debug("Schema gatekeeper unavailable — accepting all triples: %s", exc)
+        accepted = triples
+
+    if not accepted:
+        # All triples were schema-rejected (e.g. a purely nonsensical teach
+        # about a typed entity). Nothing to store; surface the rejections via
+        # the buffer and return empty so the caller falls through.
+        return []
+
+    try:
+        stored = _store_triples(accepted)
+    except Exception as exc:
+        logger.warning("Fact storage failed (%d triples): %s", len(accepted), exc)
         return []
 
     logger.info(
         "Knowledge acquisition: stored %d triple(s) from user statement: %s",
         stored,
-        triples,
+        accepted,
     )
-    return triples
+    return accepted
 
 
-__all__ = ["extract_and_store_facts", "extract_triples"]
+# Phase 62 — buffer of the most recent schema-gatekeeper rejections, for the
+# future TEACH-response layer to surface to the user. Read-only accessor below.
+# Module-level (not per-call) because the single caller in the pipeline reads it
+# immediately after extract_and_store_facts returns; it is cleared on every call.
+_LAST_REJECTIONS: list = []
+
+
+def last_rejections() -> list:
+    """Return the schema-gatekeeper rejections from the most recent TEACH.
+
+    Each entry is a ``schema_gatekeeper.Rejection``. Empty when the last call
+    accepted everything (or when no TEACH has run yet). Intended for the future
+    TEACH-response surfacing step; callers that ignore it are unaffected.
+    """
+    return list(_LAST_REJECTIONS)
+
+
+__all__ = ["extract_and_store_facts", "extract_triples", "last_rejections"]

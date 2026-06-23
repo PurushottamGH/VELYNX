@@ -807,6 +807,68 @@ def reset_state(*, verbose: bool = True) -> bool:
 # ─────────────────────────────────────────────────────────────────────────────
 # 9. LIVE RUNNER
 # ─────────────────────────────────────────────────────────────────────────────
+async def _drain_background_tasks(*, grace: float = 2.0) -> None:
+    """Quiesce the pipeline's orphaned background tasks before the loop closes.
+
+    The live pipeline fans out autonomous curiosity / agentic tasks that reach
+    the web through a Playwright browser (``backend/retrieval/browser.py``).
+    Those tasks are NOT awaited by ``answer_question`` — they outlive the turn
+    that spawned them. When :func:`asyncio.run` returns from :func:`run_live`
+    and closes the loop, any such task still mid-flight has its Playwright Node
+    driver pipe yanked out from under it, which surfaces as the trailing
+    ``EPIPE: broken pipe`` / ``RuntimeError: Event loop is closed`` noise AFTER
+    the ``PASS — 100/100`` line.
+
+    The harness does not own the browser handle (the pipeline does, and
+    ``fetch_page`` already closes it inside an ``async with`` on the normal
+    path), so there is nothing here to ``await browser.close()`` on directly.
+    Instead we let those tasks unwind cleanly:
+
+      1. Give in-flight tasks a brief grace window to finish naturally (so a
+         nearly-done ``fetch_page`` closes its own browser/context).
+      2. Cancel whatever is still pending and AWAIT the cancellations, which
+         runs each task's ``finally`` / ``async with`` exit — i.e. Playwright's
+         own ``context.close()`` / ``browser.close()`` — while the loop is still
+         alive to service those awaits.
+
+    Best-effort and never raises: teardown hygiene must not fail a green run.
+    """
+    try:
+        loop = asyncio.get_running_loop()
+    except RuntimeError:
+        return
+
+    def _others() -> list[asyncio.Task]:
+        cur = asyncio.current_task(loop=loop)
+        return [t for t in asyncio.all_tasks(loop=loop)
+                if t is not cur and not t.done()]
+
+    pending = _others()
+    if not pending:
+        return
+
+    # 1. Grace window — let nearly-finished tasks (and their browser cleanup)
+    #    complete on their own so we cancel as little as possible.
+    try:
+        await asyncio.wait(pending, timeout=grace)
+    except Exception:
+        pass
+
+    # 2. Cancel the stragglers and await them so their async-context __aexit__
+    #    (browser.close() / playwright.stop()) actually runs before loop close.
+    stragglers = _others()
+    for t in stragglers:
+        t.cancel()
+    if stragglers:
+        try:
+            # return_exceptions=True so the expected CancelledError from each
+            # cancelled task is swallowed rather than propagated.
+            await asyncio.gather(*stragglers, return_exceptions=True)
+        except Exception:
+            pass
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 async def run_live(interactions: list[Interaction], report_path: Optional[str],
                    *, wipe_before: bool = True, wipe_between: bool = False) -> int:
     """Execute interactions against the LIVE pipeline. Halt on first violation.
@@ -852,51 +914,59 @@ async def run_live(interactions: list[Interaction], report_path: Optional[str],
     print(_hr())
 
     report_lines: list[str] = []
-    for i, inter in enumerate(interactions, start=1):
-        # Optional per-interaction reset (isolated single-shot runs only). The
-        # default battery is self-consistent within a run, so this stays off.
-        if wipe_between and i > 1:
-            reset_state(verbose=False)
+    try:
+        for i, inter in enumerate(interactions, start=1):
+            # Optional per-interaction reset (isolated single-shot runs only). The
+            # default battery is self-consistent within a run, so this stays off.
+            if wipe_between and i > 1:
+                reset_state(verbose=False)
 
-        resp = None
-        try:
-            resp = await answer_question(inter.text)
-            inter.checker(resp)
-        except HarnessFailure as hf:
-            diag = dump_failure(i, total, inter, resp, hf)
-            print(diag)
-            if report_path:
-                report_lines.append(diag)
-                _write_report(report_path, report_lines)
-            print(f"\n  RESULT: FAIL — broke at interaction #{i}/{total} "
-                  f"({inter.category}, {hf.failure_type}).")
-            return 1
-        except Exception as exc:  # any pipeline exception == CRASH
-            hf = HarnessFailure(FailureType.CRASH,
-                                f"{type(exc).__name__}: {exc}",
-                                traceback_str=traceback.format_exc())
-            diag = dump_failure(i, total, inter, resp, hf)
-            print(diag)
-            if report_path:
-                report_lines.append(diag)
-                _write_report(report_path, report_lines)
-            print(f"\n  RESULT: FAIL — crashed at interaction #{i}/{total} "
-                  f"({inter.category}).")
-            return 1
+            resp = None
+            try:
+                resp = await answer_question(inter.text)
+                inter.checker(resp)
+            except HarnessFailure as hf:
+                diag = dump_failure(i, total, inter, resp, hf)
+                print(diag)
+                if report_path:
+                    report_lines.append(diag)
+                    _write_report(report_path, report_lines)
+                print(f"\n  RESULT: FAIL — broke at interaction #{i}/{total} "
+                      f"({inter.category}, {hf.failure_type}).")
+                return 1
+            except Exception as exc:  # any pipeline exception == CRASH
+                hf = HarnessFailure(FailureType.CRASH,
+                                    f"{type(exc).__name__}: {exc}",
+                                    traceback_str=traceback.format_exc())
+                diag = dump_failure(i, total, inter, resp, hf)
+                print(diag)
+                if report_path:
+                    report_lines.append(diag)
+                    _write_report(report_path, report_lines)
+                print(f"\n  RESULT: FAIL — crashed at interaction #{i}/{total} "
+                      f"({inter.category}).")
+                return 1
 
-        # Compact progress line (truncate long inputs).
-        tag = inter.text if len(inter.text) <= 58 else inter.text[:55] + "..."
-        print(f"  [{i:>3}/{total}] OK  {inter.category:<16} {inter.kind:<5} {tag}")
-        report_lines.append(f"[{i}/{total}] OK {inter.category} {inter.kind} :: {inter.text}")
+            # Compact progress line (truncate long inputs).
+            tag = inter.text if len(inter.text) <= 58 else inter.text[:55] + "..."
+            print(f"  [{i:>3}/{total}] OK  {inter.category:<16} {inter.kind:<5} {tag}")
+            report_lines.append(f"[{i}/{total}] OK {inter.category} {inter.kind} :: {inter.text}")
 
-    print(_hr())
-    print(f"  RESULT: PASS — {total}/{total} interactions clean. "
-          "Stabilization metric met.")
-    print(_hr())
-    if report_path:
-        report_lines.append(f"\nPASS — {total}/{total} clean.")
-        _write_report(report_path, report_lines)
-    return 0
+        print(_hr())
+        print(f"  RESULT: PASS — {total}/{total} interactions clean. "
+              "Stabilization metric met.")
+        print(_hr())
+        if report_path:
+            report_lines.append(f"\nPASS — {total}/{total} clean.")
+            _write_report(report_path, report_lines)
+        return 0
+    finally:
+        # Quiesce the pipeline's orphaned background (curiosity/agentic) tasks
+        # while the loop is STILL alive, so their Playwright browser/context
+        # close inside their own async-context exit. This runs on every path
+        # (pass, fail, crash) and eliminates the trailing EPIPE / "Event loop is
+        # closed" noise that appeared after teardown. Best-effort.
+        await _drain_background_tasks()
 
 
 def _write_report(path: str, lines: list[str]) -> None:

@@ -60,6 +60,7 @@ Future Phase 62 work
 from __future__ import annotations
 
 import logging
+import re
 from dataclasses import dataclass, field
 from typing import Any, Optional, Union
 
@@ -92,6 +93,12 @@ class AttributeSchema:
     description
         Human-readable docstring, surfaced later by the introspection / voice
         layer when VELYNX explains *why* it believes an attribute holds.
+    constraints
+        Optional dict of value-level checks applied AFTER the datatype check:
+        ``enum`` (allowed values), ``min`` / ``max`` (numeric range, also used
+        for ``int``), ``pattern`` (anchored regex matched against the ``str``
+        form), ``unit`` (documentation only — not enforced). Empty / absent
+        means "no extra constraints". Phase 62 addition.
     """
 
     name: str
@@ -99,12 +106,16 @@ class AttributeSchema:
     default: Any = None
     required: bool = False
     description: str = ""
+    constraints: dict = field(default_factory=dict)
 
     def validate(self, value: Any) -> None:
         """Raise :class:`SchemaError` if *value* is not acceptable for this slot.
 
         ``None`` is allowed only when the schema is not required (so an
-        unspecified optional slot validates against its default).
+        unspecified optional slot validates against its default). After the
+        datatype check, any declared ``constraints`` (``enum`` / ``min`` /
+        ``max`` / ``pattern``) are enforced so the Phase 62 gatekeeper can
+        reject e.g. ``max_speed_kph = 999999`` on a range, not just a type.
         """
         if value is None:
             if self.required:
@@ -117,6 +128,40 @@ class AttributeSchema:
                 f"attribute {self.name!r} expected {self._type_name()}, "
                 f"got {type(value).__name__} ({value!r})"
             )
+        # Value-level constraints (Phase 62). Empty dict = no extra checks.
+        self._validate_constraints(value)
+
+    def _validate_constraints(self, value: Any) -> None:
+        """Enforce ``enum`` / ``min`` / ``max`` / ``pattern`` if declared.
+
+        Each check is independent and fires only when its key is present, so a
+        schema may declare any subset. Failures raise :class:`SchemaError` with
+        a message that names the violated constraint — the gatekeeper surfaces
+        these verbatim so the user learns the ontology's rules.
+        """
+        c = self.constraints or {}
+        enum = c.get("enum")
+        if enum is not None and value not in enum:
+            raise SchemaError(
+                f"attribute {self.name!r} value {value!r} not in allowed enum {list(enum)}"
+            )
+        if isinstance(value, (int, float)) and not isinstance(value, bool):
+            lo, hi = c.get("min"), c.get("max")
+            if lo is not None and value < lo:
+                raise SchemaError(
+                    f"attribute {self.name!r} value {value!r} below min {lo}"
+                )
+            if hi is not None and value > hi:
+                raise SchemaError(
+                    f"attribute {self.name!r} value {value!r} above max {hi}"
+                )
+        pattern = c.get("pattern")
+        if pattern is not None and isinstance(value, str):
+            if re.match(pattern, value) is None:
+                raise SchemaError(
+                    f"attribute {self.name!r} value {value!r} does not match "
+                    f"pattern {pattern!r}"
+                )
 
     def _type_name(self) -> str:
         return getattr(self.datatype, "__name__", str(self.datatype))
@@ -148,18 +193,33 @@ class SchemaError(ValueError):
 
 @dataclass
 class EntityType:
-    """A named type in the world model, with an inheritance chain.
+    """A named type in the world model, with an inheritance chain and facets.
 
-    Single inheritance (one optional ``parent``) keeps attribute resolution a
-    linear walk and is sufficient for the Phase 62 scaffold. Attributes
-    declared on the type itself are *overrides* or *additions* relative to the
-    inherited set; the full resolved schema is computed by walking parents to
-    the root.
+    Single inheritance (one optional ``parent``) keeps the *is-a* tree a linear
+    walk and is sufficient for the Phase 62 scaffold. Attributes declared on
+    the type itself are *overrides* or *additions* relative to the inherited
+    set; the full resolved schema is computed by walking parents to the root.
+
+    Phase 62 addition — **facets**: a type may declare zero or more *facet*
+    types that contribute their own attributes orthogonally to the ``parent``
+    chain. This models objects that belong to multiple categories without the
+    diamond / MRO problems of multiple inheritance: e.g. a Tesla is ``is_a``
+    Vehicle (parent chain) and ``has_facet`` Electronics (facet), and its
+    resolved schema is the union of Vehicle's chain attributes and
+    Electronics's chain attributes. Facets must own slots DISJOINT from the
+    type's own chain — by design they never collide, so there is no
+    conflict-resolution rule to write.
+
+    Phase 62 addition — ``disjoint_with``: names of types that this type
+    cannot co-exist with (used by the gatekeeper to reject a typed entity being
+    re-typed into an incompatible category, e.g. a Person cannot be a Vehicle).
     """
 
     name: str
     parent: Optional["EntityType"] = None
     attributes: dict[str, AttributeSchema] = field(default_factory=dict)
+    facets: list["EntityType"] = field(default_factory=list)
+    disjoint_with: list[str] = field(default_factory=list)
     description: str = ""
 
     def __post_init__(self) -> None:
@@ -176,14 +236,19 @@ class EntityType:
             node = node.parent
 
     def resolved_attributes(self) -> dict[str, AttributeSchema]:
-        """Full attribute schema, walking the inheritance chain root-first.
+        """Full attribute schema: the ``parent`` chain, then any facets.
 
-        Child attributes override parents of the same name (last-write-wins as
-        we walk from root to self), so a subtype can narrow a datatype, flip
-        ``required``, or supply a different default.
+        Walks the inheritance chain root-first so child attributes override
+        parents of the same name (a subtype can narrow a datatype, flip
+        ``required``, or supply a different default). Then layers in each
+        facet's OWN resolved attributes. Facets are expected to own slots
+        disjoint from the type's chain — they are merged with ``setdefault``
+        so a chain-declared slot is never silently clobbered by a facet, and a
+        genuinely-colliding facet declaration raises (it indicates a modelling
+        error that must surface rather than be silently resolved).
         """
         chain: list["EntityType"] = []
-        node: Optional[EntityType] = self
+        node: Optional["EntityType"] = self
         while node is not None:
             chain.append(node)
             node = node.parent
@@ -191,16 +256,37 @@ class EntityType:
         merged: dict[str, AttributeSchema] = {}
         for t in chain:
             merged.update(t.attributes)
+        # Layer facet attributes on top. Facets own disjoint slots by design;
+        # a collision is a modelling error worth surfacing loudly.
+        for facet in self.facets:
+            for attr_name, attr_schema in facet.resolved_attributes().items():
+                if attr_name in merged and merged[attr_name] is not attr_schema:
+                    raise SchemaError(
+                        f"facet {facet.name!r} collides with type "
+                        f"{self.name!r} on attribute {attr_name!r}"
+                    )
+                merged[attr_name] = attr_schema
         return merged
 
     def is_a(self, ancestor_name: str) -> bool:
         """True if this type (or any ancestor) is named *ancestor_name*."""
-        node: Optional[EntityType] = self
+        node: Optional["EntityType"] = self
         while node is not None:
             if node.name == ancestor_name:
                 return True
             node = node.parent
         return False
+
+    def has_facet(self, facet_name: str) -> bool:
+        """True if this type declares a facet (or a facet-of-a-facet) named *facet_name*."""
+        for facet in self.facets:
+            if facet.name == facet_name or facet.has_facet(facet_name):
+                return True
+        return False
+
+    def is_disjoint_with(self, other_name: str) -> bool:
+        """True if this type declares *other_name* in its ``disjoint_with`` list."""
+        return other_name in (self.disjoint_with or [])
 
     def ancestors(self) -> list[str]:
         """Names of this type's ancestors, immediate-parent-first (excluding self)."""
@@ -219,18 +305,46 @@ class Entity:
     Constructed via :meth:`WorldModelRegistry.instantiate` (which validates the
     type exists and the values match its schema). Direct construction is
     allowed but skips parent-link validation — prefer the registry.
+
+    Phase 62 — **instance facets**: an entity may declare a list of *facet*
+    types (orthogonal to its ``type``'s ``parent`` chain) that contribute their
+    own attributes to this instance's resolved schema. This is how a specific
+    Tesla Model 3 can be ``type=Vehicle`` (mobility_type, max_speed_kph, ...)
+    AND carry Electronics attributes (power_source, voltage, ...) without
+    Vehicle itself declaring the Electronics facet (not all vehicles are
+    electronic). Instance-level facets are the mechanism; type-level facets
+    (rare) are declared on :class:`EntityType` and apply to every instance.
     """
 
     name: str
     type: EntityType
     attributes: dict[str, Any] = field(default_factory=dict)
+    facets: list[EntityType] = field(default_factory=list)
+
+    def _resolved_schema(self) -> dict[str, AttributeSchema]:
+        """Type-chain attributes (with type-level facets) + this instance's facets.
+
+        Instance facets are layered with ``setdefault`` so they cannot clobber a
+        chain-declared slot — a collision indicates a modelling error and is
+        surfaced rather than silently resolved.
+        """
+        merged = dict(self.type.resolved_attributes())
+        for facet in self.facets:
+            for attr_name, attr_schema in facet.resolved_attributes().items():
+                if attr_name in merged and merged[attr_name] is not attr_schema:
+                    raise SchemaError(
+                        f"instance facet {facet.name!r} on entity {self.name!r} "
+                        f"collides on attribute {attr_name!r}"
+                    )
+                merged[attr_name] = attr_schema
+        return merged
 
     def __post_init__(self) -> None:
         if not self.name or not self.name.strip():
             raise SchemaError("Entity.name must be a non-empty string")
         # Fill defaults for declared attributes the caller omitted, then
         # validate every supplied + defaulted value against the resolved schema.
-        schema = self.type.resolved_attributes()
+        schema = self._resolved_schema()
         for attr_name, attr_schema in schema.items():
             self.attributes.setdefault(attr_name, attr_schema.default)
         # Reject attributes the schema does not know about — typos must not
@@ -247,8 +361,8 @@ class Entity:
     def get(self, attr_name: str, default: Any = None) -> Any:
         """Read an attribute, falling back to *default* if it is absent/None.
 
-        Resolves inherited attributes transparently because
-        ``__post_init__`` already filled inherited defaults.
+        Resolves inherited + facet attributes transparently because
+        ``__post_init__`` already filled their defaults.
         """
         value = self.attributes.get(attr_name, default)
         return value if value is not None else default
@@ -259,7 +373,7 @@ class Entity:
         This is the single mutation point; a later Phase 62 step will route
         re-teaches (belief revision) through here so contradictions are flagged.
         """
-        schema = self.type.resolved_attributes()
+        schema = self._resolved_schema()
         if attr_name not in schema:
             raise SchemaError(
                 f"attribute {attr_name!r} not declared on type {self.type.name!r}"
@@ -270,6 +384,19 @@ class Entity:
     def is_a(self, type_name: str) -> bool:
         """Delegate to the type's inheritance check."""
         return self.type.is_a(type_name)
+
+    def has_facet(self, facet_name: str) -> bool:
+        """True if the type OR an instance facet is named *facet_name*."""
+        if self.type.has_facet(facet_name):
+            return True
+        for facet in self.facets:
+            if facet.name == facet_name or facet.has_facet(facet_name):
+                return True
+        return False
+
+    def is_disjoint_with(self, other_name: str) -> bool:
+        """True if this entity's type is declared disjoint from *other_name*."""
+        return self.type.is_disjoint_with(other_name)
 
     def to_dict(self) -> dict:
         """Serializable view (the shape a persistence layer will store)."""
@@ -316,21 +443,38 @@ class WorldModelRegistry:
 
     # ── entities ─────────────────────────────────────────────────────────────
     def instantiate(self, name: str, type_name: str,
-                    attributes: Optional[dict] = None) -> Entity:
+                    attributes: Optional[dict] = None,
+                    facets: Optional[list[str]] = None) -> Entity:
         """Create and register an :class:`Entity` of a registered type.
 
         Validates the type exists and the attribute dict conforms to the type's
-        resolved (inherited) schema. Returns the new entity and indexes it by
-        name (unique within the registry).
+        resolved (inherited + facet) schema. *facets* is an optional list of
+        registered type NAMES applied to this instance only (Phase 62) — e.g.
+        instantiate("Tesla Model 3", "Vehicle", facets=["Electronics"]) yields
+        an entity whose schema is Vehicle's chain union Electronics's chain.
+        Returns the new entity and indexes it by name (unique within the
+        registry).
         """
         entity_type = self._types.get(type_name)
         if entity_type is None:
             raise SchemaError(f"unknown entity type {type_name!r}")
         if name in self._entities:
             raise SchemaError(f"entity {name!r} already exists")
-        entity = Entity(name=name, type=entity_type, attributes=dict(attributes or {}))
+        facet_types: list[EntityType] = []
+        for fname in facets or []:
+            ft = self._types.get(fname)
+            if ft is None:
+                raise SchemaError(f"unknown facet type {fname!r}")
+            facet_types.append(ft)
+        entity = Entity(
+            name=name, type=entity_type,
+            attributes=dict(attributes or {}), facets=facet_types,
+        )
         self._entities[name] = entity
-        logger.info("WorldModel: instantiated %s :: %s", name, type_name)
+        logger.info(
+            "WorldModel: instantiated %s :: %s%s", name, type_name,
+            f" +facets[{','.join(facets)}]" if facets else "",
+        )
         return entity
 
     def get_entity(self, name: str) -> Optional[Entity]:
@@ -338,6 +482,30 @@ class WorldModelRegistry:
 
     def entities(self) -> list[str]:
         return sorted(self._entities)
+
+    # ── composition ──────────────────────────────────────────────────────────
+    def absorb(self, other: "WorldModelRegistry") -> "WorldModelRegistry":
+        """Merge another registry's types and entities into this one.
+
+        Used by the Phase 62 ontology loader to combine the data-driven
+        physical taxonomy (loaded from JSON) with the existing software
+        taxonomy (built by ``build_3d_software_world``) into a single registry,
+        so both coexist at runtime. Name collisions on types or entities raise
+        :class:`SchemaError` — absorb is a *merge*, never a silent overwrite.
+        """
+        for tname, etype in other._types.items():
+            if tname in self._types:
+                raise SchemaError(
+                    f"absorb: type {tname!r} already registered in target registry"
+                )
+            self._types[tname] = etype
+        for ename, entity in other._entities.items():
+            if ename in self._entities:
+                raise SchemaError(
+                    f"absorb: entity {ename!r} already registered in target registry"
+                )
+            self._entities[ename] = entity
+        return self
 
     # ── introspection ────────────────────────────────────────────────────────
     def describe(self, name: str) -> Optional[dict]:
