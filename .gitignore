@@ -18,3 +18,34 @@ backend_backup_phase35/
 # Throwaway databases from VELYNX_TEST_MODE test isolation
 backend/tests/data/_isolated/
 nul
+
+# Runtime databases
+*.db
+*.sqlite3
+backend/data/neural_links.json
+
+# Third-party nested repos (not part of this repository)
+kiro-gateway/
+searxng/
+
+# Experiment artifacts (code-derived, not committed)
+artifacts/experiments/
+artifacts/benchmarks/
+artifacts/output/
+artifacts/publication/
+
+# ChromaDB vector store
+**/chroma_db/
+
+# Python egg info
+*.egg-info/
+*.egg
+
+# IDE settings
+.idea/
+*.swp
+*.swo
+
+# OS files
+Thumbs.db
+Desktop.ini

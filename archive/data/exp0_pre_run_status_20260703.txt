@@ -1,0 +1,193 @@
+ M .commandcode/taste/taste.md
+ M .gitignore
+ M .opencode/opencode.json
+D  .velynx_data/brain_stem.db
+ D .velynx_data/brain_stem.db-shm
+ D .velynx_data/brain_stem.db-wal
+D  .velynx_data/predictive.db
+ M README.md
+D  backend/.velynx_data/brain_stem.db
+ M backend/app/db_bridge.py
+ M backend/app/pipeline.py
+ M backend/app/routes_query.py
+ M backend/app/streaming.py
+ M backend/chat.py
+ M backend/cli.py
+ M backend/cognition/scenario_engine.py
+ M backend/cognition/verify_phase50.py
+ M backend/conversation/context_compressor.py
+ M backend/conversation/dialogue_manager.py
+ M backend/data/neural_links.json
+ M backend/database/alembic/env.py
+ M backend/database/repositories.py
+ M backend/database/runtime_state.py
+ M backend/evaluation/adversarial_tests.py
+ M backend/evaluation/benchmark_runner.py
+ M backend/evaluation/cognition_benchmarks.py
+ M backend/evaluation/hallucination_detector.py
+ M backend/evaluation/memory_retrieval_tests.py
+ M backend/evaluation/planning_evaluator.py
+ M backend/evaluation/reality_checks.py
+ M backend/evaluation/reflection_evaluator.py
+ M backend/evaluation/runtime_profiler.py
+ M backend/evaluation/scenario_loader.py
+ M backend/evaluation/session_replay.py
+ M backend/evaluation/stability_monitor.py
+ M backend/evaluation/trial_runner.py
+ M backend/knowledge/knowledge_engine.py
+ M backend/learning/online_learner.py
+ M backend/learning/strategy_optimizer.py
+ M backend/main.py
+ M backend/metacognition/adaptation_engine.py
+ M backend/metacognition/cognition_metrics.py
+ M backend/metacognition/confidence_calibrator.py
+ M backend/metacognition/meta_monitor.py
+ M backend/metacognition/pattern_analyzer.py
+ M backend/metacognition/strategy_analyzer.py
+ M backend/ops/health_monitor.py
+ M backend/ops/resource_manager.py
+ M backend/ops/runtime_snapshots.py
+ M backend/ops/runtime_supervisor.py
+ M backend/ops/token_budget_manager.py
+ M backend/orchestrator.py
+ M backend/pipeline/constitution_loader.py
+ M backend/pipeline/inference_pipeline.py
+ M backend/pipeline/intent_engine.py
+ M backend/pipeline/seed_knowledge.py
+ M backend/reflection/confidence_estimator.py
+ M backend/reflection/improvement_engine.py
+ M backend/reflection/reasoning_audit.py
+ M backend/reflection/reflection_engine.py
+ M backend/runtime/event_bus.py
+ M backend/runtime/event_handlers.py
+ M backend/runtime/runtime_monitor.py
+D  backend/test_velynx.db
+D  backend/tests/backend/velynx_data/soul_graph/graph.db
+D  backend/tests/data/knowledge_graph.db
+ M backend/tests/test_agency.py
+ M backend/tests/test_belief_revision.py
+ M backend/tests/test_beliefs.py
+ M backend/tests/test_browser.py
+ M backend/tests/test_cognition.py
+ M backend/tests/test_constitution_active.py
+ M backend/tests/test_curiosity.py
+ M backend/tests/test_curriculum_expanded.py
+ M backend/tests/test_dialogue.py
+ M backend/tests/test_dynamic_agency.py
+ M backend/tests/test_episodic_memory.py
+ M backend/tests/test_evaluation.py
+ M backend/tests/test_event_system.py
+ M backend/tests/test_failure_triage.py
+ M backend/tests/test_fastpath_supersession.py
+ M backend/tests/test_feedback_ui.py
+ M backend/tests/test_full_loop_smoke.py
+ M backend/tests/test_harness_ram_reset.py
+ M backend/tests/test_health.py
+ M backend/tests/test_learning_api.py
+ M backend/tests/test_metacognition.py
+ M backend/tests/test_monologue.py
+ M backend/tests/test_ops.py
+ M backend/tests/test_permanence.py
+ M backend/tests/test_query.py
+ M backend/tests/test_reasoning_modes.py
+ M backend/tests/test_scenario_engine.py
+ M backend/tests/test_self_model.py
+ M backend/tests/test_semantic_grounding.py
+ M backend/tests/test_streaming.py
+ M backend/tests/test_terminal_drill.py
+ M backend/tests/test_trials.py
+ M backend/tests/test_wiki_client.py
+ M backend/tests/test_working_memory.py
+D  backend/velynx_data/episodes.db
+D  backend/velynx_data/episodic/episodes.db
+ D backend/velynx_data/episodic/episodes.db-shm
+ D backend/velynx_data/episodic/episodes.db-wal
+D  backend/velynx_data/knowledge_graph/graph.db
+D  backend/velynx_data/knowledge_graph/knowledge_graph.db
+D  backend/velynx_data/soul_graph/graph.db
+ D backend/velynx_data/soul_graph/graph.db-shm
+ D backend/velynx_data/soul_graph/graph.db-wal
+D  data/knowledge_graph.db
+ D data/knowledge_graph.db-shm
+ D data/knowledge_graph.db-wal
+D  data/memory_graph.db
+D  test_velynx.db
+D  velynx_identity.db
+D  velynx_state.db
+?? PROGRAM_D_RESEARCH_STATE_v0.1.md
+?? ablation_report.md
+?? active_failures.txt
+?? archive/
+?? artifacts/
+?? assumptions/
+?? backend/cognition/attention_modulator.py
+?? backend/cognition/candidate_generator.py
+?? backend/cognition/concept_birth.py
+?? backend/cognition/consolidation_tracker.py
+?? backend/cognition/decision_policy.py
+?? backend/cognition/memory_scheduler.py
+?? backend/cognition/replay_engine.py
+?? backend/cognition/vector_prediction_core.py
+?? backend/knowledge/chronicle_cli.py
+?? backend/knowledge/epistemic_manager.py
+?? backend/knowledge/temporal_filter.py
+?? backend/knowledge/time_machine_cli.py
+?? backend/nlp/
+?? backend/simulation/analyze_logs.py
+?? backend/simulation/interface.py
+?? backend/simulation/logger.py
+?? backend/simulation/logs/
+?? backend/tests/test_concept_birth.py
+?? backend/tests/test_simulation_engine.py
+?? backend/tests/test_temporal_filter.py
+?? backend/tests/test_temporal_parser.py
+?? baseline_failures.txt
+?? benchmark.py
+?? bootstrap_db.py
+?? cognitive_core.py
+?? cognitive_health.py
+?? cognitive_telemetry.py
+?? concept_birth.py
+?? concept_birth_debug.txt
+?? configs/
+?? db_check2.json
+?? dbpath.txt
+?? debug_triage.py
+?? dependency_graphs/
+?? docs/VELYNX_v2_PI_Review.md
+?? environment.py
+?? exp0_pre_run_diff_20260703.patch
+?? exp0_pre_run_status_20260703.txt
+?? experiments/EXP0/
+?? experiments/program_d_experiment_coverage_matrix.csv
+?? find_the_truth.py
+?? foundation/
+?? gcp-key.json.json
+?? generate_graph.py
+?? inspect_db.py
+?? inspect_module.py
+?? inspect_triple.py
+?? kiro-gateway/
+?? latent_cause_engine.py
+?? literature/
+?? migrate_phase64.py
+?? parameter_atlas.md
+?? peek_code.py
+?? program_c_diagram.mmd
+?? program_c_graph.graphml
+?? reduction/
+?? research/
+?? research_artifacts/
+?? research_benchmark.py
+?? research_policy_benchmark_r2a.py
+?? reviews/
+?? scripts/_check_prefixes.py
+?? scripts/_find_bare_imports.py
+?? scripts/_fix_imports.py
+?? test_c8_control_upgrade.py
+?? test_c8_decision_policy.py
+?? test_replay_engine_vitals_r3c.py
+?? test_shared_metrics_v1.py
+?? validation/
+?? velynx/graph/curiosity_engine_v2.py
+?? ~/

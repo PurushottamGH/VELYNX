@@ -1,0 +1,15 @@
+{
+  "schema_version": "exp0.1",
+  "dataset": {
+    "concepts_json_sha256": "55b54f281a894cdd808e9eae4fa1db374719c3b21842b09a31001d004065dc87",
+    "paraphrases_json_sha256": "6a33aefd68d16a6e64cf0d1c943e55ccdaccea53d92b04fedd0e7aa58d71ddee",
+    "item_count": 32
+  },
+  "seed": 1,
+  "alpha_before_correction": 0.01,
+  "tiers_run": [
+    1,
+    2
+  ],
+  "run_dir": "C:\\Users\\Purushottam\\Documents\\VELYNX\\experiments\\EXP0\\artifacts\\run_20260703T074034Z_seed1_tier12"
+}

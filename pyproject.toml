@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools>=64.0", "wheel"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "velynx"
+version = "0.1.0"
+description = "Predictive Processing Cognitive Architecture"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+authors = [
+    {name = "Program D Team"},
+]
+dynamic = ["dependencies"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+
+[tool.setuptools.packages.find]
+include = [
+    "core*",
+    "experiments*",
+    "validation*",
+    "benchmarks*",
+    "scripts*",
+]
+exclude = ["archive*", "backend*", "data*", "docs*"]
+
+[tool.pytest.ini_options]
+testpaths = [
+    "tests",
+    "validation",
+    "research/tests",
+    "experiments",
+]
+filterwarnings = ["ignore::DeprecationWarning"]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "smoke: marks tests as smoke tests",
+]
+
+[tool.coverage.run]
+source = ["core", "experiments", "validation", "benchmarks"]
+omit = ["*/tests/*", "*/__pycache__/*"]
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+
+[tool.flake8]
+max-line-length = 100
+extend-ignore = ["E203", "W503"]

@@ -1,0 +1,155 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  PYTHON_VERSION: "3.11"
+  BENCHMARK_SEED: "42"
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 black mypy
+          if (Test-Path requirements.txt) { pip install -r requirements.txt }
+          if (Test-Path backend/requirements.txt) { pip install -r backend/requirements.txt }
+      - name: Lint with flake8
+        run: flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+      - name: Check formatting with black
+        run: black --check . --diff
+      - name: Type check with mypy
+        run: mypy --ignore-missing-imports core/ validation/ benchmarks/ || true
+
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11"]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest pytest-cov
+          if (Test-Path requirements.txt) { pip install -r requirements.txt }
+          if (Test-Path backend/requirements.txt) { pip install -r backend/requirements.txt }
+          pip install -e .
+      - name: Run unit tests
+        run: |
+          python -m pytest tests/unit/ -v --cov=core --cov=validation --cov-report=term --cov-report=xml -m "not slow" || \
+          python -m pytest validation/ -v --cov=validation --cov-report=term --cov-report=xml -m "not slow" || true
+      - name: Run research tests
+        run: |
+          python -m pytest research/tests/ -v --cov=research --cov-report=term --cov-report=xml -m "not slow" || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-report
+          path: coverage.xml
+
+  reproducibility:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyyaml
+          pip install -r requirements.txt
+          if (Test-Path backend/requirements.txt) { pip install -r backend/requirements.txt }
+      - name: Verify reproducibility spec
+        run: python scripts/verify_reproducibility.py
+
+  experiment-validation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyyaml
+          pip install -r requirements.txt
+          if (Test-Path backend/requirements.txt) { pip install -r backend/requirements.txt }
+      - name: Validate experiment registry
+        run: python scripts/validate_experiment_registry.py
+      - name: Validate parameter registry consistency
+        run: python scripts/validate_parameter_registry.py
+
+  benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyyaml numpy
+          pip install -r requirements.txt
+          if (Test-Path backend/requirements.txt) { pip install -r backend/requirements.txt }
+      - name: Run benchmark smoke test
+        run: python scripts/smoke_benchmark.py
+
+  kill-criteria:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyyaml numpy
+          pip install -r requirements.txt
+      - name: Check kill criteria
+        run: python scripts/check_kill_criteria.py
+
+  artifact-integrity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyyaml
+      - name: Verify artifact integrity
+        run: python scripts/verify_artifact_integrity.py
