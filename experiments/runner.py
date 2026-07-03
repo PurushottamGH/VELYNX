@@ -64,12 +64,27 @@ def run_experiment(experiment_id, config_override=None, seed=None):
     }
     _write_json(output_dir / "manifest.json", manifest)
 
+    status = entry.get("status", "unknown")
+    if status in ("planned", "gated", "archived"):
+        print(f"[{experiment_id}] Status is '{status}' — skipping")
+        manifest["status"] = "skipped"
+        manifest["reason"] = f"Experiment status is '{status}'"
+        _write_json(output_dir / "manifest.json", manifest)
+        return
+
     print(f"[{experiment_id}] Starting run {run_id}")
     print(f"[{experiment_id}] Seed: {env['BENCHMARK_SEED']}")
     print(f"[{experiment_id}] Output: {output_dir}")
 
+    entry_point = experiment_dir / "run.py"
+    if not entry_point.exists():
+        manifest["status"] = "failed"
+        manifest["error"] = f"run.py not found in {experiment_dir}"
+        _write_json(output_dir / "manifest.json", manifest)
+        print(f"[{experiment_id}] Error: run.py not found in {experiment_dir}")
+        return
+
     try:
-        entry_point = experiment_dir / "run.py"
         spec = importlib.util.spec_from_file_location(f"experiments.{experiment_id}.run", entry_point)
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)

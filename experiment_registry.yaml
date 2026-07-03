@@ -1,0 +1,65 @@
+experiment_registry:
+  E0:
+    name: Emergence-vs-injection discrimination
+    hypothesis: H*
+    status: running
+    location: experiments/E0/
+    source: experiments/EXP0/
+    description: "Central experiment that decides H* \u2014 emergence vs injection\
+      \ on nonlinear-latent stream"
+    components:
+    - cognitive_core.py
+    - environment.py
+    - latent_cause_engine.py
+    - validation/metrics.py
+  R1:
+    name: Free-energy consolidation policy ablation
+    hypothesis: H*
+    status: archived
+    location: experiments/R1/
+    description: 72 experiments, already run. Free-energy consolidation policy ablation. Artifacts in research/.
+    note: No run.py — status indicates these were completed externally via research/runner.py
+    components:
+    - backend/cognition/decision_policy.py
+    - backend/cognition/replay_engine.py
+  R3F:
+    name: R3F1 formal benchmark suite
+    hypothesis: H*
+    status: planned
+    location: experiments/R3F/
+    description: Formal benchmark suite for cognitive capabilities
+    components:
+    - benchmarks/
+  EXP1:
+    name: Calibration curve
+    hypothesis: H1
+    status: planned
+    location: experiments/EXP1/
+    description: "H1 \u2014 ECE < 0.1 calibration test"
+    components:
+    - program_a/
+  EXP2:
+    name: Affective indexing test
+    hypothesis: H2
+    status: planned
+    location: experiments/EXP2/
+    description: "H2 \u2014 framed vs unframed affective indexing"
+    components:
+    - program_b/
+  EXP3:
+    name: Minimal predictive organism
+    hypothesis: H3
+    status: planned
+    location: experiments/EXP3/
+    description: "H3 \u2014 emergent development in minimal predictive organism"
+    components:
+    - core/predictors/
+    - core/emergence/
+  EXP4:
+    name: Cycle bootstrapping
+    hypothesis: H3
+    status: gated
+    location: experiments/EXP4/
+    description: Cycle bootstrapping gated behind EXP-3
+    components:
+    - core/mdl/
