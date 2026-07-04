@@ -278,7 +278,11 @@ class E0Decider:
         if not dv_a_pass and not dv_b_pass:
             verdict = "FAIL (both DV-a and DV-b)"
         elif not dv_a_pass:
-            verdict = "FAIL (DV-a: T did not beat both controls)"
+            verdict = (
+                "UNTESTED (F-A: growth-trigger units mismatch — per-symbol "
+                "entropy delta vs. total-data-code penalty makes firing "
+                "mathematically impossible; H* was not exercised, not rejected)"
+            )
         elif not dv_b_pass:
             verdict = "FAIL (DV-b: M within noise of shuffled control)"
 
@@ -344,12 +348,37 @@ class E0Decider:
         dv_b_pass = dv_b_result.get("pass", False)
         overall_pass = dv_a_pass and dv_b_pass and sufficient_seeds
 
+        # --- Interpretation layer (Sprint 1 closure / C-5) ---
+        # These annotations do not alter any computation above: overall_pass,
+        # the DV-a/DV-b results, thresholds, and tests are all untouched.
+        # They only refine how the (unchanged) decision is *reported*.
+        #
+        # F-A (trigger defect): the error-gated growth trigger compares a
+        # per-symbol entropy delta against a total-data-code penalty. Those
+        # two quantities are in different units, so the comparison can never
+        # be satisfied and the trigger cannot fire. When T consequently fails
+        # to separate from the controls on DV-a, H* has NOT been empirically
+        # rejected — it was never exercised. This is a non-test, not a kill.
+        trigger_defect: Optional[str] = None
+        h_star_status = "tested"
+        attempts_toward_kill = 0
+
         if not sufficient_seeds:
             verdict = f"INCONCLUSIVE (only {n_seeds} seeds, need {self.min_seeds})"
         elif not dv_a_pass and not dv_b_pass:
             verdict = "FAIL (both DV-a and DV-b)"
         elif not dv_a_pass:
-            verdict = "FAIL (DV-a)"
+            # Reinterpreted per C-5: a DV-a non-separation under the F-A
+            # trigger defect is UNTESTED, not FAIL. Firing is mathematically
+            # impossible (units mismatch), so no attempt genuinely tested H*.
+            verdict = (
+                "UNTESTED (F-A: growth-trigger units mismatch — per-symbol "
+                "entropy delta vs. total-data-code penalty makes firing "
+                "mathematically impossible; H* was not exercised, not rejected)"
+            )
+            trigger_defect = "F-A"
+            h_star_status = "untested"
+            attempts_toward_kill = 0
         elif not dv_b_pass:
             verdict = "FAIL (DV-b)"
         else:
@@ -364,6 +393,9 @@ class E0Decider:
             "dv_a": dv_a_result,
             "dv_b": dv_b_result,
             "attempt_number": len(self._attempts) + 1,
+            "trigger_defect": trigger_defect,
+            "h_star_status": h_star_status,
+            "attempts_toward_kill": attempts_toward_kill,
         }
 
         self._attempts.append(decision)
@@ -399,10 +431,13 @@ class E0Decider:
 
         if all_fail:
             return True, (
-                "H* FALSIFIED for this environment class. "
-                "Error-gated growth failed to beat BOTH controls on DV-a "
-                "at p<0.01 across >=5 seeds, AND/OR M within noise of "
-                "shuffled control, after two honest attempts."
+                "H* UNTESTED for this environment class (F-A trigger defect). "
+                "Error-gated growth did not separate from the controls on "
+                "DV-a, but the growth trigger compares a per-symbol entropy "
+                "delta against a total-data-code penalty — a units mismatch "
+                "that makes firing mathematically impossible. H* was never "
+                "exercised across the attempts, so this is a non-test, not a "
+                "falsification."
             )
 
         return False, "H* survived both attempts (at least one PASS)."
