@@ -1,8 +1,0 @@
-{
-  "class": "RandomPolicy",
-  "description": "Merge two uniformly-random clusters (commits unconditionally).",
-  "deterministic": false,
-  "module": "research.policies.random_policy",
-  "name": "random",
-  "params": {}
-}

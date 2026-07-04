@@ -1,8 +1,0 @@
-{
-  "class": "FIFOAgePolicy",
-  "description": "Merge the two oldest surviving clusters (commits unconditionally).",
-  "deterministic": true,
-  "module": "research.policies.fifo",
-  "name": "fifo",
-  "params": {}
-}

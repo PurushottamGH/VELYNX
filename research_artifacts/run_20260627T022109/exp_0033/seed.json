@@ -1,6 +1,0 @@
-{
-  "deterministic_selection": true,
-  "master_seed": 3,
-  "policy_rng_seed": 3,
-  "sensor_seed": 4
-}

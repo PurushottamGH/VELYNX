@@ -49,3 +49,10 @@ artifacts/publication/
 # OS files
 Thumbs.db
 Desktop.ini
+
+# Research artifacts (derived data, not source)
+research_artifacts/
+
+# SQLite WAL/SHM journal files (generated at runtime, not portable)
+*.db-shm
+*.db-wal

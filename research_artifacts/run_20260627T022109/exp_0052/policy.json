@@ -1,8 +1,0 @@
-{
-  "class": "UtilityPolicy",
-  "description": "Merge the two lowest-utility clusters by access frequency (commits unconditionally).",
-  "deterministic": true,
-  "module": "research.policies.utility",
-  "name": "utility",
-  "params": {}
-}
