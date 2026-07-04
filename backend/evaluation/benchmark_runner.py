@@ -5,7 +5,7 @@ import logging
 import time
 from typing import Any, Callable, Awaitable
 
-from evaluation import (
+from backend.evaluation import (
     BenchmarkResult,
     BenchmarkSuiteResult,
     TestScenario,

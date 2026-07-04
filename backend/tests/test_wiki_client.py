@@ -1,4 +1,4 @@
-from retrieval import wiki_client
+from backend.retrieval import wiki_client
 
 
 def test_parse_results_strips_html_and_builds_url() -> None:

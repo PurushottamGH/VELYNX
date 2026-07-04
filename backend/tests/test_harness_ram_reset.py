@@ -33,8 +33,8 @@ for _p in (str(_BACKEND_DIR), str(_REPO_ROOT)):
 
 import pytest  # noqa: E402
 
-from conversation.beliefs import BeliefStore, belief_store  # noqa: E402
-from conversation.working_memory import ConversationBuffer, ConversationTurn  # noqa: E402
+from backend.conversation.beliefs import BeliefStore, belief_store  # noqa: E402
+from backend.conversation.working_memory import ConversationBuffer, ConversationTurn  # noqa: E402
 from backend.memory.working_memory import working_memory_manager  # noqa: E402
 from backend.tests.live_fire_harness import _drop_ram_singletons  # noqa: E402
 

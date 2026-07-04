@@ -8,11 +8,11 @@ from pathlib import Path
 
 sys.path.append(str(Path(__file__).resolve().parent))
 
-from app.pipeline import answer_question  # noqa: E402
-from learning.curriculum import get_lesson, next_lesson, resolve_foundation_seed_answer, score_answer  # noqa: E402
-from learning.online_learner import learn_from_feedback  # noqa: E402
-from learning.permanence import _DEFAULT_PERMANENCE  # noqa: E402
-from memory.session import SessionMemory  # noqa: E402
+from backend.app.pipeline import answer_question  # noqa: E402
+from backend.learning.curriculum import get_lesson, next_lesson, resolve_foundation_seed_answer, score_answer  # noqa: E402
+from backend.learning.online_learner import learn_from_feedback  # noqa: E402
+from backend.learning.permanence import _DEFAULT_PERMANENCE  # noqa: E402
+from backend.memory.session import SessionMemory  # noqa: E402
 
 
 def teach_lesson(

@@ -4,7 +4,7 @@ import importlib
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
-from learning import permanence
+from backend.learning import permanence
 
 
 def test_permanence_persistence(tmp_path, monkeypatch) -> None:

@@ -8,18 +8,18 @@ import pytest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from ops import (
+from backend.ops import (
     SubsystemHealth, HealthReport, CircuitState, ResourceSnapshot,
     TokenBudget, DeploymentProfile, PROFILES,
 )
-from ops.circuit_breakers import CircuitBreaker, CircuitOpenError
-from ops.load_shedding import LoadShedder, LoadShedError
-from ops.token_budget_manager import TokenBudgetManager
-from ops.resource_manager import ResourceManager
-from ops.runtime_snapshots import RuntimeSnapshotter
-from ops.observability import ObservabilityManager
-from ops.failure_recovery import FailureRecovery
-from ops.runtime_supervisor import RuntimeSupervisor
+from backend.ops.circuit_breakers import CircuitBreaker, CircuitOpenError
+from backend.ops.load_shedding import LoadShedder, LoadShedError
+from backend.ops.token_budget_manager import TokenBudgetManager
+from backend.ops.resource_manager import ResourceManager
+from backend.ops.runtime_snapshots import RuntimeSnapshotter
+from backend.ops.observability import ObservabilityManager
+from backend.ops.failure_recovery import FailureRecovery
+from backend.ops.runtime_supervisor import RuntimeSupervisor
 
 
 # ── Model Tests ──────────────────────────────────────────────────

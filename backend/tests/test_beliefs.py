@@ -7,7 +7,7 @@ import pytest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from conversation.beliefs import Belief, BeliefStore, BeliefStatus, belief_store
+from backend.conversation.beliefs import Belief, BeliefStore, BeliefStatus, belief_store
 
 
 @pytest.fixture

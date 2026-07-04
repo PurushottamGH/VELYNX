@@ -1,0 +1,326 @@
+[
+  {
+    "accepted": true,
+    "distance": 0.7175391049822288,
+    "energy_after": 27.07034834995857,
+    "energy_before": 27.586166777207495,
+    "energy_delta": 0.5158184272489237,
+    "entropy_delta": 0.02675724548648084,
+    "load_delta": 1.0,
+    "policy": "random",
+    "prediction_delta": -0.0054694091187788285,
+    "reason": "random: commit unconditionally",
+    "strategy": "random",
+    "targets": [
+      3,
+      5
+    ],
+    "tick": 387
+  },
+  {
+    "accepted": true,
+    "distance": 0.47178673326088316,
+    "energy_after": 27.091405404979394,
+    "energy_before": 27.546342911551235,
+    "energy_delta": 0.4549375065718415,
+    "entropy_delta": -0.042724265430738484,
+    "load_delta": 1.0,
+    "policy": "random",
+    "prediction_delta": -0.0011691139987106414,
+    "reason": "random: commit unconditionally",
+    "strategy": "random",
+    "targets": [
+      7,
+      25
+    ],
+    "tick": 387
+  },
+  {
+    "accepted": true,
+    "distance": 0.8206724565084526,
+    "energy_after": 27.101791192608722,
+    "energy_before": 27.588252291028237,
+    "energy_delta": 0.48646109841951457,
+    "entropy_delta": -0.010762359045609848,
+    "load_delta": 1.0,
+    "policy": "random",
+    "prediction_delta": -0.001388271267437291,
+    "reason": "random: commit unconditionally",
+    "strategy": "random",
+    "targets": [
+      13,
+      51
+    ],
+    "tick": 387
+  },
+  {
+    "accepted": true,
+    "distance": 0.46583346723701846,
+    "energy_after": 27.161140748757234,
+    "energy_before": 27.641298588971612,
+    "energy_delta": 0.48015784021437824,
+    "entropy_delta": -0.020216520534191762,
+    "load_delta": 1.0,
+    "policy": "random",
+    "prediction_delta": 0.00018718037428541723,
+    "reason": "random: commit unconditionally",
+    "strategy": "random",
+    "targets": [
+      47,
+      23
+    ],
+    "tick": 453
+  },
+  {
+    "accepted": true,
+    "distance": 0.287343274447175,
+    "energy_after": 27.151243549444306,
+    "energy_before": 27.651202367468322,
+    "energy_delta": 0.499958818024016,
+    "entropy_delta": 0.0,
+    "load_delta": 1.0,
+    "policy": "random",
+    "prediction_delta": -2.0590987991508936e-05,
+    "reason": "random: commit unconditionally",
+    "strategy": "random",
+    "targets": [
+      20,
+      44
+    ],
+    "tick": 453
+  },
+  {
+    "accepted": true,
+    "distance": 0.6966016893524848,
+    "energy_after": 27.14044903709681,
+    "energy_before": 27.62036155187922,
+    "energy_delta": 0.47991251478240926,
+    "entropy_delta": -0.016692916490664178,
+    "load_delta": 1.0,
+    "policy": "random",
+    "prediction_delta": -0.0016972843634636137,
+    "reason": "random: commit unconditionally",
+    "strategy": "random",
+    "targets": [
+      17,
+      46
+    ],
+    "tick": 453
+  },
+  {
+    "accepted": true,
+    "distance": 0.6965187657232622,
+    "energy_after": 27.079746162896846,
+    "energy_before": 27.611970815135663,
+    "energy_delta": 0.532224652238817,
+    "entropy_delta": 0.04580880126794762,
+    "load_delta": 1.0,
+    "policy": "random",
+    "prediction_delta": -0.006792074514566454,
+    "reason": "random: commit unconditionally",
+    "strategy": "random",
+    "targets": [
+      2,
+      48
+    ],
+    "tick": 504
+  },
+  {
+    "accepted": true,
+    "distance": 0.810116412131199,
+    "energy_after": 27.059708010143083,
+    "energy_before": 27.557077126565588,
+    "energy_delta": 0.4973691164225045,
+    "entropy_delta": 0.004295241066700317,
+    "load_delta": 1.0,
+    "policy": "random",
+    "prediction_delta": -0.0034630623220972823,
+    "reason": "random: commit unconditionally",
+    "strategy": "random",
+    "targets": [
+      57,
+      15
+    ],
+    "tick": 504
+  },
+  {
+    "accepted": true,
+    "distance": 0.7252725188238405,
+    "energy_after": 27.04496079668721,
+    "energy_before": 27.523974107113144,
+    "energy_delta": 0.479013310425934,
+    "entropy_delta": -0.02050039876368448,
+    "load_delta": 1.0,
+    "policy": "random",
+    "prediction_delta": -0.00024314540518996508,
+    "reason": "random: commit unconditionally",
+    "strategy": "random",
+    "targets": [
+      37,
+      55
+    ],
+    "tick": 504
+  },
+  {
+    "accepted": true,
+    "distance": 0.553199415221854,
+    "energy_after": 27.121337092594903,
+    "energy_before": 27.592438236739792,
+    "energy_delta": 0.4711011441448889,
+    "entropy_delta": -0.026065783958256983,
+    "load_delta": 1.0,
+    "policy": "random",
+    "prediction_delta": -0.0014165359484276385,
+    "reason": "random: commit unconditionally",
+    "strategy": "random",
+    "targets": [
+      35,
+      64
+    ],
+    "tick": 555
+  },
+  {
+    "accepted": true,
+    "distance": 0.4705049439970505,
+    "energy_after": 27.121658697451217,
+    "energy_before": 27.594784055170884,
+    "energy_delta": 0.4731253577196668,
+    "entropy_delta": -0.024185472323150048,
+    "load_delta": 1.0,
+    "policy": "random",
+    "prediction_delta": -0.0013445849785923558,
+    "reason": "random: commit unconditionally",
+    "strategy": "random",
+    "targets": [
+      45,
+      33
+    ],
+    "tick": 555
+  },
+  {
+    "accepted": true,
+    "distance": 0.7695071267560697,
+    "energy_after": 27.099005581268802,
+    "energy_before": 27.597821646756188,
+    "energy_delta": 0.4988160654873859,
+    "entropy_delta": 0.0,
+    "load_delta": 1.0,
+    "policy": "random",
+    "prediction_delta": -0.0005919672563062806,
+    "reason": "random: commit unconditionally",
+    "strategy": "random",
+    "targets": [
+      53,
+      41
+    ],
+    "tick": 555
+  },
+  {
+    "accepted": true,
+    "distance": 0.5996331735453763,
+    "energy_after": 27.145736473125623,
+    "energy_before": 27.651505320517565,
+    "energy_delta": 0.5057688473919413,
+    "entropy_delta": 0.006888490034720363,
+    "load_delta": 1.0,
+    "policy": "random",
+    "prediction_delta": -0.0005598213213891812,
+    "reason": "random: commit unconditionally",
+    "strategy": "random",
+    "targets": [
+      52,
+      27
+    ],
+    "tick": 606
+  },
+  {
+    "accepted": true,
+    "distance": 0.5529955960417688,
+    "energy_after": 27.151392945258213,
+    "energy_before": 27.632778075896336,
+    "energy_delta": 0.4813851306381238,
+    "entropy_delta": -0.013153023805128061,
+    "load_delta": 1.0,
+    "policy": "random",
+    "prediction_delta": -0.0027309227783743895,
+    "reason": "random: commit unconditionally",
+    "strategy": "random",
+    "targets": [
+      4,
+      1
+    ],
+    "tick": 606
+  },
+  {
+    "accepted": true,
+    "distance": 0.5521700435811311,
+    "energy_after": 27.160305743153152,
+    "energy_before": 27.62257461795948,
+    "energy_delta": 0.46226887480632683,
+    "entropy_delta": -0.031038408813645724,
+    "load_delta": 1.0,
+    "policy": "random",
+    "prediction_delta": -0.0033463581900125827,
+    "reason": "random: commit unconditionally",
+    "strategy": "random",
+    "targets": [
+      39,
+      54
+    ],
+    "tick": 606
+  },
+  {
+    "accepted": true,
+    "distance": 0.8974876675275307,
+    "energy_after": 27.066043638795232,
+    "energy_before": 27.559017918606912,
+    "energy_delta": 0.49297427981167985,
+    "entropy_delta": -0.000989884309352096,
+    "load_delta": 1.0,
+    "policy": "random",
+    "prediction_delta": -0.003017917939483944,
+    "reason": "random: commit unconditionally",
+    "strategy": "random",
+    "targets": [
+      34,
+      42
+    ],
+    "tick": 673
+  },
+  {
+    "accepted": true,
+    "distance": 1.0160279353693615,
+    "energy_after": 27.085811658683177,
+    "energy_before": 27.54932632310988,
+    "energy_delta": 0.46351466442670386,
+    "entropy_delta": -0.01666625778135744,
+    "load_delta": 1.0,
+    "policy": "random",
+    "prediction_delta": -0.009909538895970016,
+    "reason": "random: commit unconditionally",
+    "strategy": "random",
+    "targets": [
+      58,
+      65
+    ],
+    "tick": 673
+  },
+  {
+    "accepted": true,
+    "distance": 0.8091102188339926,
+    "energy_after": 27.08272662284176,
+    "energy_before": 27.58146839915334,
+    "energy_delta": 0.49874177631157934,
+    "entropy_delta": 0.0,
+    "load_delta": 1.0,
+    "policy": "random",
+    "prediction_delta": -0.0006291118442097454,
+    "reason": "random: commit unconditionally",
+    "strategy": "random",
+    "targets": [
+      19,
+      69
+    ],
+    "tick": 673
+  }
+]

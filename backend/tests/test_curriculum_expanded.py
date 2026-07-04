@@ -15,7 +15,7 @@ def _load_raw_curriculum() -> dict:
 
 
 # Patch the curriculum module to use the real JSON file before importing
-import learning.curriculum as _cur_mod
+import backend.learning.curriculum as _cur_mod
 _cur_mod.CURRICULUM_PATH = _CURRICULUM_JSON
 _JSON_CURRICULUM, _JSON_STAGES = _cur_mod._load_curriculum_from_json(_CURRICULUM_JSON)
 if _JSON_CURRICULUM:
@@ -23,7 +23,7 @@ if _JSON_CURRICULUM:
     _cur_mod.STAGES = _JSON_STAGES
     _cur_mod.LESSONS_BY_ID = {lesson.id: lesson for lesson in _JSON_CURRICULUM}
 
-from learning.curriculum import (  # noqa: E402
+from backend.learning.curriculum import (  # noqa: E402
     CURRICULUM,
     LESSONS_BY_ID,
     STAGES,
@@ -33,7 +33,7 @@ from learning.curriculum import (  # noqa: E402
     prerequisites_met,
     score_answer,
 )
-from learning.permanence import PermanenceLayer  # noqa: E402
+from backend.learning.permanence import PermanenceLayer  # noqa: E402
 
 
 # ── Stage coverage ──────────────────────────────────────────────

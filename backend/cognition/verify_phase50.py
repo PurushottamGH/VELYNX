@@ -8,9 +8,9 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from memory._sqlite import canonical_db_path
+from backend.memory._sqlite import canonical_db_path
 
-from cognition.predictive_core import (
+from backend.cognition.predictive_core import (
     ensure_schema,
     _get_conn,
     _now_iso,

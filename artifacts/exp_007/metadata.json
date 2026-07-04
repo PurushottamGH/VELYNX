@@ -1,0 +1,27 @@
+{
+  "experiment_name": "env_noisy",
+  "config": {
+    "dataset_name": "environment",
+    "seed": 7,
+    "num_ticks": 5000,
+    "noise_sigma": 0.15,
+    "tolerance": 0.05,
+    "proximity_threshold": 0.28,
+    "experiment_name": "env_noisy",
+    "baseline": null,
+    "artifacts_root": null,
+    "critical_metrics": null,
+    "metrics": {
+      "EntropyMetric": 4.267671280709428,
+      "SurpriseMetric": 0.1529810435492622,
+      "ActiveLoadMetric": 50.351661806518784,
+      "CognitiveEnergyMetric": 29.749464271067346
+    }
+  },
+  "result": {
+    "passed": true,
+    "improvements": {},
+    "regressions": {},
+    "summary": "REGRESSION GATE: PASS (tolerance 5.0%)\n  No measured change across shared metrics."
+  }
+}

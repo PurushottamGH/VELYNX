@@ -1,0 +1,56 @@
+[
+  {
+    "accepted": true,
+    "distance": 0.17596115101927656,
+    "energy_after": 4.165933758441367,
+    "energy_before": 4.862910593217652,
+    "energy_delta": 0.6969768347762848,
+    "entropy_delta": 0.210727326213007,
+    "load_delta": 1.0,
+    "policy": "similarity",
+    "prediction_delta": -0.006875245718361109,
+    "reason": "similarity: commit nearest pair unconditionally",
+    "strategy": "similarity",
+    "targets": [
+      0,
+      6
+    ],
+    "tick": 499
+  },
+  {
+    "accepted": true,
+    "distance": 0.20792270858121484,
+    "energy_after": 3.6659337584413674,
+    "energy_before": 4.165933758441367,
+    "energy_delta": 0.5,
+    "entropy_delta": 0.0,
+    "load_delta": 1.0,
+    "policy": "similarity",
+    "prediction_delta": 0.0,
+    "reason": "similarity: commit nearest pair unconditionally",
+    "strategy": "similarity",
+    "targets": [
+      5,
+      7
+    ],
+    "tick": 499
+  },
+  {
+    "accepted": true,
+    "distance": 0.23018548141263484,
+    "energy_after": 3.0732164465448313,
+    "energy_before": 3.6659337584413674,
+    "energy_delta": 0.5927173118965361,
+    "entropy_delta": 0.13006613986446325,
+    "load_delta": 1.0,
+    "policy": "similarity",
+    "prediction_delta": -0.018674413983963564,
+    "reason": "similarity: commit nearest pair unconditionally",
+    "strategy": "similarity",
+    "targets": [
+      3,
+      8
+    ],
+    "tick": 499
+  }
+]

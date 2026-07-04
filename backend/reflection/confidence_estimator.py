@@ -1,7 +1,7 @@
 """Confidence estimator — recalibrates confidence based on reasoning quality signals."""
 from __future__ import annotations
 
-from reflection import ConfidenceEstimate
+from backend.reflection import ConfidenceEstimate
 
 _CONFIDENCE_LEVELS = ["CERTAIN", "PROBABLE", "DEBATED", "LOW", "UNKNOWN"]
 _CONFIDENCE_VALUES = {"CERTAIN": 0.9, "PROBABLE": 0.7, "DEBATED": 0.5, "LOW": 0.3, "UNKNOWN": 0.1}

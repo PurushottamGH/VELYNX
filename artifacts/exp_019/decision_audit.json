@@ -1,0 +1,1445 @@
+[
+  {
+    "tick": 499,
+    "targets": [
+      4,
+      15
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0015102511386162198,
+    "entropy_delta": -0.024606014835375944,
+    "load_delta": 1.0,
+    "energy_delta": 0.47237348288739156,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4724 (E 27.6613 → 27.1889, tol=0.0000)"
+  },
+  {
+    "tick": 499,
+    "targets": [
+      1,
+      21
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0009821150820524538,
+    "entropy_delta": -0.04243270015363532,
+    "load_delta": 1.0,
+    "energy_delta": 0.4556030696822617,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4556 (E 27.6846 → 27.2290, tol=0.0000)"
+  },
+  {
+    "tick": 499,
+    "targets": [
+      11,
+      12
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0017037119010752666,
+    "entropy_delta": -0.02156027163544394,
+    "load_delta": 1.0,
+    "energy_delta": 0.4750323045624043,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4750 (E 27.7176 → 27.2425, tol=0.0000)"
+  },
+  {
+    "tick": 798,
+    "targets": [
+      7,
+      24
+    ],
+    "accepted": true,
+    "prediction_delta": -0.00019706411872075225,
+    "entropy_delta": -0.008088645600185185,
+    "load_delta": 1.0,
+    "energy_delta": 0.49151722616237237,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4915 (E 27.7251 → 27.2336, tol=0.0000)"
+  },
+  {
+    "tick": 798,
+    "targets": [
+      2,
+      54
+    ],
+    "accepted": true,
+    "prediction_delta": -0.001916263803677709,
+    "entropy_delta": -0.0015402336002861006,
+    "load_delta": 1.0,
+    "energy_delta": 0.4946272387923578,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4946 (E 27.7182 → 27.2236, tol=0.0000)"
+  },
+  {
+    "tick": 798,
+    "targets": [
+      30,
+      32
+    ],
+    "accepted": true,
+    "prediction_delta": -0.00023996877591864196,
+    "entropy_delta": -0.006256846722796805,
+    "load_delta": 1.0,
+    "energy_delta": 0.4932632157253636,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4933 (E 27.7027 → 27.2094, tol=0.0000)"
+  },
+  {
+    "tick": 944,
+    "targets": [
+      42,
+      50
+    ],
+    "accepted": true,
+    "prediction_delta": -0.001356450466603848,
+    "entropy_delta": -0.009931021905815296,
+    "load_delta": 1.0,
+    "energy_delta": 0.4873560771609746,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4874 (E 27.6066 → 27.1192, tol=0.0000)"
+  },
+  {
+    "tick": 944,
+    "targets": [
+      6,
+      62
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0013385939415404002,
+    "entropy_delta": -0.03465626609165717,
+    "load_delta": 1.0,
+    "energy_delta": 0.4626665460252646,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4627 (E 27.6187 → 27.1560, tol=0.0000)"
+  },
+  {
+    "tick": 944,
+    "targets": [
+      29,
+      33
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0016637293257096009,
+    "entropy_delta": -0.03170827643750185,
+    "load_delta": 1.0,
+    "energy_delta": 0.4649642649110781,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4650 (E 27.6432 → 27.1783, tol=0.0000)"
+  },
+  {
+    "tick": 1087,
+    "targets": [
+      34,
+      64
+    ],
+    "accepted": true,
+    "prediction_delta": -0.003477033329168322,
+    "entropy_delta": -0.008015224628924233,
+    "load_delta": 1.0,
+    "energy_delta": 0.48503070871273835,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4850 (E 27.7577 → 27.2727, tol=0.0000)"
+  },
+  {
+    "tick": 1087,
+    "targets": [
+      36,
+      60
+    ],
+    "accepted": true,
+    "prediction_delta": -0.001993954613421528,
+    "entropy_delta": -0.008657157853726005,
+    "load_delta": 1.0,
+    "energy_delta": 0.487354932919434,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4874 (E 27.7727 → 27.2853, tol=0.0000)"
+  },
+  {
+    "tick": 1087,
+    "targets": [
+      14,
+      39
+    ],
+    "accepted": true,
+    "prediction_delta": -0.00010266525411511962,
+    "entropy_delta": 0.0,
+    "load_delta": 1.0,
+    "energy_delta": 0.49979466949176654,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4998 (E 27.7853 → 27.2856, tol=0.0000)"
+  },
+  {
+    "tick": 1232,
+    "targets": [
+      41,
+      44
+    ],
+    "accepted": true,
+    "prediction_delta": -0.000314557764754142,
+    "entropy_delta": -0.024395743579262774,
+    "load_delta": 1.0,
+    "energy_delta": 0.4749751408912317,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4750 (E 27.7158 → 27.2408, tol=0.0000)"
+  },
+  {
+    "tick": 1232,
+    "targets": [
+      35,
+      68
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0004300043083217686,
+    "entropy_delta": -0.01279146996561753,
+    "load_delta": 1.0,
+    "energy_delta": 0.48634852141773877,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4863 (E 27.7327 → 27.2463, tol=0.0000)"
+  },
+  {
+    "tick": 1232,
+    "targets": [
+      49,
+      58
+    ],
+    "accepted": true,
+    "prediction_delta": -0.001473963492210295,
+    "entropy_delta": 0.0006178545548447545,
+    "load_delta": 1.0,
+    "energy_delta": 0.4976699275704277,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4977 (E 27.7463 → 27.2487, tol=0.0000)"
+  },
+  {
+    "tick": 1412,
+    "targets": [
+      18,
+      56
+    ],
+    "accepted": true,
+    "prediction_delta": -0.001601202189337847,
+    "entropy_delta": -0.01834916811257914,
+    "load_delta": 1.0,
+    "energy_delta": 0.47844842750874506,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4784 (E 27.7892 → 27.3107, tol=0.0000)"
+  },
+  {
+    "tick": 1412,
+    "targets": [
+      16,
+      77
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0004313573919594027,
+    "entropy_delta": -0.009548414723065779,
+    "load_delta": 1.0,
+    "energy_delta": 0.4895888704930158,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4896 (E 27.8094 → 27.3198, tol=0.0000)"
+  },
+  {
+    "tick": 1412,
+    "targets": [
+      3,
+      37
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0004606884761635399,
+    "entropy_delta": -0.0012737625388443696,
+    "load_delta": 1.0,
+    "energy_delta": 0.497804860508829,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4978 (E 27.7919 → 27.2941, tol=0.0000)"
+  },
+  {
+    "tick": 1479,
+    "targets": [
+      83,
+      84
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0009284824553461024,
+    "entropy_delta": -0.01859582245650193,
+    "load_delta": 1.0,
+    "energy_delta": 0.47954721263280575,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4795 (E 27.8316 → 27.3520, tol=0.0000)"
+  },
+  {
+    "tick": 1479,
+    "targets": [
+      22,
+      52
+    ],
+    "accepted": true,
+    "prediction_delta": -0.000990862837361245,
+    "entropy_delta": -0.04179211576539865,
+    "load_delta": 1.0,
+    "energy_delta": 0.456226158559879,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4562 (E 27.8518 → 27.3956, tol=0.0000)"
+  },
+  {
+    "tick": 1479,
+    "targets": [
+      31,
+      43
+    ],
+    "accepted": true,
+    "prediction_delta": -0.002253460954356107,
+    "entropy_delta": -0.011380213600454603,
+    "load_delta": 1.0,
+    "energy_delta": 0.48411286449083235,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4841 (E 27.8925 → 27.4084, tol=0.0000)"
+  },
+  {
+    "tick": 1717,
+    "targets": [
+      70,
+      79
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0017547559290934378,
+    "entropy_delta": -0.021838048155468304,
+    "load_delta": 1.0,
+    "energy_delta": 0.4746524399863432,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4747 (E 27.8166 → 27.3419, tol=0.0000)"
+  },
+  {
+    "tick": 1717,
+    "targets": [
+      59,
+      85
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0019713291184602355,
+    "entropy_delta": 0.006467117978909087,
+    "load_delta": 1.0,
+    "energy_delta": 0.5025244597419878,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.5025 (E 27.8198 → 27.3173, tol=0.0000)"
+  },
+  {
+    "tick": 1717,
+    "targets": [
+      17,
+      90
+    ],
+    "accepted": true,
+    "prediction_delta": -0.001063469540501405,
+    "entropy_delta": 0.019293311945165925,
+    "load_delta": 1.0,
+    "energy_delta": 0.517166372864164,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.5172 (E 27.8173 → 27.3001, tol=0.0000)"
+  },
+  {
+    "tick": 1898,
+    "targets": [
+      78,
+      93
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0016372546285768896,
+    "entropy_delta": -0.01802287883483711,
+    "load_delta": 1.0,
+    "energy_delta": 0.4787026119080089,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4787 (E 27.6426 → 27.1639, tol=0.0000)"
+  },
+  {
+    "tick": 1898,
+    "targets": [
+      38,
+      51
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0011159512026086005,
+    "entropy_delta": -0.029845399734662603,
+    "load_delta": 1.0,
+    "energy_delta": 0.4679226978601214,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4679 (E 27.6505 → 27.1826, tol=0.0000)"
+  },
+  {
+    "tick": 1898,
+    "targets": [
+      66,
+      96
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0027405874544900455,
+    "entropy_delta": -0.03937287921416788,
+    "load_delta": 1.0,
+    "energy_delta": 0.45514594587685053,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4551 (E 27.6820 → 27.2268, tol=0.0000)"
+  },
+  {
+    "tick": 2073,
+    "targets": [
+      13,
+      91
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0016699783381319833,
+    "entropy_delta": -0.00217187691220877,
+    "load_delta": 1.0,
+    "energy_delta": 0.4944881664115286,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4945 (E 27.6470 → 27.1525, tol=0.0000)"
+  },
+  {
+    "tick": 2073,
+    "targets": [
+      101,
+      102
+    ],
+    "accepted": true,
+    "prediction_delta": -0.004464245126362759,
+    "entropy_delta": 0.035674016897623506,
+    "load_delta": 1.0,
+    "energy_delta": 0.5267455266448984,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.5267 (E 27.6356 → 27.1089, tol=0.0000)"
+  },
+  {
+    "tick": 2073,
+    "targets": [
+      27,
+      48
+    ],
+    "accepted": true,
+    "prediction_delta": 3.542024006733535e-05,
+    "entropy_delta": 0.016307097979078033,
+    "load_delta": 1.0,
+    "energy_delta": 0.5163779384592146,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.5164 (E 27.5940 → 27.0776, tol=0.0000)"
+  },
+  {
+    "tick": 2169,
+    "targets": [
+      46,
+      88
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0022262281269081474,
+    "entropy_delta": 0.017942414357432046,
+    "load_delta": 1.0,
+    "energy_delta": 0.5134899581036159,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.5135 (E 27.7433 → 27.2298, tol=0.0000)"
+  },
+  {
+    "tick": 2169,
+    "targets": [
+      89,
+      98
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0013698770417319428,
+    "entropy_delta": -0.06564361176319666,
+    "load_delta": 1.0,
+    "energy_delta": 0.43161663415334317,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4316 (E 27.7082 → 27.2766, tol=0.0000)"
+  },
+  {
+    "tick": 2169,
+    "targets": [
+      92,
+      106
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0030551417303987527,
+    "entropy_delta": -0.001926052111871801,
+    "load_delta": 1.0,
+    "energy_delta": 0.4919636644273311,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4920 (E 27.7557 → 27.2637, tol=0.0000)"
+  },
+  {
+    "tick": 2281,
+    "targets": [
+      65,
+      99
+    ],
+    "accepted": true,
+    "prediction_delta": -0.00047520540768539177,
+    "entropy_delta": -0.013843655789766096,
+    "load_delta": 1.0,
+    "energy_delta": 0.4852059333948624,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4852 (E 27.7751 → 27.2898, tol=0.0000)"
+  },
+  {
+    "tick": 2281,
+    "targets": [
+      23,
+      109
+    ],
+    "accepted": true,
+    "prediction_delta": -0.00019224102669027077,
+    "entropy_delta": -0.013843655789766096,
+    "load_delta": 1.0,
+    "energy_delta": 0.4857718621568523,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4858 (E 27.7898 → 27.3041, tol=0.0000)"
+  },
+  {
+    "tick": 2281,
+    "targets": [
+      10,
+      26
+    ],
+    "accepted": true,
+    "prediction_delta": 0.0,
+    "entropy_delta": 0.0,
+    "load_delta": 1.0,
+    "energy_delta": 0.5,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.5000 (E 27.8041 → 27.3041, tol=0.0000)"
+  },
+  {
+    "tick": 2394,
+    "targets": [
+      69,
+      116
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0006651569697265214,
+    "entropy_delta": -0.02472203285700525,
+    "load_delta": 1.0,
+    "energy_delta": 0.4739476532035418,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4739 (E 27.6995 → 27.2255, tol=0.0000)"
+  },
+  {
+    "tick": 2394,
+    "targets": [
+      19,
+      57
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0008392032909749492,
+    "entropy_delta": -0.010762359045609404,
+    "load_delta": 1.0,
+    "energy_delta": 0.48755923437244064,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4876 (E 27.6942 → 27.2067, tol=0.0000)"
+  },
+  {
+    "tick": 2394,
+    "targets": [
+      107,
+      114
+    ],
+    "accepted": true,
+    "prediction_delta": -0.001550109761535634,
+    "entropy_delta": -0.0012156828270990516,
+    "load_delta": 1.0,
+    "energy_delta": 0.49568409764982846,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4957 (E 27.6957 → 27.2000, tol=0.0000)"
+  },
+  {
+    "tick": 2520,
+    "targets": [
+      53,
+      127
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0008411869804921535,
+    "entropy_delta": 0.0037934045334848676,
+    "load_delta": 1.0,
+    "energy_delta": 0.5021110305725003,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.5021 (E 27.8403 → 27.3382, tol=0.0000)"
+  },
+  {
+    "tick": 2520,
+    "targets": [
+      73,
+      100
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0007028875996730188,
+    "entropy_delta": -0.007586809066969735,
+    "load_delta": 1.0,
+    "energy_delta": 0.49100741573368367,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4910 (E 27.8377 → 27.3467, tol=0.0000)"
+  },
+  {
+    "tick": 2520,
+    "targets": [
+      76,
+      94
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0005410046473453278,
+    "entropy_delta": -0.03687920614597262,
+    "load_delta": 1.0,
+    "energy_delta": 0.46203878455933634,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4620 (E 27.8847 → 27.4227, tol=0.0000)"
+  },
+  {
+    "tick": 2675,
+    "targets": [
+      126,
+      131
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0033001179326732355,
+    "entropy_delta": 0.0490090383801145,
+    "load_delta": 1.0,
+    "energy_delta": 0.5424088025147675,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.5424 (E 27.8591 → 27.3167, tol=0.0000)"
+  },
+  {
+    "tick": 2675,
+    "targets": [
+      113,
+      134
+    ],
+    "accepted": true,
+    "prediction_delta": -0.003103765268168024,
+    "entropy_delta": 0.040825908932703214,
+    "load_delta": 1.0,
+    "energy_delta": 0.5346183783963667,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.5346 (E 27.7980 → 27.2634, tol=0.0000)"
+  },
+  {
+    "tick": 2675,
+    "targets": [
+      28,
+      115
+    ],
+    "accepted": true,
+    "prediction_delta": -5.738641823227475e-05,
+    "entropy_delta": -0.05702401727695472,
+    "load_delta": 1.0,
+    "energy_delta": 0.44286120988657984,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4429 (E 27.7569 → 27.3140, tol=0.0000)"
+  },
+  {
+    "tick": 2760,
+    "targets": [
+      0,
+      110
+    ],
+    "accepted": true,
+    "prediction_delta": -0.002718553777561611,
+    "entropy_delta": -0.006955995298631112,
+    "load_delta": 1.0,
+    "energy_delta": 0.4876068971462466,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4876 (E 27.7300 → 27.2424, tol=0.0000)"
+  },
+  {
+    "tick": 2760,
+    "targets": [
+      80,
+      140
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0006084229183718481,
+    "entropy_delta": 0.016307097979078033,
+    "load_delta": 1.0,
+    "energy_delta": 0.5150902521423326,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.5151 (E 27.7439 → 27.2288, tol=0.0000)"
+  },
+  {
+    "tick": 2760,
+    "targets": [
+      20,
+      124
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0020271548110278315,
+    "entropy_delta": -0.03515810262487307,
+    "load_delta": 1.0,
+    "energy_delta": 0.46078758775307094,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4608 (E 27.7377 → 27.2769, tol=0.0000)"
+  },
+  {
+    "tick": 2836,
+    "targets": [
+      111,
+      120
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0005998519053303231,
+    "entropy_delta": -0.02029698501159638,
+    "load_delta": 1.0,
+    "energy_delta": 0.47850331117774303,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4785 (E 27.6821 → 27.2036, tol=0.0000)"
+  },
+  {
+    "tick": 2836,
+    "targets": [
+      40,
+      104
+    ],
+    "accepted": true,
+    "prediction_delta": 0.0,
+    "entropy_delta": 0.0,
+    "load_delta": 1.0,
+    "energy_delta": 0.5,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.5000 (E 27.7277 → 27.2277, tol=0.0000)"
+  },
+  {
+    "tick": 2836,
+    "targets": [
+      128,
+      132
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0014241871301611253,
+    "entropy_delta": -0.03241959763713753,
+    "load_delta": 1.0,
+    "energy_delta": 0.46473202810253866,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4647 (E 27.7267 → 27.2620, tol=0.0000)"
+  },
+  {
+    "tick": 2957,
+    "targets": [
+      122,
+      147
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0027392598608758367,
+    "entropy_delta": 0.00498587305133924,
+    "load_delta": 1.0,
+    "energy_delta": 0.4995073533295873,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4995 (E 27.6397 → 27.1402, tol=0.0000)"
+  },
+  {
+    "tick": 2957,
+    "targets": [
+      136,
+      137
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0036239865123247617,
+    "entropy_delta": 0.017562848665519493,
+    "load_delta": 1.0,
+    "energy_delta": 0.5103148756408693,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.5103 (E 27.6522 → 27.1419, tol=0.0000)"
+  },
+  {
+    "tick": 2957,
+    "targets": [
+      154,
+      155
+    ],
+    "accepted": true,
+    "prediction_delta": -0.004699365402378891,
+    "entropy_delta": 0.11648927513946594,
+    "load_delta": 1.0,
+    "energy_delta": 0.6070905443347101,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.6071 (E 27.7489 → 27.1419, tol=0.0000)"
+  },
+  {
+    "tick": 3066,
+    "targets": [
+      156,
+      157
+    ],
+    "accepted": true,
+    "prediction_delta": -0.007444119614051503,
+    "entropy_delta": 0.04657976307179368,
+    "load_delta": 1.0,
+    "energy_delta": 0.5316915238436906,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.5317 (E 27.7423 → 27.2106, tol=0.0000)"
+  },
+  {
+    "tick": 3066,
+    "targets": [
+      61,
+      143
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0007350887504184167,
+    "entropy_delta": -0.02687921205116517,
+    "load_delta": 1.0,
+    "energy_delta": 0.4716506104479983,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4717 (E 27.7081 → 27.2364, tol=0.0000)"
+  },
+  {
+    "tick": 3066,
+    "targets": [
+      67,
+      139
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0015356955864958277,
+    "entropy_delta": -0.000714561432862304,
+    "load_delta": 1.0,
+    "energy_delta": 0.49621404739414743,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4962 (E 27.7364 → 27.2402, tol=0.0000)"
+  },
+  {
+    "tick": 3187,
+    "targets": [
+      8,
+      9
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0015591191576601882,
+    "entropy_delta": -0.034445994835544,
+    "load_delta": 1.0,
+    "energy_delta": 0.4624357668491328,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4624 (E 27.6710 → 27.2086, tol=0.0000)"
+  },
+  {
+    "tick": 3187,
+    "targets": [
+      112,
+      123
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0006822775923555346,
+    "entropy_delta": -0.020310773768675627,
+    "load_delta": 1.0,
+    "energy_delta": 0.47832467104661447,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4783 (E 27.7086 → 27.2303, tol=0.0000)"
+  },
+  {
+    "tick": 3187,
+    "targets": [
+      72,
+      166
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0015911443798460045,
+    "entropy_delta": -0.0037129400560802495,
+    "load_delta": 1.0,
+    "energy_delta": 0.49310477118422824,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4931 (E 27.7303 → 27.2372, tol=0.0000)"
+  },
+  {
+    "tick": 3253,
+    "targets": [
+      86,
+      168
+    ],
+    "accepted": true,
+    "prediction_delta": -0.002681492052652057,
+    "entropy_delta": 0.005631892315760556,
+    "load_delta": 1.0,
+    "energy_delta": 0.5002689082104581,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.5003 (E 27.9219 → 27.4216, tol=0.0000)"
+  },
+  {
+    "tick": 3253,
+    "targets": [
+      144,
+      170
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0022182379122103746,
+    "entropy_delta": 0.027178735641970597,
+    "load_delta": 1.0,
+    "energy_delta": 0.5227422598175515,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.5227 (E 27.9228 → 27.4001, tol=0.0000)"
+  },
+  {
+    "tick": 3253,
+    "targets": [
+      63,
+      138
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0004027603052522699,
+    "entropy_delta": 0.006256846722796805,
+    "load_delta": 1.0,
+    "energy_delta": 0.5054513261122935,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.5055 (E 27.8763 → 27.3708, tol=0.0000)"
+  },
+  {
+    "tick": 3304,
+    "targets": [
+      87,
+      142
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0006989461931224961,
+    "entropy_delta": -0.03641005413517506,
+    "load_delta": 1.0,
+    "energy_delta": 0.4621920534785815,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4622 (E 27.8263 → 27.3641, tol=0.0000)"
+  },
+  {
+    "tick": 3304,
+    "targets": [
+      135,
+      149
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0018418846620864848,
+    "entropy_delta": -0.0027525538228805324,
+    "load_delta": 1.0,
+    "energy_delta": 0.493563676852947,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4936 (E 27.8404 → 27.3468, tol=0.0000)"
+  },
+  {
+    "tick": 3304,
+    "targets": [
+      97,
+      150
+    ],
+    "accepted": true,
+    "prediction_delta": -0.001047275088218974,
+    "entropy_delta": -0.017971815692730875,
+    "load_delta": 1.0,
+    "energy_delta": 0.47993363413083046,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4799 (E 27.8664 → 27.3865, tol=0.0000)"
+  },
+  {
+    "tick": 3442,
+    "targets": [
+      105,
+      130
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0038113670573317604,
+    "entropy_delta": -0.0430873240339289,
+    "load_delta": 1.0,
+    "energy_delta": 0.4492899418514078,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4493 (E 27.9501 → 27.5008, tol=0.0000)"
+  },
+  {
+    "tick": 3442,
+    "targets": [
+      158,
+      181
+    ],
+    "accepted": true,
+    "prediction_delta": -6.557853225924726e-06,
+    "entropy_delta": 0.0,
+    "load_delta": 1.0,
+    "energy_delta": 0.49998688429354843,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.5000 (E 27.9925 → 27.4925, tol=0.0000)"
+  },
+  {
+    "tick": 3442,
+    "targets": [
+      108,
+      133
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0008240829470295696,
+    "entropy_delta": -0.01707008290839296,
+    "load_delta": 1.0,
+    "energy_delta": 0.48128175119754957,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4813 (E 27.9925 → 27.5113, tol=0.0000)"
+  },
+  {
+    "tick": 3517,
+    "targets": [
+      25,
+      173
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0014417910500768016,
+    "entropy_delta": -0.025318122624703676,
+    "load_delta": 1.0,
+    "energy_delta": 0.4717982952751427,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4718 (E 28.0306 → 27.5588, tol=0.0000)"
+  },
+  {
+    "tick": 3517,
+    "targets": [
+      45,
+      185
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0006885323669347798,
+    "entropy_delta": 0.015414120268935516,
+    "load_delta": 1.0,
+    "energy_delta": 0.5140370555350664,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.5140 (E 28.0192 → 27.5052, tol=0.0000)"
+  },
+  {
+    "tick": 3517,
+    "targets": [
+      74,
+      148
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0020062344077439176,
+    "entropy_delta": 0.02955802626536652,
+    "load_delta": 1.0,
+    "energy_delta": 0.5255455574498775,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.5255 (E 27.9829 → 27.4574, tol=0.0000)"
+  },
+  {
+    "tick": 3639,
+    "targets": [
+      47,
+      187
+    ],
+    "accepted": true,
+    "prediction_delta": -0.002433405057247262,
+    "entropy_delta": -0.022563944701875283,
+    "load_delta": 1.0,
+    "energy_delta": 0.47256924518363164,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4726 (E 27.8359 → 27.3633, tol=0.0000)"
+  },
+  {
+    "tick": 3639,
+    "targets": [
+      175,
+      183
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0002141919016890037,
+    "entropy_delta": 0.010050251256281673,
+    "load_delta": 1.0,
+    "energy_delta": 0.5096218674529034,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.5096 (E 27.8495 → 27.3399, tol=0.0000)"
+  },
+  {
+    "tick": 3639,
+    "targets": [
+      165,
+      174
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0005861764569589367,
+    "entropy_delta": -0.00808864560018474,
+    "load_delta": 1.0,
+    "energy_delta": 0.49073900148589544,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4907 (E 27.8298 → 27.3390, tol=0.0000)"
+  },
+  {
+    "tick": 3979,
+    "targets": [
+      167,
+      197
+    ],
+    "accepted": true,
+    "prediction_delta": -0.00024260990830207718,
+    "entropy_delta": -0.010050251256281673,
+    "load_delta": 1.0,
+    "energy_delta": 0.4894645289271118,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4895 (E 27.8518 → 27.3623, tol=0.0000)"
+  },
+  {
+    "tick": 3979,
+    "targets": [
+      179,
+      184
+    ],
+    "accepted": true,
+    "prediction_delta": -0.004115454524426604,
+    "entropy_delta": 0.010610787479755857,
+    "load_delta": 1.0,
+    "energy_delta": 0.5023798784309044,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.5024 (E 27.8623 → 27.3599, tol=0.0000)"
+  },
+  {
+    "tick": 3979,
+    "targets": [
+      182,
+      193
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0002500109380721982,
+    "entropy_delta": -0.0007121077893281758,
+    "load_delta": 1.0,
+    "energy_delta": 0.4987878703345281,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4988 (E 27.8599 → 27.3611, tol=0.0000)"
+  },
+  {
+    "tick": 4037,
+    "targets": [
+      159,
+      176
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0014106123120430636,
+    "entropy_delta": -0.025304333867624873,
+    "load_delta": 1.0,
+    "energy_delta": 0.47187444150829094,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4719 (E 27.8347 → 27.3629, tol=0.0000)"
+  },
+  {
+    "tick": 4037,
+    "targets": [
+      75,
+      118
+    ],
+    "accepted": true,
+    "prediction_delta": 0.0003472683531005327,
+    "entropy_delta": 0.05702464315466793,
+    "load_delta": 1.0,
+    "energy_delta": 0.5577191798608716,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.5577 (E 27.8541 → 27.2964, tol=0.0000)"
+  },
+  {
+    "tick": 4037,
+    "targets": [
+      190,
+      208
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0026675481661868894,
+    "entropy_delta": -0.04965679651285626,
+    "load_delta": 1.0,
+    "energy_delta": 0.44500810715477,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4450 (E 27.7957 → 27.3507, tol=0.0000)"
+  },
+  {
+    "tick": 4161,
+    "targets": [
+      194,
+      211
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0006976285780146141,
+    "entropy_delta": -0.010762359045609404,
+    "load_delta": 1.0,
+    "energy_delta": 0.48784238379836253,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4878 (E 27.7544 → 27.2665, tol=0.0000)"
+  },
+  {
+    "tick": 4161,
+    "targets": [
+      172,
+      200
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0009336243147343992,
+    "entropy_delta": -0.003960485697220406,
+    "load_delta": 1.0,
+    "energy_delta": 0.49417226567330985,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4942 (E 27.7456 → 27.2514, tol=0.0000)"
+  },
+  {
+    "tick": 4161,
+    "targets": [
+      186,
+      210
+    ],
+    "accepted": true,
+    "prediction_delta": -0.003161689612690005,
+    "entropy_delta": 0.023931960475202185,
+    "load_delta": 1.0,
+    "energy_delta": 0.5176085812498208,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.5176 (E 27.7514 → 27.2338, tol=0.0000)"
+  },
+  {
+    "tick": 4212,
+    "targets": [
+      151,
+      213
+    ],
+    "accepted": true,
+    "prediction_delta": -0.000990712911106556,
+    "entropy_delta": -0.019278614227117075,
+    "load_delta": 1.0,
+    "energy_delta": 0.4787399599506692,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4787 (E 27.8516 → 27.3729, tol=0.0000)"
+  },
+  {
+    "tick": 4212,
+    "targets": [
+      152,
+      153
+    ],
+    "accepted": true,
+    "prediction_delta": -0.00035936316076976005,
+    "entropy_delta": -0.027687311579532192,
+    "load_delta": 1.0,
+    "energy_delta": 0.4715939620989289,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4716 (E 27.8509 → 27.3793, tol=0.0000)"
+  },
+  {
+    "tick": 4212,
+    "targets": [
+      178,
+      205
+    ],
+    "accepted": true,
+    "prediction_delta": -0.003974196858534618,
+    "entropy_delta": 0.017800761559012557,
+    "load_delta": 1.0,
+    "energy_delta": 0.5098523678419404,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.5099 (E 27.8793 → 27.3694, tol=0.0000)"
+  },
+  {
+    "tick": 4283,
+    "targets": [
+      82,
+      177
+    ],
+    "accepted": true,
+    "prediction_delta": 0.00013856142015852835,
+    "entropy_delta": 0.0,
+    "load_delta": 1.0,
+    "energy_delta": 0.5002771228403162,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.5003 (E 27.9298 → 27.4295, tol=0.0000)"
+  },
+  {
+    "tick": 4283,
+    "targets": [
+      202,
+      224
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0026169317433796524,
+    "entropy_delta": 0.0035831332773721414,
+    "load_delta": 1.0,
+    "energy_delta": 0.4983492697906122,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4983 (E 27.9293 → 27.4309, tol=0.0000)"
+  },
+  {
+    "tick": 4283,
+    "targets": [
+      103,
+      192
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0025754625877497384,
+    "entropy_delta": 0.019193387215229674,
+    "load_delta": 1.0,
+    "energy_delta": 0.514042462039729,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.5140 (E 27.9309 → 27.4169, tol=0.0000)"
+  },
+  {
+    "tick": 4383,
+    "targets": [
+      163,
+      218
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0008926990880000207,
+    "entropy_delta": -0.021554948970102572,
+    "load_delta": 1.0,
+    "energy_delta": 0.4766596528538969,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4767 (E 27.7106 → 27.2339, tol=0.0000)"
+  },
+  {
+    "tick": 4383,
+    "targets": [
+      160,
+      223
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0026051225025532088,
+    "entropy_delta": -0.054997270739216564,
+    "load_delta": 1.0,
+    "energy_delta": 0.4397924842556762,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4398 (E 27.7339 → 27.2941, tol=0.0000)"
+  },
+  {
+    "tick": 4383,
+    "targets": [
+      189,
+      204
+    ],
+    "accepted": true,
+    "prediction_delta": -0.000969431391172032,
+    "entropy_delta": -0.012703318440602462,
+    "load_delta": 1.0,
+    "energy_delta": 0.48535781877705375,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4854 (E 27.7582 → 27.2729, tol=0.0000)"
+  },
+  {
+    "tick": 4559,
+    "targets": [
+      215,
+      233
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0011112672721432792,
+    "entropy_delta": -0.020310773768675627,
+    "load_delta": 1.0,
+    "energy_delta": 0.47746669168703804,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4775 (E 27.7924 → 27.3150, tol=0.0000)"
+  },
+  {
+    "tick": 4559,
+    "targets": [
+      226,
+      236
+    ],
+    "accepted": true,
+    "prediction_delta": -0.004128738280176569,
+    "entropy_delta": 0.012232604083487697,
+    "load_delta": 1.0,
+    "energy_delta": 0.5039751275231339,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.5040 (E 27.8138 → 27.3098, tol=0.0000)"
+  },
+  {
+    "tick": 4559,
+    "targets": [
+      206,
+      207
+    ],
+    "accepted": true,
+    "prediction_delta": -0.000498453472421001,
+    "entropy_delta": -0.005895833444415466,
+    "load_delta": 1.0,
+    "energy_delta": 0.493107259610742,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4931 (E 27.8098 → 27.3167, tol=0.0000)"
+  },
+  {
+    "tick": 4610,
+    "targets": [
+      191,
+      231
+    ],
+    "accepted": true,
+    "prediction_delta": 1.7472710589216955e-06,
+    "entropy_delta": 0.0,
+    "load_delta": 1.0,
+    "energy_delta": 0.500003494542117,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.5000 (E 27.8622 → 27.3621, tol=0.0000)"
+  },
+  {
+    "tick": 4610,
+    "targets": [
+      214,
+      228
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0002601539052277113,
+    "entropy_delta": 0.0,
+    "load_delta": 1.0,
+    "energy_delta": 0.4994796921895457,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4995 (E 27.8621 → 27.3627, tol=0.0000)"
+  },
+  {
+    "tick": 4610,
+    "targets": [
+      222,
+      244
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0010405957109409503,
+    "entropy_delta": -0.019468859200639343,
+    "load_delta": 1.0,
+    "energy_delta": 0.4784499493774774,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4784 (E 27.8482 → 27.3698, tol=0.0000)"
+  },
+  {
+    "tick": 4671,
+    "targets": [
+      169,
+      180
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0017597178015708037,
+    "entropy_delta": -0.030760921276078435,
+    "load_delta": 1.0,
+    "energy_delta": 0.4657196431207815,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4657 (E 27.8723 → 27.4066, tol=0.0000)"
+  },
+  {
+    "tick": 4671,
+    "targets": [
+      55,
+      201
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0009370065043245446,
+    "entropy_delta": -0.0017513343999837616,
+    "load_delta": 1.0,
+    "energy_delta": 0.49637465259136704,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4964 (E 27.9066 → 27.4103, tol=0.0000)"
+  },
+  {
+    "tick": 4671,
+    "targets": [
+      217,
+      219
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0013668637905873138,
+    "entropy_delta": 0.006940468036996883,
+    "load_delta": 1.0,
+    "energy_delta": 0.5042067404558246,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.5042 (E 27.8857 → 27.3814, tol=0.0000)"
+  },
+  {
+    "tick": 4722,
+    "targets": [
+      234,
+      246
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0009377044585324734,
+    "entropy_delta": 0.005464359772648475,
+    "load_delta": 1.0,
+    "energy_delta": 0.5035889508555869,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.5036 (E 27.9079 → 27.4043, tol=0.0000)"
+  },
+  {
+    "tick": 4722,
+    "targets": [
+      141,
+      227
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0016966875952189042,
+    "entropy_delta": -0.024722032857005694,
+    "load_delta": 1.0,
+    "energy_delta": 0.4718845919525556,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4719 (E 27.8895 → 27.4176, tol=0.0000)"
+  },
+  {
+    "tick": 4722,
+    "targets": [
+      188,
+      240
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0008256550443021538,
+    "entropy_delta": 0.041415858308639475,
+    "load_delta": 1.0,
+    "energy_delta": 0.5397645482200382,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.5398 (E 27.9233 → 27.3835, tol=0.0000)"
+  },
+  {
+    "tick": 4842,
+    "targets": [
+      249,
+      254
+    ],
+    "accepted": true,
+    "prediction_delta": -0.004080966076478509,
+    "entropy_delta": -0.013457837278180396,
+    "load_delta": 1.0,
+    "energy_delta": 0.47838023056886314,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4784 (E 27.7972 → 27.3189, tol=0.0000)"
+  },
+  {
+    "tick": 4842,
+    "targets": [
+      216,
+      257
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0008855590488565102,
+    "entropy_delta": -0.013843655789766096,
+    "load_delta": 1.0,
+    "energy_delta": 0.48438522611251855,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4844 (E 27.7767 → 27.2923, tol=0.0000)"
+  },
+  {
+    "tick": 4842,
+    "targets": [
+      125,
+      241
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0025259691358175684,
+    "entropy_delta": 0.007309941507915418,
+    "load_delta": 1.0,
+    "energy_delta": 0.5022580032362818,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.5023 (E 27.7841 → 27.2819, tol=0.0000)"
+  },
+  {
+    "tick": 4952,
+    "targets": [
+      245,
+      260
+    ],
+    "accepted": true,
+    "prediction_delta": -0.0037243140929869023,
+    "entropy_delta": 0.013466859443282964,
+    "load_delta": 1.0,
+    "energy_delta": 0.5060182312573076,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.5060 (E 27.7760 → 27.2700, tol=0.0000)"
+  },
+  {
+    "tick": 4952,
+    "targets": [
+      229,
+      237
+    ],
+    "accepted": true,
+    "prediction_delta": -0.002642655935009841,
+    "entropy_delta": -0.012984334053679714,
+    "load_delta": 1.0,
+    "energy_delta": 0.4817303540763014,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.4817 (E 27.7696 → 27.2879, tol=0.0000)"
+  },
+  {
+    "tick": 4952,
+    "targets": [
+      266,
+      268
+    ],
+    "accepted": true,
+    "prediction_delta": -0.004925151780349996,
+    "entropy_delta": 0.013309770676879662,
+    "load_delta": 1.0,
+    "energy_delta": 0.5034594671161798,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.5035 (E 27.7684 → 27.2649, tol=0.0000)"
+  }
+]

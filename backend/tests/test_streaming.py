@@ -7,7 +7,7 @@ import pytest
 import pytest_asyncio
 from httpx import AsyncClient, ASGITransport
 
-from app.main import app
+from backend.app.main import app
 
 
 @pytest_asyncio.fixture

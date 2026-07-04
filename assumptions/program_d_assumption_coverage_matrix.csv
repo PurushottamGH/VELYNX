@@ -1,0 +1,21 @@
+Assumption,Category,Domain,Validated By,Status
+SymbolAsAtom,semantic,Modeling,generate_graph.py A1,ACCEPTED
+FlatMarkovSufficient,semantic,Modeling,generate_graph.py A2,ACCEPTED
+StabilitySolvesForgetting,semantic,Learning,generate_graph.py A3,ACCEPTED
+EnergyAsFreeEnergyProxy,semantic,Optimization,generate_graph.py A4,ACCEPTED
+InertiaLawPreventsCatastrophicForgetting,semantic,Learning,generate_graph.py A5,ACCEPTED
+ExceptionQuarantinePreservesPattern,semantic,Learning,generate_graph.py A6,ACCEPTED
+ReplayRestoresStability,semantic,Learning,generate_graph.py A7,ACCEPTED
+FractureMechanismPreservesCoherence,semantic,Learning,generate_graph.py A8,ACCEPTED
+NoLLMRequiredForReasoning,architectural,System,generate_graph.py A9,ACCEPTED
+SQLiteSufficientForProduction,architectural,Storage,generate_graph.py A10,ACCEPTED
+FileSystemReliableForState,architectural,Storage,generate_graph.py A11,ACCEPTED
+SoulGraphResonatesWithNarrative,architectural,Cognition,generate_graph.py A12,ACCEPTED
+WikipediaAlwaysAvailable,operational,Retrieval,generate_graph.py A13,ACCEPTED
+SingleThreadedLearningSufficient,architectural,System,generate_graph.py A14,ACCEPTED
+LocalFirstNoCloudDependency,architectural,System,generate_graph.py A15,ACCEPTED
+ConceptBirthMDLThresholdValid,numeric,Learning,generate_graph.py A16,ACCEPTED
+DualBrainCoherence,architectural,System,manual,UNVALIDATED
+ParallelGraphDBConvergence,architectural,Storage,manual,UNVALIDATED
+SelfCoderSandboxIsolationSufficient,operational,System,manual,UNVALIDATED
+CrossDomainBridgeSignalMapping,semantic,Cognition,manual,UNVALIDATED

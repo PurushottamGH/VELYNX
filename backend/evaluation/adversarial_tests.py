@@ -4,8 +4,8 @@ from __future__ import annotations
 import logging
 from typing import Any, Callable, Awaitable
 
-from evaluation import HallucinationReport
-from evaluation.hallucination_detector import hallucination_detector
+from backend.evaluation import HallucinationReport
+from backend.evaluation.hallucination_detector import hallucination_detector
 
 logger = logging.getLogger("uvicorn")
 

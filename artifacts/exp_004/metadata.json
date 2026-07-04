@@ -1,0 +1,27 @@
+{
+  "experiment_name": "calibration_020",
+  "config": {
+    "dataset_name": "environment",
+    "seed": 7,
+    "num_ticks": 5000,
+    "noise_sigma": 0.05,
+    "tolerance": 0.05,
+    "proximity_threshold": 0.2,
+    "experiment_name": "calibration_020",
+    "baseline": null,
+    "artifacts_root": null,
+    "critical_metrics": null,
+    "metrics": {
+      "EntropyMetric": 2.8455296815006688,
+      "SurpriseMetric": 0.14276164450870588,
+      "ActiveLoadMetric": 50.20600812956781,
+      "CognitiveEnergyMetric": 28.234057035301987
+    }
+  },
+  "result": {
+    "passed": true,
+    "improvements": {},
+    "regressions": {},
+    "summary": "REGRESSION GATE: PASS (tolerance 5.0%)\n  No measured change across shared metrics."
+  }
+}

@@ -1,0 +1,30 @@
+# CI Output — Sprint 1.1 Remediation
+
+**Date:** 2026-07-04
+**Environment:** Windows, Python 3.11.9
+
+## Test Suite: E0 Core + Integration + Canonical (101 tests)
+```
+python -m pytest tests/unit/test_e0_components.py tests/integration/test_e0_pipeline.py tests/unit/test_core_canonical.py -v --tb=short
+Result: 100 passed, 1 skipped, 3 warnings in 13.88s
+```
+
+## Production 5-Seed Run
+```
+python -m experiments.E0.run --seed 42 --num-seeds 5
+[E0] Starting multi-seed experiment: 5 seeds
+[E0]   seed 42: FAIL (DV-a: T did not beat both controls) (5.5s)
+[E0]   seed 43: FAIL (DV-a: T did not beat both controls) (5.6s)
+[E0]   seed 44: FAIL (DV-a: T did not beat both controls) (6.3s)
+[E0]   seed 45: FAIL (DV-a: T did not beat both controls) (5.1s)
+[E0]   seed 46: FAIL (DV-a: T did not beat both controls) (5.1s)
+[E0] Multi-seed run completed in 27.5s
+[E0] Aggregated decision: FAIL (DV-a)
+[E0] Seeds: 5 / 5 required
+```
+
+## Verification 5-Seed Run (reproducibility)
+```
+python -m experiments.E0.run --seed 42 --num-seeds 5
+Result: Identical FAIL (DV-a) verdict, consistent per-seed timings (27.3s vs 27.5s)
+```

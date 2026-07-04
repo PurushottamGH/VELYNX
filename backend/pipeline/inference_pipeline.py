@@ -4,9 +4,9 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from pipeline.context_builder import build_context
-from cognition.reasoning_engine import reason, ReasoningResult
-from memory.memory_manager import memory_manager
+from backend.pipeline.context_builder import build_context
+from backend.cognition.reasoning_engine import reason, ReasoningResult
+from backend.memory.memory_manager import memory_manager
 
 logger = logging.getLogger("uvicorn")
 

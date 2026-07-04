@@ -6,7 +6,7 @@ import logging
 import time
 from datetime import datetime, timezone
 
-from metacognition import (
+from backend.metacognition import (
     AdaptationRecommendation,
     CognitionHealthReport,
     HealthIndicator,
@@ -14,11 +14,11 @@ from metacognition import (
     RuntimePerformanceMetrics,
     TimeWindow,
 )
-from metacognition.cognition_metrics import CognitionMetrics
-from metacognition.pattern_analyzer import PatternAnalyzer
-from metacognition.confidence_calibrator import ConfidenceCalibrator
-from metacognition.strategy_analyzer import CrossDomainStrategyAnalyzer
-from metacognition.adaptation_engine import AdaptationEngine
+from backend.metacognition.cognition_metrics import CognitionMetrics
+from backend.metacognition.pattern_analyzer import PatternAnalyzer
+from backend.metacognition.confidence_calibrator import ConfidenceCalibrator
+from backend.metacognition.strategy_analyzer import CrossDomainStrategyAnalyzer
+from backend.metacognition.adaptation_engine import AdaptationEngine
 
 logger = logging.getLogger("uvicorn")
 

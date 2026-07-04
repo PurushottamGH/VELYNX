@@ -1,0 +1,91 @@
+{
+  "artifacts": {
+    "evaluation_log": "evaluation_log.jsonl",
+    "experiment_manifest": "experiment_manifest.json"
+  },
+  "configuration": {
+    "dataset_name": "environment",
+    "decision_policy": {},
+    "held_out_seed": null,
+    "held_out_ticks": 200,
+    "max_clusters": 50,
+    "noise_sigma": 0.15,
+    "num_ticks": 5000,
+    "output_dir": "research_artifacts",
+    "proximity_threshold": 0.28,
+    "replay_horizon": 200,
+    "seed": 1,
+    "source_order": [
+      "geometric",
+      "temporal",
+      "utility",
+      "random"
+    ],
+    "top_k": 2
+  },
+  "experiment": "counterfactual_merge_evaluation",
+  "num_windows": 82,
+  "reproducibility": {
+    "code_hash": "d28c92713ac4",
+    "config_hash": "ae5a6a3f0a28",
+    "git_commit": "32be7a1d12f610e1e4b6f5acc50a6a2e74782355",
+    "node": "Purushottam",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "platform_arch": "AMD64",
+    "python_version": "3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]",
+    "system": "Windows"
+  },
+  "schema_version": "r3.0",
+  "source_panel": [
+    {
+      "class": "GeometricSource",
+      "description": "Nearest centroid pairs by Euclidean distance (proximity).",
+      "module": "research.proposals.sources",
+      "name": "geometric",
+      "stochastic": false
+    },
+    {
+      "class": "TemporalSource",
+      "description": "Pairs with the most similar outgoing cluster-transition distributions, by Jensen-Shannon divergence over the recent window.",
+      "module": "research.proposals.sources",
+      "name": "temporal",
+      "stochastic": false
+    },
+    {
+      "class": "UtilitySource",
+      "description": "Least-utilised pairs by lowest combined cluster access count.",
+      "module": "research.proposals.sources",
+      "name": "utility",
+      "stochastic": false
+    },
+    {
+      "class": "RandomSource",
+      "description": "Uniformly random distinct cluster pairs (control).",
+      "module": "research.proposals.sources",
+      "name": "random",
+      "stochastic": true
+    }
+  ],
+  "sprint": "R3",
+  "summary": {
+    "avg_replay_error": null,
+    "num_windows": 82,
+    "pareto_coverage_rate": 0.12195121951219512,
+    "strategy_attribution": {
+      "geometric": 6,
+      "random": 21,
+      "temporal": 18,
+      "utility": 37
+    },
+    "top_k_attempts": 82,
+    "top_k_hit_count": 10,
+    "top_k_hit_rate": 0.12195121951219512,
+    "winner_strategy_counts": {
+      "geometric": 6,
+      "random": 21,
+      "temporal": 18,
+      "utility": 37
+    }
+  },
+  "timestamp_utc": "2026-06-27T16:29:23Z"
+}

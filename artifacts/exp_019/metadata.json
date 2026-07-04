@@ -1,0 +1,29 @@
+{
+  "experiment_name": "env_noisy_free_energy",
+  "config": {
+    "dataset_name": "environment",
+    "seed": 7,
+    "num_ticks": 5000,
+    "noise_sigma": 0.15,
+    "tolerance": 0.05,
+    "proximity_threshold": 0.28,
+    "max_clusters": 50,
+    "experiment_name": "env_noisy_free_energy",
+    "baseline": null,
+    "artifacts_root": null,
+    "critical_metrics": null,
+    "decision_policy": null,
+    "metrics": {
+      "EntropyMetric": 3.8201588341179313,
+      "SurpriseMetric": 0.5067789228604908,
+      "ActiveLoadMetric": 50.365429542854635,
+      "CognitiveEnergyMetric": 30.01643145126623
+    }
+  },
+  "result": {
+    "passed": true,
+    "improvements": {},
+    "regressions": {},
+    "summary": "REGRESSION GATE: PASS (tolerance 5.0%)\n  No measured change across shared metrics."
+  }
+}

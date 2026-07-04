@@ -1,0 +1,11 @@
+{
+  "dataset_name": "environment",
+  "seed": 7,
+  "num_ticks": 5000,
+  "noise_sigma": 0.05,
+  "tolerance": 0.05,
+  "proximity_threshold": 0.35,
+  "experiment_name": "proximity_035",
+  "baseline": "artifacts/exp_002",
+  "critical_metrics": null
+}

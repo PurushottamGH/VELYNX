@@ -4,16 +4,52 @@ from __future__ import annotations
 import asyncio
 import logging
 
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Body, Request
 from pydantic import BaseModel
 
 from backend.models.answer import AnswerResponse
 from backend.models.query import Query
 from backend.app.pipeline import answer_question
+from backend.memory.knowledge_graph import KnowledgeGraph
 
 logger = logging.getLogger("uvicorn")
 
 router = APIRouter()
+kg = KnowledgeGraph()
+# Add this line to print the path the KG is actually using
+print(f"DEBUG: I am using this database file: {kg.db_path}")
+
+
+@router.post("/teach")
+async def teach_fact(payload: dict = Body(...)):
+    text = payload.get("text", "")
+
+    # We need this lightweight container to satisfy the add_triple signature
+    class Triple:
+        def __init__(self, subject, relation, obj, confidence=1.0, source="user"):
+            self.subject = subject
+            self.relation = relation
+            self.obj = obj
+            self.confidence = confidence
+            self.source = source
+
+    if "is " not in text or " from" not in text:
+        return {"status": "error", "message": "Format: 'The CEO of OpenAI is Sam Altman from 2019 to 2023.'"}
+
+    try:
+        # Extract the value
+        object_val = text.split("is ")[1].split(" from")[0]
+
+        # Wrap the data in our Triple object
+        new_triple = Triple(subject="OpenAI", relation="has_CEO", obj=object_val)
+
+        # Pass the object to the database
+        await kg.add_triple(new_triple)
+
+        return {"status": "success", "stored": object_val}
+
+    except Exception as e:
+        return {"status": "error", "message": f"Persistence failed: {str(e)}"}
 
 
 @router.post("/query", response_model=AnswerResponse)

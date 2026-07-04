@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import logging
 
-from reflection import AuditIssue, AuditResult
+from backend.reflection import AuditIssue, AuditResult
 
 logger = logging.getLogger("uvicorn")
 

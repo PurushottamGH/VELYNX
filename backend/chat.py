@@ -4,7 +4,7 @@ import os
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from app.pipeline import answer_question
+from backend.app.pipeline import answer_question
 
 
 async def chat_loop():

@@ -4,9 +4,9 @@ from __future__ import annotations
 import logging
 from collections import defaultdict
 
-from database.engine import async_session
-from database.repositories import ReflectionRepository
-from metacognition import StrategyAnalysis, StrategyPerformance
+from backend.database.engine import async_session
+from backend.database.repositories import ReflectionRepository
+from backend.metacognition import StrategyAnalysis, StrategyPerformance
 
 logger = logging.getLogger("uvicorn")
 

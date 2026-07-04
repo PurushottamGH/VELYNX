@@ -7,22 +7,22 @@ import pytest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from evaluation import (
+from backend.evaluation import (
     TestScenario, TestSuite, BenchmarkResult, BenchmarkSuiteResult,
     ProfileSample, ProfileReport, MetricEvaluation, EvaluationReport,
     HallucinationSignal, HallucinationReport, StabilityWindow, StabilityReport,
     Regression, RegressionReport,
 )
-from evaluation.cognition_benchmarks import (
+from backend.evaluation.cognition_benchmarks import (
     DEFAULT_SUITES, get_all_scenarios, get_suite_by_name, get_scenarios_by_category,
 )
-from evaluation.benchmark_runner import BenchmarkRunner
-from evaluation.runtime_profiler import RuntimeProfiler
-from evaluation.reflection_evaluator import ReflectionEvaluator
-from evaluation.memory_retrieval_tests import MemoryRetrievalEvaluator
-from evaluation.planning_evaluator import PlanningEvaluator
-from evaluation.hallucination_detector import HallucinationDetector
-from evaluation.stability_monitor import StabilityMonitor
+from backend.evaluation.benchmark_runner import BenchmarkRunner
+from backend.evaluation.runtime_profiler import RuntimeProfiler
+from backend.evaluation.reflection_evaluator import ReflectionEvaluator
+from backend.evaluation.memory_retrieval_tests import MemoryRetrievalEvaluator
+from backend.evaluation.planning_evaluator import PlanningEvaluator
+from backend.evaluation.hallucination_detector import HallucinationDetector
+from backend.evaluation.stability_monitor import StabilityMonitor
 
 
 # ── Model Tests ──────────────────────────────────────────────────

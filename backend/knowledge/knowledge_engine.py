@@ -6,10 +6,10 @@ _backend_root = str(Path(__file__).parent.parent.resolve())
 if _backend_root not in sys.path:
     sys.path.insert(0, _backend_root)
 
-from cognition.scenario_engine import parse_scenario
-from knowledge.bridge import get_domain_concepts
-from knowledge.knowledge_graph import KnowledgeGraph
-from soul.soul_graph import get_tensions, load_soul
+from backend.cognition.scenario_engine import parse_scenario
+from backend.knowledge.bridge import get_domain_concepts
+from backend.knowledge.knowledge_graph import KnowledgeGraph
+from backend.soul.soul_graph import get_tensions, load_soul
 
 
 TENSION_PAIRS = {

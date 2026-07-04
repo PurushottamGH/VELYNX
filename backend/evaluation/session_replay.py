@@ -4,8 +4,8 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from runtime.event_bus import event_bus
-from runtime.event_models import Event, EventType
+from backend.runtime.event_bus import event_bus
+from backend.runtime.event_models import Event, EventType
 
 logger = logging.getLogger("uvicorn")
 

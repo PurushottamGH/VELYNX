@@ -1,0 +1,8 @@
+{
+  "class": "SimilarityPolicy",
+  "description": "Merge the two nearest centroids (commits unconditionally).",
+  "deterministic": true,
+  "module": "research.policies.similarity",
+  "name": "similarity",
+  "params": {}
+}

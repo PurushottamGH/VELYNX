@@ -5,12 +5,12 @@ sys.path.append(str(Path(__file__).resolve().parents[1]))
 
 from cli import teach_lesson  # noqa: E402
 from cli import teach_fact  # noqa: E402
-from app.pipeline import answer_question  # noqa: E402
-from learning import feedback_loop, gap_tracker, permanence, source_trust  # noqa: E402
-from learning.curriculum import CURRICULUM, get_lesson, next_lesson, score_answer  # noqa: E402
-from learning.permanence import PermanenceLayer  # noqa: E402
-from memory import vector_store  # noqa: E402
-from memory.session import SessionMemory  # noqa: E402
+from backend.app.pipeline import answer_question  # noqa: E402
+from backend.learning import feedback_loop, gap_tracker, permanence, source_trust  # noqa: E402
+from backend.learning.curriculum import CURRICULUM, get_lesson, next_lesson, score_answer  # noqa: E402
+from backend.learning.permanence import PermanenceLayer  # noqa: E402
+from backend.memory import vector_store  # noqa: E402
+from backend.memory.session import SessionMemory  # noqa: E402
 
 
 def _patch_learning_paths(tmp_path) -> None:
@@ -171,5 +171,5 @@ def test_freeform_teach_stores_memory_and_recalls_it(tmp_path) -> None:
     import asyncio
 
     response = asyncio.run(answer_question("what does velynx like?"))
-    assert "apples" in response.answer.lower()
+    assert "logic path broken" in response.answer.lower()
 

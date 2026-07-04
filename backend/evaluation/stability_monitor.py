@@ -5,7 +5,7 @@ import logging
 import time
 from collections import deque
 
-from evaluation import Regression, RegressionReport, StabilityReport, StabilityWindow
+from backend.evaluation import Regression, RegressionReport, StabilityReport, StabilityWindow
 
 logger = logging.getLogger("uvicorn")
 

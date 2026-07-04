@@ -5,10 +5,10 @@ import logging
 import time
 from typing import Any
 
-from ops.health_monitor import health_monitor
-from ops.failure_recovery import failure_recovery
-from ops.resource_manager import resource_manager
-from ops.observability import observability
+from backend.ops.health_monitor import health_monitor
+from backend.ops.failure_recovery import failure_recovery
+from backend.ops.resource_manager import resource_manager
+from backend.ops.observability import observability
 
 logger = logging.getLogger("uvicorn")
 

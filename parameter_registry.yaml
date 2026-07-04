@@ -1,0 +1,79 @@
+parameter_registry:
+  e0:
+    experiment:
+      num_seeds:
+        value: 5
+        location: experiments/E0/config.json
+        role: Number of independent seeds for statistical significance (>=5 per canonical)
+      num_train_steps:
+        value: 10000
+        location: experiments/E0/config.json
+        role: Training steps per seed
+      num_test_steps:
+        value: 2000
+        location: experiments/E0/config.json
+        role: Held-out test steps
+    environment:
+      num_latent_states:
+        value: 10
+        location: experiments/E0/config.json
+        role: Number of true latent states K
+      observation_dim:
+        value: 16
+        location: experiments/E0/config.json
+        role: Observation dimensionality D
+      transition_alpha:
+        value: 1.0
+        location: experiments/E0/config.json
+        role: Dirichlet concentration for transition matrix
+      noise_sigma:
+        value: 0.05
+        location: experiments/E0/config.json
+        role: Observation noise standard deviation
+    predictor:
+      initial_capacity:
+        value: 2
+        location: experiments/E0/config.json
+        role: Initial predictor capacity k
+      alpha:
+        value: 1.0
+        location: experiments/E0/config.json
+        role: Dirichlet prior concentration
+    growth:
+      b:
+        value: 1.0
+        location: core/mdl/mdl_growth.py:24
+        role: "Bits per parameter (scientific constant: lambda_model = k*b + n*log2(N))"
+      evaluate_every:
+        value: 500
+        location: experiments/E0/config.json
+        role: "Steps between growth evaluations"
+      warmup_steps:
+        value: 1000
+        location: experiments/E0/config.json
+        role: "Minimum steps before first growth"
+  mdl:
+    lambda_model:
+      formula: "lambda_model = k * b + n * log2(N)"
+      location: core/mdl/mdl_growth.py:35
+      role: "Derived MDL complexity penalty. NOT configurable (PROGRAM_D_CANONICAL.md \u00a75.4)"
+      b:
+        value: 1.0
+        role: "Bits per parameter (scientific constant, not tunable)"
+  emergence:
+    m_statistic:
+      formula: "M = NMI(learned, true) - NMI(learned, shuffled)"
+      location: experiments/E0/analysis.py:87
+      role: "Null-referenced emergence statistic (PROGRAM_D_CANONICAL.md \u00a75.5)"
+      margin:
+        value: 0.05
+        location: experiments/E0/decision.py:125
+        role: "Pre-registered M margin above null (E[M|H0]=0)"
+
+# [REJECTED] entries below are archived for reference only.
+# They derive from the pre-redesign system and must not appear in live code.
+# See PROGRAM_D_CANONICAL.md \u00a710 for disposition.
+#_rejected_free_energy:
+#  Removed per PROGRAM_D_CANONICAL.md \u00a75: "E = \u03bbH + \u03bcS + \u03bdA" permanently removed.
+#_rejected_thresholds:
+#  Removed per PROGRAM_D_CANONICAL.md \u00a75.4: lambda_model is derived, not configurable.

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns
+         http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+  <key id="k_type" for="node" attr.name="type" attr.type="string"/>
+  <key id="k_loc" for="node" attr.name="location" attr.type="string"/>
+  <key id="k_lines" for="node" attr.name="lines" attr.type="int"/>
+  <key id="k_kind" for="edge" attr.name="kind" attr.type="string"/>
+  <graph id="VELYNX_Program_D" edgedefault="directed">
+
+    <!-- ====== CORE ENGINE LAYER ====== -->
+    <node id="velynx_core" type="package" loc="velynx_core/" lines="1911"/>
+    <node id="velynx_core_velynx" type="module" loc="velynx_core/velynx.py" lines="428"/>
+    <node id="velynx_core_brain" type="module" loc="velynx_core/brain.py" lines="371"/>
+    <node id="velynx_core_memory" type="module" loc="velynx_core/memory.py" lines="365"/>
+    <node id="velynx_core_learner" type="module" loc="velynx_core/learner.py" lines="501"/>
+    <node id="velynx_core_selfcoder" type="module" loc="velynx_core/self_coder.py" lines="617"/>
+
+    <!-- ====== BACKEND LAYER ====== -->
+    <node id="backend" type="package" loc="backend/" lines="~15000"/>
+    <node id="backend_orchestrator" type="module" loc="backend/orchestrator.py" lines="481"/>
+    <node id="backend_brain" type="module" loc="backend/brain.py" lines="211"/>
+    <node id="backend_chat" type="module" loc="backend/chat.py" lines="46"/>
+    <node id="backend_cli" type="module" loc="backend/cli.py" lines="207"/>
+    <node id="backend_cli_ui" type="module" loc="backend/cli_ui.py" lines="535"/>
+    <node id="backend_selfcoder" type="module" loc="backend/self_coder.py" lines="145"/>
+    <node id="backend_wipe_db" type="module" loc="backend/wipe_db.py" lines="246"/>
+    <node id="backend_diagnose_db" type="module" loc="backend/diagnose_db.py" lines="171"/>
+
+    <!-- ====== BACKEND SUBPACKAGES ====== -->
+    <node id="backend_cognition" type="package" loc="backend/cognition/" lines="~9000"/>
+    <node id="backend_memory" type="package" loc="backend/memory/" lines="~6000"/>
+    <node id="backend_knowledge" type="package" loc="backend/knowledge/" lines="~5000"/>
+    <node id="backend_agency" type="package" loc="backend/agency/" lines="~3000"/>
+    <node id="backend_app" type="package" loc="backend/app/" lines="~2000"/>
+    <node id="backend_learning" type="package" loc="backend/learning/" lines="~4000"/>
+    <node id="backend_retrieval" type="package" loc="backend/retrieval/" lines="~2000"/>
+    <node id="backend_pipeline" type="package" loc="backend/pipeline/" lines="~4000"/>
+    <node id="backend_reflection" type="package" loc="backend/reflection/" lines="~1000"/>
+    <node id="backend_database" type="package" loc="backend/database/" lines="~500"/>
+    <node id="backend_soul" type="package" loc="backend/soul/" lines="~200"/>
+    <node id="backend_models" type="package" loc="backend/models/" lines="~300"/>
+    <node id="backend_metacognition" type="package" loc="backend/metacognition/" lines="~800"/>
+    <node id="backend_audio" type="package" loc="backend/audio/" lines="~200"/>
+    <node id="backend_tools" type="package" loc="backend/tools/" lines="~100"/>
+    <node id="backend_evaluation" type="package" loc="backend/evaluation/" lines="~200"/>
+    <node id="backend_testing" type="package" loc="backend/testing/" lines="~500"/>
+    <node id="backend_constitution" type="package" loc="backend/constitution/" lines="~200"/>
+    <node id="backend_contracts" type="package" loc="backend/contracts/" lines="~100"/>
+    <node id="backend_conversation" type="package" loc="backend/conversation/" lines="~200"/>
+    <node id="backend_abstraction" type="package" loc="backend/abstraction/" lines="~100"/>
+    <node id="backend_simulation" type="package" loc="backend/simulation/" lines="~200"/>
+    <node id="backend_ops" type="package" loc="backend/ops/" lines="~200"/>
+    <node id="backend_nlp" type="package" loc="backend/nlp/" lines="~200"/>
+    <node id="backend_agents" type="package" loc="backend/agents/" lines="~200"/>
+
+    <!-- ====== COGNITION MODULES ====== -->
+    <node id="cog_metacog" type="module" loc="backend/cognition/metacog.py" lines="157"/>
+    <node id="cog_scenario" type="module" loc="backend/cognition/scenario_engine.py" lines="49"/>
+    <node id="cog_unified_pipeline" type="module" loc="backend/cognition/unified_pipeline.py" lines="374"/>
+    <node id="cog_reasoning" type="module" loc="backend/cognition/reasoning_engine.py" lines="~1300"/>
+    <node id="cog_predictive_core" type="module" loc="backend/cognition/predictive_core.py" lines="450"/>
+    <node id="cog_decision_policy" type="module" loc="backend/cognition/decision_policy.py" lines="391"/>
+    <node id="cog_advanced_cognition" type="module" loc="backend/cognition/advanced_cognition.py" lines="322"/>
+    <node id="cog_self_model" type="module" loc="backend/cognition/self_model.py" lines="1006"/>
+    <node id="cog_brain" type="module" loc="backend/brain.py" lines="211"/>
+
+    <!-- ====== ROOT SCRIPTS ====== -->
+    <node id="cognitive_core" type="module" loc="cognitive_core.py" lines="2236"/>
+    <node id="cognitive_health" type="module" loc="cognitive_health.py" lines="78"/>
+    <node id="cognitive_telemetry" type="module" loc="cognitive_telemetry.py" lines="1044"/>
+    <node id="concept_birth" type="module" loc="concept_birth.py" lines="520"/>
+    <node id="latent_cause_engine" type="module" loc="latent_cause_engine.py" lines="403"/>
+    <node id="night_learner" type="module" loc="night_learner.py" lines="434"/>
+    <node id="teach" type="module" loc="teach.py" lines="433"/>
+    <node id="find_truth" type="module" loc="find_the_truth.py" lines="10"/>
+    <node id="find_ghosts" type="module" loc="find_ghosts.py" lines="24"/>
+    <node id="ghost_hunt" type="module" loc="ghost_hunt.py" lines="27"/>
+    <node id="stability_audit" type="module" loc="stability_audit.py" lines="61"/>
+    <node id="peek_code" type="module" loc="peek_code.py" lines="5"/>
+    <node id="generate_graph" type="module" loc="generate_graph.py" lines="502"/>
+    <node id="verify_topology" type="module" loc="verify_recall_topology.py" lines="85"/>
+    <node id="benchmark" type="module" loc="benchmark.py" lines="298"/>
+    <node id="run_benchmark_v2" type="module" loc="run_benchmark_v2.py" lines="263"/>
+    <node id="research_benchmark" type="module" loc="research_benchmark.py" lines="239"/>
+
+    <!-- ====== VALIDATION ====== -->
+    <node id="val_interfaces" type="module" loc="validation/interfaces.py" lines="163"/>
+    <node id="val_metrics" type="module" loc="validation/metrics.py" lines="303"/>
+    <node id="val_report" type="module" loc="validation/report.py" lines="320"/>
+    <node id="val_runner" type="module" loc="validation/runner.py" lines="617"/>
+    <node id="val_datasets" type="module" loc="validation/datasets.py" lines="127"/>
+    <node id="val_monitor" type="module" loc="validation/monitor.py" lines="153"/>
+    <node id="val_regression" type="module" loc="validation/regression.py" lines="349"/>
+    <node id="val_artifact" type="module" loc="validation/artifact.py" lines="478"/>
+    <node id="val_shared_metrics" type="module" loc="validation/shared_metrics_v1.py" lines="145"/>
+
+    <!-- ====== EDGES: DEPENDENCY RELATIONSHIPS ====== -->
+    <!-- Core engine dependencies -->
+    <edge source="velynx_core_velynx" target="velynx_core_memory" kind="import"/>
+    <edge source="velynx_core_velynx" target="velynx_core_brain" kind="import"/>
+    <edge source="velynx_core_velynx" target="velynx_core_learner" kind="import"/>
+    <edge source="velynx_core_velynx" target="velynx_core_selfcoder" kind="import"/>
+    <edge source="velynx_core_brain" target="velynx_core_memory" kind="import"/>
+    <edge source="velynx_core_learner" target="velynx_core_memory" kind="import"/>
+    <edge source="velynx_core_selfcoder" target="velynx_core_memory" kind="import"/>
+
+    <!-- Backend brain -> submodules -->
+    <edge source="cog_brain" target="backend_memory" kind="import"/>
+    <edge source="cog_brain" target="backend_cognition" kind="import"/>
+    <edge source="cog_brain" target="backend_reflection" kind="import"/>
+    <edge source="cog_brain" target="backend_selfcoder" kind="import"/>
+
+    <!-- Backend orchestrator dependencies -->
+    <edge source="backend_orchestrator" target="backend_knowledge" kind="import"/>
+    <edge source="backend_orchestrator" target="backend_cognition" kind="import"/>
+    <edge source="backend_orchestrator" target="backend_memory" kind="import"/>
+    <edge source="backend_orchestrator" target="backend_agency" kind="import"/>
+    <edge source="backend_orchestrator" target="backend_audio" kind="import"/>
+
+    <!-- Scenario engine -> metacog (circular) -->
+    <edge source="cog_scenario" target="cog_metacog" kind="import"/>
+    <edge source="cog_scenario" target="backend_soul" kind="import"/>
+
+    <!-- Unified pipeline dependencies -->
+    <edge source="cog_unified_pipeline" target="backend_cognition" kind="import"/>
+    <edge source="cog_unified_pipeline" target="backend_memory" kind="import"/>
+    <edge source="cog_unified_pipeline" target="backend_pipeline" kind="import"/>
+    <edge source="cog_unified_pipeline" target="backend_retrieval" kind="import"/>
+    <edge source="cog_unified_pipeline" target="backend_learning" kind="import"/>
+
+    <!-- Advanced cognition -> backend memory -->
+    <edge source="cog_advanced_cognition" target="backend_memory" kind="import"/>
+
+    <!-- Self model -> backend components -->
+    <edge source="cog_self_model" target="backend_memory" kind="import"/>
+    <edge source="cog_self_model" target="backend_knowledge" kind="import"/>
+    <edge source="cog_self_model" target="backend_agency" kind="import"/>
+    <edge source="cog_self_model" target="backend_abstraction" kind="import"/>
+
+    <!-- Predictive core -> backend memory -->
+    <edge source="cog_predictive_core" target="backend_memory" kind="import"/>
+
+    <!-- Reasoning engine -> backend knowledge -->
+    <edge source="cog_reasoning" target="backend_knowledge" kind="import"/>
+
+    <!-- Root scripts dependencies -->
+    <edge source="cognitive_core" target="cognitive_health" kind="import"/>
+    <edge source="cognitive_core" target="concept_birth" kind="import"/>
+    <edge source="cognitive_core" target="latent_cause_engine" kind="import"/>
+    <edge source="cognitive_health" target="val_metrics" kind="import"/>
+    <edge source="cognitive_health" target="val_report" kind="import"/>
+    <edge source="night_learner" target="backend_retrieval" kind="import"/>
+    <edge source="night_learner" target="backend_memory" kind="import"/>
+    <edge source="night_learner" target="backend_learning" kind="import"/>
+    <edge source="teach" target="backend_app" kind="import"/>
+    <edge source="ghost_hunt" target="backend_app" kind="import"/>
+    <edge source="stability_audit" target="backend_ops" kind="import"/>
+    <edge source="find_truth" target="backend_memory" kind="import"/>
+    <edge source="peek_code" target="backend_memory" kind="import"/>
+    <edge source="run_benchmark_v2" target="backend_cognition" kind="import"/>
+    <edge source="run_benchmark_v2" target="backend_soul" kind="import"/>
+    <edge source="benchmark" target="val_artifact" kind="import"/>
+    <edge source="benchmark" target="val_datasets" kind="import"/>
+    <edge source="benchmark" target="val_metrics" kind="import"/>
+    <edge source="benchmark" target="val_monitor" kind="import"/>
+    <edge source="benchmark" target="val_regression" kind="import"/>
+    <edge source="benchmark" target="val_report" kind="import"/>
+    <edge source="benchmark" target="val_runner" kind="import"/>
+    <edge source="benchmark" target="cog_decision_policy" kind="import"/>
+
+    <!-- Validation dependencies -->
+    <edge source="val_metrics" target="val_interfaces" kind="import"/>
+    <edge source="val_report" target="val_metrics" kind="import"/>
+    <edge source="val_runner" target="backend_cognition" kind="import"/>
+    <edge source="val_runner" target="val_interfaces" kind="import"/>
+    <edge source="val_monitor" target="val_interfaces" kind="import"/>
+    <edge source="val_regression" target="val_interfaces" kind="import"/>
+    <edge source="val_artifact" target="val_regression" kind="import"/>
+    <edge source="val_datasets" target="val_interfaces" kind="import"/>
+
+    <!-- Research scripts -->
+    <edge source="research_benchmark" target="backend_research" kind="import"/>
+
+  </graph>
+</graphml>

@@ -1,0 +1,123 @@
+# VELYNX — Reproducibility Specification v1
+# ===========================================
+# Every experiment in this repository must be reproducible from:
+#  1. The source code at a pinned git commit
+#  2. The configuration files in infra/config/
+#  3. The parameter registry (parameter_registry.yaml)
+#  4. This document's dependency and environment specification
+
+reproducibility:
+  version: "1.0"
+  date: "2026-07-03"
+
+  # -- Git -------------------------------------------------------------------
+  version_control:
+    system: git
+    repository: "https://github.com/velynx/velynx"
+    current_head: "32be7a1"  # Phase 62.1
+    history_preserved: true
+    policy: "All code moves use git mv. git log --follow traces file history."
+
+  # -- Python Environment ----------------------------------------------------
+  python:
+    version: ">=3.11"
+    package_manager: pip
+    dependencies:
+      source: requirements.txt
+      pinned: false  # TODO: pin with pip freeze > requirements-locked.txt
+    virtual_environment:
+      path: .venv/
+      activate: "source .venv/bin/activate (Linux) or .venv/Scripts/Activate.ps1 (Windows)"
+
+  # -- Configuration ---------------------------------------------------------
+  configuration:
+    schema: "infra/config/"
+    files:
+      - baseline.json
+      - noisy.json
+      - simple.json
+    environment_variables:
+      source: .env.example
+      required:
+        - OPENAI_API_KEY  # or alternative LLM provider key
+        - VELYNX_DATA_DIR  # runtime data directory
+      optional:
+        - LOG_LEVEL
+        - BENCHMARK_SEED
+
+  # -- Parameters ------------------------------------------------------------
+  parameters:
+    registry: parameter_registry.yaml
+    freeze_energy_coefficients:
+      lambda: 1.0
+      mu: 2.0
+      nu: 0.5
+      source_of_truth: "validation/metrics.py"
+      mirrors:
+        - backend/cognition/decision_policy.py  # DEFAULT_LAMBDA/MU/NU
+        - cognitive_core.py  # LAMBDA/MU/NU (imported from cognitive_health)
+
+  # -- Experiments -----------------------------------------------------------
+  experiments:
+    registry: experiment_registry.yaml
+    reproducibility_protocol:
+      1: "git checkout <experiment-commit>"
+      2: "pip install -r requirements.txt"
+      3: "cp infra/config/<experiment-config>.json infra/config/active.json"
+      4: "python experiments/<EXPERIMENT>/run.py"
+      5: "python experiments/<EXPERIMENT>/analysis.py"
+    experiment_specific:
+      E0:
+        entry: "experiments/E0/run.py"
+        config: "baseline.json"
+        output: "artifacts/experiments/E0/"
+        seed: 42
+      R1:
+        entry: "experiments/R1/run.py"
+        config: "noisy.json"
+        output: "artifacts/experiments/R1/"
+        note: "72 experiments already completed; artifacts archived"
+
+  # -- Data ------------------------------------------------------------------
+  data:
+    runtime: "infra/data/"
+    databases:
+      - knowledge_graph.db
+      - memory_graph.db
+      - soul_graph.db
+      - brain_stem.db
+      - predictive.db
+    generated_by: "bootstrap scripts or first run"
+    not_in_vcs: true  # *.db in .gitignore
+
+  # -- Randomness ------------------------------------------------------------
+  randomness:
+    seed_control: "BENCHMARK_SEED environment variable"
+    default_seed: 42
+    numpy_random_state: true
+    python_random_seed: true
+
+  # -- Hardware Dependencies -------------------------------------------------
+  hardware:
+    minimum:
+      cpu: "4 cores"
+      ram: "8 GB"
+      disk: "10 GB free"
+    recommended:
+      gpu: "CUDA-capable (for deep_learner.py)"
+      ram: "16 GB"
+    note: "GPU is optional; all cognitive core runs on CPU"
+
+  # -- Verification ----------------------------------------------------------
+  verification:
+    test_suite: "pytest tests/ -m 'not slow'"
+    benchmark: "python benchmark.py"
+    ci: "GitHub Actions (configured separately)"
+    regression_gate: "validation/regression.py"
+    expected_pass_rate: "100% on pinned commit"
+
+  # -- Known Non-Reproducibility Factors ------------------------------------
+  known_issues:
+    - "LLM API responses vary by model version and temperature; pin model in config"
+    - "Soul graph Hebbian updates depend on query order; deterministic in replay"
+    - "Web search results depend on external API availability; mock for unit tests"

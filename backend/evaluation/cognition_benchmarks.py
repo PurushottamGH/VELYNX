@@ -1,7 +1,7 @@
 """Default benchmark test suites for cognition evaluation."""
 from __future__ import annotations
 
-from evaluation import TestScenario, TestSuite
+from backend.evaluation import TestScenario, TestSuite
 
 # ── Reasoning Coherence Benchmarks ───────────────────────────────
 

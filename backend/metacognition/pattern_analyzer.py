@@ -5,9 +5,9 @@ import hashlib
 import logging
 from collections import Counter, defaultdict
 
-from database.engine import async_session
-from database.repositories import ReflectionRepository
-from metacognition import PatternCluster, ReasoningPattern
+from backend.database.engine import async_session
+from backend.database.repositories import ReflectionRepository
+from backend.metacognition import PatternCluster, ReasoningPattern
 
 logger = logging.getLogger("uvicorn")
 

@@ -4,7 +4,7 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from evaluation import MetricEvaluation
+from backend.evaluation import MetricEvaluation
 
 logger = logging.getLogger("uvicorn")
 

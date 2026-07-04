@@ -1,0 +1,154 @@
+{
+  "config": {
+    "field_validation": {
+      "all_fields_present": true,
+      "missing_samples": {},
+      "per_field_proportion": {
+        "delta_energy": "656/656 (100.0%)",
+        "delta_entropy": "656/656 (100.0%)",
+        "delta_load": "656/656 (100.0%)",
+        "delta_prediction": "656/656 (100.0%)",
+        "energy_before": "656/656 (100.0%)",
+        "entropy_after": "656/656 (100.0%)",
+        "entropy_before": "656/656 (100.0%)",
+        "load_after": "656/656 (100.0%)",
+        "load_before": "656/656 (100.0%)",
+        "prediction_after": "656/656 (100.0%)",
+        "prediction_before": "656/656 (100.0%)"
+      },
+      "total_proposals": 656
+    },
+    "has_held_out": true,
+    "horizon": 200,
+    "num_windows": 82
+  },
+  "objectives": [
+    {
+      "details": {
+        "available": true
+      },
+      "effect_size_vs_Replay_\u0394E": 0.0,
+      "mae": 3.137599,
+      "n_proposals": 656,
+      "n_windows": 82,
+      "objective": "Replay_\u0394E",
+      "pearson_ci95_high": 0.151028,
+      "pearson_ci95_low": 0.000388,
+      "pearson_r": 0.074352,
+      "rmse": 3.78847,
+      "roc_auc": 0.548313,
+      "roc_auc_ci95_high": 0.613913,
+      "roc_auc_ci95_low": 0.482165,
+      "sign_agreement": 0.526568,
+      "spearman_ci95_high": 0.154213,
+      "spearman_ci95_low": 0.001028,
+      "spearman_rho": 0.082406
+    },
+    {
+      "details": {
+        "available": true
+      },
+      "effect_size_vs_Replay_\u0394E": -37.316708,
+      "mae": 3.501047,
+      "n_proposals": 656,
+      "n_windows": 82,
+      "objective": "Replay_\u0394S",
+      "pearson_ci95_high": 0.195237,
+      "pearson_ci95_low": 0.030859,
+      "pearson_r": 0.113364,
+      "rmse": 4.184233,
+      "roc_auc": 0.503877,
+      "roc_auc_ci95_high": 0.572209,
+      "roc_auc_ci95_low": 0.436662,
+      "sign_agreement": 0.531359,
+      "spearman_ci95_high": 0.175548,
+      "spearman_ci95_low": 0.019016,
+      "spearman_rho": 0.098127
+    },
+    {
+      "details": {
+        "available": false,
+        "note": "\u0394R requires representation-error (R) to be measured during replay, which the current ReplayEngine does not compute. See shared_metrics_v1.compute_R_representation_error."
+      },
+      "effect_size_vs_Replay_\u0394E": null,
+      "mae": null,
+      "n_proposals": 0,
+      "n_windows": 82,
+      "objective": "Replay_\u0394R",
+      "pearson_ci95_high": null,
+      "pearson_ci95_low": null,
+      "pearson_r": null,
+      "rmse": null,
+      "roc_auc": null,
+      "roc_auc_ci95_high": null,
+      "roc_auc_ci95_low": null,
+      "sign_agreement": null,
+      "spearman_ci95_high": null,
+      "spearman_ci95_low": null,
+      "spearman_rho": null
+    },
+    {
+      "details": {
+        "available": true
+      },
+      "effect_size_vs_Replay_\u0394E": 39.752685,
+      "mae": 2.75,
+      "n_proposals": 656,
+      "n_windows": 82,
+      "objective": "Always_Merge",
+      "pearson_ci95_high": null,
+      "pearson_ci95_low": null,
+      "pearson_r": null,
+      "rmse": 3.391165,
+      "roc_auc": 0.5,
+      "roc_auc_ci95_high": 0.5,
+      "roc_auc_ci95_low": 0.5,
+      "sign_agreement": 0.0,
+      "spearman_ci95_high": 0.200548,
+      "spearman_ci95_low": 0.047962,
+      "spearman_rho": 0.124149
+    },
+    {
+      "details": {
+        "available": true
+      },
+      "effect_size_vs_Replay_\u0394E": -37.295716,
+      "mae": 3.5,
+      "n_proposals": 656,
+      "n_windows": 82,
+      "objective": "Never_Merge",
+      "pearson_ci95_high": null,
+      "pearson_ci95_low": null,
+      "pearson_r": null,
+      "rmse": 4.1833,
+      "roc_auc": 0.5,
+      "roc_auc_ci95_high": 0.5,
+      "roc_auc_ci95_low": 0.5,
+      "sign_agreement": 0.0,
+      "spearman_ci95_high": 0.200548,
+      "spearman_ci95_low": 0.047962,
+      "spearman_rho": 0.124149
+    },
+    {
+      "details": {
+        "available": true
+      },
+      "effect_size_vs_Replay_\u0394E": 0.070066,
+      "mae": 3.114542,
+      "n_proposals": 656,
+      "n_windows": 82,
+      "objective": "Random_Merge",
+      "pearson_ci95_high": 0.047847,
+      "pearson_ci95_low": -0.104016,
+      "pearson_r": -0.027548,
+      "rmse": 3.782425,
+      "roc_auc": 0.447969,
+      "roc_auc_ci95_high": 0.515371,
+      "roc_auc_ci95_low": 0.381431,
+      "sign_agreement": 0.487369,
+      "spearman_ci95_high": 0.049039,
+      "spearman_ci95_low": -0.103481,
+      "spearman_rho": -0.026567
+    }
+  ]
+}

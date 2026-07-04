@@ -5,7 +5,7 @@ import logging
 import re
 from typing import Any
 
-from evaluation import HallucinationReport, HallucinationSignal
+from backend.evaluation import HallucinationReport, HallucinationSignal
 
 logger = logging.getLogger("uvicorn")
 

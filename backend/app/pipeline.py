@@ -70,11 +70,11 @@ from backend.cognition.self_model import (
 )
 from backend.pipeline.soul_router import soul_lookup, soul_lookup_legacy
 # Phase 11: Conversational Cognition
-from conversation.beliefs import belief_store
-from conversation.dialogue_manager import dialogue_manager
-from conversation.monologue import inner_monologue
-from conversation.reasoning_modes import get_mode_config, select_reasoning_mode
-from conversation.working_memory import ConversationTurn, conversation_buffer
+from backend.conversation.beliefs import belief_store
+from backend.conversation.dialogue_manager import dialogue_manager
+from backend.conversation.monologue import inner_monologue
+from backend.conversation.reasoning_modes import get_mode_config, select_reasoning_mode
+from backend.conversation.working_memory import ConversationTurn, conversation_buffer
 
 logger = logging.getLogger("uvicorn")
 

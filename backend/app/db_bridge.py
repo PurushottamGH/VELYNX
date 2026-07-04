@@ -8,8 +8,8 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from database.runtime_state import runtime_state
-from database.engine import async_session
+from backend.database.runtime_state import runtime_state
+from backend.database.engine import async_session
 
 logger = logging.getLogger("uvicorn")
 

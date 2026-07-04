@@ -7,10 +7,10 @@ import httpx
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
-from app.main import app  # noqa: E402
-from learning import feedback_loop, gap_tracker, permanence, source_trust  # noqa: E402
-from learning import living_constitution  # noqa: E402
-from learning.permanence import PermanenceLayer  # noqa: E402
+from backend.app.main import app  # noqa: E402
+from backend.learning import feedback_loop, gap_tracker, permanence, source_trust  # noqa: E402
+from backend.learning import living_constitution  # noqa: E402
+from backend.learning.permanence import PermanenceLayer  # noqa: E402
 
 
 def _patch_paths(tmp_path) -> None:

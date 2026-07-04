@@ -4,8 +4,8 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 
-from runtime.event_models import Event, EventType
-from runtime.runtime_monitor import runtime_monitor
+from backend.runtime.event_models import Event, EventType
+from backend.runtime.runtime_monitor import runtime_monitor
 
 if TYPE_CHECKING:
     from runtime.event_bus import EventBus

@@ -12,7 +12,7 @@ _backend_root = str(Path(__file__).parent.parent.resolve())
 if _backend_root not in sys.path:
     sys.path.insert(0, _backend_root)
 
-from cognition.metacog import reflect
+from backend.cognition.metacog import reflect
 
 
 def parse_scenario(query: str) -> dict:
@@ -46,4 +46,4 @@ def parse_scenario(query: str) -> dict:
     }
 
 
-from cognition.metacog import reflect  # noqa: E402,F401 — metacognitive wrapper; import at bottom avoids circular dep
+from backend.cognition.metacog import reflect  # noqa: E402,F401 — metacognitive wrapper; import at bottom avoids circular dep

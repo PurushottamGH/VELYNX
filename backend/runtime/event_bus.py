@@ -8,7 +8,7 @@ from collections import defaultdict
 from collections.abc import Awaitable, Callable
 from typing import Any
 
-from runtime.event_models import (
+from backend.runtime.event_models import (
     Event,
     EventEnvelope,
     EventType,

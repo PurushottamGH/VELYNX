@@ -5,7 +5,7 @@ from pathlib import Path
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
-from retrieval import browser  # noqa: E402
+from backend.retrieval import browser  # noqa: E402
 
 
 def test_fetch_page_returns_none_on_failure(monkeypatch) -> None:

@@ -7,18 +7,18 @@ import pytest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from metacognition import (
+from backend.metacognition import (
     TimeWindow, MetricPoint, MetricTrend, CognitionMetricsReport,
     ReasoningPattern, PatternCluster, CalibrationRecord, CalibrationReport,
     StrategyPerformance, StrategyAnalysis, HealthIndicator, CognitionHealthReport,
     AdaptationRecommendation, RuntimePerformanceMetrics, MetacognitionReport,
 )
-from metacognition.cognition_metrics import CognitionMetrics
-from metacognition.pattern_analyzer import PatternAnalyzer
-from metacognition.confidence_calibrator import ConfidenceCalibrator
-from metacognition.strategy_analyzer import CrossDomainStrategyAnalyzer
-from metacognition.adaptation_engine import AdaptationEngine
-from metacognition.meta_monitor import MetaMonitor
+from backend.metacognition.cognition_metrics import CognitionMetrics
+from backend.metacognition.pattern_analyzer import PatternAnalyzer
+from backend.metacognition.confidence_calibrator import ConfidenceCalibrator
+from backend.metacognition.strategy_analyzer import CrossDomainStrategyAnalyzer
+from backend.metacognition.adaptation_engine import AdaptationEngine
+from backend.metacognition.meta_monitor import MetaMonitor
 
 
 # ── Model Tests ──────────────────────────────────────────────────

@@ -5,9 +5,9 @@ import logging
 import math
 from datetime import datetime, timedelta, timezone
 
-from database.engine import async_session
-from database.repositories import ReflectionRepository
-from metacognition import CognitionMetricsReport, MetricPoint, MetricTrend, TimeWindow
+from backend.database.engine import async_session
+from backend.database.repositories import ReflectionRepository
+from backend.metacognition import CognitionMetricsReport, MetricPoint, MetricTrend, TimeWindow
 
 logger = logging.getLogger("uvicorn")
 

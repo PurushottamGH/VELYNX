@@ -1,0 +1,27 @@
+{
+  "experiment_name": "anomaly_test",
+  "config": {
+    "dataset_name": "environment",
+    "seed": 7,
+    "num_ticks": 5000,
+    "noise_sigma": 0.05,
+    "tolerance": 0.05,
+    "proximity_threshold": 0.25,
+    "experiment_name": "anomaly_test",
+    "baseline": null,
+    "artifacts_root": null,
+    "critical_metrics": null,
+    "metrics": {
+      "EntropyMetric": 2.2925945283952496,
+      "SurpriseMetric": 0.08213714942219093,
+      "ActiveLoadMetric": 24.19599575880889,
+      "CognitiveEnergyMetric": 14.554866706644077
+    }
+  },
+  "result": {
+    "passed": true,
+    "improvements": {},
+    "regressions": {},
+    "summary": "REGRESSION GATE: PASS (tolerance 5.0%)\n  No measured change across shared metrics."
+  }
+}

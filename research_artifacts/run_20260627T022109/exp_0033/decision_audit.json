@@ -1,0 +1,56 @@
+[
+  {
+    "accepted": true,
+    "distance": 0.5881684574902233,
+    "energy_after": 4.797876311704708,
+    "energy_before": 5.040745831582287,
+    "energy_delta": 0.242869519877579,
+    "entropy_delta": -0.15712490762541276,
+    "load_delta": 1.0,
+    "policy": "fifo",
+    "prediction_delta": -0.050002786248503794,
+    "reason": "fifo: commit oldest pair unconditionally",
+    "strategy": "fifo_age",
+    "targets": [
+      0,
+      1
+    ],
+    "tick": 499
+  },
+  {
+    "accepted": true,
+    "distance": 0.3500358903632977,
+    "energy_after": 4.148561851492211,
+    "energy_before": 4.797876311704708,
+    "energy_delta": 0.649314460212497,
+    "entropy_delta": 0.1657626740387611,
+    "load_delta": 1.0,
+    "policy": "fifo",
+    "prediction_delta": -0.00822410691313194,
+    "reason": "fifo: commit oldest pair unconditionally",
+    "strategy": "fifo_age",
+    "targets": [
+      2,
+      3
+    ],
+    "tick": 499
+  },
+  {
+    "accepted": true,
+    "distance": 0.3575221232802919,
+    "energy_after": 3.623160476449707,
+    "energy_before": 4.148561851492211,
+    "energy_delta": 0.5254013750425037,
+    "entropy_delta": 0.05054529472400149,
+    "load_delta": 1.0,
+    "policy": "fifo",
+    "prediction_delta": -0.01257195984074913,
+    "reason": "fifo: commit oldest pair unconditionally",
+    "strategy": "fifo_age",
+    "targets": [
+      4,
+      5
+    ],
+    "tick": 499
+  }
+]

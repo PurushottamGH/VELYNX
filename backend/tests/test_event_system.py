@@ -8,10 +8,10 @@ import pytest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from runtime.event_models import Event, EventType, EventPriority, HandlerResult
-from runtime.tracing import new_correlation_id, get_correlation_id, set_correlation_id, trace
-from runtime.runtime_monitor import RuntimeMonitor, LatencyStats
-from runtime.event_bus import EventBus
+from backend.runtime.event_models import Event, EventType, EventPriority, HandlerResult
+from backend.runtime.tracing import new_correlation_id, get_correlation_id, set_correlation_id, trace
+from backend.runtime.runtime_monitor import RuntimeMonitor, LatencyStats
+from backend.runtime.event_bus import EventBus
 
 
 # ── Event Models ─────────────────────────────────────────────────

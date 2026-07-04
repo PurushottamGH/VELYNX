@@ -30,7 +30,7 @@ for _p in (str(_BACKEND_DIR), str(_REPO_ROOT)):
 
 import pytest
 
-from conversation.working_memory import (
+from backend.conversation.working_memory import (
     ConversationBuffer,
     ConversationTurn,
     WorkingContext,
@@ -184,7 +184,7 @@ for _stream in (sys.stdout, sys.stderr):
     except Exception:
         pass
 
-from app.pipeline import answer_question  # noqa: E402
+from backend.app.pipeline import answer_question  # noqa: E402
 
 
 # ── Phase 55 fixtures / constants ─────────────────────────────────────────────

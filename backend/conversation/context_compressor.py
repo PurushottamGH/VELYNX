@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import re
-from conversation.working_memory import ConversationTurn
+from backend.conversation.working_memory import ConversationTurn
 
 
 def compress_context(turns: list[ConversationTurn]) -> str:

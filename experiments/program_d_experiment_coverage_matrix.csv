@@ -1,0 +1,21 @@
+Experiment,Component,Coverage,Source,Status
+E1_C1_PredictiveUnderstanding,CognitiveEngine,cognition_chain,generate_graph.py,COVERED
+E2_C2_ContradictionResolution,ReasoningEngine,functional_predicates,generate_graph.py,COVERED
+E3_C3_GraphTraversal,KnowledgeGraph,bfs_paths,generate_graph.py,COVERED
+E4_C4_Synthesis,SynthesizerModule,answer_composition,generate_graph.py,COVERED
+E5_C5_SelfProgramming,SelfCoder,code_generation,generate_graph.py,COVERED
+E6_C6_BeliefRevision,StableBeliefModel,inertia_law,generate_graph.py,COVERED
+E7_C7_Sensorium,SensoriumMonitor,fusion_loop,generate_graph.py,COVERED
+E8_C8_Consolidation,ConsolidationPipeline,replay_engine,generate_graph.py,COVERED
+E9_ReplayEngineSandbox,ReplayEngine,sandbox_simulation,generate_graph.py,COVERED
+E10_PolicyComparison,DecisionPolicy,free_energy_vs_pareto,generate_graph.py,COVERED
+E11_NoveltyAdaptation,CognitiveEngine,novelty_detection,generate_graph.py,COVERED
+E12_ConvergenceStability,CognitiveEngine,long_run_stability,generate_graph.py,COVERED
+E13_OntologyIntegration,WorldModel,ontology_facts,generate_graph.py,COVERED
+-- ConceptBirthMDL,concept_birth.py,entropy_ledger,manual,UNCOVERED
+-- LatentCauseDiscovery,latent_cause_engine.py,predicate_mining,manual,UNCOVERED
+-- SoulGraphResonance,soul_graph.py,emotion_matching,manual,UNCOVERED
+-- SelfModelIntrospection,self_model.py,epistemic_aggregation,manual,UNCOVERED
+-- CurriculumTeaching,teaching_engine.py,lesson_scoring,manual,UNCOVERED
+-- RetrievalMesh,unified_retriever.py,multi_source_retrieval,manual,UNCOVERED
+-- RegressionGate,regression.py,baseline_comparison,manual,COVERED

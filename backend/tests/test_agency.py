@@ -79,7 +79,7 @@ for _p in (str(_BACKEND_DIR), str(_REPO_ROOT)):
 
 import pytest  # noqa: E402
 
-from app.pipeline import answer_question  # noqa: E402
+from backend.app.pipeline import answer_question  # noqa: E402
 
 
 # ── Test fixtures / constants ─────────────────────────────────────────────────

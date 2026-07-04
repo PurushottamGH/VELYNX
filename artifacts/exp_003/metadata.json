@@ -1,0 +1,32 @@
+{
+  "experiment_name": "proximity_035",
+  "config": {
+    "dataset_name": "environment",
+    "seed": 7,
+    "num_ticks": 5000,
+    "noise_sigma": 0.05,
+    "tolerance": 0.05,
+    "proximity_threshold": 0.35,
+    "experiment_name": "proximity_035",
+    "baseline": "artifacts/exp_002",
+    "artifacts_root": null,
+    "critical_metrics": null,
+    "metrics": {
+      "EntropyMetric": 1.2503359432278058,
+      "SurpriseMetric": 0.05262579493061732,
+      "ActiveLoadMetric": 8.192983583026363,
+      "CognitiveEnergyMetric": 5.452079324602222
+    }
+  },
+  "result": {
+    "passed": true,
+    "improvements": {
+      "EntropyMetric": 0.45461967751314264,
+      "SurpriseMetric": 0.3592936289995054,
+      "ActiveLoadMetric": 0.6613909315948037,
+      "CognitiveEnergyMetric": 0.625411937155465
+    },
+    "regressions": {},
+    "summary": "REGRESSION GATE: PASS (tolerance 5.0%)\n  Improvements:\n    - ActiveLoadMetric: 66.14% better\n    - CognitiveEnergyMetric: 62.54% better\n    - EntropyMetric: 45.46% better\n    - SurpriseMetric: 35.93% better"
+  }
+}

@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import re
 
-from pipeline.constitution_loader import load_constitution
-from learning.curriculum import detect_cognitive_layer
-from learning.strategy_optimizer import apply_learned_preferences
+from backend.pipeline.constitution_loader import load_constitution
+from backend.learning.curriculum import detect_cognitive_layer
+from backend.learning.strategy_optimizer import apply_learned_preferences
 
 DIMENSIONS = ["scientific", "historical", "philosophical", "human", "practical"]
 DOMAIN_KEYWORDS = {

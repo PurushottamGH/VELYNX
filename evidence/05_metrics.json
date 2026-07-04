@@ -1,0 +1,118 @@
+{
+  "experiment_id": "E0",
+  "report_title": "Sprint 1.1.1 — Final Reconciliation (C2 Data Leakage Fixed)",
+  "generated_at": "2026-07-04T13:13:35Z",
+  "num_seeds": 5,
+  "base_seed": 42,
+  "elapsed_seconds": 34.4,
+  "test_steps": 2000,
+  "decision": {
+    "verdict": "FAIL (DV-a)",
+    "pass": false,
+    "dv_a_pass": false,
+    "dv_b_pass": true,
+    "growth_occurred": false,
+    "n_seeds": 5,
+    "min_seeds": 5
+  },
+  "dv_a": {
+    "test_type": "paired_ttest",
+    "fwer_alpha": 0.01,
+    "vs_C1": {
+      "t_statistic": "NaN (zero variance)",
+      "p_value": "NaN (zero variance)",
+      "mean_difference": 0.0,
+      "significant": false,
+      "holm_bonferroni_corrected": true,
+      "explanation": "T and C1 produced identical models (0 growth events), so mean LL difference is exactly 0 with zero variance"
+    },
+    "vs_C2": {
+      "t_statistic": "NaN (zero variance)",
+      "p_value": "NaN (zero variance)",
+      "mean_difference": 0.0,
+      "significant": false,
+      "holm_bonferroni_corrected": true,
+      "explanation": "T and C2 produced identical models (0 growth events for both), so mean LL difference is exactly 0 with zero variance"
+    }
+  },
+  "dv_b": {
+    "m_statistic": 0.3012749149796877,
+    "margin": 0.051140693004735976,
+    "margin_source": "data_derived",
+    "exceeds_margin": true
+  },
+  "growth_diagnostics": {
+    "total_mdl_checks": 90,
+    "growth_events": 0,
+    "max_margin": -21.947324,
+    "mean_margin": -26.246136,
+    "diagnosis": "Growth never fired. Every MDL check evaluated G - lambda_model <= 0. Entropy reduction from adding a state never justified the increase in model complexity."
+  },
+  "per_seed": {
+    "42": {
+      "T_mean_ll": -0.9271763553619385,
+      "C1_mean_ll": -0.9271763553619385,
+      "C2_mean_ll": -0.9271763553619385,
+      "C3_mean_ll": -0.7618522047996521,
+      "T_growth": 0,
+      "C2_growth": 0,
+      "T_final_capacity": 2,
+      "C2_final_capacity": 2,
+      "T_test_n": 1999,
+      "C2_test_n": 1999
+    },
+    "43": {
+      "T_mean_ll": -0.6937090754508972,
+      "C1_mean_ll": -0.6937090754508972,
+      "C2_mean_ll": -0.6937090754508972,
+      "C3_mean_ll": -0.6914121508598328,
+      "T_growth": 0,
+      "C2_growth": 0,
+      "T_final_capacity": 2,
+      "C2_final_capacity": 2,
+      "T_test_n": 1999,
+      "C2_test_n": 1999
+    },
+    "44": {
+      "T_mean_ll": -0.729657769203186,
+      "C1_mean_ll": -0.729657769203186,
+      "C2_mean_ll": -0.729657769203186,
+      "C3_mean_ll": -0.6957247853279114,
+      "T_growth": 0,
+      "C2_growth": 0,
+      "T_final_capacity": 2,
+      "C2_final_capacity": 2,
+      "T_test_n": 1999,
+      "C2_test_n": 1999
+    },
+    "45": {
+      "T_mean_ll": -0.6722413897514343,
+      "C1_mean_ll": -0.6722413897514343,
+      "C2_mean_ll": -0.6722413897514343,
+      "C3_mean_ll": -0.6697271466255188,
+      "T_growth": 0,
+      "C2_growth": 0,
+      "T_final_capacity": 2,
+      "C2_final_capacity": 2,
+      "T_test_n": 1999,
+      "C2_test_n": 1999
+    },
+    "46": {
+      "T_mean_ll": -0.731808602809906,
+      "C1_mean_ll": -0.731808602809906,
+      "C2_mean_ll": -0.731808602809906,
+      "C3_mean_ll": -0.7372925281524658,
+      "T_growth": 0,
+      "C2_growth": 0,
+      "T_final_capacity": 2,
+      "C2_final_capacity": 2,
+      "T_test_n": 1999,
+      "C2_test_n": 1999
+    }
+  },
+  "floor_hit_rate": 0.0,
+  "verification": {
+    "c2_fix_confirmed": true,
+    "evidence": "C2 has test_n=1999 matching T for all seeds, confirming proper held-out evaluation via the independent test sequence"
+  }
+}

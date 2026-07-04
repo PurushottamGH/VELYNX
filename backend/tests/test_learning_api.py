@@ -7,8 +7,8 @@ sys.path.append(str(Path(__file__).resolve().parents[1]))
 
 import httpx
 
-from app.main import app
-from learning import permanence
+from backend.app.main import app
+from backend.learning import permanence
 
 
 def test_feedback_updates_permanence(tmp_path) -> None:

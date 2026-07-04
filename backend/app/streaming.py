@@ -10,12 +10,12 @@ from typing import AsyncGenerator
 from fastapi import Request
 from fastapi.responses import StreamingResponse
 
-from conversation.working_memory import conversation_buffer, ConversationTurn
-from conversation.monologue import inner_monologue
-from conversation.beliefs import belief_store
-from conversation.dialogue_manager import dialogue_manager
-from conversation.reasoning_modes import select_reasoning_mode, get_mode_config
-from models.source import Source
+from backend.conversation.working_memory import conversation_buffer, ConversationTurn
+from backend.conversation.monologue import inner_monologue
+from backend.conversation.beliefs import belief_store
+from backend.conversation.dialogue_manager import dialogue_manager
+from backend.conversation.reasoning_modes import select_reasoning_mode, get_mode_config
+from backend.models.source import Source
 
 logger = logging.getLogger("uvicorn")
 

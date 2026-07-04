@@ -7,7 +7,7 @@ from enum import Enum
 
 from pydantic import BaseModel, Field
 
-from conversation.working_memory import WorkingContext
+from backend.conversation.working_memory import WorkingContext
 
 logger = logging.getLogger("uvicorn")
 

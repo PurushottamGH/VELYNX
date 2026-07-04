@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import logging
 
-from ops import ResourceSnapshot
+from backend.ops import ResourceSnapshot
 
 logger = logging.getLogger("uvicorn")
 

@@ -11,8 +11,8 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 # Add parent directory to path so we can import database.models
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 
-from database.models import Base
-from database.engine import DATABASE_URL
+from backend.database.models import Base
+from backend.database.engine import DATABASE_URL
 
 config = context.config
 config.set_main_option("sqlalchemy.url", DATABASE_URL)

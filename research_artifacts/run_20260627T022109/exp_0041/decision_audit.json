@@ -1,0 +1,272 @@
+[
+  {
+    "accepted": true,
+    "distance": 0.1842569428048719,
+    "energy_after": 26.272004463470605,
+    "energy_before": 26.77184485443,
+    "energy_delta": 0.49984039095939536,
+    "entropy_delta": 0.0,
+    "load_delta": 1.0,
+    "policy": "similarity",
+    "prediction_delta": -7.980452030106888e-05,
+    "reason": "similarity: commit nearest pair unconditionally",
+    "strategy": "similarity",
+    "targets": [
+      16,
+      30
+    ],
+    "tick": 387
+  },
+  {
+    "accepted": true,
+    "distance": 0.20680681350903218,
+    "energy_after": 26.229997123111453,
+    "energy_before": 26.771396019379313,
+    "energy_delta": 0.5413988962678609,
+    "entropy_delta": 0.04081632653061207,
+    "load_delta": 1.0,
+    "policy": "similarity",
+    "prediction_delta": 0.0002912848686255076,
+    "reason": "similarity: commit nearest pair unconditionally",
+    "strategy": "similarity",
+    "targets": [
+      4,
+      7
+    ],
+    "tick": 387
+  },
+  {
+    "accepted": true,
+    "distance": 0.20946394739170657,
+    "energy_after": 26.229746660154078,
+    "energy_before": 26.729746660154078,
+    "energy_delta": 0.5,
+    "entropy_delta": 0.0,
+    "load_delta": 1.0,
+    "policy": "similarity",
+    "prediction_delta": 0.0,
+    "reason": "similarity: commit nearest pair unconditionally",
+    "strategy": "similarity",
+    "targets": [
+      6,
+      36
+    ],
+    "tick": 387
+  },
+  {
+    "accepted": true,
+    "distance": 0.20362167534791983,
+    "energy_after": 26.121920740827342,
+    "energy_before": 26.62227023657099,
+    "energy_delta": 0.5003494957436487,
+    "entropy_delta": 0.0,
+    "load_delta": 1.0,
+    "policy": "similarity",
+    "prediction_delta": 0.00017474787182342189,
+    "reason": "similarity: commit nearest pair unconditionally",
+    "strategy": "similarity",
+    "targets": [
+      29,
+      49
+    ],
+    "tick": 456
+  },
+  {
+    "accepted": true,
+    "distance": 0.2041693698378655,
+    "energy_after": 26.124585015480836,
+    "energy_before": 26.621920740827342,
+    "energy_delta": 0.49733572534650605,
+    "entropy_delta": 0.0,
+    "load_delta": 1.0,
+    "policy": "similarity",
+    "prediction_delta": -0.0013321373267463632,
+    "reason": "similarity: commit nearest pair unconditionally",
+    "strategy": "similarity",
+    "targets": [
+      45,
+      46
+    ],
+    "tick": 456
+  },
+  {
+    "accepted": true,
+    "distance": 0.21807731845363526,
+    "energy_after": 26.127425227939383,
+    "energy_before": 26.624585015480836,
+    "energy_delta": 0.4971597875414524,
+    "entropy_delta": 0.0,
+    "load_delta": 1.0,
+    "policy": "similarity",
+    "prediction_delta": -0.0014201062292736044,
+    "reason": "similarity: commit nearest pair unconditionally",
+    "strategy": "similarity",
+    "targets": [
+      13,
+      31
+    ],
+    "tick": 456
+  },
+  {
+    "accepted": true,
+    "distance": 0.20722839271451732,
+    "energy_after": 26.01807033769113,
+    "energy_before": 26.473345126426665,
+    "energy_delta": 0.45527478873553306,
+    "entropy_delta": -0.036213010424843706,
+    "load_delta": 1.0,
+    "policy": "similarity",
+    "prediction_delta": -0.004256100419811282,
+    "reason": "similarity: commit nearest pair unconditionally",
+    "strategy": "similarity",
+    "targets": [
+      2,
+      18
+    ],
+    "tick": 507
+  },
+  {
+    "accepted": true,
+    "distance": 0.2172829231903646,
+    "energy_after": 25.873670318687854,
+    "energy_before": 26.372287336697127,
+    "energy_delta": 0.4986170180092735,
+    "entropy_delta": 0.0,
+    "load_delta": 1.0,
+    "policy": "similarity",
+    "prediction_delta": -0.0006914909953622261,
+    "reason": "similarity: commit nearest pair unconditionally",
+    "strategy": "similarity",
+    "targets": [
+      50,
+      54
+    ],
+    "tick": 507
+  },
+  {
+    "accepted": true,
+    "distance": 0.22642060021403704,
+    "energy_after": 25.824242915072933,
+    "energy_before": 26.323117774421217,
+    "energy_delta": 0.4988748593482839,
+    "entropy_delta": 0.0,
+    "load_delta": 1.0,
+    "policy": "similarity",
+    "prediction_delta": -0.0005625703258579084,
+    "reason": "similarity: commit nearest pair unconditionally",
+    "strategy": "similarity",
+    "targets": [
+      26,
+      41
+    ],
+    "tick": 507
+  },
+  {
+    "accepted": true,
+    "distance": 0.20192236729074903,
+    "energy_after": 26.272657873685088,
+    "energy_before": 26.793846232250544,
+    "energy_delta": 0.5211883585654569,
+    "entropy_delta": 0.02337238832095223,
+    "load_delta": 1.0,
+    "policy": "similarity",
+    "prediction_delta": -0.0010920148777480154,
+    "reason": "similarity: commit nearest pair unconditionally",
+    "strategy": "similarity",
+    "targets": [
+      11,
+      55
+    ],
+    "tick": 590
+  },
+  {
+    "accepted": true,
+    "distance": 0.2068338491967315,
+    "energy_after": 26.275764598111913,
+    "energy_before": 26.725673469383086,
+    "energy_delta": 0.4499088712711732,
+    "entropy_delta": -0.04081632653061251,
+    "load_delta": 1.0,
+    "policy": "similarity",
+    "prediction_delta": -0.004637401099108457,
+    "reason": "similarity: commit nearest pair unconditionally",
+    "strategy": "similarity",
+    "targets": [
+      15,
+      44
+    ],
+    "tick": 590
+  },
+  {
+    "accepted": true,
+    "distance": 0.23277567550958025,
+    "energy_after": 26.400121118284677,
+    "energy_before": 26.775764598111913,
+    "energy_delta": 0.3756434798272359,
+    "entropy_delta": -0.11244438784340693,
+    "load_delta": 1.0,
+    "policy": "similarity",
+    "prediction_delta": -0.005956066164678253,
+    "reason": "similarity: commit nearest pair unconditionally",
+    "strategy": "similarity",
+    "targets": [
+      64,
+      66
+    ],
+    "tick": 590
+  },
+  {
+    "accepted": true,
+    "distance": 0.2353063896122152,
+    "energy_after": 25.903803196335744,
+    "energy_before": 26.361358353155158,
+    "energy_delta": 0.4575551568194136,
+    "entropy_delta": -0.04081632653061229,
+    "load_delta": 1.0,
+    "policy": "similarity",
+    "prediction_delta": -0.0008142583249866608,
+    "reason": "similarity: commit nearest pair unconditionally",
+    "strategy": "similarity",
+    "targets": [
+      0,
+      34
+    ],
+    "tick": 673
+  },
+  {
+    "accepted": true,
+    "distance": 0.23629794576112087,
+    "energy_after": 25.91956802327419,
+    "energy_before": 26.403067920034328,
+    "energy_delta": 0.4834998967601365,
+    "entropy_delta": -0.015405867391091177,
+    "load_delta": 1.0,
+    "policy": "similarity",
+    "prediction_delta": -0.0005471179243855262,
+    "reason": "similarity: commit nearest pair unconditionally",
+    "strategy": "similarity",
+    "targets": [
+      8,
+      28
+    ],
+    "tick": 673
+  },
+  {
+    "accepted": true,
+    "distance": 0.2365868718518334,
+    "energy_after": 25.904073211884754,
+    "energy_before": 26.420063685388193,
+    "energy_delta": 0.5159904735034395,
+    "entropy_delta": 0.015405867391091177,
+    "load_delta": 1.0,
+    "policy": "similarity",
+    "prediction_delta": 0.0002923030561753359,
+    "reason": "similarity: commit nearest pair unconditionally",
+    "strategy": "similarity",
+    "targets": [
+      3,
+      62
+    ],
+    "tick": 673
+  }
+]

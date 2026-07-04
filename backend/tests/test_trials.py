@@ -8,17 +8,17 @@ import pytest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from evaluation import TestScenario, TestSuite
-from evaluation.trial_runner import TrialRunner
-from evaluation.scenario_loader import (
+from backend.evaluation import TestScenario, TestSuite
+from backend.evaluation.trial_runner import TrialRunner
+from backend.evaluation.scenario_loader import (
     get_all_trial_suites, get_trial_suite_by_name, get_all_trial_scenarios,
     DEFAULT_TRIAL_SUITES,
 )
-from evaluation.adversarial_tests import AdversarialTestRunner
-from evaluation.reality_checks import RealityChecker
-from evaluation.failure_analysis import FailureAnalyzer
-from evaluation.cognition_drift_monitor import CognitionDriftMonitor
-from evaluation.session_replay import SessionReplay
+from backend.evaluation.adversarial_tests import AdversarialTestRunner
+from backend.evaluation.reality_checks import RealityChecker
+from backend.evaluation.failure_analysis import FailureAnalyzer
+from backend.evaluation.cognition_drift_monitor import CognitionDriftMonitor
+from backend.evaluation.session_replay import SessionReplay
 
 
 # ── Scenario Loader Tests ────────────────────────────────────────

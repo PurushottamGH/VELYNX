@@ -8,7 +8,7 @@ from typing import Sequence
 from sqlalchemy import select, update, delete, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from database.models import (
+from backend.database.models import (
     EpisodeModel,
     ConceptModel,
     ReflectionModel,

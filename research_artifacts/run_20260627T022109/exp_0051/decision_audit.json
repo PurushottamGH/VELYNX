@@ -1,0 +1,56 @@
+[
+  {
+    "accepted": true,
+    "distance": 0.4773877598751987,
+    "energy_after": 4.372163036658703,
+    "energy_before": 4.862910593217652,
+    "energy_delta": 0.49074755655894897,
+    "entropy_delta": -0.009150632973605077,
+    "load_delta": 1.0,
+    "policy": "utility",
+    "prediction_delta": -5.0905233723114174e-05,
+    "reason": "utility: commit least-used pair unconditionally",
+    "strategy": "utility",
+    "targets": [
+      7,
+      3
+    ],
+    "tick": 499
+  },
+  {
+    "accepted": true,
+    "distance": 0.42559533527715393,
+    "energy_after": 3.7057026059507545,
+    "energy_before": 4.372163036658703,
+    "energy_delta": 0.6664604307079487,
+    "entropy_delta": 0.18059155668215704,
+    "load_delta": 1.0,
+    "policy": "utility",
+    "prediction_delta": -0.00706556298710409,
+    "reason": "utility: commit least-used pair unconditionally",
+    "strategy": "utility",
+    "targets": [
+      5,
+      6
+    ],
+    "tick": 499
+  },
+  {
+    "accepted": true,
+    "distance": 0.336032599964656,
+    "energy_after": 3.1578986747444504,
+    "energy_before": 3.7057026059507545,
+    "energy_delta": 0.5478039312063041,
+    "entropy_delta": 0.052654199076977326,
+    "load_delta": 1.0,
+    "policy": "utility",
+    "prediction_delta": -0.0024251339353365264,
+    "reason": "utility: commit least-used pair unconditionally",
+    "strategy": "utility",
+    "targets": [
+      8,
+      2
+    ],
+    "tick": 499
+  }
+]

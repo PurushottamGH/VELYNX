@@ -1,0 +1,56 @@
+[
+  {
+    "accepted": true,
+    "distance": 0.17596115101927656,
+    "energy_after": 4.165933758441367,
+    "energy_before": 4.862910593217652,
+    "energy_delta": 0.6969768347762848,
+    "entropy_delta": 0.210727326213007,
+    "load_delta": 1.0,
+    "policy": "free_energy",
+    "prediction_delta": -0.006875245718361109,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.6970 (E 4.8629 → 4.1659, tol=0.0000)",
+    "strategy": "free_energy",
+    "targets": [
+      0,
+      6
+    ],
+    "tick": 499
+  },
+  {
+    "accepted": true,
+    "distance": 0.20792270858121484,
+    "energy_after": 3.6659337584413674,
+    "energy_before": 4.165933758441367,
+    "energy_delta": 0.5,
+    "entropy_delta": 0.0,
+    "load_delta": 1.0,
+    "policy": "free_energy",
+    "prediction_delta": 0.0,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.5000 (E 4.1659 → 3.6659, tol=0.0000)",
+    "strategy": "free_energy",
+    "targets": [
+      5,
+      7
+    ],
+    "tick": 499
+  },
+  {
+    "accepted": true,
+    "distance": 0.23018548141263484,
+    "energy_after": 3.0732164465448313,
+    "energy_before": 3.6659337584413674,
+    "energy_delta": 0.5927173118965361,
+    "entropy_delta": 0.13006613986446325,
+    "load_delta": 1.0,
+    "policy": "free_energy",
+    "prediction_delta": -0.018674413983963564,
+    "reason": "Free-energy accept: free energy minimized; ΔE=+0.5927 (E 3.6659 → 3.0732, tol=0.0000)",
+    "strategy": "free_energy",
+    "targets": [
+      3,
+      8
+    ],
+    "tick": 499
+  }
+]

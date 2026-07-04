@@ -1,7 +1,7 @@
 """Scenario loader — provides predefined real-world cognition trial scenarios."""
 from __future__ import annotations
 
-from evaluation import TestScenario, TestSuite
+from backend.evaluation import TestScenario, TestSuite
 
 # ── Long-Horizon Reasoning Trials ────────────────────────────────
 

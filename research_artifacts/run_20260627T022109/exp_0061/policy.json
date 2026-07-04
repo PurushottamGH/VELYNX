@@ -1,0 +1,22 @@
+{
+  "class": "FreeEnergyPolicy",
+  "description": "VELYNX C8 Free-Energy Minimization: merge nearest pair, accept iff total cognitive energy does not increase (wraps the frozen DecisionPolicy unchanged).",
+  "deterministic": true,
+  "energy": {
+    "formula": "E = lambda*H + mu*S + nu*A",
+    "lambda": 1.0,
+    "mu": 2.0,
+    "nu": 0.5,
+    "strategy": "free_energy",
+    "tolerance": 0.0
+  },
+  "module": "research.policies.free_energy",
+  "name": "free_energy",
+  "params": {
+    "lam": 1.0,
+    "mu": 2.0,
+    "nu": 0.5,
+    "strategy": "free_energy",
+    "tolerance": 0.0
+  }
+}

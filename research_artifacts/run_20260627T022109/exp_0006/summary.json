@@ -1,0 +1,16 @@
+{
+  "final_cluster_count": 50.0,
+  "final_energy": 29.118020736588655,
+  "memory": {
+    "active_anomalies_count": 66,
+    "average_anomaly_lifetime": 0.0,
+    "longest_anomaly_lifetime": 0,
+    "resolved_anomalies_count": 0,
+    "total_clusters": 50
+  },
+  "merges_committed": 0,
+  "merges_rejected": 0,
+  "prediction_rmse": 0.44686691454559335,
+  "proposals": 0,
+  "scheduler_triggers": 9
+}

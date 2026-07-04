@@ -4,10 +4,10 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from reflection import ReflectionResult
-from reflection.reasoning_audit import audit_reasoning
-from reflection.confidence_estimator import estimate_confidence
-from reflection.improvement_engine import suggest_improvements
+from backend.reflection import ReflectionResult
+from backend.reflection.reasoning_audit import audit_reasoning
+from backend.reflection.confidence_estimator import estimate_confidence
+from backend.reflection.improvement_engine import suggest_improvements
 
 logger = logging.getLogger("uvicorn")
 

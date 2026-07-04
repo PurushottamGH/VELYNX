@@ -6,7 +6,7 @@ import logging
 import time
 from datetime import datetime, timezone
 
-from ops import HealthReport, SubsystemHealth
+from backend.ops import HealthReport, SubsystemHealth
 
 logger = logging.getLogger("uvicorn")
 

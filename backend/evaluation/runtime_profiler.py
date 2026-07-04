@@ -5,7 +5,7 @@ import logging
 import time
 from collections import defaultdict
 
-from evaluation import ProfileReport, ProfileSample
+from backend.evaluation import ProfileReport, ProfileSample
 
 logger = logging.getLogger("uvicorn")
 

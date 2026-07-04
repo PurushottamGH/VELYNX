@@ -12,24 +12,24 @@ _backend_root = str(Path(__file__).parent.resolve())
 if _backend_root not in sys.path:
     sys.path.insert(0, _backend_root)
 
-from knowledge.knowledge_engine import cross_query
-from cognition.metacog import reflect
-from knowledge.voice_engine import compile_path_to_speech
+from backend.knowledge.knowledge_engine import cross_query
+from backend.cognition.metacog import reflect
+from backend.knowledge.voice_engine import compile_path_to_speech
 # LLM-free: llm_client removed
 from rich.console import Console
 from rich.status import Status
 from cli_ui import VelynxDashboard
-from memory.memory_graph import MemoryCore
-from audio.vocal_tract import VocalTract
-from agency.system_bridge import SystemBridge, ExecutionQuarantine
-from agency.action_log import ActionLogger
-from agency.code_writer import CodeWriter
-from agency.quality_assurance import QAEngine
-from agency.auto_fixer import AutoFixer
-from agency.health_sentinel import HealthSentinel
+from backend.memory.memory_graph import MemoryCore
+from backend.audio.vocal_tract import VocalTract
+from backend.agency.system_bridge import SystemBridge, ExecutionQuarantine
+from backend.agency.action_log import ActionLogger
+from backend.agency.code_writer import CodeWriter
+from backend.agency.quality_assurance import QAEngine
+from backend.agency.auto_fixer import AutoFixer
+from backend.agency.health_sentinel import HealthSentinel
 
 # Phase 50 predictive core (seeded on warmup)
-from cognition.predictive_core import seed_concept_states_from_soul, seed_transition_rules_from_living_edges
+from backend.cognition.predictive_core import seed_concept_states_from_soul, seed_transition_rules_from_living_edges
 
 MEMORY = MemoryCore()
 _code_writer = None

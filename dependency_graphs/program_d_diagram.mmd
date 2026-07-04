@@ -1,0 +1,222 @@
+graph TD
+    %% VELYNX Program D — Dependency Graph
+    %% Layers: Core Engine -> Backend -> Subsystems -> Validation -> Research
+
+    %% ===== CORE ENGINE LAYER =====
+    subgraph core["Core Engine (velynx_core/)"]
+        vx[velynx.py]
+        br[brain.py]
+        mm[memory.py]
+        lr[learner.py]
+        sc[self_coder.py]
+    end
+
+    vx --> mm
+    vx --> br
+    vx --> lr
+    vx --> sc
+    br --> mm
+    lr --> mm
+    sc --> mm
+
+    %% ===== BACKEND LAYER =====
+    subgraph backend_pkg["Backend Layer"]
+        orchestrator[orchestrator.py]
+        brain2[brain.py]
+        chat[chat.py]
+        cli[cli.py]
+        cli_ui[cli_ui.py]
+        selfcoder2[self_coder.py]
+        wipe_db[wipe_db.py]
+        diagnose_db[diagnose_db.py]
+    end
+
+    %% ===== COGNITION SUBSYSTEM =====
+    subgraph cognition["Cognition Subsystem"]
+        metacog[metacog.py]
+        scenario[scenario_engine.py]
+        unified[unified_pipeline.py]
+        reasoning[reasoning_engine.py]
+        predictive[predictive_core.py]
+        decision[decision_policy.py]
+        advanced[advanced_cognition.py]
+        selfmodel[self_model.py]
+    end
+
+    %% ===== MEMORY SUBSYSTEM =====
+    subgraph memory["Memory Subsystem"]
+        kg[knowledge_graph.py]
+        vs[vector_store.py]
+        concept_eng[concept_engine.py]
+        mem_graph[memory_graph.py]
+        episodic[episodic_memory.py]
+        session[session.py]
+        sqlite[_sqlite.py]
+    end
+
+    %% ===== KNOWLEDGE SUBSYSTEM =====
+    subgraph knowledge["Knowledge Subsystem"]
+        keng[knowledge_engine.py]
+        kgraph[knowledge_graph.py]
+        voice[voice_engine.py]
+        predicate[predicate_resolver.py]
+        bridge[bridge.py]
+        consolidator[consolidator.py]
+    end
+
+    %% ===== AGENCY SUBSYSTEM =====
+    subgraph agency["Agency Subsystem"]
+        bridge_ag[system_bridge.py]
+        codewriter[code_writer.py]
+        qa[quality_assurance.py]
+        autofix[auto_fixer.py]
+        health[health_sentinel.py]
+        actionlog[action_log.py]
+        curiosity[curiosity.py]
+        depman[dependency_manager.py]
+    end
+
+    %% ===== PIPELINE =====
+    subgraph pipeline["Pipeline Subsystem"]
+        agentic[agentic_loop.py]
+        reasoncore[reasoning_core.py]
+        infer[inference_pipeline.py]
+        synth[synthesizer.py]
+        intent[intent_engine.py]
+        krouter[knowledge_router.py]
+        reflex[reflex.py]
+        retrieval_mesh[retrieval_mesh.py]
+    end
+
+    %% ===== LEARNING =====
+    subgraph learning["Learning Subsystem"]
+        cont_learn[continuous_learner.py]
+        curriculum[curriculum.py]
+        online[online_learner.py]
+        night[night_learner.py]
+        permanence[permanence.py]
+        deepl[deep_learner.py]
+        constitution[living_constitution.py]
+        gap[gap_tracker.py]
+        trust[source_trust.py]
+        feedback[feedback_loop.py]
+        tutor[knowledge_tutor.py]
+    end
+
+    %% ===== RETRIEVAL =====
+    subgraph retrieval["Retrieval Subsystem"]
+        unified_ret[unified_retriever.py]
+        wiki[wiki_client.py]
+        brave[brave_client.py]
+        duck[duckduckgo_client.py]
+        searxng[searxng_client.py]
+        tavily[tavily_client.py]
+    end
+
+    %% ===== ROOT SCRIPTS =====
+    subgraph scripts["Root Scripts"]
+        cogcore[cognitive_core.py]
+        coghealth[cognitive_health.py]
+        cogtele[cognitive_telemetry.py]
+        cbirth[concept_birth.py]
+        lce[latent_cause_engine.py]
+        nite[night_learner.py]
+        teach_script[teach.py]
+        gengraph[generate_graph.py]
+        bench[benchmark.py]
+        rbench[research_benchmark.py]
+        rbenchv2[run_benchmark_v2.py]
+    end
+
+    %% ===== VALIDATION =====
+    subgraph validation["Validation Subsystem"]
+        vinterfaces[interfaces.py]
+        vmetrics[metrics.py]
+        vreport[report.py]
+        vrunner[runner.py]
+        vdatasets[datasets.py]
+        vmonitor[monitor.py]
+        vregression[regression.py]
+        vartifact[artifact.py]
+        vshared[shared_metrics_v1.py]
+    end
+
+    %% ===== EDGES =====
+    %% Backend orchestrator dependencies
+    orchestrator --> keng
+    orchestrator --> metacog
+    orchestrator --> voice
+    orchestrator --> mem_graph
+    orchestrator --> bridge_ag
+    orchestrator --> codewriter
+    orchestrator --> qa
+    orchestrator --> autofix
+    orchestrator --> health
+
+    %% Brain v2 dependencies
+    brain2 --> kg
+    brain2 --> vs
+    brain2 --> reasoning
+    brain2 --> selfcoder2
+
+    %% Scenario -> metacog (CIRCULAR)
+    scenario --> metacog
+    metacog --> scenario
+
+    %% Unified pipeline dependencies
+    unified --> advanced
+    unified --> concept_eng
+    unified --> kgraph
+    unified --> unified_ret
+    unified --> cont_learn
+
+    %% Reasoning engine
+    reasoning --> predicate
+
+    %% Self model
+    selfmodel --> kgraph
+    selfmodel --> curiosity
+
+    %% Predictive core
+    predictive --> sqlite
+
+    %% Root scripts
+    cogcore --> coghealth
+    cogcore --> cbirth
+    cogcore --> lce
+    coghealth --> vmetrics
+    coghealth --> vreport
+    nite --> unified_ret
+    teach_script --> codewriter
+    bench --> vartifact
+    bench --> vdatasets
+    bench --> vmetrics
+    bench --> vmonitor
+    bench --> vregression
+    bench --> vrunner
+    bench --> decision
+
+    %% Validation deps
+    vmetrics --> vinterfaces
+    vreport --> vmetrics
+    vrunner --> vinterfaces
+    vdatasets --> vinterfaces
+    vmonitor --> vinterfaces
+    vregression --> vinterfaces
+    vartifact --> vregression
+
+    %% ===== DUPLICATE MODULES =====
+    %% Two knowledge_graph.py files
+    mem_kg[memory/knowledge_graph.py]
+    know_kg[knowledge/knowledge_graph.py]
+    mem_kg -.->|"DUPLICATE"| know_kg
+
+    %% Two brain.py files
+    core_br[velynx_core/brain.py]
+    be_br[backend/brain.py]
+    core_br -.->|"DUPLICATE"| be_br
+
+    %% Two self_coder.py files
+    core_sc[velynx_core/self_coder.py]
+    be_sc[backend/self_coder.py]
+    core_sc -.->|"DUPLICATE"| be_sc

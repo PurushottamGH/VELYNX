@@ -33,15 +33,22 @@ def compute_nmi(labels_true: List[int], labels_pred: List[int]) -> float:
             mi += n_tp / n * math.log(n * n_tp / (n_t[t] * n_p[p]) + 1e-15)
 
     def entropy(counts):
-        return -sum(c / n * math.log(c / n + 1e-15) for c in counts.values())
+        h = 0.0
+        for c in counts.values():
+            p = c / n
+            if p > 0:
+                h -= p * math.log(p)
+        return h
 
     h_true = entropy(n_t)
     h_pred = entropy(n_p)
 
-    if h_true + h_pred == 0:
+    # Guard against zero-entropy edge case (single state)
+    denom = h_true + h_pred
+    if denom < 1e-12:
         return 0.0
 
-    return 2.0 * mi / (h_true + h_pred)
+    return 2.0 * mi / denom
 
 
 def compute_held_out_log_likelihood(

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import re
 
-from learning.permanence import best_strategy, record_strategy
+from backend.learning.permanence import best_strategy, record_strategy
 
 
 QUERY_TYPES = ['scientific', 'historical', 'philosophical', 'human', 'practical']

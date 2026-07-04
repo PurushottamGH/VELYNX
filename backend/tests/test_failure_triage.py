@@ -6,62 +6,63 @@ from unittest.mock import patch
 # Match the test fixture from test_scenario_engine.py to prevent real embed calls.
 patch("cognition.embed_index.semantic_lookup", return_value=[]).start()
 
-from cognition.scenario_engine import parse_scenario
+from backend.cognition.scenario_engine import parse_scenario
+
+# Phase 62.1: parse_scenario now routes everything to "personal" domain
+# with empty concepts/scores/arc and query_type="direct".
 
 
 def test_personal_triage_doubt_myself():
     r = parse_scenario("I am failing at everything and I doubt myself")
     assert r["domain_route"] == "personal", f"got {r['domain_route']}"
-    assert r["scores"].get("shame", 0) >= 1.5, f"shame={r['scores'].get('shame')}"
-    assert r["scores"].get("identity", 0) >= 1.0, f"identity={r['scores'].get('identity')}"
-    assert "shame" in r["concepts"][:3], r["concepts"]
+    assert r["concepts"] == []
+    assert r["scores"] == {}
 
 
 def test_personal_triage_feel_like_a_failure():
     r = parse_scenario("I feel like a failure and I do not know who I am anymore")
     assert r["domain_route"] == "personal"
-    assert r["scores"].get("shame", 0) >= 1.5
-    assert r["scores"].get("identity", 0) >= 1.0
+    assert r["concepts"] == []
+    assert r["scores"] == {}
 
 
 def test_personal_triage_self_worth():
     r = parse_scenario("I am useless, a total disappointment, and I lost faith in myself")
     assert r["domain_route"] == "personal"
-    assert r["scores"].get("shame", 0) >= 1.5
-    assert r["scores"].get("identity", 0) >= 1.0
+    assert r["concepts"] == []
+    assert r["scores"] == {}
 
 
 def test_structural_triage_deployment_failed():
     r = parse_scenario("the deployment failed and the server is down")
-    assert r["domain_route"] == "structural", f"got {r['domain_route']}"
-    assert "failure" in r["domain_hits"]
-    assert "shame" not in r["scores"], "shame must be stripped for structural"
-    assert "identity" not in r["scores"], "identity must be stripped for structural"
+    assert r["domain_route"] == "personal", f"got {r['domain_route']}"
+    assert r["scores"] == {}
     assert r["arc"] == ""
+    assert r["query_type"] == "direct"
 
 
 def test_structural_triage_pipeline_crash():
     r = parse_scenario("the pipeline crashed and the api is broken")
-    assert r["domain_route"] == "structural"
-    assert "failure" in r["domain_hits"]
+    assert r["domain_route"] == "personal"
+    assert r["scores"] == {}
 
 
 def test_structural_triage_server_failure():
     r = parse_scenario("server failure on the primary node")
-    assert r["domain_route"] == "structural"
-    assert "failure" in r["domain_hits"]
+    assert r["domain_route"] == "personal"
+    assert r["scores"] == {}
 
 
 def test_structural_triage_bottleneck():
     r = parse_scenario("the database is the bottleneck")
-    assert r["domain_route"] == "structural"
-    assert "bottleneck" in r["domain_hits"]
+    assert r["domain_route"] == "personal"
+    assert r["scores"] == {}
 
 
 def test_no_triage_grief():
     r = parse_scenario("I lost everything and felt nothing")
-    assert r["domain_route"] == "none"
-    assert "grief" in r["concepts"]
+    assert r["domain_route"] == "personal"
+    assert r["concepts"] == []
 
 
 def test_mixed_collision_prefers_personal():
@@ -73,7 +74,7 @@ def test_mixed_collision_prefers_personal():
 
 def test_return_shape_includes_new_fields():
     r = parse_scenario("I doubt myself")
-    for k in ("triage", "domain_route", "domain_hits"):
+    for k in ("domain_route", "concepts", "scores", "arc", "query_type"):
         assert k in r, f"missing key {k}"
 
 

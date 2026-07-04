@@ -7,9 +7,9 @@ from datetime import datetime, timezone
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from database.engine import async_engine, async_session
-from database.models import Base
-from database.repositories import (
+from backend.database.engine import async_engine, async_session
+from backend.database.models import Base
+from backend.database.repositories import (
     SessionRepository,
     EpisodeRepository,
     ConceptRepository,
@@ -21,7 +21,7 @@ from database.repositories import (
     LearnedRuleRepository,
     ContextSnapshotRepository,
 )
-from database.redis_cache import redis_cache
+from backend.database.redis_cache import redis_cache
 
 logger = logging.getLogger("uvicorn")
 

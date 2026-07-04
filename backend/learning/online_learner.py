@@ -2,13 +2,13 @@ from __future__ import annotations
 
 import logging
 
-from learning import feedback_loop, gap_tracker, source_trust
-from learning.failure_diagnosis import diagnose_failure
-from learning.living_constitution import record_rule
-from learning.permanence import confidence, reinforce_fact, weaken_fact
-from learning.rule_deriver import derive_rule_from_failure
-from learning.strategy_optimizer import classify_query, detect_strategy, learn_strategy
-from memory.vector_store import remember_interaction
+from backend.learning import feedback_loop, gap_tracker, source_trust
+from backend.learning.failure_diagnosis import diagnose_failure
+from backend.learning.living_constitution import record_rule
+from backend.learning.permanence import confidence, reinforce_fact, weaken_fact
+from backend.learning.rule_deriver import derive_rule_from_failure
+from backend.learning.strategy_optimizer import classify_query, detect_strategy, learn_strategy
+from backend.memory.vector_store import remember_interaction
 
 logger = logging.getLogger("uvicorn")
 

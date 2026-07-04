@@ -6,7 +6,7 @@ import time
 from collections import defaultdict, deque
 from dataclasses import dataclass, field
 
-from runtime.event_models import Event, HandlerResult
+from backend.runtime.event_models import Event, HandlerResult
 
 logger = logging.getLogger("uvicorn")
 

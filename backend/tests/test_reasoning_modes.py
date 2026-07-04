@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import pytest
 
-from conversation.reasoning_modes import (
+from backend.conversation.reasoning_modes import (
     ModeConfig,
     ReasoningMode,
     get_mode_config,

@@ -8,11 +8,11 @@ import httpx
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
-from app.main import app  # noqa: E402
-from learning import living_constitution  # noqa: E402
-from learning.living_constitution import record_rule, render_rules  # noqa: E402
-from pipeline import constitution_loader, retrieval_mesh  # noqa: E402
-from pipeline.reasoning_core import reason  # noqa: E402
+from backend.app.main import app  # noqa: E402
+from backend.learning import living_constitution  # noqa: E402
+from backend.learning.living_constitution import record_rule, render_rules  # noqa: E402
+from backend.pipeline import constitution_loader, retrieval_mesh  # noqa: E402
+from backend.pipeline.reasoning_core import reason  # noqa: E402
 
 
 # ── Constitution loaded at startup ──────────────────────────────

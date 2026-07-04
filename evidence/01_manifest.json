@@ -1,0 +1,58 @@
+{
+  "evidence_package": "VELYNX Program D Sprint 1.1 Final Reconciliation — Sprint 1.1.1",
+  "generated_at": "2026-07-04T13:13:35Z",
+  "git_commit_hash": "fb6c51461502a60b6645ecb569e48c71118dc753",
+  "python_version": "3.11.9",
+  "dependencies": {
+    "numpy": "2.4.4",
+    "scipy": "1.17.1",
+    "scikit-learn": "1.8.0",
+    "pytest": "9.0.3"
+  },
+  "experiment_config": {
+    "num_seeds": 5,
+    "base_seed": 42,
+    "num_train_steps": 10000,
+    "num_test_steps": 2000,
+    "environment": {
+      "num_latent_states": 10,
+      "observation_dim": 16,
+      "transition_alpha": 1.0,
+      "noise_sigma": 0.05
+    },
+    "predictor": {
+      "initial_capacity": 2,
+      "alpha": 1.0
+    }
+  },
+  "remediation_items": {
+    "F1": "DV-a scoring category error fixed",
+    "C2_fix": "C2 data leakage fixed: test_steps passed to apply_growth_at_random_times and its run_fixed_capacity fallback",
+    "growth_diagnostics": "Per-check MDL growth table generated: 90 checks, 0 growth events across 5 seeds",
+    "held_out": "Independent held-out environment implemented",
+    "FWER": "Holm-Bonferroni correction implemented",
+    "M_threshold": "M threshold derived from null distribution",
+    "W1": "hash() replaced with hashlib.sha256",
+    "W4": "Dead imports removed from run.py and analysis.py"
+  },
+  "evidence_files": {
+    "01_manifest": "This file — artifact provenance and remediation inventory",
+    "02_git_diff_summary": "Diff summary of Sprint 1.1 changes",
+    "04_test_output": "Test output from Sprint 1.1 (100 passed)",
+    "05_metrics": "Structured metrics from corrected 5-seed run",
+    "06_statistical_results": "Statistical narrative for corrected run",
+    "09_requirement_traceability": "Mapping every priority to its proof artifact",
+    "10_sprint_report": "Sprint 1.1 Final Reconciliation report",
+    "growth_diagnostics": "Per-check MDL growth decision table (all seeds)",
+    "C2_fix_verification": "C2 test_n=1999 matching T across all seeds confirms fix"
+  },
+  "result_summary": {
+    "verdict": "FAIL (DV-a)",
+    "growth_events": 0,
+    "seeds": 5,
+    "dv_a_pass": false,
+    "dv_b_pass": true,
+    "c2_fix_verified": true,
+    "c2_test_n_matches_t": true
+  }
+}

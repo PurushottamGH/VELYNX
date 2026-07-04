@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import pytest
 
-from conversation.monologue import (
+from backend.conversation.monologue import (
     InnerMonologue,
     MonologueStep,
     MonologueTrace,

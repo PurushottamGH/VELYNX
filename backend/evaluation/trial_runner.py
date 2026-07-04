@@ -5,19 +5,19 @@ import logging
 import time
 from typing import Any, Callable, Awaitable
 
-from evaluation import (
+from backend.evaluation import (
     BenchmarkResult,
     BenchmarkSuiteResult,
     TestScenario,
     TestSuite,
 )
-from evaluation.benchmark_runner import BenchmarkRunner
-from evaluation.runtime_profiler import RuntimeProfiler
-from evaluation.stability_monitor import StabilityMonitor
-from evaluation.hallucination_detector import hallucination_detector
-from evaluation.reflection_evaluator import reflection_evaluator
-from runtime.tracing import trace, get_correlation_id
-from runtime.event_bus import event_bus
+from backend.evaluation.benchmark_runner import BenchmarkRunner
+from backend.evaluation.runtime_profiler import RuntimeProfiler
+from backend.evaluation.stability_monitor import StabilityMonitor
+from backend.evaluation.hallucination_detector import hallucination_detector
+from backend.evaluation.reflection_evaluator import reflection_evaluator
+from backend.runtime.tracing import trace, get_correlation_id
+from backend.runtime.event_bus import event_bus
 
 logger = logging.getLogger("uvicorn")
 

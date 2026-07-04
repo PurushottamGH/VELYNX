@@ -122,7 +122,14 @@ def test_pending_unconsolidated_preference_is_a_revision(tmp_path, monkeypatch):
     # Arrange: a favorite-movie re-teach sitting un-consolidated in raw memory.
     db = tmp_path / "graph.db"
     _seed_triples(db, [("User's favorite movie", "be", "Avatar", 0)])
+
+    # Patch both the path resolver AND the local open_connection reference to
+    # insulate against test-pollution that corrupts the consolidator's state.
     monkeypatch.setattr(consolidator, "_raw_triples_db_path", lambda: db)
+    monkeypatch.setattr(
+        consolidator, "open_connection",
+        lambda path, **kw: sqlite3.connect(str(db), **kw),
+    )
 
     # Act / Assert: the consolidator reports a pending revision -> fast path defers.
     assert consolidator.has_pending_revision("User's favorite movie") is True
@@ -175,6 +182,10 @@ def test_router_guard_detects_pending_preference(tmp_path, monkeypatch):
     db = tmp_path / "graph.db"
     _seed_triples(db, [("User's favorite movie", "be", "Avatar", 0)])
     monkeypatch.setattr(consolidator, "_raw_triples_db_path", lambda: db)
+    monkeypatch.setattr(
+        consolidator, "open_connection",
+        lambda path, **kw: sqlite3.connect(str(db), **kw),
+    )
 
     assert knowledge_router._has_pending_supersession(_FakeNode("User's favorite movie")) is True
 

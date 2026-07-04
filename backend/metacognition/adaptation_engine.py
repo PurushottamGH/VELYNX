@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import logging
 
-from metacognition import (
+from backend.metacognition import (
     AdaptationRecommendation,
     CalibrationReport,
     CognitionHealthReport,

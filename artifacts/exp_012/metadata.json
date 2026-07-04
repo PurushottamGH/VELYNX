@@ -1,0 +1,28 @@
+{
+  "experiment_name": "velynx_benchmark",
+  "config": {
+    "dataset_name": "environment",
+    "seed": 7,
+    "num_ticks": 1100,
+    "noise_sigma": 0.05,
+    "tolerance": 0.05,
+    "proximity_threshold": 0.25,
+    "max_clusters": 50,
+    "experiment_name": "velynx_benchmark",
+    "baseline": null,
+    "artifacts_root": null,
+    "critical_metrics": null,
+    "metrics": {
+      "EntropyMetric": 1.7781313805734413,
+      "SurpriseMetric": 0.16418214623705304,
+      "ActiveLoadMetric": 18.175747693638325,
+      "CognitiveEnergyMetric": 11.19436951986671
+    }
+  },
+  "result": {
+    "passed": true,
+    "improvements": {},
+    "regressions": {},
+    "summary": "REGRESSION GATE: PASS (tolerance 5.0%)\n  No measured change across shared metrics."
+  }
+}

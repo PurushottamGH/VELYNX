@@ -1,0 +1,28 @@
+{
+  "experiment_name": "env_noisy_c8_telemetry",
+  "config": {
+    "dataset_name": "environment",
+    "seed": 7,
+    "num_ticks": 5000,
+    "noise_sigma": 0.15,
+    "tolerance": 0.05,
+    "proximity_threshold": 0.28,
+    "max_clusters": 50,
+    "experiment_name": "env_noisy_c8_telemetry",
+    "baseline": null,
+    "artifacts_root": null,
+    "critical_metrics": null,
+    "metrics": {
+      "EntropyMetric": 4.305375438565888,
+      "SurpriseMetric": 0.16563433421121027,
+      "ActiveLoadMetric": 50.35603302731086,
+      "CognitiveEnergyMetric": 29.814660620643735
+    }
+  },
+  "result": {
+    "passed": true,
+    "improvements": {},
+    "regressions": {},
+    "summary": "REGRESSION GATE: PASS (tolerance 5.0%)\n  No measured change across shared metrics."
+  }
+}

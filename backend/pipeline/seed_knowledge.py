@@ -3,7 +3,7 @@ from __future__ import annotations
 import hashlib
 from dataclasses import dataclass
 
-from learning.curriculum import resolve_foundation_seed_answer
+from backend.learning.curriculum import resolve_foundation_seed_answer
 
 
 @dataclass(frozen=True)

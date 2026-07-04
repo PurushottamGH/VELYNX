@@ -1,0 +1,29 @@
+{
+  "artifacts": [
+    "configuration.json",
+    "decision_audit.json",
+    "experiment.json",
+    "metrics.json",
+    "policy.json",
+    "seed.json",
+    "summary.json"
+  ],
+  "content_hash": "c2476d8395867b2df0da71998b28a6560050ebb5331ab9728ae06c9172964259",
+  "created_utc": "2026-06-26T20:52:53.437764+00:00",
+  "experiment_id": "exp_0033",
+  "fixed_factors": {
+    "dataset_name": "environment",
+    "max_clusters": 50,
+    "num_ticks": 700,
+    "proximity_threshold": 0.25
+  },
+  "group": "run_20260627T022109",
+  "independent_variables": {
+    "noise_sigma": 0.01,
+    "policy": "fifo",
+    "replay_horizon": 200,
+    "seed": 3
+  },
+  "name": "velynx_research_r1",
+  "schema_version": "r1.0"
+}

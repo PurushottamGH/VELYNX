@@ -7,8 +7,8 @@ import time
 from collections import deque
 from typing import Any
 
-from ops import ResourceSnapshot
-from ops.resource_manager import resource_manager
+from backend.ops import ResourceSnapshot
+from backend.ops.resource_manager import resource_manager
 
 logger = logging.getLogger("uvicorn")
 

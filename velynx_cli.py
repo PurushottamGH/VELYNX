@@ -98,12 +98,40 @@ def _run_direct_question(question: str) -> int:
     return 0
 
 
+def _run_e0(args: list[str]) -> int:
+    """Run the E0 emergence-vs-injection experiment."""
+    import argparse
+    parser = argparse.ArgumentParser(description="E0: Emergence-vs-Injection Discrimination")
+    parser.add_argument("--output-dir", help="Output directory for results")
+    parser.add_argument("--config", help="Path to experiment config JSON")
+    parser.add_argument("--seed", type=int, default=42, help="Base master random seed")
+    parser.add_argument("--num-seeds", type=int, default=5,
+                        help="Number of seeds to run (default: 5, min 5)")
+    parsed = parser.parse_args(args)
+
+    from experiments.E0.run import main as e0_main
+    e0_main(
+        output_dir=parsed.output_dir,
+        config=parsed.config,
+        seed=parsed.seed,
+        num_seeds=parsed.num_seeds,
+    )
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
-    args = list(argv) if argv is not None else sys.argv[1:]
-    subcommands = {"teach", "review", "chat"}
-    if args and not args[0].startswith("-") and args[0] not in subcommands:
-        return _run_direct_question(" ".join(args).strip())
-    return int(backend_cli_main(args))
+    args_list = list(argv) if argv is not None else sys.argv[1:]
+    subcommands = {"teach", "review", "chat", "e0"}
+    if not args_list:
+        print("Usage: python velynx_cli.py <query or subcommand>")
+        print("Subcommands: teach, review, chat, e0")
+        return 1
+    cmd = args_list[0]
+    if cmd == "e0":
+        return _run_e0(args_list[1:])
+    if cmd not in subcommands and not cmd.startswith("-"):
+        return _run_direct_question(" ".join(args_list).strip())
+    return int(backend_cli_main(args_list))
 
 
 if __name__ == "__main__":

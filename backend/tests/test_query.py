@@ -6,8 +6,8 @@ import httpx
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
-from app.main import app  # noqa: E402
-from pipeline import retrieval_mesh  # noqa: E402
+from backend.app.main import app  # noqa: E402
+from backend.pipeline import retrieval_mesh  # noqa: E402
 
 
 def test_query_endpoint(monkeypatch) -> None:

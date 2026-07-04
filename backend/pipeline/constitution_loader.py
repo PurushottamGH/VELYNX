@@ -5,7 +5,7 @@ from pathlib import Path
 
 CONSTITUTION_DIR = Path(__file__).resolve().parents[1] / "constitution"
 
-from learning.living_constitution import render_rules
+from backend.learning.living_constitution import render_rules
 
 
 def load_constitution(cognitive_layer: str | None = None, include_pending: bool = True) -> str:

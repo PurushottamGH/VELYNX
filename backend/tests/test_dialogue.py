@@ -3,14 +3,14 @@ from __future__ import annotations
 
 import pytest
 
-from conversation.dialogue_manager import (
+from backend.conversation.dialogue_manager import (
     DialogueAct,
     DialogueDecision,
     DialogueManager,
     DialogueState,
     dialogue_manager,
 )
-from conversation.working_memory import ConversationTurn, WorkingContext
+from backend.conversation.working_memory import ConversationTurn, WorkingContext
 
 
 @pytest.fixture

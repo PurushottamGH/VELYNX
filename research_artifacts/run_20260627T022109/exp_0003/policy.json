@@ -1,0 +1,8 @@
+{
+  "class": "NullPolicy",
+  "description": "Never consolidate (no-op control baseline).",
+  "deterministic": true,
+  "module": "research.policies.null",
+  "name": "null",
+  "params": {}
+}

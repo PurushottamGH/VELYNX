@@ -1,0 +1,40 @@
+{
+  "reproducibility_verified": true,
+  "verification_method": "two independent runs with identical seed",
+  "run_1": {
+    "timestamp": "2026-07-04T12:50:08Z",
+    "verdict": "FAIL (DV-a)",
+    "elapsed_seconds": 27.3,
+    "artifact_dir": "artifacts/experiments/E0/run_20260704T125008Z_s42_n5"
+  },
+  "run_2": {
+    "timestamp": "2026-07-04T12:51:08Z",
+    "verdict": "FAIL (DV-a)",
+    "elapsed_seconds": 27.5,
+    "artifact_dir": "artifacts/experiments/E0/run_20260704T125108Z_s42_n5"
+  },
+  "seed_determinism_verified": true,
+  "seed_registry": {
+    "method": "hashlib.sha256 (replaced hash())",
+    "salt": "fixed string prefix (no PYTHONHASHSEED dependency)",
+    "env_agent_separation": true,
+    "verification_test": "test_seeded_reproducibility (PASS)"
+  },
+  "dependency_pinning": {
+    "python": "3.11.9",
+    "numpy": "2.4.4",
+    "scipy": "1.17.1",
+    "scikit-learn": "1.8.0"
+  },
+  "held_out_generation": {
+    "type": "independent_environment_instance",
+    "seed_offset": 9999,
+    "test_length": 2000,
+    "independence_justification": "Fresh NonlinearLatentEnvironment instance with seed = env_seed + 9999 produces different transition matrix, base vectors, and initial state from training environment"
+  },
+  "statistical_reproducibility": {
+    "holm_bonferroni": true,
+    "fwer_alpha": 0.01,
+    "m_margin_derivation": "2 * std(M_stats) / sqrt(n_seeds), floored at 0.02"
+  }
+}

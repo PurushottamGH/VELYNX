@@ -4,7 +4,7 @@ from __future__ import annotations
 import logging
 import time
 
-from ops import TokenBudget
+from backend.ops import TokenBudget
 
 logger = logging.getLogger("uvicorn")
 
