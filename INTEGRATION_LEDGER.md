@@ -79,4 +79,50 @@ Fix **F1** (blocking). W1–W4 to be resolved in the same delivery. W5–W6 trac
 
 ---
 
-*Awaiting next engineering delivery.*
+---
+
+## Review #002 — 2026-07-04 — Sprint 1.1.1 Remediation Verification (committed `fd7aabf`)
+
+**Scope reviewed:** Evidence package committed in `fd7aabf` (Sprint 1.1 + 1.1.1): `evidence/02_git_diff_summary.md`, `evidence/06_statistical_results.md`, `evidence/09_requirement_traceability.md`, `evidence/10_sprint_report.md`, `experiments/E0/E0_IMPLEMENTATION_REPORT.md`.
+
+### VERDICT: **PASS** (all Review #001 blocking items closed)
+
+---
+
+### F1 — DV-a routing fix — CONFIRMED
+
+- **Evidence:** `evidence/02_git_diff_summary.md:6` — "Replaced `predictive_log_likelihood(probs, latent)` with `predictor.log_predictive_probability(obs_list, context)` at all 4 scoring sites (T, C1, C2, C3 condition runners)."
+- **Evidence:** `experiments/E0/E0_IMPLEMENTATION_REPORT.md:15` — "F1: DV-a category error ✅ `predictor.log_predictive_probability(obs_list, context)` at all 4 sites."
+- **Evidence:** `evidence/10_sprint_report.md:11` — confirms F1 fix was written from scratch as part of Sprint 1.1, not pre-existing.
+- **Status:** Correction applied at all four scoring sites. Blocking defect closed.
+
+### C2 held-out leakage fix — CONFIRMED
+
+- **Evidence:** `evidence/02_git_diff_summary.md:35-36` — both `test_steps` patch sites documented (line ~618, line ~359).
+- **Evidence:** `evidence/06_statistical_results.md:73-75` — "C2 test_n: 1999 (all seeds) — matches T's test_n of 1999"; "C2 now evaluates on the same held-out test sequence as T, C1, and C3."
+- **Evidence:** `evidence/09_requirement_traceability.md:8` — "P1 | Fix C2 data leakage | ✅ Fixed."
+- **Status:** C2 now correctly evaluates on independent held-out sequence.
+
+### T == C1 exact-equality — INVESTIGATED
+
+- **Evidence:** `evidence/06_statistical_results.md:64-67` — 720 MDL checks executed across T and C3; 0 growth events; max margin −21.89; mean margin −26.25. Text: "Growth never fired in any seed. The MDL criterion consistently calculated G − λ_model ≪ 0 at every check point across both the temporal-ordered (T) and shuffled-input (C3) conditions."
+- **Evidence:** `evidence/10_sprint_report.md:29-34` — same 90/0/−26.25 data; "Growth never fired. The MDL criterion consistently rejected growth at every check point."
+- **Evidence:** `evidence/10_sprint_report.md:58` — "Growth never fired across any of the 5 seeds. Since the MDL trigger never found a positive gain, the treatment condition (T) produced an identical model to the fixed-capacity control (C1) and the decoupled control (C2)."
+- **Status:** `should_grow()` executed at every scheduled check point (90/90) and actively rejected growth each time. T==C1==C2 because the MDL trigger never fired, not because it was silently bypassed.
+
+### W1–W4 — CONFIRMED resolved
+
+- **W1 (hash determinism):** `evidence/02_git_diff_summary.md:7` — `hashlib.sha256` replaces `hash()`.
+- **W2 (private coupling):** `evidence/02_git_diff_summary.md:8` — duplicate function removed.
+- **W4 (dead imports):** `evidence/02_git_diff_summary.md:9-10` — unused imports/members removed.
+- **Status:** All W-clearance items closed.
+
+### W5–W6 (pre-existing drift)
+
+- Not charged to this delivery. No action taken.
+
+---
+
+### Required to close Review #002
+
+None. All blocking items from Review #001 are resolved. W5–W6 tracked separately for §9-DeepSeek archive pass.

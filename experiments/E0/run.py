@@ -452,6 +452,7 @@ def run_shuffled_input(
     inferred_latent_states: List[int] = []
     true_latent_states: List[int] = []
     growth_events: List[int] = []
+    per_step_log: List[Dict] = []
     context: List[float] = []
 
     env.reset()
@@ -504,6 +505,17 @@ def run_shuffled_input(
                 predictor.grow()
                 growth_events.append(step)
 
+            per_step_log.append({
+                "step": step,
+                "capacity_before": k,
+                "capacity_after": predictor.capacity,
+                "entropy_before": entropy_before,
+                "entropy_after": entropy_after,
+                "lambda_model": lam,
+                "gain": gain,
+                "grew": decision,
+            })
+
         context = obs_list
 
     # Held-out evaluation on independent test sequence
@@ -528,6 +540,7 @@ def run_shuffled_input(
         "log_likelihoods": log_likelihoods,
         "latent_states": inferred_latent_states,
         "true_latent_states": true_latent_states,
+        "per_step_log": per_step_log,
         "final_predictor_state": predictor.state_dict(),
     }
 

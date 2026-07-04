@@ -60,7 +60,7 @@
 
 ### 4. Emergence (M) Implies Generalization Benefit
 **Cannot claim:** "The positive emergence statistic M translates to better held-out prediction."
-**Reason:** DV-a (held-out LL) and DV-b (emergence M) are dissociated: DV-a FAILS while DV-b PASSES. M measures structure recovery relative to shuffle; it does not imply better generalization on this task.
+**Reason:** DV-a is untested (F-A: growth never fired) and DV-b's C3-null PASS is an artifact (self-null M=−0.6055). Even at face value, M measures structure recovery relative to a shuffle; it does not imply better generalization on this task.
 
 ### 5. C2 Control Is "Solved" or "Sufficient"
 **Cannot claim:** "C2 is a sufficient control for all capacity confounds."

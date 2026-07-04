@@ -1,0 +1,30 @@
+{
+  "experiment_id": "E0",
+  "seed": 52,
+  "env_seed": 101,
+  "num_train_steps": 10000,
+  "num_test_steps": 2000,
+  "environment": {
+    "num_latent_states": 10,
+    "observation_dim": 16,
+    "transition_alpha": 1.0,
+    "noise_sigma": 0.05
+  },
+  "predictor": {
+    "initial_capacity": 2,
+    "alpha": 1.0
+  },
+  "growth": {
+    "b": 1.0,
+    "evaluate_every": 500,
+    "warmup_steps": 1000
+  },
+  "conditions": [
+    "T",
+    "C1",
+    "C2",
+    "C3"
+  ],
+  "num_seeds": 5,
+  "results_dir": null
+}

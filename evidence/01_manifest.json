@@ -1,7 +1,7 @@
 {
-  "evidence_package": "VELYNX Program D Sprint 1.1 Final Reconciliation — Sprint 1.1.1",
-  "generated_at": "2026-07-04T13:13:35Z",
-  "git_commit_hash": "fb6c51461502a60b6645ecb569e48c71118dc753",
+  "evidence_package": "VELYNX Program D Sprint 1.2 — 20-Seed Final Package",
+  "generated_at": "2026-07-04T21:30:00Z",
+  "git_commit_hash": "326cf1780f4fbc0045fc6c6256a1fb825767a7c4",
   "python_version": "3.11.9",
   "dependencies": {
     "numpy": "2.4.4",
@@ -10,7 +10,7 @@
     "pytest": "9.0.3"
   },
   "experiment_config": {
-    "num_seeds": 5,
+    "num_seeds": 20,
     "base_seed": 42,
     "num_train_steps": 10000,
     "num_test_steps": 2000,
@@ -28,7 +28,8 @@
   "remediation_items": {
     "F1": "DV-a scoring category error fixed",
     "C2_fix": "C2 data leakage fixed: test_steps passed to apply_growth_at_random_times and its run_fixed_capacity fallback",
-    "growth_diagnostics": "Per-check MDL growth table generated: 90 checks, 0 growth events across 5 seeds",
+    "C3_instrumentation": "C3 per_step_log added (identical to T): 360 checks logged across 20 seeds",
+    "growth_diagnostics": "Per-check MDL growth table generated: 720 checks (360 T + 360 C3), 0 growth events across 20 seeds",
     "held_out": "Independent held-out environment implemented",
     "FWER": "Holm-Bonferroni correction implemented",
     "M_threshold": "M threshold derived from null distribution",
@@ -39,20 +40,32 @@
     "01_manifest": "This file — artifact provenance and remediation inventory",
     "02_git_diff_summary": "Diff summary of Sprint 1.1 changes",
     "04_test_output": "Test output from Sprint 1.1 (100 passed)",
-    "05_metrics": "Structured metrics from corrected 5-seed run",
-    "06_statistical_results": "Statistical narrative for corrected run",
+    "05_metrics": "Structured metrics from 20-seed run",
+    "06_statistical_results": "Statistical narrative for 20-seed run",
     "09_requirement_traceability": "Mapping every priority to its proof artifact",
     "10_sprint_report": "Sprint 1.1 Final Reconciliation report",
-    "growth_diagnostics": "Per-check MDL growth decision table (all seeds)",
+    "11_power_analysis": "Binomial sensitivity with n=20 results",
+    "growth_diagnostics": "Per-check MDL growth decision table (20 seeds, both T and C3)",
     "C2_fix_verification": "C2 test_n=1999 matching T across all seeds confirms fix"
   },
   "result_summary": {
-    "verdict": "FAIL (DV-a)",
+    "verdict": "H* UNTESTED — growth-trigger unit defect (F-A) precluded firing; attempts-toward-kill = 0",
+    "verdict_note": "The raw fields below record what the run produced and are unchanged. Interpretation corrected 2026-07-04: growth never fired because the MDL trigger is unit-incommensurate (per-symbol entropy delta vs total-data-code penalty lambda_model ~= 22-28 bits), not because H* was tested and failed. T == C1 == C2 identically, so no paired H* test was possible. dv_b_pass below is under the pre-registered C3 null only and is a known artifact of shared marginal smoothing at K_learned=2; under the stricter self-null M = -0.6055 (FAIL). See RESEARCH_DIRECTOR_DECISION.md, LIMITATIONS.md (F-A), evidence/12_m_recomputation.md.",
     "growth_events": 0,
-    "seeds": 5,
+    "seeds": 20,
     "dv_a_pass": false,
+    "dv_a_status": "untested (F-A trigger-unit defect; not tested-and-failed)",
     "dv_b_pass": true,
+    "dv_b_pass_null": "C3-shuffle (pre-registered); artifact of shared marginal smoothing at K_learned=2",
+    "dv_b_self_null_M": -0.6055,
+    "dv_b_self_null_pass": false,
     "c2_fix_verified": true,
-    "c2_test_n_matches_t": true
+    "c2_test_n_matches_t": true,
+    "c3_instrumentation_verified": true,
+    "c3_per_step_log_count": 360,
+    "t_per_step_log_count": 360
+  },
+  "notes": {
+    "num_seeds_config_quirk": "config.json's num_seeds field shows 5 due to a known parsing quirk — the CLI --num-seeds 20 override is not reflected in the snapshot config embedded in aggregated_results.json. The top-level aggregated_results.json correctly records num_seeds=20. This is documented, not a defect."
   }
 }

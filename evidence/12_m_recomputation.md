@@ -6,6 +6,9 @@ from the n=20 production run was recomputed under (a) Hungarian-alignment,
 C3 reference.
 
 Source data: `evidence/experiment_logs/run_20260704_n20/aggregated_results.json`
+(raw per-step dump, ~94 MB — **kept out of git**; sha256 recorded in the
+provenance table below. Committed summaries + configs + the recompute script
+reproduce every statistic here.)
 Script: `recompute_m_hungarian.py`
 
 ## Per-Seed Results
@@ -137,6 +140,34 @@ does not change the Sprint 1 disposition.
   inferred sequence, recomputed per seed
 - All other parameters match the preregistration in
   `M_STATISTIC_SPECIFICATION.md`
+
+## Raw source-data provenance (not committed to git)
+
+The raw per-step `aggregated_results.json` dumps are large (~205 MB total)
+and are intentionally excluded from git (`.gitignore`) to keep the repository
+lean. The committed summaries (`06_statistical_results.md`,
+`growth_diagnostics.md`, this file's per-seed table), configs, and
+`recompute_m_hungarian.py` reproduce every reported statistic. For provenance,
+the sha256 of each raw file is recorded here (verify with
+`sha256sum <file>`):
+
+| Raw file | sha256 |
+|----------|--------|
+| `run_20260704_n20/aggregated_results.json` (n=20, primary source) | `1207462a59fef9fb1ebfd2c772f1ebbf11d68d05c28683614b51c26d30e17921` |
+| `run_20260704T125008Z_s42_n5/aggregated_results.json` | `27870808f26e7b9b9d32d5981b0559a034ca0926b4186e005e370136ad03f1bc` |
+| `run_20260704T125108Z_s42_n5/aggregated_results.json` | `911b894ace85687efb4a5a4bda0aff0d917bca2b56421ecf7e67551119e1e56e` |
+| `run_seed50/aggregated_results.json` | `57f5213a0ce867ae0fad98e61531ea613a12cf2b81df308a1ee35e60130b5619` |
+| `seed_51/aggregated_results.json` | `3a6b57a799c5c9434351ef6d76ca18c896fa07da74c565d9e41e421905c8c6ca` |
+| `seed_52/aggregated_results.json` | `26c525cb349ef537c6742865fde34005404fb0a9de93bb7fbf597951bd31e4f1` |
+| `seed_53/aggregated_results.json` | `8148b2cb17703f309db8cd7bf80a98300e6270c8024a2369ecde2184772ecd61` |
+| `seed_54/aggregated_results.json` | `123d69bc4c291ceb563dc1ce49bd4070fcdaa2daf9f50c9c22843fec14157382` |
+| `seed_55/aggregated_results.json` | `2f976fa27bf60cb111609b4d63087a4305095594ba6663b716ed8e0755cd7332` |
+| `seed_56/aggregated_results.json` | `cfa72dd9f46bf249f44348e6deeff31b3a249922413b7e2ed78309e7f5caf49c` |
+| `seed_57/aggregated_results.json` | `8c6ed3956b21d2515ab301320805c5031c4b70254355b87c92755fe681d35cd9` |
+| `seed_58/aggregated_results.json` | `a7c4337abe2f3fda12a483207056dfe8eed3c199129feabed4c334659685e35a` |
+| `seed_59/aggregated_results.json` | `1dfd01ee7c71ea530190bdcb5cd230b74bb9b1976028b7595f260eb2992bb1a6` |
+| `seed_60/aggregated_results.json` | `89527d26bb082796b1b36a65f113285911396950dd1a318ed5126c09a57e4c54` |
+| `seed_61/aggregated_results.json` | `80943760426d0211eb6639ad26df8b406b2f1cf0b28b47b4b7f12e5e21bdba4d` |
 
 ## Files
 

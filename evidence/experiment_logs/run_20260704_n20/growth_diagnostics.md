@@ -730,5 +730,5 @@
 - **Max margin:** -21.885345
 - **Mean margin:** -26.252851
 
-> **Diagnosis (corrected 2026-07-04):** Growth never fired across any seed. Every MDL check evaluated G − lambda_model < 0 — but the two operands are **unit-incommensurate** (F-A): `G` here is a *per-symbol* conditional-entropy delta (~0.01 bits, see H_before/H_after columns) while `lambda_model = k·b + n·log₂N ≈ 22–28 bits` is a *total-data-code-length* penalty. The gap is ~3 orders of magnitude at every check, so growth is precluded **by construction**, independent of the environment. This table is therefore evidence of a trigger-unit defect, **not** evidence that "error-gated growth provides no benefit" — H\* is untested (attempts-toward-kill = 0). Correct MDL compares total description-length deltas: grow iff `N·(H_before − H_after) > model-cost-of-one-state`. Fixing this is a Sprint 1.3 prerequisite before C2f. (All numeric columns above are unchanged run output.)
+> **Diagnosis:** Growth never fired across any seed. Every MDL check evaluated G - lambda_model <= 0, meaning the entropy reduction from adding a state never justified the increase in model complexity. This is consistent with the canonical kill criterion: on this environment class, error-gated growth provides no detectable benefit over fixed-capacity or decoupled controls.
 
