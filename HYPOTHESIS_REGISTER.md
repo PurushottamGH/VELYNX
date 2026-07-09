@@ -70,20 +70,5 @@
 
 ---
 
-## H3 (Emergent Development)
-**[HYPOTHESIS]** An agent minimizing sensorimotor prediction error, adding capacity only on persistent error, spontaneously develops reusable structure absent at initialization.
-
-* **Purpose:** To test the developmental bootstrapping claim.
-* **Variables:** 
-  * Independent Variable: Error-gated capacity growth.
-* **Observables:** 
-  * Transfer of emergent structure to a held-out prediction task.
-* **Mathematics:** 
-  * See H* for mathematical foundation (H3 is a precursor hypothesis to H*).
-* **Failure conditions:** 
-  * Observability gap prevents measuring transfer.
-* **Kill criteria:** 
-  * No structure emerges beyond what initialization + input statistics trivially provide.
-* **Experimental protocol:** EXP-3 (Minimal predictive organism).
-* **Expected positive result:** Significant transfer of learned structure to a held-out prediction task.
-* **Expected negative result:** No measurable transfer or no spontaneous development of reusable structure.
+## H3 (Emergent Development) — [REJECTED] / SUBSUMED BY H*
+**[REJECTED]** Retained only as an archived cross-reference (PROGRAM_D_CANONICAL.md §10 Issue-1). This is H* with the emergent-vs-injected clause (iii)/I2 removed; its content lives inside H* and its protocol is subsumed and made rigorous by E0. Do not treat as a live hypothesis or build EXP-3/EXP-4 for it.

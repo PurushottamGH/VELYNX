@@ -48,19 +48,4 @@ experiment_registry:
     location: experiments/EXP2/
     description: "H2 \u2014 framed vs unframed affective indexing, third-party task set (PROGRAM_D_CANONICAL.md \u00a76-H2)"
     components: []
-  EXP3:
-    name: Minimal predictive organism
-    hypothesis: H3 [REJECTED]
-    status: archived
-    location: experiments/EXP3/
-    description: "[REJECTED] Subsumed by H* per PROGRAM_D_CANONICAL.md \u00a710 Issue-1. Do not use."
-    note: "[REJECTED] Do not build or reference as a live experiment."
-    components: []
-  EXP4:
-    name: Cycle bootstrapping
-    hypothesis: H3 [REJECTED]
-    status: archived
-    location: experiments/EXP4/
-    description: "[REJECTED] Subsumed by H* per PROGRAM_D_CANONICAL.md \u00a710 Issue-1. Do not use."
-    note: "[REJECTED] Do not build or reference as a live experiment."
-    components: []
+

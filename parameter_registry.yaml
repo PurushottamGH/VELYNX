@@ -75,5 +75,10 @@ parameter_registry:
 # See PROGRAM_D_CANONICAL.md \u00a710 for disposition.
 #_rejected_free_energy:
 #  Removed per PROGRAM_D_CANONICAL.md \u00a75: "E = \u03bbH + \u03bcS + \u03bdA" permanently removed.
+#  Free-energy scaling factors \u03bb, \u03bc, \u03bd are archived-only/rejected.
 #_rejected_thresholds:
 #  Removed per PROGRAM_D_CANONICAL.md \u00a75.4: lambda_model is derived, not configurable.
+#_rejected_energy_exhaustion:
+#  ENERGY_EXHAUSTION is [REJECTED] / archive-only.
+#_rejected_strategy_free_energy:
+#  STRATEGY_FREE_ENERGY is [REJECTED] / archive-only.
