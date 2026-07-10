@@ -1,11 +1,11 @@
 {
-  "total_queries": 1,
+  "total_queries": 3,
   "total_concepts_learned": 0,
   "total_concepts_updated": 0,
   "domains_covered": {
-    "general": 1
+    "general": 3
   },
-  "avg_confidence": 1.0,
+  "avg_confidence": 0.7000000000000001,
   "learning_rate": 0.0,
   "session_start": 1783166390.3644805,
   "gaps_queue_size": 0

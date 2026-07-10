@@ -51,9 +51,5 @@
 
 ---
 
-## EXP-3: Minimal Predictive Organism
-**[FACT]** Tests H3 (Emergent Development).
-
-* **Protocol Summary:** The precursor protocol to E0. Deploy the minimal organism into an environment requiring structure acquisition.
-* **Measurement:** Transfer of emergent structure to a held-out prediction task.
-* **Criteria:** The structure acquired must exceed what is trivially given by initialization and input statistics. (Effectively subsumed and made rigorous by E0).
+## EXP-3: Minimal Predictive Organism — [REJECTED] / ARCHIVED
+**[REJECTED]** Precursor protocol to E0. (Effectively subsumed and made rigorous by E0). Do not run or reference as a live protocol.

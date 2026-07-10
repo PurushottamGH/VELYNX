@@ -17,7 +17,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from core.mdl.mdl_growth import compute_lambda_model, should_grow, mdl_gain
+from core.mdl.mdl_growth import compute_lambda_model, compute_lambda_model_corrected, should_grow, mdl_gain
 from core.measurement.proper_scoring import (
     predictive_log_likelihood,
     scoring_loss,
@@ -30,7 +30,8 @@ from core.predictors.dirichlet_markov import DirichletMarkovPredictor
 
 
 class TestLambdaModel:
-    """Verify λ_model = k·b + n·log₂N is the exact canonical derivation."""
+    """Verify λ_model = k·b + n·log₂N (canonical) and
+    λ_corrected = b + log₂N (F-A corrected marginal cost)."""
 
     def test_lambda_formula_matches_canonical(self):
         """λ_model = k·b + n·log₂N for sampled (k, n, N)."""
@@ -73,30 +74,61 @@ class TestLambdaModel:
         lam_10 = compute_lambda_model(k=10, n=10, N=100)
         assert lam_2 < lam_5 < lam_10
 
-    def test_should_grow_wires_lambda_correctly(self):
-        """should_grow must use the derived λ, not a configurable threshold."""
-        # With k=2, n=2, N=100: λ = 2*1 + 2*log2(100) ≈ 2 + 13.29 = 15.29
-        # G = 10 - 1 - 15.29 = -6.29, which is < 0, so decision is False
-        # To get G > 0, we need H_before - H_after > λ_model
+    def test_corrected_lambda_formula(self):
+        """λ_corrected = b + log₂N per F-A preregistration §2-3."""
+        test_cases = [
+            (10, 1.0, 1.0 + math.log2(10)),
+            (100, 1.0, 1.0 + math.log2(100)),
+            (1000, 1.0, 1.0 + math.log2(1000)),
+            (50, 2.0, 2.0 + math.log2(50)),
+        ]
+        for N, b, expected in test_cases:
+            lam = compute_lambda_model_corrected(N=N, b=b)
+            assert lam == pytest.approx(expected, rel=1e-12), (
+                f"λ_corrected({N}, {b}) = {lam}, expected {expected}"
+            )
+
+    def test_corrected_lambda_raises_on_invalid_inputs(self):
+        """λ_corrected must reject N < 1 or b <= 0."""
+        with pytest.raises(ValueError):
+            compute_lambda_model_corrected(N=0)
+        with pytest.raises(ValueError):
+            compute_lambda_model_corrected(N=100, b=0.0)
+
+    def test_should_grow_wires_corrected_formula(self):
+        """should_grow must use the corrected marginal cost b + log₂N."""
+        # λ_corrected = 1.0 + log₂(100) ≈ 7.64
+        # G = N·ΔH - λ = 100 * 29.0 - 7.64 = 2892.36 > 0 → fires
         decision, gain, lam = should_grow(
             entropy_before=30.0,
             entropy_after=1.0,
             k=2, n=2, N=100,
         )
-        # λ = 2*1 + 2*log2(100) ≈ 15.29
-        # G = 30 - 1 - 15.29 = 13.71 > 0
         assert decision is True, f"Large gain (G={gain}) should trigger growth"
         assert gain > 0
-        assert lam == pytest.approx(compute_lambda_model(k=2, n=2, N=100))
+        expected_lam = compute_lambda_model_corrected(N=100)
+        assert lam == pytest.approx(expected_lam, rel=1e-12)
 
-    def test_should_grow_rejects_small_gain(self):
-        """should_grow must reject when gain <= 0 after λ penalty."""
-        decision, gain, lam = should_grow(
+    def test_should_grow_rejects_zero_gain(self):
+        """should_grow must reject when ΔH = 0 (no entropy reduction)."""
+        # ΔH = 0 → N·ΔH = 0 < λ → G < 0
+        decision, gain, _ = should_grow(
             entropy_before=5.0,
-            entropy_after=4.9,
+            entropy_after=5.0,
             k=10, n=10, N=1000,
         )
-        assert decision is False, "Small gain should not trigger growth"
+        assert decision is False, "Zero gain should not trigger growth"
+        assert gain < 0
+
+    def test_should_grow_rejects_negative_gain(self):
+        """should_grow must reject when ΔH < 0 (entropy increases)."""
+        decision, gain, _ = should_grow(
+            entropy_before=4.9,
+            entropy_after=5.0,
+            k=10, n=10, N=1000,
+        )
+        assert decision is False, "Negative gain should not trigger growth"
+        assert gain < 0
 
 
 # ─── Test 2: Log Score (proper scoring rule) ──────────────────────────

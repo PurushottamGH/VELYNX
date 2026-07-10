@@ -29,8 +29,6 @@ experiments/R1/
 experiments/R3F/
 experiments/EXP1/
 experiments/EXP2/
-experiments/EXP3/
-experiments/EXP4/
 experiments/coverage/
 
 benchmarks/evaluation/
@@ -54,14 +52,12 @@ program_c/metacognition/
 program_c/reflection/
 program_c/pipeline/
 program_c/abstraction/
-program_c/self_model/
 program_c/simulation/
 program_c/agency/
 program_c/conversation/
 program_c/models/
 
 infra/app/
-infra/app/soul/
 infra/database/
 infra/database/alembic/versions/
 infra/runtime/
@@ -216,7 +212,6 @@ Every subdirectory under `backend/` that is not already moved to `program_a/`, `
 | `backend/reflection/` → `program_c/reflection/` |
 | `backend/pipeline/` → `program_c/pipeline/` |
 | `backend/abstraction/` → `program_c/abstraction/` |
-| `backend/self_model/` → `program_c/self_model/` |
 | `backend/simulation/` → `program_c/simulation/` |
 | `backend/agency/` → `program_c/agency/` |
 | `backend/conversation/` → `program_c/conversation/` |
@@ -309,6 +304,7 @@ Move files that are dead, duplicated, or superseded into `archive/`.
 | `backend/tools/` → `archive/code/tools/` | One-off utilities |
 | `backend/contracts/` → `archive/code/contracts/` | Single file, not maintained |
 | `backend/integration/` → `archive/code/integration/` | Empty directory |
+| `backend/self_model/` → `archive/code/self_model/` | Rejected self-model (constitutional constraint) |
 | `backend/self_coder.py` → `archive/code/` | Duplicate (also in `velynx_core/`) |
 | `backend/orchestrator.py` → `archive/code/` | Superseded by `program_c/pipeline/agentic_loop.py` |
 | `experiments/calculator.py` → `archive/experiments/` | Toy scripts |
@@ -319,6 +315,20 @@ Move files that are dead, duplicated, or superseded into `archive/`.
 | `kiro-gateway/` → **delete** (third-party) | Not part of the repository |
 | `node_modules/` → **delete** | Build artifact |
 | `dist/` → **delete** | Build artifact |
+
+---
+
+## Phase 8.5: Anthropomorphic Name Retirement & Rename
+
+Rename anthropomorphic symbols across Program B and Program C code bases to ensure constitutional alignment with `PROGRAM_D_CANONICAL.md`.
+
+| Old Name | New Name / Action |
+|----------|-------------------|
+| `soul` | `affective` or `concept` |
+| `belief` | `predicted_state` or `predictor` |
+| `curiosity` | `exploration` or `novelty` |
+| `dream_state` | `offline_replay` or `consolidation` |
+| `monologue` | `internal_reasoning` |
 
 ---
 
@@ -350,7 +360,6 @@ Every Python file in the repository must be updated to reflect the new directory
 | `backend.reflection.` | `program_c.reflection.` |
 | `backend.pipeline.` | `program_c.pipeline.` |
 | `backend.abstraction.` | `program_c.abstraction.` |
-| `backend.self_model.` | `program_c.self_model.` |
 | `backend.simulation.` | `program_c.simulation.` |
 | `backend.agency.` | `program_c.agency.` |
 | `backend.conversation.` | `program_c.conversation.` |

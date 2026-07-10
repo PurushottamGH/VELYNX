@@ -6,6 +6,7 @@ on a minimal configuration to verify the pipeline works end-to-end.
 from __future__ import annotations
 
 import json
+import math
 import tempfile
 from pathlib import Path
 
@@ -24,7 +25,7 @@ from experiments.E0.analysis import (
 )
 from experiments.E0.decision import E0Decider
 from core.predictors.dirichlet_markov import DirichletMarkovPredictor
-from core.mdl.mdl_growth import compute_lambda_model, should_grow
+from core.mdl.mdl_growth import compute_lambda_model, compute_lambda_model_corrected, should_grow
 from core.measurement.proper_scoring import predictive_log_likelihood, scoring_loss
 
 
@@ -97,30 +98,46 @@ class TestE0EndToEnd:
         assert not np.isinf(h)
 
     def test_mdl_lambda_computation(self):
-        """λ_model is computed deterministically from formula."""
+        """λ_model is computed deterministically from canonical formula."""
         lam = compute_lambda_model(k=2, n=2, N=50)
-        expected = 2.0 + 2.0 * np.log2(50)
+        expected = 2.0 + 2.0 * math.log2(50)
         assert lam == pytest.approx(expected)
 
+    def test_mdl_lambda_corrected(self):
+        """λ_corrected = b + log₂N per F-A preregistration."""
+        lam = compute_lambda_model_corrected(N=50)
+        expected = 1.0 + math.log2(50)
+        assert lam == pytest.approx(expected, rel=1e-12)
+
     def test_mdl_should_grow(self):
-        """should_grow makes correct decisions."""
-        # λ_model for k=2, n=2, N=50 = 2*1 + 2*log2(50) ≈ 2 + 11.29 = 13.29
-        # G = 30 - 2 - 13.29 = 14.71 > 0 → should grow
+        """should_grow makes correct decisions using F-A corrected marginal cost."""
+        # λ_corrected = 1.0 + log₂(50) ≈ 6.64
+        # G = 50 * (30.0 - 2.0) - 6.64 = 1393.36 > 0 → should grow
         decision, gain, lam = should_grow(
             entropy_before=30.0,
             entropy_after=2.0,
             k=2, n=2, N=50,
         )
         assert decision is True, f"G={gain:.2f}, lam={lam:.2f}: Large gain should trigger growth"
+        assert gain > 0
 
-        # λ_model for k=5, n=5, N=100 = 5*1 + 5*log2(100) ≈ 5 + 33.22 = 38.22
-        # G = 5.0 - 4.9 - 38.22 = -38.12 < 0 → should not grow
+        # ΔH = 0 → G < 0 regardless of N (positive threshold always)
         decision, gain, lam = should_grow(
-            entropy_before=5.0,
+            entropy_before=4.9,
             entropy_after=4.9,
             k=5, n=5, N=100,
         )
-        assert decision is False, f"G={gain:.2f}: Small gain should not trigger growth"
+        assert decision is False, f"G={gain:.2f}: Zero ΔH should never trigger growth"
+        assert gain < 0
+
+        # ΔH < 0 → G < 0 always
+        decision, gain, lam = should_grow(
+            entropy_before=4.9,
+            entropy_after=5.0,
+            k=5, n=5, N=100,
+        )
+        assert decision is False, f"G={gain:.2f}: Negative ΔH should never trigger growth"
+        assert gain < 0
 
     def test_log_loss_monotonic(self):
         """Better predictions should give lower loss."""

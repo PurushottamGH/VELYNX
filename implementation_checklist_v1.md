@@ -17,7 +17,7 @@ foundation/hypothesis/  foundation/assumptions/  foundation/kill_criteria/
 foundation/mathematics/ foundation/architecture/ foundation/novelty/
 core/predictors/  core/emergence/  core/mdl/  core/measurement/  core/controls/
 experiments/E0/  experiments/R1/  experiments/R3F/
-experiments/EXP1/  experiments/EXP2/  experiments/EXP3/  experiments/EXP4/
+experiments/EXP1/  experiments/EXP2/
 experiments/coverage/
 benchmarks/evaluation/  benchmarks/cognition/  benchmarks/reflection/
 benchmarks/monitoring/  benchmarks/hallucination/  benchmarks/failure/
@@ -25,7 +25,7 @@ program_a/retrieval/  program_a/nlp/
 program_b/soul_graph/  program_b/concepts/
 program_c/cognition/  program_c/memory/  program_c/learning/  program_c/knowledge/
 program_c/metacognition/  program_c/reflection/  program_c/pipeline/
-program_c/abstraction/  program_c/self_model/  program_c/simulation/
+program_c/abstraction/  program_c/simulation/
 program_c/agency/  program_c/conversation/  program_c/models/
 infra/app/  infra/database/alembic/versions/  infra/runtime/
 infra/ops/  infra/constitution/  infra/config/  infra/data/  infra/frontend/
@@ -250,7 +250,6 @@ Move the remaining smaller packages together (safe to batch since each is indepe
 - `git mv backend/metacognition/* program_c/metacognition/`
 - `git mv backend/reflection/* program_c/reflection/`
 - `git mv backend/abstraction/* program_c/abstraction/`
-- `git mv backend/self_model/* program_c/self_model/`
 - `git mv backend/simulation/* program_c/simulation/`
 - `git mv backend/agency/* program_c/agency/`
 - `git mv backend/conversation/* program_c/conversation/`
@@ -358,7 +357,7 @@ Extract the Dirichlet–Markov conjugate predictor from `backend/cognition/predi
 ### Commit 6.1 — Rename `experiments/EXP0/` to `experiments/E0/` and add per-experiment dirs
 
 - `git mv experiments/EXP0 experiments/E0`
-- Create `experiments/R1/`, `experiments/R3F/`, `experiments/EXP1/`–`EXP4/` with `preregistration.md`, `protocol.md`, `run.py`, `analysis.py` stubs (or move from `research/experiments/` if they exist)
+- Create `experiments/R1/`, `experiments/R3F/`, `experiments/EXP1/`–`EXP2/` with `preregistration.md`, `protocol.md`, `run.py`, `analysis.py` stubs (or move from `research/experiments/` if they exist)
 - Write `experiments/coverage/experiment_coverage_matrix.csv` — derived from `program_d_experiment_coverage_matrix.csv`
 - Preserve backward compat: write a `README.md` in `experiments/EXP0/` that says "Moved to experiments/E0/"
 - Or: create a `forward` file / git symlink (prefer the former on Windows)
@@ -409,6 +408,7 @@ Extract the Dirichlet–Markov conjugate predictor from `backend/cognition/predi
 - `git mv backend/tools/ archive/code/tools/`
 - `git mv backend/contracts/ archive/code/contracts/`
 - `git mv backend/integration/ archive/code/integration/`
+- `git mv backend/self_model/ archive/code/self_model/`
 - `git mv backend/self_coder.py archive/code/`
 - `git mv backend/orchestrator.py archive/code/`
 - `git mv experiments/calculator.py archive/experiments/`
@@ -424,6 +424,17 @@ Extract the Dirichlet–Markov conjugate predictor from `backend/cognition/predi
 **Risk:** Medium — must verify no remaining references before moving. Run a grep first.
 **Rollback:** `git revert`. If something breaks, `git mv` back from archive.
 **Time:** 1 hr
+
+### Commit 8.2 — Retract and rename anthropomorphic terms
+
+Systematically rename anthropomorphic terms across `program_b/` and `program_c/` to strictly align with constitutional naming rules (e.g., rename `soul` -> `affective`, `belief` -> `predicted_state`, `curiosity` -> `exploration`, `dream_state` -> `offline_replay`, `monologue` -> `internal_reasoning`).
+
+**Files touched:** Multiple files in `program_b/` and `program_c/`.
+**Verification:** Run `pytest` and verify that no live code uses the prohibited terms.
+**Difficulty:** Medium
+**Risk:** Medium — renaming can break imports or dynamic attribute access.
+**Rollback:** `git revert`
+**Time:** 2 hr
 
 ---
 
@@ -450,7 +461,6 @@ Write `scripts/_fix_imports_v2.py` that applies the import mapping table:
 | `backend.reflection.` | `program_c.reflection.` |
 | `backend.pipeline.` | `program_c.pipeline.` |
 | `backend.abstraction.` | `program_c.abstraction.` |
-| `backend.self_model.` | `program_c.self_model.` |
 | `backend.simulation.` | `program_c.simulation.` |
 | `backend.agency.` | `program_c.agency.` |
 | `backend.conversation.` | `program_c.conversation.` |

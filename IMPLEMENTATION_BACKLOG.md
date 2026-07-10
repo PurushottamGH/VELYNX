@@ -11,14 +11,14 @@
 
 | ID | Description | Maps-to | Deps | Diff | Est | Files | Acceptance test | Definition of Done |
 |---|---|---|---|---|---|---|---|---|
-| RC-01 | Strike H3 as a live hypothesis; mark `[REJECTED]/subsumed by H*`; ensure H* present | H\* | — | Easy | 1 | `HYPOTHESIS_REGISTER.md` | `grep -n "H3" HYPOTHESIS_REGISTER.md` shows only `[REJECTED]` cross-refs; H* block present | Register lists H\*,H1,H2 live; H3 archival only |
-| RC-02 | Remove EXP-3 protocol; note "subsumed by E0" | H\* | RC-01 | Easy | 0.5 | `EXPERIMENT_PROTOCOLS.md` | no live EXP-3 section; E0 present | Protocols list EXP-0/1/2/E0 only |
-| RC-03 | Rewrite SPEC §3-H2 to task-score/unframed form; retire 0.15 ECE dead-zone (single gate <0.10) | H2, H1 | — | Medium | 2 | `PROGRAM_D_SPECIFICATION.md` | `grep -niE "dimensionality reduction|search steps|dense.embedding|0\.15"` → 0 live hits | SPEC H2 = affective→task-score, unframed control; H1 gate single `<0.10` |
-| RC-04 | `repository_v2.md`: delete EXP3/EXP4 rows; `self_model`→archive; drop soul_graph+concepts.json from EXP-2 deps | H2, H\* | — | Medium | 2 | `repository_v2.md` | no EXP3/EXP4 experiment rows; EXP-2 dependents exclude program_b | Engineering doc has no rejected experiments/deps |
-| RC-05 | `migration_plan.md`+`implementation_checklist_v1.md`: drop EXP3/EXP4, self_model, infra/app/soul from skeleton; add anthropomorphic-rename step; de-dup to one skeleton/remap/archive list | H\*, H2 | RC-04 | Medium | 3 | `migration_plan.md`, `implementation_checklist_v1.md` | Phase-0 skeleton has no `EXP3/EXP4/self_model/soul`; one remap table only | Three engineering docs agree on one skeleton |
-| RC-06 | `experiment_registry.yaml`: delete EXP3/EXP4; set R2/R3F=archived (not live) | H\* | RC-04 | Easy | 1 | `experiment_registry.yaml` | YAML has E0/EXP1/EXP2 live + EXP-0; no EXP3/EXP4 live | Registry = live set only |
-| RC-07 | `parameter_registry.yaml`: mark free-energy λ/μ/ν, ENERGY_EXHAUSTION, STRATEGY_FREE_ENERGY `[REJECTED] archive-only`; pin `mdl.lambda_model=k·b+n·log₂N` (remove "configurable") | H\* | — | Easy | 1 | `parameter_registry.yaml` | `grep -n "configurable" parameter_registry.yaml` → 0 for lambda_model; free_energy block tagged REJECTED | Registry carries no live rejected params; λ pinned |
-| RC-08 | Author Program-D coverage matrix over EXP-0/1/2/E0 (replace legacy E1–E13) | all exp | RC-06 | Medium | 2 | `experiments/coverage/experiment_coverage_matrix.csv` | every row ∈ {EXP-0,EXP-1,EXP-2,E0}; no `E1..E13`/`self_coder`/`free_energy_vs_pareto` rows | Matrix maps live experiments→component→hypothesis→metric→kill |
+| **[DONE]** RC-01 | Strike H3 as a live hypothesis; mark `[REJECTED]/subsumed by H*`; ensure H* present | H\* | — | Easy | 1 | `HYPOTHESIS_REGISTER.md` | `grep -n "H3" HYPOTHESIS_REGISTER.md` shows only `[REJECTED]` cross-refs; H* block present | Register lists H\*,H1,H2 live; H3 archival only |
+| **[DONE]** RC-02 | Remove EXP-3 protocol; note "subsumed by E0" | H\* | RC-01 | Easy | 0.5 | `EXPERIMENT_PROTOCOLS.md` | no live EXP-3 section; E0 present | Protocols list EXP-0/1/2/E0 only |
+| **[DONE]** RC-03 | Rewrite SPEC §3-H2 to task-score/unframed form; retire 0.15 ECE dead-zone (single gate <0.10) | H2, H1 | — | Medium | 2 | `PROGRAM_D_SPECIFICATION.md` | `grep -niE "dimensionality reduction|search steps|dense.embedding|0\.15"` → 0 live hits | SPEC H2 = affective→task-score, unframed control; H1 gate single `<0.10` |
+| **[DONE]** RC-04 | `repository_v2.md`: delete EXP3/EXP4 rows; `self_model`→archive; drop soul_graph+concepts.json from EXP-2 deps | H2, H\* | — | Medium | 2 | `repository_v2.md` | no EXP3/EXP4 experiment rows; EXP-2 dependents exclude program_b | Engineering doc has no rejected experiments/deps |
+| **[DONE]** RC-05 | `migration_plan.md`+`implementation_checklist_v1.md`: drop EXP3/EXP4, self_model, infra/app/soul from skeleton; add anthropomorphic-rename step; de-dup to one skeleton/remap/archive list | H\*, H2 | RC-04 | Medium | 3 | `migration_plan.md`, `implementation_checklist_v1.md` | Phase-0 skeleton has no `EXP3/EXP4/self_model/soul`; one remap table only | Three engineering docs agree on one skeleton |
+| **[DONE]** RC-06 | `experiment_registry.yaml`: delete EXP3/EXP4; set R2/R3F=archived (not live) | H\* | RC-04 | Easy | 1 | `experiment_registry.yaml` | YAML has E0/EXP1/EXP2 live + EXP-0; no EXP3/EXP4 live | Registry = live set only |
+| **[DONE]** RC-07 | `parameter_registry.yaml`: mark free-energy λ/μ/ν, ENERGY_EXHAUSTION, STRATEGY_FREE_ENERGY `[REJECTED] archive-only`; pin `mdl.lambda_model=k·b+n·log₂N` (remove "configurable") | H\* | — | Easy | 1 | `parameter_registry.yaml` | `grep -n "configurable" parameter_registry.yaml` → 0 for lambda_model; free_energy block tagged REJECTED | Registry carries no live rejected params; λ pinned |
+| **[DONE]** RC-08 | Author Program-D coverage matrix over EXP-0/1/2/E0 (replace legacy E1–E13) | all exp | RC-06 | Medium | 2 | `experiments/coverage/experiment_coverage_matrix.csv` | every row ∈ {EXP-0,EXP-1,EXP-2,E0}; no `E1..E13`/`self_coder`/`free_energy_vs_pareto` rows | Matrix maps live experiments→component→hypothesis→metric→kill |
 
 ---
 
@@ -132,15 +132,15 @@
 
 | Milestone | Tasks | Est (h) | Critical-path risk |
 |---|---|---|---|
-| M0 Reconciliation | 8 | ~12.5 | Low (docs) — but blocks all |
+| M0 Reconciliation | 8 | **0 (DONE)** | None (Completed) |
 | M1 Core + Skeleton | 16 | ~92 | Very-High (INFRA-08 codemod, CORE extraction) |
 | M2 EXP-0 | 6 | ~16 | Medium (state reset) |
 | M3 EXP-1 | 6 | ~16 | Medium |
 | M4 E0 | 14 | ~40 | High (keystone I2) |
 | M5 EXP-2 | 5 | ~13 | Medium (circularity) |
 | M6 Publication | 5 | ~15 | Low–Medium |
-| **Total** | **60** | **~205 h (~26 ed)** | — |
+| **Total** | **60** | **~192.5 h (~24 ed)** | — |
 
-*Note:* the ~26 engineer-day floor here counts only atomic coding tasks; the roadmap's ~55 ed adds review, preregistration authoring, seeded reruns, and analysis iteration (canonical priority: reproducibility > speed).
+*Note:* the ~24 engineer-day floor here counts only atomic coding tasks; the roadmap's ~55 ed adds review, preregistration authoring, seeded reruns, and analysis iteration (canonical priority: reproducibility > speed).
 
-**Ready-to-start now (no open deps):** RC-01, RC-03, RC-04, RC-07, CORE-02, CORE-04. See `EXECUTION_ORDER.md` for the full unblock sequence.
+**Ready-to-start now (no open deps):** CORE-02, CORE-04. See `EXECUTION_ORDER.md` for the full unblock sequence.

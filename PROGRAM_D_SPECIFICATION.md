@@ -45,14 +45,15 @@ Every canonical statement must be tagged:
 - **Kill Criteria:** $ECE \geq 0.10$ or statistical independence over the query set. *(Single gate per CANONICAL §6-H1 / Issue-4: the legacy 0.15 threshold is retired — a 0.10–0.15 dead zone leaves the claim simultaneously un-passed and un-killed. Pass iff $ECE < 0.10$.)*
 - **Goodhart Risk:** Threshold hacking—artificially tightening confidence bins to lower ECE without improving the underlying retrieval signal.
 
-### H2: Affective Dimensionality Reduction
-**[HYPOTHESIS]** Projecting state observations through a fixed, low-dimensional "affective" manifold yields a compression ratio that accelerates structural search and retrieval.
-- **Scientific Motivation:** Dimensionality reduction via evolutionary priors (affect) may constrain expansive search spaces more efficiently than raw semantic distances.
-- **Observable:** Search steps-to-convergence on novel tasks.
-- **Null Hypothesis:** Affective projection yields equal or slower convergence than direct dense semantic vector search.
-- **Control:** Standard dense embedding cosine-similarity search (e.g., text-ada-002).
-- **Kill Criteria:** Convergence steps (affective) $\geq$ Convergence steps (control).
+### H2: Affective Indexing
+**[HYPOTHESIS]** A learned affective-framing to problem-solving-schema mapping improves objective task outcomes over an unframed baseline.
+- **Scientific Motivation:** Emotional framing acts as an effective retrieval key into problem-solving schemas, improving task outcomes.
+- **Observable:** Objective task score (e.g., debugging fixes / planning success).
+- **Null Hypothesis:** Affective framing yields no significant improvement in objective task outcomes over an unframed baseline.
+- **Control:** Unframed baseline prompt (neutral task description only).
+- **Kill Criteria:** Mean objective task score (Framed) <= Mean objective task score (Unframed), or if schemas must be re-authored per task.
 - **Circular Logic Risk:** Evaluating on task environments authored by the same designer, implicitly matching the affect categories. Must use fully isolated third-party test sets.
+- **Experimental protocol:** EXP-2.
 
 ### H3: MDL-Gated Topology Emergence — [REJECTED] / SUBSUMED BY H\*
 **[REJECTED]** Retained only as an archived cross-reference (CANONICAL §10 Issue-1). This is H\* with the emergent-vs-injected clause (iii)/I2 removed; its content lives inside H\* and its protocol is subsumed and made rigorous by E0. Do not treat as a live hypothesis or build EXP-3/EXP-4 for it.

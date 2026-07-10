@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "skills": {
+    "documentation-writer": {
+      "source": "github/awesome-copilot",
+      "sourceType": "github",
+      "skillPath": "skills/documentation-writer/SKILL.md",
+      "computedHash": "ee53d65b163cd7eb953a930c95841cfe398cc2c0bd24c06508bbaa07c432be35"
+    },
+    "excalidraw-diagram-generator": {
+      "source": "github/awesome-copilot",
+      "sourceType": "github",
+      "skillPath": "skills/excalidraw-diagram-generator/SKILL.md",
+      "computedHash": "68af7d099a9e6fd2a94b4e1219b8b7820e09ebe4a8c2a636358d3f5188219e51"
+    },
+    "frontend-design": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "skillPath": "skills/frontend-design/SKILL.md",
+      "computedHash": "93f53fd1c0352d3d7ec17b8f73d7351bf76f4821e55d123c9d2abc2c53ba48e4"
+    },
+    "git-commit": {
+      "source": "github/awesome-copilot",
+      "sourceType": "github",
+      "skillPath": "skills/git-commit/SKILL.md",
+      "computedHash": "2607fc60629b82b257136dd2a7a373f0a4466c0b49df7746d845d59313c99b21"
+    },
+    "prd": {
+      "source": "github/awesome-copilot",
+      "sourceType": "github",
+      "skillPath": "skills/prd/SKILL.md",
+      "computedHash": "1f3e1f005fc40fda85d250ae906c8ee4f7e8e833e23adfeca6542c19609fd7cd"
+    }
+  }
+}

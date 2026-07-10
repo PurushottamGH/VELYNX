@@ -664,8 +664,7 @@ class TestGrowthDecision:
         """predictor.grow() must only be called when should_grow returns True."""
         from core.mdl.mdl_growth import should_grow, compute_lambda_model
         lam = compute_lambda_model(k=2, n=2, N=50)
-        # G = 30 - 29.9 - λ = very negative => should NOT grow
-        # This means should_grow returns False, so grow() should NOT be called
+        # G = N·ΔH - (b + log₂N) = 50*0.1 - 6.64 = -1.64 => should NOT grow
         decision, gain, _ = should_grow(
             entropy_before=30.0,
             entropy_after=29.9,

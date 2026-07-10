@@ -1,17 +1,21 @@
-"""MDL-based growth trigger — pinned canonical derivation.
+"""MDL growth trigger — canonical derivation, F-A corrected.
 
 Canonical MDL growth operator:
 
-    G = H_before − H_after − λ_model > 0
+    G = N · (H_before − H_after) − (b + log₂N) > 0
 
-where λ_model = k · b + n · log₂ N  (concept-birth ledger).
+where b = BITS_PER_PARAMETER = 1.0 and the marginal cost λ = b + log₂N
+follows from the two-part MDL inequality (F_A_TRIGGER_FIX_PREREGISTRATION.md §2-3).
 
-This is a **derivation, not a configurable threshold**. A hand-set λ
-violates I2 by construction (failure mode F2). The formula is hardcoded
-and non-tunable.
+Both terms are in **total bits** — a dimensionally consistent comparison,
+unlike the Sprint-1 buggy formula (H_before − H_after − λ_model) which
+mixed bits/symbol with total bits.
 
-Reference: PROGRAM_D_CANONICAL.md §5.4
-           literature/program_d_mathematical_provenance.md §2
+This is a **derivation, not a configurable threshold**. The formula is
+hardcoded and non-tunable.
+
+Reference: F_A_TRIGGER_FIX_PREREGISTRATION.md §2-3
+           PROGRAM_D_CANONICAL.md §5.4
 """
 from __future__ import annotations
 
@@ -40,7 +44,12 @@ def compute_lambda_model(
 ) -> float:
     """Compute the canonical MDL model complexity penalty.
 
-    λ_model = k · b + n · log₂ N
+    λ_model = k · b + n · log₂N
+
+    This is the **total** model cost (not the marginal cost), expressed
+    in total bits. It is used for backward compatibility with existing
+    callers. For the F-A corrected marginal cost, use
+    :func:`compute_lambda_model_corrected`.
 
     Parameters
     ----------
@@ -57,7 +66,7 @@ def compute_lambda_model(
     Returns
     -------
     float
-        The model complexity penalty in bits.
+        The model complexity penalty in bits: k·b + n·log₂N.
 
     Raises
     ------
@@ -74,6 +83,52 @@ def compute_lambda_model(
         raise ValueError(f"b must be > 0, got {b}")
 
     return float(k * b + n * math.log2(max(N, 1)))
+
+
+# --- F-A corrected marginal cost ---
+
+
+def compute_lambda_model_corrected(
+    N: int,
+    b: float = BITS_PER_PARAMETER,
+) -> float:
+    """Compute the F-A corrected marginal model cost (F-A trigger fix).
+
+    λ_corrected = b + log₂N
+
+    This is the **marginal** cost of adding one new state, derived from
+    the two-part MDL inequality (see F_A_TRIGGER_FIX_PREREGISTRATION.md §2-3):
+
+        N·H_before + k·b + k·log₂N > N·H_after + (k+1)·b + (k+1)·log₂N
+        →  N·ΔH > b + log₂N
+
+    The term `b` encodes the integer state index and `log₂N` encodes the
+    transition distribution for the new state, which scales with the total
+    observation count.
+
+    Parameters
+    ----------
+    N : int
+        Total observations seen so far.
+    b : float
+        Bit cost per parameter. Default is BITS_PER_PARAMETER = 1.0.
+
+    Returns
+    -------
+    float
+        The marginal model cost threshold in total bits: b + log₂N.
+
+    Raises
+    ------
+    ValueError
+        If N < 1.
+    """
+    if N < 1:
+        raise ValueError(f"N must be >= 1, got {N}")
+    if b <= 0.0:
+        raise ValueError(f"b must be > 0, got {b}")
+
+    return float(b + math.log2(max(N, 1)))
 
 
 # --- Canonical growth trigger ---
@@ -117,39 +172,51 @@ def should_grow(
     N: int,
     b: float = BITS_PER_PARAMETER,
 ) -> Tuple[bool, float, float]:
-    """Canonical growth decision: should the model grow?
+    """F-A corrected growth decision: should the model grow?
 
-    Wires together the MDL gain check: grows iff the description length
-    strictly decreases (G > 0).
+    Corrected MDL trigger (dimensionally consistent, total bits):
 
-    This function replaces all configurable `birth_threshold` parameters
-    with the derived λ_model. There is no tunable threshold.
+        G = N · (H_before − H_after) − (b + log₂N) > 0
+
+    where λ = b + log₂N is the marginal cost of adding one state,
+    computed by :func:`compute_lambda_model_corrected`.
+
+    This replaces the Sprint-1 buggy formula which compared bits/symbol
+    to total bits — a unit-incommensurate comparison that made growth
+    mathematically impossible.
+
+    Parameters ``k`` and ``n`` are kept for backward compatibility with
+    existing callers (run_treatment, run_c3) but are **not used** in the
+    corrected computation — the marginal cost is independent of k.
 
     Parameters
     ----------
     entropy_before : float
-        Predictive entropy before adding capacity.
+        Predictive entropy before adding capacity (bits/symbol).
     entropy_after : float
-        Predictive entropy after adding capacity.
+        Predictive entropy after adding capacity (bits/symbol).
     k : int
-        Current number of states (before growth).
+        Current number of states (before growth) — kept for backward
+        compatibility, not used in the corrected computation.
     n : int
-        Dimensionality of parameters (typically = k).
+        Parameter dimensionality — kept for backward compatibility,
+        not used in the corrected computation.
     N : int
         Total observations seen.
     b : float
-        Bit cost per parameter (default 1.0).
+        Bit cost per parameter. Default is BITS_PER_PARAMETER = 1.0.
 
     Returns
     -------
     Tuple[bool, float, float]
         (decision, gain, lambda_model)
-        decision : True if model should grow (gain > 0)
-        gain     : The MDL gain value
-        lambda_model : The computed complexity penalty
+        decision : True if model should grow (G > 0)
+        gain     : G = N·ΔH − (b + log₂N) in total bits
+        lambda_model : The corrected marginal cost b + log₂N
     """
-    lam = compute_lambda_model(k=k, n=n, N=N, b=b)
-    gain = mdl_gain(entropy_before, entropy_after, lam)
+    delta_h = entropy_before - entropy_after
+    lam = compute_lambda_model_corrected(N=N, b=b)
+    gain = N * delta_h - lam
     return gain > 0.0, gain, lam
 
 

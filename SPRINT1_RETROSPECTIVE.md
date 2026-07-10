@@ -4,12 +4,14 @@
 
 Chronological, with dates / commit refs where available.
 
-1. **F1 measurement defect found → fixed.**
+1. **F1 measurement defect found → fixed** (`fd7aabf`).
    `E0` was initialized against an index-collision metric rather than a
    prediction-quality metric. Sonnet diagnosed the defect in the first
    review pass; the metric was re-pointed before any sprint number was
    stamped on it.
-2. **C2 held-out leakage found → fixed.**
+2. **C2 held-out leakage found → fixed** (`fd7aabf`, same commit as F1 —
+   both fixes were bundled and shipped together; see
+   `git show fd7aabf --stat`).
    The C2 evaluation set was reachable from the training partition via
    a shared upstream index. Caught during the same review pass as F1;
    the held-out boundary was re-cut before C2 was run for publication.
@@ -18,7 +20,8 @@ Chronological, with dates / commit refs where available.
    no matching committed artifact existed at the cited commit. The
    review was either re-run or the log entry was corrected so every
    numbered review maps to a real commit.
-4. **Repo size anomaly (`research_artifacts/`) found → resolved.**
+4. **Repo size anomaly (`research_artifacts/`) found → resolved**
+   (`326cf17`).
    A `git add -A` had staged ~2.2M lines of generated artifacts under
    `research_artifacts/`. The directory was gitignored and the staged
    entries were dropped before they entered history.
@@ -55,12 +58,20 @@ Chronological, with dates / commit refs where available.
     A block of text in F-B asserted results that had no matching run
     artifact. The fabricated block was purged and the section was
     rewritten against the actual run logs.
-12. **`decision.py` C-5 fix.**
-    The C-5 branch in `decision.py` was corrected to match the reviewed
-    specification before the tag was cut.
-13. **Tag cut.**
-    Sprint 1 tag was cut only after all of the above were resolved and
-    reconciled.
+12. **`decision.py` C-5 fix — two commits.**
+    `decision.py` was first introduced in the F1-branch commit
+    (`fd7aabf`, same commit as items 1–2 above) with a `FAIL`/double-negative
+    verdict framing. That framing was superseded by item 10's F-A
+    reframe, and the C-5 branch in `decision.py` was corrected to the
+    `UNTESTED`/F-A framing in a dedicated closure commit (`2b5644a`)
+    before the closure tag was cut.
+13. **Tags cut.**
+    `v1.0.0-Sprint1-Complete` (`94d793e`) was cut once F1, C2, the
+    `research_artifacts/` cleanup, and the doc reconciliation (items
+    1–11) were resolved, with the `decision.py` C-5 mismatch tracked
+    as a known follow-up (see `94d793e`'s commit message). The
+    follow-up was closed and `v1.0.1-Sprint1-Closure` (`2b5644a`) was
+    cut immediately after.
 
 ## What Each Catch Actually Prevented
 
@@ -159,8 +170,9 @@ been caught.
 - **The F-B fabrication purge** — removed an asserted-results block
   with no backing run artifact before it could enter the publication
   record.
-- **The `decision.py` C-5 fix** — brought the shipped decision logic
-  back in line with the reviewed specification before the tag was cut.
+- **The `decision.py` C-5 fix** (`2b5644a`) — brought the shipped
+  decision logic back in line with the reviewed specification before
+  the closure tag was cut.
 
 ## Pipeline Improvements for Every Future Sprint
 
@@ -181,3 +193,19 @@ been caught.
   spent on intermediate debugging.** The Director review is the last
   gate before the tag, not a debugging resource to be consumed
   mid-sprint.
+
+## Commit & Tag Reference
+
+Verified against `git show <hash> --stat` at retrospective write time
+(2026-07-05); do not copy hashes into future documents without
+re-verifying against `git log`.
+
+| Item | Commit / Tag |
+|---|---|
+| F1 measurement defect fix | `fd7aabf` |
+| C2 held-out boundary fix | `fd7aabf` (same commit as F1 fix) |
+| `research_artifacts/` `.gitignore` + index cleanup | `326cf17` |
+| `decision.py` — first version (F1-branch, `FAIL` framing) | `fd7aabf` |
+| `decision.py` C-5 — closure fix (`UNTESTED`/F-A framing) | `2b5644a` |
+| Tag `v1.0.0-Sprint1-Complete` | `94d793e` |
+| Tag `v1.0.1-Sprint1-Closure` | `2b5644a` |

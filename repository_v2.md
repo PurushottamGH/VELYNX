@@ -47,7 +47,7 @@ The reusable scientific machinery — primitives and measurement infrastructure 
 **Owner:** Research Engineering Lead
 **Scientific role:** Implements the five primitives from the mathematical foundation (I1–I3, log-loss, MDL trigger, emergence statistic)
 **Engineering role:** Single source of truth for predictive machinery; all experiments import from here
-**Dependent experiments:** E0, R1–R3F, EXP-0–EXP-4 (all experimental measurement)
+**Dependent experiments:** E0, R1–R3F, EXP-0–EXP-2 (all experimental measurement)
 **Would be cited by:** Methodology section of every experimental paper
 **Category:** Core
 
@@ -65,8 +65,6 @@ Each experiment is self-contained. It imports from `core/` and writes results to
 | `experiments/R3F/` | R3F1 formal benchmark suite | `preregistration.md`, `protocol.md`, `run.py`, `analysis.py` |
 | `experiments/EXP1/` | Calibration curve (H1 — ECE < 0.1) | `preregistration.md`, `protocol.md`, `run.py`, `analysis.py` |
 | `experiments/EXP2/` | Affective indexing test (H2 — framed vs unframed) | `preregistration.md`, `protocol.md`, `run.py`, `analysis.py` |
-| `experiments/EXP3/` | Minimal predictive organism (H3) | `preregistration.md`, `protocol.md`, `run.py`, `analysis.py` |
-| `experiments/EXP4/` | Cycle bootstrapping (gated behind EXP-3) | `preregistration.md`, `protocol.md`, `run.py`, `analysis.py` |
 | `experiments/coverage/` | Experiment-to-component coverage matrix | `experiment_coverage_matrix.csv` |
 
 **Owner:** PI + Research Engineering Lead (joint)
@@ -94,7 +92,7 @@ Evaluation harnesses and benchmark suites shared across experiments.
 **Owner:** Research Engineering Lead
 **Scientific role:** Ensures every claimed capability has a measurable test
 **Engineering role:** CI-integrated benchmark harnesses
-**Dependent experiments:** R1–R3F, EXP-0–EXP-4 (share benchmark infrastructure)
+**Dependent experiments:** R1–R3F, EXP-0–EXP-2 (share benchmark infrastructure)
 **Would be cited by:** Methods section of experimental papers
 **Category:** Benchmarks
 
@@ -145,7 +143,7 @@ The honest product path. Separated from the research stack because it ships inde
 
 ## Program B — Soul Graph
 
-Authored affective concept graph. Engineering-retained to run experiments that depend on it (EXP-2, R3F).
+Authored affective concept graph. Engineering-retained to run experiments that depend on it (R3F).
 
 | Directory | Purpose | Contents |
 |-----------|---------|----------|
@@ -154,8 +152,8 @@ Authored affective concept graph. Engineering-retained to run experiments that d
 
 **Owner:** PI (scientific) + Engineering Lead (maintenance)
 **Scientific role:** H2 (affective indexing) tests whether the affective→strategic bridge does measurable work
-**Engineering role:** Maintains the soul graph runtime; no new features unless H2 survives EXP-2
-**Dependent experiments:** EXP-2 (H2), R3F (if it uses soul concepts)
+**Engineering role:** Maintains the soul graph runtime; no new features unless H2 survives
+**Dependent experiments:** R3F (if it uses soul concepts)
 **Would be cited by:** H2 paper (if signal found); otherwise archived
 **Category:** Program B (experimental)
 
@@ -175,7 +173,6 @@ The symbolic-AGI subsystems. Engineering-retained to run current experiments. No
 | `program_c/reflection/` | Reflection engine, advanced reflection, confidence estimation, improvement engine, reasoning audit | `reflection_engine.py`, `advanced_reflection.py`, `confidence_estimator.py`, `improvement_engine.py`, `reasoning_audit.py` |
 | `program_c/pipeline/` | Agentic loop, inference pipeline, reasoning core/wiring, context builder, intent engine, query rewriter, knowledge router, retrieval mesh, synthesizer, truth filter, contradiction detection, resonance, reflex, constitution loader, seed knowledge, persistence, self-router, soul router, reflection router | All pipeline files |
 | `program_c/abstraction/` | Belief generator, belief models, belief store, consolidation runner, cross-seed validator | `belief_generator.py`, `belief_models.py`, `belief_store.py`, `consolidation_runner.py`, `cross_seed_validator.py` |
-| `program_c/self_model/` | Self-model, identity store, health monitor, baseline tracker, self-audit | `self_model.py`, `identity_store.py`, `health_monitor.py`, `baseline_tracker.py`, `self_audit.py` |
 | `program_c/simulation/` | Simulation interface, causal evaluator, logger, memory context | `interface.py`, `causal_evaluator.py`, `logger.py`, `simulation_memory_context.py` |
 | `program_c/agency/` | Action log, code writer, curiosity executor, dependency manager, health sentinel, quality assurance, system bridge, auto-fixer, context reconstruction | `action_log.py`, `code_writer.py`, `curiosity.py`, `curiosity_executor.py`, `dependency_manager.py`, `health_sentinel.py`, `quality_assurance.py`, `system_bridge.py`, `auto_fixer.py`, `context_recon.py` |
 | `program_c/conversation/` | Dialogue manager, monologue, context compressor, beliefs, working memory, reasoning modes | `dialogue_manager.py`, `monologue.py`, `context_compressor.py`, `beliefs.py`, `working_memory.py`, `reasoning_modes.py` |
@@ -219,7 +216,7 @@ Superseded code, deprecated experiments, legacy documents. Never deleted — onl
 
 | Directory | Purpose |
 |-----------|---------|
-| `archive/code/` | Deprecated/superseded source code (velynx_core/, legacy orchestrator, brain.py duplicates, self_coder.py duplicates, frontend/, configs/, etc.) |
+| `archive/code/` | Deprecated/superseded source code (velynx_core/, legacy orchestrator, brain.py duplicates, self_coder.py duplicates, frontend/, configs/, self_model/, etc.) |
 | `archive/experiments/` | Superseded experiment artifacts (calculator, toy scripts) |
 | `archive/documents/` | Superseded design documents |
 | `archive/data/` | Legacy data files from past experiments (not needed for reproduction) |

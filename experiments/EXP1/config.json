@@ -1,0 +1,76 @@
+{
+  "experiment_id": "EXP-1",
+  "hypothesis_tested": "H1",
+  "canonical_objective": "Program A produces confidence estimates matching empirical correctness.",
+  "primary_metric": "expected_calibration_error",
+  "pass_target": {
+    "ece_lt": 0.1
+  },
+  "dataset": {
+    "name": "calibration_queries_v1",
+    "path": "data/exp1_queries.json",
+    "format": "json_records",
+    "minimum_sample_size": 200,
+    "planned_balanced_dataset_size": 210,
+    "query_family_allocation_at_210": {
+      "known_factual": 70,
+      "ambiguous_or_debated": 70,
+      "hallucinated_unanswerable_or_false_premise": 70
+    }
+  },
+  "confidence": {
+    "tiers": ["UNKNOWN", "DEBATED", "PROBABLE", "CERTAIN"],
+    "tier_mapping": {
+      "UNKNOWN": {
+        "interval": [0.0, 0.25],
+        "right_closed": false,
+        "numeric_confidence": 0.125
+      },
+      "DEBATED": {
+        "interval": [0.25, 0.5],
+        "right_closed": false,
+        "numeric_confidence": 0.375
+      },
+      "PROBABLE": {
+        "interval": [0.5, 0.75],
+        "right_closed": false,
+        "numeric_confidence": 0.625
+      },
+      "CERTAIN": {
+        "interval": [0.75, 1.0],
+        "right_closed": true,
+        "numeric_confidence": 0.875
+      }
+    },
+    "ignore_raw_numeric_confidence_if_emitted": true
+  },
+  "calibration": {
+    "bin_count": 4,
+    "binning_strategy": "equal_width",
+    "bin_boundaries": [0.0, 0.25, 0.5, 0.75, 1.0],
+    "empty_bin_handling": "report_with_zero_ece_weight",
+    "reliability_diagram_bins": "same_as_ece_bins",
+    "post_hoc_calibration_prohibited": true,
+    "equal_frequency_bins_prohibited": true
+  },
+  "replication": {
+    "independent_seed_count": 22,
+    "expected_seed_level_kill_relevant_effect_rate": 0.1,
+    "miss_probability_at_seed_count": 0.0985,
+    "miss_probability_target_lt": 0.1
+  },
+  "decision": {
+    "ece_kill_threshold_gte": 0.1,
+    "independence_test_alpha": 0.05,
+    "degenerate_tier_use_threshold_less_than": 2,
+    "hard_hallucination_honesty_failures_tolerated": 0,
+    "correctness_outcome_scale": [0, 1]
+  },
+  "prohibited_measurements": [
+    "tier_labels_against_query_family_labels",
+    "retrieval_relevance_as_answer_correctness",
+    "internal_source_confidence_as_answer_confidence",
+    "correctness_awarded_from_uncertainty_expression",
+    "post_hoc_tier_remapping"
+  ]
+}

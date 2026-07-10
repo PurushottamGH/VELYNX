@@ -300,6 +300,8 @@ is fixed at G4 from this register (no unfounded numeric is invented).
 | 5.7 | `ANSWER_TEMPLATES` | PA-4's frozen answer-text templates per state — the rubric-facing wording patterns for "explicit unsupported/unknown", "represents the alternatives", "hedged source-attributed", and "asserted source-attributed". | Structural + determinism: the answer form coupled to each state (CR-9) must be frozen, not improvised at runtime, so the rubric-facing elements are reproducible and auditable. (ARCHITECTURE PA-4; MECHANISM §7.2.) | A frozen template string per state `{S0, S1, S2, S3}` (exact template text fixed at G4 from this register). The `UNKNOWN`/`DEBATED` forms assert no fact; the `PROBABLE`/`CERTAIN` forms are source-attributed. | yes, verbatim |
 | 5.8 | `SPEC_VERSION` | The T1 spec version identity — the frozen identity string of this mechanism specification. | Structural: the version anchor that ties the frozen code (`mechanism_id()`, `frozen_constants_digest()`) to this frozen spec; any mechanism change forces a new `SPEC_VERSION`. (CR-6/CR-12; `constants.py` `SPEC_VERSION`.) | `SPEC_VERSION: str = "es1-t1-2026-07-09"` (draft identity for this document; ratified to its final frozen value at the G4 freeze commit). | yes, verbatim (final value set at G4) |
 
+| 5.9 | `PA3_RULESET_VERSION` | Structural identity tag binding the PA-3 mechanism-defining rule set (addendum §A6-DIGEST) to the runtime digest. | Structural: a pure identity string (no probability, no numeric evaluation constant), in the same class as `SPEC_VERSION`. Folding it into the digest closes the coverage gap so a silent edit to the PA-3 rule text (§A1–§A7) trips the runtime `CONSTANTS_HASH` tripwire, restoring the "two independent drift detectors" property (§9.2). (Addendum §A6-DIGEST.) | `PA3_RULESET_VERSION: str = "pa3-ruleset-2026-07-09"` (addendum §A6-DIGEST; ratified to its final frozen value at the G4 freeze commit). | yes, verbatim |
+
 Additionally, `STATE_TIER_MAP` (§3.2) and `CONFIDENCE_TIERS` (§3.2) are frozen
 structural constants transcribed into `constants.py` from §3. They carry no
 probability and are not tunable; their edit triggers the same change-control
@@ -321,7 +323,8 @@ constant set**: the canonical, ordered serialization of every register entry
 in §5 (`MIN_INDEPENDENT_ORIGINS_FOR_S3`, `INDEPENDENCE_RELATION`,
 `SUPPORT_TEST_PARAMS`, `CONTRADICTION_MATERIALITY_PARAMS`,
 `EVIDENCE_ORDERING_KEY`, `EXTRACTION_PARAMS`, `ANSWER_TEMPLATES`,
-`SPEC_VERSION`) together with the structural `STATE_TIER_MAP` and
+`SPEC_VERSION`, and the structural identity tag `PA3_RULESET_VERSION` per
+addendum §A6-DIGEST) together with the structural `STATE_TIER_MAP` and
 `CONFIDENCE_TIERS`. The digest is computed once at the G4 freeze commit, and
 the resulting hex string is **pinned** (recorded in `constants.py` as
 `CONSTANTS_HASH` and asserted by `tests/program_a/test_evidence_states.py`).

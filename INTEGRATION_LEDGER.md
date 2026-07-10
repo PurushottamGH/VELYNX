@@ -99,13 +99,13 @@ Fix **F1** (blocking). W1–W4 to be resolved in the same delivery. W5–W6 trac
 ### C2 held-out leakage fix — CONFIRMED
 
 - **Evidence:** `evidence/02_git_diff_summary.md:35-36` — both `test_steps` patch sites documented (line ~618, line ~359).
-- **Evidence:** `evidence/06_statistical_results.md:73-75` — "C2 test_n: 1999 (all seeds) — matches T's test_n of 1999"; "C2 now evaluates on the same held-out test sequence as T, C1, and C3."
+- **Evidence:** `evidence/06_statistical_results.md:75-77` — "C2 test_n: 1999 (all seeds) — matches T's test_n of 1999"; "C2 now evaluates on the same held-out test sequence as T, C1, and C3."
 - **Evidence:** `evidence/09_requirement_traceability.md:8` — "P1 | Fix C2 data leakage | ✅ Fixed."
 - **Status:** C2 now correctly evaluates on independent held-out sequence.
 
 ### T == C1 exact-equality — INVESTIGATED
 
-- **Evidence:** `evidence/06_statistical_results.md:64-67` — 720 MDL checks executed across T and C3; 0 growth events; max margin −21.89; mean margin −26.25. Text: "Growth never fired in any seed. The MDL criterion consistently calculated G − λ_model ≪ 0 at every check point across both the temporal-ordered (T) and shuffled-input (C3) conditions."
+- **Evidence:** `evidence/06_statistical_results.md:66-69` — 720 MDL checks executed across T and C3; 0 growth events; max margin −21.89; mean margin −26.25. Text: "Growth never fired in any seed. The MDL criterion consistently calculated G − λ_model ≪ 0 at every check point across both the temporal-ordered (T) and shuffled-input (C3) conditions."
 - **Evidence:** `evidence/10_sprint_report.md:29-34` — same 90/0/−26.25 data; "Growth never fired. The MDL criterion consistently rejected growth at every check point."
 - **Evidence:** `evidence/10_sprint_report.md:58` — "Growth never fired across any of the 5 seeds. Since the MDL trigger never found a positive gain, the treatment condition (T) produced an identical model to the fixed-capacity control (C1) and the decoupled control (C2)."
 - **Status:** `should_grow()` executed at every scheduled check point (90/90) and actively rejected growth each time. T==C1==C2 because the MDL trigger never fired, not because it was silently bypassed.
