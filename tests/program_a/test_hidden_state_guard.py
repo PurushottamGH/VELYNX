@@ -23,6 +23,8 @@ from pathlib import Path
 
 import pytest
 
+pytest.importorskip("program_a.mechanism.emission")
+
 from program_a.mechanism import emission
 
 EMISSION_MODULE_PATH = Path(emission.__file__)

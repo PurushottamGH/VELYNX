@@ -30,6 +30,9 @@ from __future__ import annotations
 
 import pytest
 
+pytest.importorskip("program_a.binding.exp1_binding")
+pytest.importorskip("program_a.mechanism.emission")
+
 from program_a import constants
 from program_a.binding.exp1_binding import program_a_answer_fn
 from program_a.evidence.snapshot_builder import build_snapshot

@@ -5,11 +5,32 @@
 `PROGRAM_A_T1_MECHANISM_PREREGISTRATION.md` (the T1/G4 freeze object). It does
 not re-derive T1; it closes the residual PA-3 specification ambiguities so the
 frozen T1 mechanism *completely determines* PA-3 behavior.
-**Date:** 2026-07-09
+**Date:** 2026-07-13 (FINAL MERGED — supersedes the 2026-07-09 DRAFT)
 **Status:** DRAFT — binds only when co-pinned with the T1 object at G4, under the
 same B2 (ScientificAuditor) / B3 (ReleaseManager) sign-off. Until then the
 standing prohibition (`ES1_IMPLEMENTATION_GATE.md`:91-93) is in force: no
 emission-surface or binding code, no frozen-row output.
+
+**MERGE PROVENANCE (this is the canonical merged ES-1 / PA-3 specification).**
+This edition folds the three accepted A3.5 erratum-class corrections into the
+addendum body, in place, with **no redesign and no wording change beyond what
+each correction specifies**. This is a merge, not a new correction: no new
+finding was sought, no new state / predicate / numeric constant is introduced.
+
+| Finding | Source document | What it corrects | Where merged here |
+|---|---|---|---|
+| **Finding 1** | `PROGRAM_A_A3_5_FINDING1_CORRECTION.md` | ES-1 S2/S3 definitions: "no material contradiction" → "no material contradiction **across independent sources**" (conforms definitions to the frozen operational rule). | **§A0** (incorporated ES-1 §3.1/§4 text) + **§B6** (T1 transcription action). |
+| **Finding 2** | `PROGRAM_A_A3_5_FINDING2_CORRECTION.md` | S1 anchoring **totality**: `contradiction_doc_ids` was undefined when the S1-triggering pair is disjoint from `selected_claim`. Adds the `Comp`/`Part` empty-set fallback. | **§A4** anchoring bullet + **§A7 I-3**. |
+| **Finding 3** | `PROGRAM_A_A3_5_FINDING3_CORRECTION.md` | S1 anchoring **faithfulness**: refines Finding 2's `Comp` set by adding the §A4 condition-3 cross-origin conjunct, so `contradiction_doc_ids` provably carries a genuine S1 participant. | **§A4** `Comp` definition + **§A7 I-3** (supersedes Finding 2's wording in the same spot). |
+
+Each merged clause is tagged inline `[Finding N]`. Findings 2 and 3 both edit
+§A4/§A7; Finding 3 is a strict refinement of Finding 2's `Comp` set, so the
+merged text carries Finding 2's `Comp`/`Part` structure with Finding 3's
+`Comp` membership and Finding 3's I-3 wording — there is no residual conflict
+(see the **Consistency Verification** at the end). Digest consequence: Finding 1
+is digest-neutral; Findings 2 and 3 both edit digest-covered rules (iv)/(v) and
+therefore advance `PA3_RULESET_VERSION` **once**, to `pa3-ruleset-2026-07-13`,
+at the single (still-future) G4 pin (§A6-DIGEST).
 
 **Posture (unchanged from T1 §0):** no evaluation-side probability constant, no
 EXP-1 bin boundary, no ECE pass/kill logic, no tier→probability mapping. Every
@@ -34,6 +55,53 @@ Grounding types (frozen, `program_a/types.py`, on disk):
 **already frozen**;
 `EvidenceStateResult = {state, selected_claim|None, support_doc_ids,
 contradiction_doc_ids, independent_origin_count}`.
+
+### A0 — Incorporated ES-1 state-definition corrections `[Finding 1]`
+
+**RULING (erratum, digest-neutral).** The ES-1 S2/S3 state definitions in the
+T1 object (`PROGRAM_A_T1_MECHANISM_PREREGISTRATION.md` §3.1 rows and §4 semantic
+openers) are conformed to the frozen operational rule of §A3/§A4 by narrowing
+their materiality clause from the *unqualified* "no material contradiction" to
+"no material contradiction **across independent sources**." S1 is tested before
+S2/S3 in the frozen precedence (§A3) and already consumes exactly the
+*cross-origin* material contradictions (§A4 cond. 3); the residual S2/S3 region
+is therefore precisely "material contradictions confined to a single origin (or
+none)." This changes **no operational behavior, no state boundary, no constant,
+and no digest input** — it makes the definitions *state what the frozen rule
+already computes*, closing the same-origin / lone-source exhaustiveness
+contradiction (a same-origin self-contradiction fires S2/S3 by `ios`, yet the
+un-narrowed definitions excluded it). The corrected canonical text (transcribed
+into T1 §3.1/§4 at G4 per §B6):
+
+**T1 §3.1 — S2 row (corrected) `[Finding 1]`:** "Support from exactly one
+independent origin; **no material contradiction across independent sources**
+(any material contradiction present is confined to a single origin and therefore
+does not fire S1 — §A4 cond. 3)." → tier `PROBABLE`.
+
+**T1 §3.1 — S3 row (corrected) `[Finding 1]`:** "Support from ≥2 independent
+origins; **no material contradiction across independent sources** (any material
+contradiction present is confined to a single origin and therefore does not fire
+S1 — §A4 cond. 3)." → tier `CERTAIN`.
+
+**T1 §4 — S2 semantic opener (corrected) `[Finding 1]`:** "When exactly one
+independent origin supports the selected claim and there is **no material
+contradiction across independent sources** (any contradiction present is
+confined to a single origin and so does not fire S1 — §A4 cond. 3), the lawful
+answer is a single hedged, source-attributed factual assertion." *(Remainder of
+the S2 bullet unchanged.)*
+
+**T1 §4 — S3 semantic opener (corrected) `[Finding 1]`:** "When ≥2 independent
+origins support the selected claim and there is **no material contradiction
+across independent sources** (any contradiction present is confined to a single
+origin and so does not fire S1 — §A4 cond. 3), the lawful answer is a single
+asserted, source-attributed factual assertion." *(Remainder of the S3 bullet
+unchanged.)*
+
+S0 and S1 definitions, `STATE_TIER_MAP`, `CONFIDENCE_TIERS`, the precedence
+`S0 → S1 → (S2 | S3)`, and every constant are unchanged by Finding 1. This block
+is digest-neutral: the S2/S3 definitions and tier arguments are **not** inputs to
+`frozen_constants_digest()` and are outside the §A6-DIGEST (i)–(v) rule set, so
+Finding 1 alone requires **no** `PA3_RULESET_VERSION` bump.
 
 ### A1 — Claim-selection rule (item 1)
 
@@ -139,11 +207,39 @@ is treated as vacuously false, never computed).
 
 - `selected_claim` = the §A1/§A2 winner over `Σ` (the best-corroborated
   supported claim). Non-`None`.
-- `contradiction_doc_ids` = the supporters of the **materially-incompatible
-  competing claim** — i.e. the `≺`-maximal claim among
-  `{ c ∈ Σ : contradicts(selected_claim, c) ∧ is_material(selected_claim, c) }`,
-  tie-broken by §A2. Its supporting evidence, ordered by
-  `EVIDENCE_ORDERING_KEY`.
+- `contradiction_doc_ids` = the supporters of the **competing claim**,
+  tie-broken by §A2, its supporting evidence ordered by `EVIDENCE_ORDERING_KEY`,
+  where the competing claim is defined by: `[Finding 2]` (the `Comp`/`Part`
+  split and empty-set fallback) refined by `[Finding 3]` (the cond-3 conjunct on
+  `Comp`):
+  - let `Comp = { c ∈ Σ, c ≠ selected_claim :
+                     contradicts(selected_claim, c)
+                   ∧ is_material(selected_claim, c)
+                   ∧ independent_origins(supp(selected_claim) ∪ supp(c)) ≥ 2,
+                     with ≥1 independent origin on each side }`
+    — i.e. `Comp = { c ∈ Σ, c ≠ selected_claim : {selected_claim, c} satisfies the
+    §A4 S1-firing predicate (conditions 1–3) }`. This is the frozen §A4 firing
+    test applied with one side pinned to `selected_claim`. `[Finding 3]` added
+    condition 3 (cross-origin independence) to the earlier `{contradicts ∧
+    is_material}` membership, and nothing else, so that `Comp` cannot admit a
+    same-origin material contradiction that does not itself fire S1.
+  - **if `Comp ≠ ∅`** (`selected_claim` forms an S1-firing pair with some claim
+    in `Σ`): the competing claim is the `≺`-maximal element of `Comp`.
+  - **else** (`Comp = ∅`: every S1-triggering pair is disjoint from
+    `selected_claim`): the competing claim is the `≺`-maximal element of the
+    **S1-participant set** `[Finding 2]`
+    `Part = { c ∈ Σ : ∃ c' ∈ Σ, c' ≠ c,
+              contradicts(c, c') ∧ is_material(c, c')
+              ∧ independent_origins(supp(c) ∪ supp(c')) ≥ 2
+                with ≥1 independent origin on each side }`
+    — the claims that make the §A4 S1-firing predicate (conditions 1–3) true.
+  Whenever S1 fires, `Part ≠ ∅` (that is what makes S1 fire), so the competing
+  claim — hence `contradiction_doc_ids` — is **total** over every input on which
+  S1 fires, and in **both** branches the competing claim is a member of an
+  S1-firing pair (so `contradiction_doc_ids` faithfully witnesses the
+  contradiction that caused S1). The fallback and the `Comp` filter reuse only
+  frozen machinery (§A4 conds 1–3, the §A1/§A2 order, `EVIDENCE_ORDERING_KEY`):
+  no new predicate, no new constant, no new input.
 - `support_doc_ids` = the supporters of `selected_claim`, ordered by
   `EVIDENCE_ORDERING_KEY`.
 
@@ -217,14 +313,19 @@ outside `{S2, S3}`). The FM-1 guard ("`CERTAIN` only with `state == S3`") is
 therefore *tier-gated*, and is not weakened by S1 carrying a non-`None`
 selected_claim.
 
-**I-3 (anchoring & witnesses).** `support_doc_ids` and `contradiction_doc_ids`
-are **always** computed with respect to `selected_claim`, ordered by
+**I-3 (anchoring & witnesses).** `support_doc_ids` is **always** computed with
+respect to `selected_claim`. `contradiction_doc_ids` is computed with respect to
+`selected_claim` **iff** `selected_claim` forms an S1-firing pair with some claim
+in `Σ` — equivalently `Comp ≠ ∅` under the §A4-conds-1–3 definition of `Comp`
+(§A4) — and otherwise with respect to the S1-triggering pair (the §A4 `Part`
+fallback). `[Finding 2]` introduced the `Comp`/`Part` reconciliation; `[Finding 3]`
+tightened the guard to the S1-firing biconditional above. Both are ordered by
 `EVIDENCE_ORDERING_KEY`, and satisfy per state:
 
 | State | `selected_claim` | `support_doc_ids` | `contradiction_doc_ids` | `independent_origin_count` |
 |---|---|---|---|---|
 | **S0** | `None` | `()` | `()` | `0` |
-| **S1** | §A1/§A2 winner (non-`None`) | supporters of selected_claim | supporters of the material-incompatible competing claim (§A4) | `ios(selected_claim)` (≥1) |
+| **S1** | §A1/§A2 winner (non-`None`) | supporters of selected_claim | supporters of the §A4 competing claim — the `≺`-maximal claim **forming an S1-firing pair with** `selected_claim` (§A4 conds 1–3), or (if none) the `≺`-maximal S1-participant (§A4 `Part`). In either branch the competing claim is a member of an S1-firing pair. `[Finding 2/3]` | `ios(selected_claim)` (≥1) |
 | **S2** | §A1/§A2 winner (non-`None`) | supporters of selected_claim | `()` | `1` |
 | **S3** | §A1/§A2 winner (non-`None`) | supporters of selected_claim | `()` | `≥ MIN_INDEPENDENT_ORIGINS_FOR_S3` (=2) |
 
@@ -280,7 +381,8 @@ at runtime, the frozen-constant serialization input to `frozen_constants_digest(
 is **extended by one structural tag**:
 
 ```
-PA3_RULESET_VERSION: str   # e.g. "pa3-ruleset-2026-07-09"
+PA3_RULESET_VERSION: str   # merged value: "pa3-ruleset-2026-07-13"
+                           # (was "pa3-ruleset-2026-07-09" pre-merge)
 ```
 
 - It carries **no probability, no numeric evaluation constant** — it is a pure
@@ -292,6 +394,21 @@ PA3_RULESET_VERSION: str   # e.g. "pa3-ruleset-2026-07-09"
   changes the digest → fails the `CONSTANTS_HASH` equality test → forces a new
   `mechanism_id()` (T1 §9). Rule drift is now mechanically un-landable green,
   identically to constant drift.
+
+**Merge consequence for the digest `[Findings 1–3]`.** Finding 1 edits the S2/S3
+*state definitions* and *tier arguments* (T1 §3.1/§4, §A0) — objects **not** in
+the digest-covered set (i)–(v) — so it is **digest-neutral** and requires no
+bump. Findings 2 and 3 both edit rule **(iv)** (§A4 S1 anchoring) and its seam
+restatement **(v)** (§A7 I-3): Finding 3 is a *strict subset edit* of the same
+rule (iv) Finding 2 touches. By the contract above this is exactly one drift
+event on rules (iv)/(v), so `PA3_RULESET_VERSION` advances **once** — to
+`pa3-ruleset-2026-07-13` — and is computed a **single** time, at the still-future
+G4 pin, over the fully-corrected §A4/§A7 ruleset (Finding 2's `Comp`/`Part`
+split with Finding 3's cond-3 conjunct on `Comp`). There is no double-bump and no
+re-freeze of an already-pinned object (ES-1/PA-3 is pre-G4 DRAFT; no
+`mechanism_id()` has been minted). Only the *value* of an existing digest input
+advances — no input is added or removed, and **no numeric constant** is
+introduced; the CR-8/L8 firewall is intact.
 
 **Not mechanism-defining (excluded from the identity, unchanged):** answer
 *rendering* niceties above the frozen `ANSWER_TEMPLATES`, `seed` (unused,
@@ -327,6 +444,13 @@ design question.
   seam-invariant assertions and a selection/tie-break determinism case
   (multi-claim, equal-corroboration tie resolved by §A2). Post-GO, Wave 4;
   spec fixed here.
+- **B6 — `PROGRAM_A_T1_MECHANISM_PREREGISTRATION.md` §3.1 and §4 `[Finding 1]`.**
+  Transcribe the corrected S2/S3 state rows (§3.1) and S2/S3 semantic openers
+  (§4) verbatim from §A0: "no material contradiction" → "no material
+  contradiction **across independent sources**." Digest-neutral erratum (§A0,
+  §A6-DIGEST): no `SPEC_VERSION` or `PA3_RULESET_VERSION` change follows from B6
+  alone. Behavior-preserving — the corrected definitions state what §A3/§A4
+  already compute.
 
 No change to PA-1, PA-2, PA-4, or PA-5 *contracts*; no change to
 `STATE_TIER_MAP`, the tier set, the precedence order, or any numeric value.
@@ -344,7 +468,10 @@ mechanism now completely determines PA-3 behavior for every input:
 - ties are broken by a frozen strict total order over already-frozen keys
   (§A2),
 - S1 is a fully composed predicate over `contradicts` ∧ `is_material` ∧
-  cross-origin independence, with defined anchoring (§A4),
+  cross-origin independence, with anchoring that is **total and faithful** —
+  `contradiction_doc_ids` is defined for every S1-firing input and always
+  witnesses a genuine S1-firing pair (§A4, as merged from `[Finding 2]` totality
+  + `[Finding 3]` faithfulness),
 - `is_material` has one canonical signature (§A5),
 - `contradicts` has a fixed status and role — package-internal, retained
   (§A6),
@@ -352,6 +479,11 @@ mechanism now completely determines PA-3 behavior for every input:
   invariants across S0/S1/S2/S3 (§A7),
 - and the mechanism-defining rule set is bound to the runtime identity via
   `PA3_RULESET_VERSION` (§A6-DIGEST).
+- the S2/S3 state definitions are self-consistent with the frozen precedence:
+  they exclude only material contradictions **across independent sources**, so a
+  same-origin self-contradiction that fires S2/S3 by `ios` satisfies the state
+  definition it fires (§A0, `[Finding 1]`); the four states are exhaustive and
+  mutually exclusive with no residual contradiction-free region.
 
 **No new numeric constant, no probability, no evaluation-side value introduced**
 — CR-8/L8 firewall intact; ordinality-by-construction preserved.
@@ -387,11 +519,116 @@ to the T1 object; it becomes **FROZEN** if and only if the T1 object's B2
 G4 freeze step. Until then this addendum remains **DRAFT** and the standing
 prohibition (`ES1_IMPLEMENTATION_GATE.md`:91-93) is in force.
 
+The single G4 co-freeze also ratifies the three merged A3.5 corrections
+(`[Findings 1, 2, 3]`), which ride the same B2/B3 sign-off and open no separate
+approval. At the pin the ReleaseManager applies the §A0/§B6 Finding-1 edits to
+T1 §3.1/§4, the merged §A4/§A7 Finding-2+3 anchoring text, and transcribes the
+**single** advanced `PA3_RULESET_VERSION = pa3-ruleset-2026-07-13` into
+`program_a/constants.py` (§A6-DIGEST).
+
 - **Co-freeze (rides T1 Section 12 B2/B3):**
   - ScientificAuditor (T1 Section 12 B2): ____________________ , date: __________
-  - ReleaseManager (T1 Section 12 B3): ____________________ , pinned commit: ____________________ , date: __________
+  - ReleaseManager (T1 Section 12 B3): ____________________ , pinned commit: ____________________ , `PA3_RULESET_VERSION`: ____________________ , date: __________
   - Addendum status on completion: DRAFT → FROZEN
 
 ---
 
-*End of PA-3 freeze addendum. Co-freezes with the T1/G4 object.*
+## E. Merge summary (change log — every merged correction tagged to its Finding)
+
+Editorial merge only. Each row is a clause edited *exactly* as its source
+correction specifies; no clause was redesigned, reworded beyond the correction,
+or newly discovered here.
+
+| # | Clause (location in this addendum) | Before (frozen) | After (merged) | Finding | Behavior change? |
+|---|---|---|---|---|---|
+| 1 | **§A0 → T1 §3.1 S2 row** (via §B6) | "…no material contradiction." | "…no material contradiction **across independent sources** (confined to a single origin ⇒ not S1, §A4 cond. 3)." | **F1** | None (definition now matches §A3/§A4 behavior). |
+| 2 | **§A0 → T1 §3.1 S3 row** (via §B6) | "…no material contradiction." | "…no material contradiction **across independent sources** (…§A4 cond. 3)." | **F1** | None. |
+| 3 | **§A0 → T1 §4 S2 opener** (via §B6) | "…there is no material contradiction…" | "…no material contradiction **across independent sources**…" | **F1** | None. |
+| 4 | **§A0 → T1 §4 S3 opener** (via §B6) | "…there is no material contradiction…" | "…no material contradiction **across independent sources**…" | **F1** | None. |
+| 5 | **§A4 `contradiction_doc_ids` bullet** | `≺`-max of `{ c ∈ Σ : contradicts(sc,c) ∧ is_material(sc,c) }`; undefined when that set is empty. | `Comp`/`Part` split with empty-set `Part` fallback ⇒ **total** on every S1-firing input. | **F2** | Defines a previously-**undefined** field; no already-defined output changes. |
+| 6 | **§A4 `Comp` membership** | `{ contradicts ∧ is_material }` (no cond-3 filter). | `{ contradicts ∧ is_material ∧ cross-origin (cond 3) }` ⇒ `Comp` ⊆ old `Comp`; competing claim is always a genuine S1 participant. | **F3** | Changes `contradiction_doc_ids` **only** on the ios=1 same-origin-decoy class; all other outputs byte-identical. |
+| 7 | **§A7 I-3 preamble** | "`support_doc_ids` and `contradiction_doc_ids` **always** wrt `selected_claim`." | `contradiction_doc_ids` wrt `selected_claim` **iff** `Comp ≠ ∅` (S1-firing biconditional), else wrt the `Part` pair. | **F2 → F3** | None beyond rows 5–6; wording made total & faithful. |
+| 8 | **§A7 I-3 table, S1 row** | "supporters of the material-incompatible competing claim (§A4)." | "supporters of the §A4 competing claim — `≺`-max forming an S1-firing pair with `selected_claim`, or (if none) `≺`-max S1-participant; a member of an S1-firing pair either way." | **F2/F3** | None beyond rows 5–6. |
+| 9 | **§A6-DIGEST `PA3_RULESET_VERSION`** | `pa3-ruleset-2026-07-09` | `pa3-ruleset-2026-07-13` (single advance; rules (iv)/(v) edited by F2/F3; F1 digest-neutral). | **F2, F3** | Identity-tag value only; no numeric constant, no digest input added/removed. |
+
+**Rule numbering (Task 5).** No renumbering was required. Findings 2 and 3 edit
+*within* existing rules §A4 (rule iv) and §A7 (rule v); Finding 1 is captured in
+the new **§A0** and reconciliation entry **§B6**. The §A-rule set (§A1–§A7),
+§A6-DIGEST rule list (i)–(v), and Section B numbering are otherwise unchanged.
+The only added identifiers are §A0 (incorporated ES-1 correction) and §B6
+(its T1 transcription action).
+
+**Unchanged by every Finding (spot-preserved):** S0/S1 state definitions;
+`STATE_TIER_MAP` / `CONFIDENCE_TIERS`; precedence `S0 → S1 → (S2|S3)` (§A3);
+claim selection §A1; tie-break `≺` §A2; the S1-firing predicate §A4 conds 1–3;
+`is_material`/`contradicts` contracts (§A5/§A6); every T1 §5 register constant;
+the digest algorithm and its input **list** (§A6-DIGEST); `support_doc_ids`,
+`independent_origin_count`, `state`, and `selected_claim` on every input.
+
+## F. Consistency verification (post-merge — Task 6)
+
+**F.1 No conflicting clauses remain.** The three findings edit disjoint or
+strictly-nested regions:
+- **F1** edits ES-1 state *definitions* / tier *arguments* (§A0 → T1 §3.1/§4).
+  **F2** and **F3** edit the addendum's S1 *anchoring* (§A4) and *seam invariant*
+  (§A7). F1's region is disjoint from F2/F3's region — no overlap, no conflict.
+- **F2 vs F3** touch the *same* §A4 anchoring bullet and §A7 I-3. F3 is a strict
+  refinement of F2: it (a) narrows the `Comp` set by adding one already-frozen
+  conjunct (cond 3) — `Comp_F3 ⊆ Comp_F2`, and (b) tightens the I-3 wording to
+  the S1-firing biconditional. The merged text carries F2's `Comp`/`Part`
+  structure with F3's `Comp` membership and F3's I-3 wording; F3's wording
+  *supersedes* F2's in the one shared location. No clause asserts both the F2 and
+  the F3 form simultaneously — verified by inspection of §A4 and §A7. **No
+  residual contradiction.**
+
+**F.2 Invariants preserved.**
+- *Exactly one state fires* (§A3 / T1 §3.3): the §A3 cascade is untouched; F1
+  edits only outcome definitions, F2/F3 only the S1 payload inside the
+  already-fired S1 branch. Preserved.
+- *Exhaustiveness & mutual exclusion*: the S0/S1/S2/S3 partition of inputs is
+  unchanged (no state boundary moved). After F1 the corrected S2/S3 definitions
+  now *label* that partition with no residual region. Preserved and repaired.
+- *Derived seam invariant* `contradiction_doc_ids ≠ () ⟺ state = S1` (§A7): in
+  both the `Comp` and `Part` branches the competing claim ∈ `Σ` ⇒ `ios ≥ 1` ⇒
+  ≥1 supporting item ⇒ `contradiction_doc_ids ≠ ()`; it stays `()` in S0/S2/S3.
+  Preserved without edit.
+- *I-1 (nullity)*, *I-2 (assertion gate / FM-1)*, S0/S2/S3 rows of I-3: untouched.
+
+**F.3 Totality & faithfulness (the two defects closed).**
+- **Totality (F2):** S1 fires ⟹ `Part ≠ ∅` ⟹ the competing claim exists ⟹
+  `contradiction_doc_ids` is defined for every S1-firing input. Narrowing `Comp`
+  (F3) can only move an input from the `Comp` branch to the (provably non-empty)
+  `Part` branch, so it cannot break totality — F2's totality theorem holds
+  verbatim under the merged `Comp`.
+- **Faithfulness (F3):** `Comp` now admits only claims that form an S1-firing
+  pair with `selected_claim` (cond 3 added); `Part` members are S1 participants by
+  definition. So in both branches the competing claim participates in the
+  S1-triggering contradiction. The `Comp ≠ ∅ ⟺ selected_claim participates`
+  biconditional (§A7 I-3) holds exactly.
+
+**F.4 Determinism / replay / digest coherence.**
+- *Determinism & replay*: every merged clause is a pure function of frozen
+  artifacts (`ios`, §A1/§A2 order, §A4 predicates, `EVIDENCE_ORDERING_KEY`); no
+  `seed`, wall-clock, or hash-iteration order enters. Seed-invariant across the
+  22 seeds. No prior replay is invalidated — ES-1/PA-3 is pre-G4 DRAFT with no
+  minted `mechanism_id()`.
+- *Digest*: F1 is digest-neutral (edits objects outside (i)–(v)); F2+F3 edit
+  rules (iv)/(v) and jointly advance `PA3_RULESET_VERSION` **once** to
+  `pa3-ruleset-2026-07-13`, computed a single time at G4. Consistent with the
+  §A6-DIGEST tripwire contract; no numeric constant introduced; CR-8/L8 firewall
+  intact. **Verified consistent.**
+
+**F.5 Out-of-scope items (carried forward, unchanged — not "fixed" here).**
+The S1 semantic oddity (an S1 result carrying a strongly-corroborated
+`selected_claim` that nobody debates) is a design question, deliberately not
+addressed. The §A2 tie-break injectivity dependency on PA-2 `EXTRACTION_PARAMS`
+(audit F2/F2′, CONDITIONAL) is orthogonal and untouched; the merged `Comp` is a
+subset of the pre-merge set, introducing no new tie surface.
+
+**Verification result: PASS — the merged specification is internally consistent,
+behavior-preserving where required, and free of conflicting clauses.**
+
+---
+
+*End of PA-3 freeze addendum (FINAL MERGED, `[Findings 1–3]`). Co-freezes with
+the T1/G4 object.*
