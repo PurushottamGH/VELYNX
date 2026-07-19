@@ -17,13 +17,13 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from core.mdl.mdl_growth import compute_lambda_model, compute_lambda_model_corrected, should_grow, mdl_gain
-from core.measurement.proper_scoring import (
+from framework.core.mdl.mdl_growth import compute_lambda_model, compute_lambda_model_corrected, should_grow, mdl_gain
+from framework.core.measurement.proper_scoring import (
     predictive_log_likelihood,
     scoring_loss,
 )
-from core.emergence.emergence_statistic import compute_nmi
-from core.predictors.dirichlet_markov import DirichletMarkovPredictor
+from framework.core.emergence.emergence_statistic import compute_nmi
+from framework.core.predictors.dirichlet_markov import DirichletMarkovPredictor
 
 
 # ─── Test 1: λ_model = k·b + n·log₂N ──────────────────────────────────

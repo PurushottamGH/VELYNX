@@ -334,13 +334,15 @@ class ProactiveLearner:
             from retrieval.unified_retriever import unified_retriever
             report = await unified_retriever.retrieve(concept)
             if report.sources:
-                from velynx_cli import internal_reason
-                result = internal_reason(concept, report.source_dicts)
+                from pipeline.reasoning_core import reason
+                result = reason(sources=report.source_dicts, query=concept)
+                answer = result.get("draft", "") if isinstance(result, dict) else str(result)
+                confidence = result.get("confidence", "UNKNOWN") if isinstance(result, dict) else "UNKNOWN"
                 await continuous_learner.learn_from_query(
                     query=concept,
                     sources=report.source_dicts,
-                    answer=result.get("answer", ""),
-                    confidence=result.get("confidence", "UNKNOWN"),
+                    answer=answer,
+                    confidence=confidence,
                     tags=["proactive", "background"],
                 )
                 logger.info("Proactive: learned %r", concept[:40])

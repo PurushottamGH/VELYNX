@@ -19,19 +19,22 @@ dependencies = {file = ["requirements.txt"]}
 
 [tool.setuptools.packages.find]
 include = [
-    "core*",
-    "program_a*",
+    "framework*",
     "experiments*",
-    "validation*",
-    "benchmarks*",
+    "tests*",
     "scripts*",
 ]
 exclude = ["archive*", "backend*", "data*", "docs*"]
 
 [tool.pytest.ini_options]
+pythonpath = [
+    ".",
+    "archive/program_a",
+    "archive/program_b",
+    "archive/program_c",
+]
 testpaths = [
     "tests",
-    "validation",
     "research/tests",
     "experiments",
 ]
@@ -43,7 +46,7 @@ markers = [
 ]
 
 [tool.coverage.run]
-source = ["core", "experiments", "validation", "benchmarks"]
+source = ["framework", "experiments", "tests", "scripts"]
 omit = ["*/tests/*", "*/__pycache__/*"]
 
 [tool.black]

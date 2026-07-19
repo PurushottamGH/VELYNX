@@ -1,66 +1,55 @@
-# VELYNX — 2026-07-02 Artifact Index
+# VELYNX — Repository Index & Map
 
-Structured catalog of every artifact generated during the Program D analysis session. Ready for ZIP archival.
+This repository houses the **VELYNX** cognitive architecture. It is organized as a research-first repository with clear separation between mathematical core, engineering application, experiments, and scientific evidence.
 
 ---
 
-## /foundation
+## 1. Directory Structure
 
-| File | Description |
-|------|-------------|
-| `kill_criteria_validation.md` | Audits all 10 kill criteria (K1–K10) for measurability, experimental coverage, automated checking, and decorative-only status. |
+The repository is organized according to the [Repository Constitution](file:///C:/Users/Purushottam/Documents/P1/REPOSITORY_CONSTITUTION.md):
 
-## /reviews
+*   [framework/](file:///C:/Users/Purushottam/Documents/P1/framework/)
+    *   **Purpose**: Single source of truth for reusable mathematical primitives and core scientific machinery.
+    *   **Contents**: Stateless predictors, emergence estimators, MDL calculations, proper scoring metrics, and null controls under [framework/core/](file:///C:/Users/Purushottam/Documents/P1/framework/core/).
+*   [backend/](file:///C:/Users/Purushottam/Documents/P1/backend/)
+    *   **Purpose**: The application and engineering layer.
+    *   **Contents**: Replay engines, knowledge models, database persistence, and telemetry components.
+*   [frontend/](file:///C:/Users/Purushottam/Documents/P1/frontend/)
+    *   **Purpose**: Standalone client web interface (React/Vite app).
+*   [theory/](file:///C:/Users/Purushottam/Documents/P1/theory/)
+    *   **Purpose**: Hypotheses register, mathematical specifications, literature, and foundations.
+    *   **Contents**: [SCIENTIFIC_EXECUTION_SPEC.md](file:///C:/Users/Purushottam/Documents/P1/theory/SCIENTIFIC_EXECUTION_SPEC.md), [STATISTICAL_ANALYSIS_SPEC.md](file:///C:/Users/Purushottam/Documents/P1/theory/STATISTICAL_ANALYSIS_SPEC.md), hypotheses registers, and assumption ledgers.
+*   [experiments/](file:///C:/Users/Purushottam/Documents/P1/experiments/)
+    *   **Purpose**: Active empirical validation runs.
+    *   **Contents**: [experiments/E0/](file:///C:/Users/Purushottam/Documents/P1/experiments/E0/) (central H\* test), [experiments/EXP0/](file:///C:/Users/Purushottam/Documents/P1/experiments/EXP0/) (precondition), [experiments/EXP1/](file:///C:/Users/Purushottam/Documents/P1/experiments/EXP1/) (calibration gate), and experiment configuration schemas under [experiments/specs/](file:///C:/Users/Purushottam/Documents/P1/experiments/specs/).
+*   [evidence/](file:///C:/Users/Purushottam/Documents/P1/evidence/)
+    *   **Purpose**: Verification artifacts, audit ledgers, compliance matrices, and trace logs.
+    *   **Contents**: [evidence/certifications/](file:///C:/Users/Purushottam/Documents/P1/evidence/certifications/) (scientific, metric, and reproducibility certifications) and [evidence/reports/](file:///C:/Users/Purushottam/Documents/P1/evidence/reports/) (implementation audits and dataset reconciliations).
+*   [tests/](file:///C:/Users/Purushottam/Documents/P1/tests/)
+    *   **Purpose**: Automated verification test suites.
+    *   **Contents**: Centralized [tests/unit/](file:///C:/Users/Purushottam/Documents/P1/tests/unit/), [tests/integration/](file:///C:/Users/Purushottam/Documents/P1/tests/integration/), and regression tests.
+*   [docs/](file:///C:/Users/Purushottam/Documents/P1/docs/)
+    *   **Purpose**: Project documentation, sprint planning, and migration roadmaps.
+    *   **Contents**: Sprint reports, execution order guides, and historical reduction plans under [docs/plans/](file:///C:/Users/Purushottam/Documents/P1/docs/plans/).
+*   [scripts/](file:///C:/Users/Purushottam/Documents/P1/scripts/)
+    *   **Purpose**: Reusable utility scripts.
+    *   **Contents**: CLI execution wrappers, graph generators, and build validation tools.
+*   [archive/](file:///C:/Users/Purushottam/Documents/P1/archive/)
+    *   **Purpose**: Scientific vault for deprecated versions and inherited systems (Programs A/B/C code and legacy docs).
 
-| File | Description |
-|------|-------------|
-| `program_d_circular_dependencies.md` | Identifies circular import chains across modules that risk runtime errors and initialization deadlocks. |
-| `program_d_dead_code_analysis.md` | Catalogs modules and functions that are defined but never imported or called at runtime. |
-| `program_d_duplicated_logic.md` | Lists functionally identical or near-identical logic duplicated across multiple locations in the codebase. |
-| `program_d_hidden_coupling.md` | Detects implicit, non-import dependencies such as file-system coupling, config coupling, and temporal coupling. |
+---
 
-## /literature
+## 2. Root Files
 
-| File | Description |
-|------|-------------|
-| `program_d_mathematical_provenance.md` | Traces every mathematical formula and quantitative relationship back to its source-code definition. |
-
-## /assumptions
-
-| File | Description |
-|------|-------------|
-| `program_d_assumption_coverage_matrix.csv` | Maps each design assumption (e.g., SymbolAsAtom, FlatMarkovSufficient) to its validation status and originating module. |
-| `program_d_parameter_atlas.md` | Catalogs all tunable parameters system-wide with default values, locations, and constraints. |
-
-## /experiments
-
-| File | Description |
-|------|-------------|
-| `program_d_experiment_coverage_matrix.csv` | Maps each experiment identifier to the component it covers and its coverage status. |
-
-## /dependency_graphs
-
-| File | Description |
-|------|-------------|
-| `program_d_dependency_graph.graphml` | Full inter-module dependency graph in GraphML format, importable by yEd or Gephi. |
-| `program_d_dependency_matrix.csv` | Tabular matrix of every source→target dependency with kind and layer annotations. |
-| `program_d_diagram.mmd` | Mermaid diagram rendering the layered architecture and module dependency relationships. |
-
-## /reduction
-
-| File | Description |
-|------|-------------|
-| `program_d_reduction_plan.md` | Systematic plan for eliminating technical debt, dead code, and duplicated logic without losing capabilities. |
-| `program_d_migration_plan.md` | Migration path from the dual-core architecture (`velynx_core/` + `backend/`) to a unified architecture with clear layer boundaries. |
-| `program_c_reduction_plan.md` | Classifies every subsystem as REQUIRED, SUPPORTING, OPTIONAL, or DEAD to guide experimental minimality. |
-| `program_c_safe_removal_order.md` | Dependency-topological sequence for removing subsystems while preserving the remaining experiment set. |
-
-## /novelty
-
-*(No artifacts generated today.)*
-
-## /archive
-
-| File | Description |
-|------|-------------|
-| `program_c_archive_manifest.md` | Defines the disposition (KEEP, ARCHIVE, MERGE, DELETE) for every component in the Program C reduction. |
+To keep the root clean, only essential project governance and metadata files are permitted:
+*   [README.md](file:///C:/Users/Purushottam/Documents/P1/README.md) — This directory map.
+*   [REPOSITORY_CONSTITUTION.md](file:///C:/Users/Purushottam/Documents/P1/REPOSITORY_CONSTITUTION.md) — Operational guidelines and design policies.
+*   [RESEARCH_PROTOCOL.md](file:///C:/Users/Purushottam/Documents/P1/RESEARCH_PROTOCOL.md) — Peer review and reproducibility workflows.
+*   [pyproject.toml](file:///C:/Users/Purushottam/Documents/P1/pyproject.toml) — Package configuration, dependencies, and pytest options.
+*   [requirements.txt](file:///C:/Users/Purushottam/Documents/P1/requirements.txt) — Python dependencies list.
+*   [.gitignore](file:///C:/Users/Purushottam/Documents/P1/.gitignore) — Version control exclusion patterns.
+*   [.env.example](file:///C:/Users/Purushottam/Documents/P1/.env.example) — Configuration template for environment variables.
+*   [docker-compose.yml](file:///C:/Users/Purushottam/Documents/P1/docker-compose.yml) — Container setup.
+*   [package.json](file:///C:/Users/Purushottam/Documents/P1/package.json) — Frontend package settings.
+*   [tsconfig.json](file:///C:/Users/Purushottam/Documents/P1/tsconfig.json) — TypeScript config.
+*   [skills-lock.json](file:///C:/Users/Purushottam/Documents/P1/skills-lock.json) — Agent skill registry configuration.

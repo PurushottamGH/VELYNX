@@ -281,7 +281,7 @@ def _recent_entities(limit: int) -> list[dict]:
     try:
         from backend.knowledge.knowledge_graph import DB_PATH
         from backend.memory._sqlite import connect as open_connection
-    except Exception as exc:  # pragma: no cover - import environment issue
+    except Exception as exc:  # pragma: no cover - import framework.core.environment as environment issue
         logger.warning("Curiosity: KG modules unavailable (%s)", exc)
         return []
 

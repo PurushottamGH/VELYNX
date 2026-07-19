@@ -35,8 +35,8 @@ _project_root = Path(__file__).resolve().parent.parent.parent
 if str(_project_root) not in sys.path:
     sys.path.insert(0, str(_project_root))
 
-from core.predictors.dirichlet_markov import DirichletMarkovPredictor
-from core.mdl.mdl_growth import should_grow
+from framework.core.predictors.dirichlet_markov import DirichletMarkovPredictor
+from framework.core.mdl.mdl_growth import should_grow
 from experiments.E0.dataset import NonlinearLatentEnvironment
 from experiments.E0.analysis import (  # noqa: E402
     analyze_conditions,

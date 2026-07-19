@@ -15,7 +15,7 @@ from typing import Dict, List, Optional, Tuple
 import numpy as np
 from sklearn.metrics.cluster import normalized_mutual_info_score as sklearn_nmi
 
-from core.emergence.emergence_statistic import compute_nmi
+from framework.core.emergence.emergence_statistic import compute_nmi
 
 
 # --- DV-a: Held-out Predictive Log-Likelihood ---

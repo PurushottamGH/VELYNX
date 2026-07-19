@@ -38,7 +38,7 @@ from pathlib import Path
 import pytest
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-PROGRAM_A_ROOT = REPO_ROOT / "program_a"
+PROGRAM_A_ROOT = REPO_ROOT / "archive" / "program_a" / "program_a"
 EXP1_ROOT = REPO_ROOT / "experiments" / "EXP1"
 
 # The single sanctioned seam: only this module may import experiments.EXP1.*.

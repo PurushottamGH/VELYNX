@@ -76,7 +76,7 @@ COGNITIVE_ENERGY = "cognitive_energy"    # E — derived free-energy proxy
 # E = lam*H + mu*S + nu*A. Kept identical to validation.metrics.{LAMBDA,MU,NU}
 # so this merge-time policy and the CI-time RegressionGate measure energy in the
 # same units, without importing the validation package.
-# ALSO mirrored in cognitive_core.py (imported from cognitive_health→validation.metrics).
+# ALSO mirrored in cognitive_core.py (imported from framework.core.cognitive_health→validation.metrics).
 # If tuning these, update ALL THREE: validation/metrics.py, cognitive_core.py, and here.
 DEFAULT_LAMBDA = 1.0   # weight on Entropy (H)
 DEFAULT_MU = 2.0       # weight on Prediction Error / Surprise (S)

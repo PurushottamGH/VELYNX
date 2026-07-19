@@ -19,7 +19,7 @@ def _repo_root() -> Path:
 
 
 def _pa2_section() -> str:
-    path = _repo_root() / "PROGRAM_A_FINAL_ARCHITECTURE.md"
+    path = _repo_root() / "archive" / "program_a" / "docs" / "PROGRAM_A_FINAL_ARCHITECTURE.md"
     text = path.read_text(encoding="utf-8")
     lines = text.splitlines()
     start = None

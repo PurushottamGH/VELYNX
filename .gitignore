@@ -57,6 +57,14 @@ research_artifacts/
 *.db-shm
 *.db-wal
 
+# Local database directory, secrets, and worktrees
+.velynx_data/
+gcp-key.json.json
+P1.worktrees/
+*.worktrees/
+worktrees/
+evidence/simulations/
+
 # Raw per-step experiment dumps (large; kept out of git, sha256 recorded in
 # evidence/12_m_recomputation.md provenance table). Summaries + configs +
 # recompute_m_hungarian.py are committed and reproduce all reported statistics.

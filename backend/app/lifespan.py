@@ -109,7 +109,7 @@ async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
     # Night Learner — background scheduled learning
     _night_learner_task = None
     try:
-        from learning.night_learner import night_learner
+        from learning.night_learner import framework.core.night_learner as night_learner
         _night_learner_task = asyncio.create_task(night_learner.start())
         logger.info("Night learner started")
     except Exception as exc:

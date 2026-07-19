@@ -10,7 +10,7 @@ Reference: F_A_TRIGGER_FIX_PREREGISTRATION.md §2
 """
 from __future__ import annotations
 
-from core.mdl.mdl_growth import should_grow
+from framework.core.mdl.mdl_growth import should_grow
 
 
 FIRING_SEEDS = frozenset({46, 49, 54, 60})

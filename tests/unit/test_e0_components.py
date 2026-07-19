@@ -39,7 +39,7 @@ from experiments.E0.run import (
     run_multi_seed,
     SeedRegistry,
 )
-from core.mdl.mdl_growth import should_grow, compute_lambda_model
+from framework.core.mdl.mdl_growth import should_grow, compute_lambda_model
 
 
 # ─── Environment tests ─────────────────────────────────────────────
@@ -203,7 +203,7 @@ class TestAnalysis:
         """[BLOCKER 3] true_latent_states must come from env.step(), not predictor."""
         # Create environment and predictor
         env = NonlinearLatentEnvironment(num_latent_states=3, observation_dim=4, seed=42)
-        from core.predictors.dirichlet_markov import DirichletMarkovPredictor
+        from framework.core.predictors.dirichlet_markov import DirichletMarkovPredictor
         predictor = DirichletMarkovPredictor(initial_capacity=2, alpha=1.0, rng_seed=99)
 
         env.reset()
@@ -421,7 +421,7 @@ class TestConditionRunners:
 
     @pytest.fixture
     def predictor(self):
-        from core.predictors.dirichlet_markov import DirichletMarkovPredictor
+        from framework.core.predictors.dirichlet_markov import DirichletMarkovPredictor
         return DirichletMarkovPredictor(
             initial_capacity=2,
             alpha=1.0,
@@ -454,7 +454,7 @@ class TestConditionRunners:
         assert "growth_events" in result
 
     def test_run_fixed_capacity(self, env):
-        from core.predictors.dirichlet_markov import DirichletMarkovPredictor
+        from framework.core.predictors.dirichlet_markov import DirichletMarkovPredictor
         p = DirichletMarkovPredictor(initial_capacity=2, alpha=1.0)
         result = run_fixed_capacity(
             env=env,
@@ -466,7 +466,7 @@ class TestConditionRunners:
         assert result["final_capacity"] == 2  # Never grows
 
     def test_apply_growth_at_random_times(self, env):
-        from core.predictors.dirichlet_markov import DirichletMarkovPredictor
+        from framework.core.predictors.dirichlet_markov import DirichletMarkovPredictor
         p = DirichletMarkovPredictor(initial_capacity=2, alpha=1.0)
         rng = np.random.RandomState(42)
         result = apply_growth_at_random_times(
@@ -480,7 +480,7 @@ class TestConditionRunners:
         assert len(result["growth_events"]) == 3  # Exactly 3 growth events
 
     def test_run_shuffled_input(self, env):
-        from core.predictors.dirichlet_markov import DirichletMarkovPredictor
+        from framework.core.predictors.dirichlet_markov import DirichletMarkovPredictor
         p = DirichletMarkovPredictor(initial_capacity=2, alpha=1.0)
         result = run_shuffled_input(
             env=env,
@@ -581,7 +581,7 @@ class TestC2CapacityMatched:
 
     def test_c2_starts_with_same_initial_capacity(self):
         """C2 must start with same initial capacity as T."""
-        from core.predictors.dirichlet_markov import DirichletMarkovPredictor
+        from framework.core.predictors.dirichlet_markov import DirichletMarkovPredictor
         env = NonlinearLatentEnvironment(num_latent_states=3, observation_dim=4, seed=42)
         rng = np.random.RandomState(42)
         p = DirichletMarkovPredictor(initial_capacity=2, alpha=1.0)
@@ -662,7 +662,7 @@ class TestGrowthDecision:
 
     def test_growth_only_after_positive_gain(self):
         """predictor.grow() must only be called when should_grow returns True."""
-        from core.mdl.mdl_growth import should_grow, compute_lambda_model
+        from framework.core.mdl.mdl_growth import should_grow, compute_lambda_model
         lam = compute_lambda_model(k=2, n=2, N=50)
         # G = N·ΔH - (b + log₂N) = 50*0.1 - 6.64 = -1.64 => should NOT grow
         decision, gain, _ = should_grow(
@@ -942,7 +942,7 @@ class TestGrowthOrderingRegression:
         """verify that _hypothetical_entropy_after_growth is computed BEFORE
         predictor.grow() is called, and the predictor capacity does not change
         between the computation and the decision."""
-        from core.predictors.dirichlet_markov import DirichletMarkovPredictor
+        from framework.core.predictors.dirichlet_markov import DirichletMarkovPredictor
         pred = DirichletMarkovPredictor(initial_capacity=2, alpha=1.0, rng_seed=42)
         # Feed some data
         for _ in range(20):

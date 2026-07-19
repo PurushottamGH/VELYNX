@@ -24,9 +24,9 @@ from experiments.E0.analysis import (
     compute_emergence_statistic,
 )
 from experiments.E0.decision import E0Decider
-from core.predictors.dirichlet_markov import DirichletMarkovPredictor
-from core.mdl.mdl_growth import compute_lambda_model, compute_lambda_model_corrected, should_grow
-from core.measurement.proper_scoring import predictive_log_likelihood, scoring_loss
+from framework.core.predictors.dirichlet_markov import DirichletMarkovPredictor
+from framework.core.mdl.mdl_growth import compute_lambda_model, compute_lambda_model_corrected, should_grow
+from framework.core.measurement.proper_scoring import predictive_log_likelihood, scoring_loss
 
 
 class TestE0EndToEnd:
