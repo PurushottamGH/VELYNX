@@ -2,6 +2,8 @@
 
 This protocol defines the scientific method, hypothesis registration, experimental calibration gates, and replication protocols for Project P1 (Program D).
 
+> Scope: This protocol governs VELYNX Program D experiments. P1 Research OS records and P1-registered experiments are governed by the approved P1 Research OS specification and Principal Investigator decisions.
+
 ---
 
 ## 1. Scientific Method & Hypotheses

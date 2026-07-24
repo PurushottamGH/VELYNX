@@ -1,0 +1,100 @@
+name: P1 Release Gate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch: {}
+
+jobs:
+  p1-release-gate:
+    name: P1 Release Gate
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout candidate
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          python -m pip install -r p1/requirements-dev.txt
+          python -m pip install -e p1/tooling
+          python -m pip install build==1.5.0
+
+      - name: Record pip freeze
+        run: |
+          set -euo pipefail
+          mkdir -p evidence/p1-release
+          python -m pip freeze > evidence/p1-release/pip-freeze.txt
+
+      - name: Collect P1 tests
+        run: |
+          set -euo pipefail
+          python -m pytest tests/p1_os --collect-only -q
+
+      - name: Run P1 tests
+        run: |
+          set -euo pipefail
+          python -m pytest tests/p1_os -q | tee evidence/p1-release/pytest-output.txt
+
+      - name: Build wheel and sdist
+        run: |
+          set -euo pipefail
+          python -m build --outdir dist/p1 p1/tooling | tee evidence/p1-release/build-output.txt
+
+      - name: Assert 0.1.0 artifacts exist
+        run: |
+          set -euo pipefail
+          test -f dist/p1/p1_os-0.1.0-py3-none-any.whl
+          test -f dist/p1/p1_os-0.1.0.tar.gz
+
+      - name: Smoke test built wheel in isolated environment
+        run: |
+          set -euo pipefail
+          WHEEL_PATH="$(pwd)/dist/p1/p1_os-0.1.0-py3-none-any.whl"
+          SMOKE_VENV="$(mktemp -d)/smoke-venv"
+          python -m venv "$SMOKE_VENV"
+          "$SMOKE_VENV/bin/python" -m pip install --upgrade pip
+          "$SMOKE_VENV/bin/python" -m pip install "$WHEEL_PATH"
+          SMOKE_DIR="$(mktemp -d)"
+          cd "$SMOKE_DIR"
+          "$SMOKE_VENV/bin/python" -c "
+          import p1_os
+          import p1_os.frontmatter
+          import p1_os.schemas
+          from importlib.metadata import version
+          assert version('p1-os') == '0.1.0', version('p1-os')
+          print('smoke test passed:', p1_os.__file__)
+          "
+
+      - name: Record source commit SHA
+        run: |
+          set -euo pipefail
+          echo "${GITHUB_SHA}" > evidence/p1-release/source-commit-sha.txt
+
+      - name: Generate SHA256SUMS
+        run: |
+          set -euo pipefail
+          (cd dist/p1 && sha256sum p1_os-0.1.0-py3-none-any.whl p1_os-0.1.0.tar.gz) > evidence/p1-release/SHA256SUMS
+
+      - name: Upload release artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: p1-os-0.1.0-dist
+          path: dist/p1
+
+      - name: Upload release evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: p1-release-evidence
+          path: evidence/p1-release

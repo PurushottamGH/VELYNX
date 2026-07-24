@@ -52,6 +52,8 @@ Desktop.ini
 
 # Research artifacts (derived data, not source)
 research_artifacts/
+!/p1/records/research_artifacts/
+!/p1/records/research_artifacts/**
 
 # SQLite WAL/SHM journal files (generated at runtime, not portable)
 *.db-shm
@@ -69,3 +71,7 @@ evidence/simulations/
 # evidence/12_m_recomputation.md provenance table). Summaries + configs +
 # recompute_m_hungarian.py are committed and reproduce all reported statistics.
 evidence/experiment_logs/**/aggregated_results.json
+
+# P1 Research OS — generated/transient state (see REPOSITORY_CONSTITUTION.md)
+/p1/derived/
+/p1/.transactions/active/

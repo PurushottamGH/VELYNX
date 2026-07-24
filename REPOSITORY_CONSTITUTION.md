@@ -49,6 +49,9 @@ The repository is organized into a clean, compartmentalized structure designed t
 *   `worktrees/`
     *   **Purpose**: Git worktree workspace.
     *   **Rules**: Keeps concurrent workspace developments out of the main git directory path.
+*   `p1/`
+    *   **Purpose**: Bounded subtree for the P1 Research OS pilot — canonical Markdown records, methodology, specifications, tooling, templates, small reproducibility artifacts, disposable derived indexes, and transient transaction state.
+    *   **Rules**: Governed by the approved P1 Research OS specification and Principal Investigator decisions, not by the VELYNX directory-placement rules in this section. P1 tooling must not depend on the VELYNX `backend/`, `frontend/`, runtime databases, remote APIs, or background services. P1 Research OS uses no database; the SQLite preservation rule in Section 5 applies only to VELYNX and legacy runtime components, not to `p1/`.
 
 ---
 

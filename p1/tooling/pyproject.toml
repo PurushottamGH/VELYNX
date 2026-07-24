@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=64.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "p1-os"
+version = "0.1.0"
+description = "P1 Research OS canonical record schemas and Markdown/YAML tooling"
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic==2.13.4",
+    "PyYAML==6.0.3",
+]
+
+[project.optional-dependencies]
+dev = ["pytest==9.0.3"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["p1_os*"]
