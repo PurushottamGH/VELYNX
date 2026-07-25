@@ -1,0 +1,396 @@
+---
+# EXAMPLE ONLY — NOT THE GOVERNANCE REGISTRY
+#
+# status: Draft
+# scope: Illustration of the machine-readable jurisdiction form proposed by G-1
+# responsibility: Show what GOVERNANCE_REGISTRY.yaml would contain after M-3, and how
+#                 jurisdiction tuples make Constitution §4 ¶2 overlap rejection decidable
+# authority_source: None. This file has no normative authority, registers nothing,
+#                   activates nothing, and assigns no authority. The Governance Registry
+#                   is GOVERNANCE_REGISTRY.yaml at the repository root (Constitution §2);
+#                   this file MUST NOT be treated as it or merged into it.
+# governing_artifact: REPOSITORY_CONSTITUTION.md v1.2.0 (Draft, not adopted)
+#
+# Reading notes
+#   - Every `jurisdiction` block is a tuple set, not prose. Prose jurisdictions cannot be
+#     mechanically compared, which would leave §4 ¶2 unenforceable. See 05_AUTOMATION §3 A-04.
+#   - `not_owned` is load-bearing: explicit renunciation is what makes an adjacent
+#     standard's ownership provable rather than merely assumed.
+#   - `delegations_relied_upon` cites the delegating clause and restates §4 ¶4's five
+#     elements. A refinement with no citable delegation is void, not merely defective.
+#   - Only the six M-3 foundation standards are shown in full; the remaining eighteen
+#     follow the identical shape.
+
+schema_version: "2.0"          # G-1-owned; distinct from the current Draft registry's "1.0"
+status: Draft                   # would be Active only after the §13 adoption atomic change
+scope: Project P1 repository governance
+responsibility: >-
+  Register active normative artifacts, their non-overlapping jurisdictions, and authority
+  assignments. Constitution §2 confines this file to exactly these three concerns; rationale,
+  roadmap, and narrative belong elsewhere.
+authority_source: REPOSITORY_CONSTITUTION.md §13 initial adoption
+
+# ---------------------------------------------------------------------------
+# Tier 0
+# ---------------------------------------------------------------------------
+
+constitution:
+  id: p1-repository-constitution
+  path: REPOSITORY_CONSTITUTION.md
+  version: "1.2.0"
+  status: Active                # Draft today; Active only post-adoption
+  scope: >-
+    All version-controlled research, governance, software, data descriptions, and
+    documentation in Project P1
+  responsibility: Define repository-wide authority boundaries and epistemic invariants
+  authority_source: >-
+    Initial dual-human adoption or later amendment authority under
+    REPOSITORY_CONSTITUTION.md §13
+  jurisdiction:
+    owned_transitions:
+      - {type: constitution, from: draft,  to: active}
+      - {type: constitution, from: active, to: amended}
+      - {type: constitution, from: active, to: superseded}
+      - {type: constitution, from: active, to: withdrawn}
+  # D-2 / H-04: the Constitution assigns the Registry no rank in the §4 precedence order.
+  # If H-04 is accepted, the clause resolving this appears in §4, not here — a subordinate
+  # artifact resolving its own precedence would enlarge jurisdiction, barred by §4 ¶4.
+
+# ---------------------------------------------------------------------------
+# Tier 1-3: Active Domain standards (all authority Level 2, peers — §4)
+# ---------------------------------------------------------------------------
+
+active_domain_standards:
+
+  - id: o-1-ontology
+    path: domain_standards/ontology/O-1_ONTOLOGY_STANDARD.md
+    version: "1.0.0"
+    status: Active
+    domain_class: governance
+    responsibility: >-
+      Register governed object types, identifier grammar, and permitted relationship kinds
+    scope:
+      population: all version-controlled governed records in Project P1
+      environment: repository
+      conditions: all
+      versions: schema_version >= 1.0
+      time_interval: from activation until superseded
+    authority_source:
+      registry_authority: constitutional_steward
+      activation_transition: {type: domain_standard, from: draft, to: active}
+    jurisdiction:
+      owned_object_types: [object_type_registration, identifier_allocation, relationship_kind]
+      owned_transitions:
+        - {type: object_type_registration, from: proposed,   to: registered}
+        - {type: object_type_registration, from: registered, to: deprecated}
+        - {type: identifier_allocation,    from: proposed,   to: allocated}
+        - {type: relationship_kind,        from: proposed,   to: registered}
+        - {type: relationship_kind,        from: registered, to: retired}
+      referenced_types: []
+      not_owned:
+        - "Any object type's states, entry or exit criteria, or transitions — owned by that
+           type's standard. O-1 declares what exists and how it connects, never how it moves."
+    delegations_relied_upon:
+      - delegating_clause: "REPOSITORY_CONSTITUTION.md §5 ¶6"
+        delegated_subject: governance of ontologies
+        scope: the P1 object type system
+        recipient: o-1-ontology
+        permitted_transitions: [register type, deprecate type, register relationship kind]
+        limits: >-
+          MUST reuse §2 terms unchanged within their Scope (§11 ¶3); MUST NOT register a type
+          whose lifecycle no Active standard owns (§9 ¶1)
+    verification:
+      checks: [A-04, A-09, A-10, A-11, A-27]
+      manual_procedures: [MRP-15]
+    depends_on: []
+    dependents: [g-1-registry-spec, g-2-normative-artifact, g-3-authority-delegation,
+                 g-7-custody, g-11-automation, g-12-architecture, g-13-decision,
+                 s-1-research, s-2-question, s-3-unknown, s-4-observation, s-5-evidence,
+                 s-6-claim, s-7-hypothesis, s-8-result, s-9-interpretation, s-10-principle]
+
+  - id: g-1-registry-spec
+    path: domain_standards/governance/G-1_REGISTRY_SPECIFICATION.md
+    version: "1.0.0"
+    status: Active
+    domain_class: governance
+    responsibility: >-
+      Define the form, schema, and integrity constraints of the Governance Registry
+    scope:
+      population: GOVERNANCE_REGISTRY.yaml and registry/**
+      environment: repository
+      conditions: all
+      versions: schema_version >= 2.0
+      time_interval: from activation until superseded
+    authority_source:
+      registry_authority: constitutional_steward
+      activation_transition: {type: domain_standard, from: draft, to: active}
+    jurisdiction:
+      owned_object_types: [registry_schema, jurisdiction_declaration, registry_transition_record]
+      owned_transitions:
+        - {type: registry_schema,            from: draft,    to: published}
+        - {type: jurisdiction_declaration,   from: proposed, to: registered}
+        - {type: registry_transition_record, from: none,     to: recorded}
+      referenced_types: [object_type_registration, authority_assignment]
+      not_owned:
+        - "Which artifacts are Active, and who holds authority — that is Registry content,
+           assigned under G-3 and approved by the steward, not determined by G-1."
+        - "Precedence between the Registry and a Domain standard (defect D-2) — reserved to §13."
+    delegations_relied_upon:
+      - delegating_clause: "REPOSITORY_CONSTITUTION.md §4 ¶1-2"
+        delegated_subject: form and integrity of the Registry's required fields
+        scope: GOVERNANCE_REGISTRY.yaml
+        recipient: g-1-registry-spec
+        permitted_transitions: [publish schema, register jurisdiction declaration]
+        limits: >-
+          MUST NOT extend the Registry's responsibility beyond §2's three concerns;
+          MUST fail closed on any absent required field (§4 ¶1)
+    verification:
+      checks: [A-01, A-03, A-04, A-05, A-22]
+      manual_procedures: [MRP-14]
+    depends_on: [o-1-ontology]
+
+  - id: g-2-normative-artifact
+    path: domain_standards/governance/G-2_NORMATIVE_ARTIFACT_STANDARD.md
+    version: "1.0.0"
+    status: Active
+    domain_class: governance
+    responsibility: >-
+      Govern the Normative artifact object type: drafting, versioning, activation, amendment,
+      supersession, withdrawal, Legacy disposition, and the Domain Standard Interface
+    scope:
+      population: all Normative artifacts in Project P1
+      environment: repository
+      conditions: all
+      versions: interface_version >= 1.0
+      time_interval: from activation until superseded
+    authority_source:
+      registry_authority: constitutional_steward
+      activation_transition: {type: domain_standard, from: draft, to: active}
+      self_activation: prohibited      # §4 ¶2 — a standard MUST NOT authorize its own activation
+    jurisdiction:
+      owned_object_types:
+        [normative_artifact, domain_standard, standard_version, activation_dossier,
+         legacy_disposition]
+      owned_transitions:
+        - {type: normative_artifact, from: none,       to: draft}
+        - {type: domain_standard,    from: draft,      to: active}
+        - {type: domain_standard,    from: active,     to: amended}
+        - {type: domain_standard,    from: active,     to: superseded}
+        - {type: domain_standard,    from: active,     to: withdrawn}
+        - {type: legacy_disposition, from: legacy,     to: archived}
+        - {type: legacy_disposition, from: legacy,     to: reactivated}
+      referenced_types: [attestation, authority_assignment, review_record]
+      not_owned:
+        - "Software and release versioning — owned by G-8. Different object types with
+           different change semantics; they MUST NOT share a version number."
+        - "The content of any review or attestation — owned by G-4."
+    delegations_relied_upon:
+      - delegating_clause: "REPOSITORY_CONSTITUTION.md §9 ¶4"
+        delegated_subject: extension of the minimum Normative artifact lifecycle
+        scope: Normative artifacts in Project P1
+        recipient: g-2-normative-artifact
+        permitted_transitions: [draft, activate, amend, supersede, withdraw]
+        limits: >-
+          MUST retain Draft/Active/Superseded/Withdrawn; MUST keep prior versions
+          recoverable (§9 ¶4); MUST NOT permit self-activation (§4 ¶2)
+        UNDER_SPECIFIED: >-
+          DEFECT D-1 — §9 ¶4 identifies neither recipient nor permitted transitions nor
+          limits, so it does not satisfy §4 ¶4's own five-element requirement. G-2 SHOULD
+          NOT activate until H-03 is decided. See 10_HUMAN_JUDGMENT_REGISTER.md.
+    verification:
+      checks: [A-02, A-06, A-07, A-22, A-30, A-63]
+      manual_procedures: [MRP-01, MRP-16]
+    depends_on: [o-1-ontology]
+
+  - id: g-3-authority-delegation
+    path: domain_standards/governance/G-3_AUTHORITY_DELEGATION_STANDARD.md
+    version: "1.0.0"
+    status: Active
+    domain_class: governance
+    responsibility: >-
+      Govern authority assignment records, delegation records, role definitions, and
+      conflict-of-interest declarations
+    scope:
+      population: all authority and delegation records in Project P1
+      environment: repository
+      conditions: all
+      versions: ">= 1.0"
+      time_interval: from activation until superseded
+    authority_source:
+      registry_authority: constitutional_steward
+      activation_transition: {type: domain_standard, from: draft, to: active}
+    jurisdiction:
+      owned_object_types:
+        [authority_assignment, delegation_record, role_definition,
+         conflict_of_interest_declaration]
+      owned_transitions:
+        - {type: authority_assignment, from: proposed, to: active}
+        - {type: authority_assignment, from: active,   to: revoked}
+        - {type: authority_assignment, from: active,   to: expired}
+        - {type: authority_assignment, from: active,   to: succeeded}
+        - {type: delegation_record,    from: proposed, to: active}
+        - {type: delegation_record,    from: active,   to: revoked}
+      referenced_types: [domain_standard, decision, attestation]
+      not_owned:
+        - "Creation of authority. All authority originates at §13's steward assignment and
+           flows downward through recorded delegations. §4 ¶4 forbids a refinement from
+           creating authority over any transition not expressly delegated. G-3 records and
+           lifecycles authority; it never mints it."
+        - "Approval of any specific transition — that is a Decision under G-13."
+    delegations_relied_upon:
+      - delegating_clause: "REPOSITORY_CONSTITUTION.md §4 ¶1, §4 ¶4, §13 ¶3"
+        delegated_subject: recording and lifecycle of authority assignments and delegations
+        scope: Project P1
+        recipient: g-3-authority-delegation
+        permitted_transitions: [assign, delegate, sub-delegate, revoke, expire, succeed]
+        limits: >-
+          MUST NOT enlarge any jurisdiction; MUST NOT assign authority to an automated
+          system (§4 ¶4); every delegation MUST state all five §4 ¶4 elements or is void
+    verification:
+      checks: [A-05, A-23, A-24, A-36, A-37]
+      manual_procedures: []
+    depends_on: [o-1-ontology]
+
+  - id: g-4-review-attestation
+    path: domain_standards/governance/G-4_REVIEW_ATTESTATION_STANDARD.md
+    version: "1.0.0"
+    status: Active
+    domain_class: governance
+    responsibility: >-
+      Govern review requests, review records, Independent reviewer attestations, and the
+      register of named manual review procedures
+    scope:
+      population: all reviews and attestations in Project P1
+      environment: repository
+      conditions: all
+      versions: ">= 1.0"
+      time_interval: from activation until superseded
+    authority_source:
+      registry_authority: constitutional_steward
+      activation_transition: {type: domain_standard, from: draft, to: active}
+    jurisdiction:
+      owned_object_types: [review_request, review_record, attestation, manual_review_procedure]
+      owned_transitions:
+        - {type: review_request, from: none,      to: requested}
+        - {type: review_record,  from: requested, to: conducted}
+        - {type: attestation,    from: none,      to: attested}
+        - {type: attestation,    from: attested,  to: withdrawn}
+      referenced_types: [authority_assignment, conflict_of_interest_declaration, change_set]
+      not_owned:
+        - "The conformance claim that cites a review — owned by G-5."
+        - "Audit reports — owned by G-6."
+    delegations_relied_upon:
+      - delegating_clause: "REPOSITORY_CONSTITUTION.md §12 ¶4"
+        delegated_subject: named manual review procedures for non-mechanically-decidable requirements
+        scope: all Active normative artifacts in Project P1
+        recipient: g-4-review-attestation
+        permitted_transitions: [request, conduct, attest, reject]
+        limits: >-
+          An automated system MUST NOT produce an attestation (§4 ¶4); a self-review MUST NOT
+          be labelled independent (§12 ¶1); an unavailable check MUST be reported as
+          not verified (§12 ¶1)
+        UNDER_SPECIFIED: "DEFECT D-1 — §12 ¶4 names no recipient artifact or role. See H-03."
+    verification:
+      checks: [A-23, A-24, A-29, A-38, A-39]
+      manual_procedures: [all MRP-xx are registered here]
+    depends_on: [o-1-ontology, g-3-authority-delegation]
+    # BLOCKING NOTE: G-4 is operable only where an Independent reviewer exists (§2).
+    # One identified human exists in P1. See risk R-01 and judgment item H-01.
+
+  - id: g-13-decision
+    path: domain_standards/governance/G-13_DECISION_STANDARD.md
+    version: "1.0.0"
+    status: Active
+    domain_class: governance
+    responsibility: Govern the Decision object type
+    scope:
+      population: all Decisions in Project P1
+      environment: repository
+      conditions: all
+      versions: ">= 1.0"
+      time_interval: from activation until superseded
+    authority_source:
+      registry_authority: constitutional_steward
+      activation_transition: {type: domain_standard, from: draft, to: active}
+    jurisdiction:
+      owned_object_types: [decision]
+      owned_transitions:
+        - {type: decision, from: none,     to: proposed}
+        - {type: decision, from: proposed, to: approved}
+        - {type: decision, from: approved, to: executed}
+        - {type: decision, from: executed, to: reversed}
+        - {type: decision, from: executed, to: superseded}
+      referenced_types: [evidence, interpretation, result, claim, unknown, authority_assignment]
+      not_owned:
+        - "The scientific transition a Decision authorizes — specified by the owning S-*
+           standard (§4 ¶5). Specification and authorization are distinct objects."
+        - "The content of the Evidence or Interpretations cited — a Decision references but
+           does not contain them, and does not make its rationale true (§2)."
+    delegations_relied_upon:
+      - delegating_clause: "REPOSITORY_CONSTITUTION.md §4 ¶5, §8 ¶2, §9 ¶1"
+        delegated_subject: lifecycle and required content of Decisions
+        scope: Project P1
+        recipient: g-13-decision
+        permitted_transitions: [propose, approve, execute, reverse, supersede]
+        limits: >-
+          A Decision MUST NOT alter an Observation or Result (§3 ¶6); governance approval
+          MUST NOT be represented as scientific support (§3 ¶6); every scientific state
+          change MUST remain reversible (§8 ¶2)
+    verification:
+      checks: [A-12, A-13, A-52, A-53]
+      manual_procedures: [MRP-05]
+    depends_on: [o-1-ontology, g-3-authority-delegation]
+
+  # -------------------------------------------------------------------------
+  # Remaining eighteen standards follow the identical shape. Activation order
+  # per 08_IMPLEMENTATION_ROADMAP.md:
+  #   M-4  s-1-research · s-3-unknown · s-4-observation · s-8-result
+  #        g-7-custody · g-12-architecture
+  #   M-5  s-2-question · s-5-evidence · s-6-claim · s-9-interpretation
+  #   M-7  g-5-conformance · g-6-audit · g-8-change-release · g-11-automation
+  #   M-8  s-7-hypothesis · s-10-principle · g-9-emergency · g-10-conflict
+  # -------------------------------------------------------------------------
+
+# ---------------------------------------------------------------------------
+# Authority assignments (§4 ¶1, §13 ¶3)
+# ---------------------------------------------------------------------------
+
+authority_assignments:
+  constitutional_steward:
+    - id: steward-01
+      human_identity: "<identified human — required; a role name is not an identity>"
+      assigned: "<timezone-qualified time, §2>"
+      expires: "<time-bounded assignments preferred; renewal is a reviewed transition>"
+      successor: "<REQUIRED — an assignment with no successor is an unrecoverable single
+                   point of governance failure. See risk R-17 and judgment item H-08.>"
+      permitted_transitions:
+        - {type: constitution,    from: any,   to: any}
+        - {type: domain_standard, from: draft, to: active}
+        - {type: domain_standard, from: active, to: superseded}
+        - {type: domain_standard, from: active, to: withdrawn}
+      jurisdiction_note: >-
+        Where more than one steward is assigned, prefer disjoint jurisdictions over a quorum
+        rule: §4 ¶4 resolves conflicting requirements, not conflicting stewards, so two
+        stewards sharing a jurisdiction can deadlock with no constitutional remedy.
+
+  independent_reviewer_pool:
+    # §2: an identified human who is not an author of the reviewed change, did not produce
+    # the Evidence under review, and declares material conflicts. §4 ¶4: automated systems
+    # MUST NOT supply independent review — at any capability level.
+    - id: reviewer-01
+      human_identity: "<identified human, distinct from every change author>"
+      competence: "<§13 ¶2 as amended by A-1 — the reviewer's relevant competence>"
+      conflicts_declared: "<per-review; independence is a property of the review, not the person>"
+
+# ---------------------------------------------------------------------------
+# Adoption state (§13 ¶3)
+# ---------------------------------------------------------------------------
+
+activation_requirements:
+  adopter_attestation: "<path under constitution/attestations/ — currently null>"
+  independent_reviewer_attestation: "<path under constitution/attestations/ — currently null>"
+  constitutional_steward_assignment_required: true
+  atomic_default_branch_change_required: true
+  # §13 ¶3 requires attestations by two identified humans. The repository history contains
+  # one. Until that changes, adoption fails closed and every activation above is
+  # unreachable — not delayed. See risk R-01 and judgment item H-01.

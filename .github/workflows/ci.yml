@@ -24,14 +24,18 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install flake8 black mypy
-          if (Test-Path requirements.txt) { pip install -r requirements.txt }
-          if (Test-Path backend/requirements.txt) { pip install -r backend/requirements.txt }
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          if [ -f backend/requirements.txt ]; then pip install -r backend/requirements.txt; fi
       - name: Lint with flake8
         run: flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
       - name: Check formatting with black
         run: black --check . --diff
-      - name: Type check with mypy
-        run: mypy --ignore-missing-imports core/ validation/ benchmarks/ || true
+      # Advisory under Constitution S12p3 (SHOULD). `continue-on-error` marks the
+      # step as failed without failing the job, so an unassessed criterion is not
+      # reported as passed (S12p1). `|| true` would report it as passed.
+      - name: Type check with mypy (advisory)
+        continue-on-error: true
+        run: mypy --ignore-missing-imports framework/ p1/tooling/p1_os/
 
   test:
     runs-on: ubuntu-latest
@@ -49,16 +53,19 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install pytest pytest-cov
-          if (Test-Path requirements.txt) { pip install -r requirements.txt }
-          if (Test-Path backend/requirements.txt) { pip install -r backend/requirements.txt }
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          if [ -f backend/requirements.txt ]; then pip install -r backend/requirements.txt; fi
           pip install -e .
+      # No suppressed exit codes: a failing test suite fails the job (S12p1).
+      # Coverage targets are packages that exist in the tree; `core/` and
+      # `validation/` do not, and naming them produced a check that could not
+      # assess what it claimed to assess.
       - name: Run unit tests
         run: |
-          python -m pytest tests/unit/ -v --cov=core --cov=validation --cov-report=term --cov-report=xml -m "not slow" || \
-          python -m pytest validation/ -v --cov=validation --cov-report=term --cov-report=xml -m "not slow" || true
+          python -m pytest tests/unit/ -v --cov=framework --cov-report=term --cov-report=xml -m "not slow"
       - name: Run research tests
         run: |
-          python -m pytest research/tests/ -v --cov=research --cov-report=term --cov-report=xml -m "not slow" || true
+          python -m pytest research/tests/ -v --cov=research --cov-report=term --cov-report=xml -m "not slow"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -79,7 +86,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install pyyaml
           pip install -r requirements.txt
-          if (Test-Path backend/requirements.txt) { pip install -r backend/requirements.txt }
+          if [ -f backend/requirements.txt ]; then pip install -r backend/requirements.txt; fi
       - name: Verify reproducibility spec
         run: python scripts/verify_reproducibility.py
 
@@ -97,7 +104,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install pyyaml
           pip install -r requirements.txt
-          if (Test-Path backend/requirements.txt) { pip install -r backend/requirements.txt }
+          if [ -f backend/requirements.txt ]; then pip install -r backend/requirements.txt; fi
       - name: Validate experiment registry
         run: python scripts/validate_experiment_registry.py
       - name: Validate parameter registry consistency
@@ -117,7 +124,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install pyyaml numpy
           pip install -r requirements.txt
-          if (Test-Path backend/requirements.txt) { pip install -r backend/requirements.txt }
+          if [ -f backend/requirements.txt ]; then pip install -r backend/requirements.txt; fi
       - name: Run benchmark smoke test
         run: python scripts/smoke_benchmark.py
 

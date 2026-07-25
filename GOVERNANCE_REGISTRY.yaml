@@ -1,0 +1,35 @@
+schema_version: "1.0"
+status: Draft
+scope: Project P1 repository governance
+responsibility: Register active normative artifacts, their jurisdictions, and authority assignments
+authority_source: REPOSITORY_CONSTITUTION.md Section 13 initial adoption
+authority_jurisdiction:
+  - register_normative_artifact
+  - assign_governance_authority
+  - record_normative_transition
+
+constitution:
+  id: p1-repository-constitution
+  path: REPOSITORY_CONSTITUTION.md
+  version: "1.2.0"
+  status: Draft
+  scope: All version-controlled research, governance, software, data descriptions, and documentation in Project P1
+  responsibility: Define repository-wide authority boundaries and epistemic invariants
+  authority_source: Initial dual-human adoption or later amendment authority under REPOSITORY_CONSTITUTION.md Section 13
+  jurisdiction:
+    - activate_constitution
+    - amend_constitution
+    - supersede_constitution
+    - withdraw_constitution
+
+active_domain_standards: []
+
+authority_assignments:
+  constitutional_steward: []
+
+activation_requirements:
+  adopter_attestation: null
+  independent_reviewer_attestation: null
+  constitutional_steward_assignment_required: true
+  atomic_default_branch_change_required: true
+  constitutional_transition_record_required: true

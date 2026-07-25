@@ -1,0 +1,223 @@
+# Governance Registry — target states for adoption (D) and RS-1 activation (E)
+#
+# NOT THE LIVE REGISTRY. The live Registry is GOVERNANCE_REGISTRY.yaml (§2 fixes
+# that path). This file is a Draft target used to assemble the two atomic changes
+# described in governance/activation/03_ADOPTION_CHANGE_MANIFEST.md. It has no
+# authority and registers nothing.
+#
+# Usage: copy block D over GOVERNANCE_REGISTRY.yaml in the adoption revision;
+# copy block E in the RS-1 activation revision. Do not commit either block with
+# populated steward or attestation fields before the corresponding attestations
+# exist in the same revision.
+
+# =====================================================================
+# BLOCK D — state after the §13 ¶3 adoption revision
+# =====================================================================
+d_target:
+  schema_version: "1.0"
+  status: Active
+  scope: Project P1 repository governance
+  responsibility: Register active normative artifacts, their jurisdictions, and authority assignments
+  authority_source: REPOSITORY_CONSTITUTION.md Section 13 initial adoption
+  authority_jurisdiction:
+    - register_normative_artifact
+    - assign_governance_authority
+    - record_normative_transition
+
+  constitution:
+    id: p1-repository-constitution
+    path: REPOSITORY_CONSTITUTION.md
+    version: "1.2.0"
+    status: Active
+    scope: All version-controlled research, governance, software, data descriptions, and documentation in Project P1
+    responsibility: Define repository-wide authority boundaries and epistemic invariants
+    authority_source: Initial dual-human adoption under REPOSITORY_CONSTITUTION.md Section 13
+    jurisdiction:
+      - activate_constitution
+      - amend_constitution
+      - supersede_constitution
+      - withdraw_constitution
+
+  # Deliberately empty and conforming. §13 ¶3's adoption list is Constitution,
+  # Registry, steward, two attestations — no Domain standard appears — and §9 ¶1
+  # excepts Domain standards from per-type ownership.
+  #
+  # §9 ¶1 is satisfied because no *subordinate* object type is in use, not
+  # because no object type is in use. This revision does create governance
+  # objects: two attestations, a conformance claim, an authority assignment, an
+  # architecture record, and a transition record. Each is specified directly by
+  # the Constitution, so none is subordinate to a Domain standard. See the
+  # dossier's recorded interpretation 4.5, which states the argument and the
+  # alternative reading it rejects. `p1/records/** empty` verifies the absence of
+  # *scientific* records; it does not by itself discharge §9 ¶1.
+  active_domain_standards: []
+
+  # No `assigned_in_revision` field. The assignment is made *by* the adoption
+  # revision, so a SHA here would be the SHA of the commit that contains it — a
+  # commit cannot contain its own identifier. Nothing in §4 ¶1 or §13 ¶3 requires
+  # one: the assigning revision is recoverable with `git log -S` on this block,
+  # and the reviewed pre-merge revision is named in the two attestations.
+  authority_assignments:
+    constitutional_steward:
+      - name: "[COMPLETE identified human]"
+        contact: "[COMPLETE]"
+        permitted_transitions:
+          - amend_constitution
+          - supersede_constitution
+          - withdraw_constitution
+          - activate_domain_standard
+        successor: "[COMPLETE recommended: named successor]"
+
+  adoption_record:
+    adopter_attestation: governance/attestations/ADOPTER_ATTESTATION.md
+    independent_reviewer_attestation: governance/attestations/INDEPENDENT_REVIEWER_ATTESTATION.md
+    conformance_dossier: governance/conformance/ADOPTION_CONFORMANCE_DOSSIER.md
+    # §2 lists a transition record among the elements an atomic change contains,
+    # and §9 ¶3 is unqualified as to object type: the Constitution's own
+    # Draft -> Active transition needs one.
+    transition_record: governance/transitions/T-0001-constitution-draft-to-active.md
+    # No `adopted_revision`: same self-reference as above. Adoption becomes
+    # effective when this revision is accepted to the default branch (§13 ¶4);
+    # that revision's identifier is recorded afterwards in the post-merge
+    # re-verification record, not inside the revision itself.
+    adopted_at: "[COMPLETE timezone-qualified, precision stated]"
+
+  # §11: the Registry carries active artifacts, jurisdictions, and authority
+  # assignments only. The two keys below are identifiers, not narrative, and are
+  # the minimum needed for a reviewer to locate the §13 ¶2 evidence. Rationale,
+  # roadmap, and plan text stay out of this file.
+
+# =====================================================================
+# BLOCK E — state after the §4 ¶2 RS-1 activation revision
+# Identical to D except active_domain_standards and authority_assignments.
+#
+# The authority block is NOT identical and must not be omitted. §4 ¶5 requires a
+# scientific transition to be authorized by "the Registry-listed authority for
+# that transition", and §4 ¶1 voids an authority whose permitted transitions are
+# absent or inconsistent. Carrying D's four constitutional transitions forward
+# unchanged would leave no Registry-listed authority permitted for any of RS-1's
+# 21 transitions, and every research transition would fail closed under §9 ¶3 —
+# E would activate a standard that authorizes nothing.
+# =====================================================================
+e_target:
+  # Replaces the D block. Same steward, same identity, permitted_transitions
+  # extended to cover the jurisdiction RS-1 brings into existence.
+  authority_assignments:
+    constitutional_steward:
+      - name: "[COMPLETE identified human — MUST match the D block exactly]"
+        contact: "[COMPLETE]"
+        # Two forms in one field, because §4 ¶1 names a single "permitted
+        # transitions" per authority source. A bare string is a constitutional
+        # transition; a mapping is a scientific transition tuple, matching the
+        # tuple form in RS-1 §1 so the comparison is mechanical.
+        permitted_transitions:
+          - amend_constitution
+          - supersede_constitution
+          - withdraw_constitution
+          - activate_domain_standard
+          - {standard: rs-1, type: registered_protocol, from: draft, to: registered}
+          - {standard: rs-1, type: registered_protocol, from: draft, to: withdrawn}
+          - {standard: rs-1, type: registered_protocol, from: registered, to: executing}
+          - {standard: rs-1, type: registered_protocol, from: executing, to: closed}
+          - {standard: rs-1, type: observation, from: none, to: recorded}
+          - {standard: rs-1, type: observation, from: recorded, to: superseded}
+          - {standard: rs-1, type: result, from: none, to: recorded}
+          - {standard: rs-1, type: result, from: recorded, to: superseded}
+          - {standard: rs-1, type: unknown, from: none, to: open}
+          - {standard: rs-1, type: unknown, from: open, to: resolved}
+          - {standard: rs-1, type: unknown, from: resolved, to: open}
+          - {standard: rs-1, type: decision, from: proposed, to: approved}
+          - {standard: rs-1, type: decision, from: approved, to: executed}
+          - {standard: rs-1, type: decision, from: executed, to: reversed}
+          - {standard: rs-1, type: interpretation, from: none, to: draft}
+          - {standard: rs-1, type: interpretation, from: draft, to: active}
+          - {standard: rs-1, type: interpretation, from: draft, to: withdrawn}
+          - {standard: rs-1, type: interpretation, from: active, to: superseded}
+          - {standard: rs-1, type: interpretation, from: active, to: withdrawn}
+        # {decision, none -> proposed} and {decision, proposed -> withdrawn} are
+        # absent by design, not by omission. RS-1 §2.2.1 exempts them: they are
+        # governance transitions under §3 ¶2, authored by any contributor without
+        # a prior decision. Listing them here would imply an approval step that
+        # §2.2.1 removes, and would reintroduce the regress.
+        successor: "[COMPLETE recommended: named successor]"
+
+  active_domain_standards:
+    - id: rs-1
+      path: governance/standards/RS-1_RESEARCH_STANDARD.md
+      version: "1.0.0"
+      status: Active
+      scope:
+        population: governed scientific execution and inference in Project P1
+        environment: this repository
+        conditions: all
+        versions: "RS-1 >= 1.0.0"
+        time_interval: from activation until superseded or withdrawn
+      responsibility: Define this domain's object definitions and scientific lifecycles
+      authority_source: Constitutional steward listed in authority_assignments, per REPOSITORY_CONSTITUTION.md Section 4 paragraph 2
+      jurisdiction:
+        owned_object_types:
+          - registered_protocol
+          - observation
+          - result
+          - unknown
+          - decision
+          - interpretation
+        # 21 tuples, identical to RS-1 §1. The three `-> withdrawn` exits are the
+        # abandonment paths: without them a draft protocol, a proposed decision,
+        # and a draft interpretation can each be created and never disposed of,
+        # because §9 ¶3 fails an unlisted transition closed.
+        owned_transitions:
+          - {type: registered_protocol, from: draft, to: registered}
+          - {type: registered_protocol, from: draft, to: withdrawn}
+          - {type: registered_protocol, from: registered, to: executing}
+          - {type: registered_protocol, from: executing, to: closed}
+          - {type: observation, from: none, to: recorded}
+          - {type: observation, from: recorded, to: superseded}
+          - {type: result, from: none, to: recorded}
+          - {type: result, from: recorded, to: superseded}
+          - {type: unknown, from: none, to: open}
+          - {type: unknown, from: open, to: resolved}
+          - {type: unknown, from: resolved, to: open}
+          - {type: decision, from: none, to: proposed}
+          - {type: decision, from: proposed, to: approved}
+          - {type: decision, from: proposed, to: withdrawn}
+          - {type: decision, from: approved, to: executed}
+          - {type: decision, from: executed, to: reversed}
+          - {type: interpretation, from: none, to: draft}
+          - {type: interpretation, from: draft, to: active}
+          - {type: interpretation, from: draft, to: withdrawn}
+          - {type: interpretation, from: active, to: superseded}
+          - {type: interpretation, from: active, to: withdrawn}
+        # Types no Active standard owns. A record of one of these kinds cannot
+        # lawfully be created: §9 ¶1 requires exactly one owning standard, and
+        # §9 ¶3 fails the transition closed without one.
+        not_owned:
+          - claim
+          - evidence
+          - source
+          - question
+          - hypothesis
+          - principle
+      activation_record:
+        decision: governance/decisions/D-0001-activate-rs1.md
+        approved_by: "[COMPLETE steward name, must match authority_assignments]"
+        independent_reviewer_attestation: governance/attestations/RS-1_INDEPENDENT_REVIEWER_ATTESTATION.md
+        # D-0001 is the approval. The §9 ¶3 transition record is a separate
+        # element that §2 also requires, and RS-1 §2.1 requires it in addition to
+        # the approving decision — an approval is not a transition record.
+        transition_record: governance/transitions/T-0002-rs1-draft-to-active.md
+        # No `activated_revision`: a commit cannot contain its own SHA. The
+        # reviewed pre-merge revision is named in the RS-1 attestation; the
+        # accepted revision is recorded in the post-E re-verification record.
+        activated_at: "[COMPLETE timezone-qualified]"
+      # §4 ¶2 overlap test: compared against an empty active_domain_standards at
+      # the moment of activation, so no overlapping jurisdiction is possible.
+      overlap_checked_against: []
+
+# =====================================================================
+# Field-presence checklist (§4 ¶1: any absent or inconsistent required
+# field means the artifact has no authority)
+# =====================================================================
+# For every entry: id, path, version, status, scope, responsibility,
+# authority_source, jurisdiction — all present, all matching the artifact's
+# own header without contradiction.

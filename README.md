@@ -6,7 +6,7 @@ This repository houses the **VELYNX** cognitive architecture. It is organized as
 
 ## 1. Directory Structure
 
-The repository is organized according to the [Repository Constitution](file:///C:/Users/Purushottam/Documents/P1/REPOSITORY_CONSTITUTION.md):
+The repository is organized according to the [Repository Constitution](file:///C:/Users/Purushottam/Documents/P1/REPOSITORY_CONSTITUTION.md), which governs repository-wide authority boundaries and epistemic invariants. Directory purposes below are descriptive; enforceable domain boundaries belong in active scoped standards registered in `GOVERNANCE_REGISTRY.yaml`.
 
 *   [framework/](file:///C:/Users/Purushottam/Documents/P1/framework/)
     *   **Purpose**: Single source of truth for reusable mathematical primitives and core scientific machinery.
@@ -39,17 +39,16 @@ The repository is organized according to the [Repository Constitution](file:///C
 
 ---
 
-## 2. Root Files
+## 2. Root Governance and Metadata
 
-To keep the root clean, only essential project governance and metadata files are permitted:
-*   [README.md](file:///C:/Users/Purushottam/Documents/P1/README.md) — This directory map.
-*   [REPOSITORY_CONSTITUTION.md](file:///C:/Users/Purushottam/Documents/P1/REPOSITORY_CONSTITUTION.md) — Operational guidelines and design policies.
-*   [RESEARCH_PROTOCOL.md](file:///C:/Users/Purushottam/Documents/P1/RESEARCH_PROTOCOL.md) — Peer review and reproducibility workflows.
-*   [pyproject.toml](file:///C:/Users/Purushottam/Documents/P1/pyproject.toml) — Package configuration, dependencies, and pytest options.
-*   [requirements.txt](file:///C:/Users/Purushottam/Documents/P1/requirements.txt) — Python dependencies list.
-*   [.gitignore](file:///C:/Users/Purushottam/Documents/P1/.gitignore) — Version control exclusion patterns.
-*   [.env.example](file:///C:/Users/Purushottam/Documents/P1/.env.example) — Configuration template for environment variables.
-*   [docker-compose.yml](file:///C:/Users/Purushottam/Documents/P1/docker-compose.yml) — Container setup.
-*   [package.json](file:///C:/Users/Purushottam/Documents/P1/package.json) — Frontend package settings.
-*   [tsconfig.json](file:///C:/Users/Purushottam/Documents/P1/tsconfig.json) — TypeScript config.
-*   [skills-lock.json](file:///C:/Users/Purushottam/Documents/P1/skills-lock.json) — Agent skill registry configuration.
+The root contains repository-wide governance, indexes, registries, and cross-tool configuration. This section is descriptive, not a constitutional allowlist. In particular:
+
+*   [README.md](file:///C:/Users/Purushottam/Documents/P1/README.md) — Repository map.
+*   [REPOSITORY_CONSTITUTION.md](file:///C:/Users/Purushottam/Documents/P1/REPOSITORY_CONSTITUTION.md) — Repository-wide authority boundaries and epistemic invariants.
+*   `GOVERNANCE_REGISTRY.yaml` — Status, jurisdiction, and authority registry for active normative artifacts.
+*   [RESEARCH_PROTOCOL.md](file:///C:/Users/Purushottam/Documents/P1/RESEARCH_PROTOCOL.md) and `PROGRAM_D_*.md` — Program D domain material subject to constitutional registration and scope.
+*   `experiment_registry.yaml`, `parameter_registry.yaml`, and `reproducibility.yaml` — Scientific registries and reproducibility metadata.
+*   `pyproject.toml`, `requirements.txt`, `package.json`, `tsconfig.json`, lockfiles, and container files — Build and tool configuration.
+*   [.gitignore](file:///C:/Users/Purushottam/Documents/P1/.gitignore) and [.env.example](file:///C:/Users/Purushottam/Documents/P1/.env.example) — Version-control exclusions and a non-secret environment template.
+
+A root location does not grant an artifact authority. Normative authority exists only as specified by the Constitution and Governance Registry.
