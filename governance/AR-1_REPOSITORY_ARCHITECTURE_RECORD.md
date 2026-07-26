@@ -1,11 +1,11 @@
 # AR-1 — Repository Architecture Record
 
-- **Status:** Active as a Level-4 record (implementation and explanatory documentation), descriptive only
+- **Status:** Current — descriptive Level-4 record (implementation and explanatory documentation). Deliberately **not** `Active`: §2 defines `Active` for a Normative artifact listed in the Governance Registry, or for a governed object entered into its Active state under a Domain standard. This record is neither, so applying that word to it would reuse constitutional terminology for a different type, which §11 ¶3 forbids. `Current` here means "the version that describes the repository at this revision"; it is superseded by the next accepted revision of this record, and prior versions remain recoverable in history
 - **Scope:** Version-controlled directory layout and declared boundaries of Project P1, at the revision in which this record is accepted
 - **Responsibility:** Define repository layout, boundaries, dependencies, and rationale, as required by `REPOSITORY_CONSTITUTION.md` §10 ¶1
 - **Authority source:** None. This record imposes no requirement and authorizes no transition. It is not a Normative artifact under §2 and holds no Registry entry.
 - **Governing artifact:** `REPOSITORY_CONSTITUTION.md` §10 ¶1
-- **Version:** 1.0.0
+- **Version:** 1.0.1
 
 ---
 
@@ -94,4 +94,6 @@ Consequence a reader should draw: no separation claim may be made about these di
 
 This record is Level-4 documentation. It is revised by ordinary engineering change with the version incremented and the rationale for the change recorded. It requires no steward approval, no attestation, and no Registry entry, because it creates no requirement (§4 ¶3, §10 ¶1).
 
-It MUST NOT acquire normative phrasing. If a boundary here needs to bind, the correct move is to activate an architecture Domain standard under §4 ¶2, not to add MUSTs to this file — a Level-4 document imposing requirements would contradict §4 ¶3 and have no authority anyway.
+This record carries no normative phrasing, and normative phrasing added to it would carry no authority: a Level-4 document imposing requirements contradicts §4 ¶3. Where a boundary needs to bind, the mechanism is an architecture Domain standard activated under §4 ¶2, not added obligations in this file.
+
+Revision history: `1.0.1` restated this paragraph descriptively. The prior wording expressed it as a prohibition on the record itself, which introduced a requirement into informative text contrary to §11 ¶2 and asserted a requirement the record's own authority line disclaims. No boundary, dependency, weakness, or rationale in §§2–5 changed.

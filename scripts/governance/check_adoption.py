@@ -397,23 +397,81 @@ def check_identified_humans() -> Result:
 # --------------------------------------------------------------------------
 # A-10  Attestation field completeness  (section 13 paragraph 2)
 # --------------------------------------------------------------------------
-# Section 13 paragraph 2 fixes the required content of an Independent reviewer
-# attestation exactly. Each element below is one of its clauses. Presence of the
-# element is mechanically decidable; whether the named party is an identified
-# human who is not an author is not (section 4 paragraph 4) -> procedure P-A1.
-ATTESTATION_ELEMENTS = {
-    "reviewed revision": re.compile(r"revision (reviewed|attested)", re.I),
-    "non-authorship declaration": re.compile(r"not an author", re.I),
+# governance/attestations/ holds two document kinds, and section 13 gives them
+# different required content. Applying one element set to both is what made this
+# check unsatisfiable against the shipped templates, so the element set is
+# dispatched by declared document kind.
+#
+#   Independent reviewer attestation — section 13 paragraph 2 fixes its content
+#   exactly; each REVIEWER_ELEMENTS entry is one of its clauses.
+#
+#   Adopter attestation — section 13 paragraph 3 requires it but does not
+#   enumerate its content. ADOPTER_ELEMENTS therefore derives from what that
+#   paragraph makes the adopter responsible for (adoption of this Constitution,
+#   assignment of at least one steward) plus the attested revision and the
+#   conclusion, which are what make it reviewable at all. Notably it does NOT
+#   include the non-authorship declaration: the adopter IS the author, and
+#   requiring that declaration of them was the schema-dispatch defect.
+#
+# Presence of an element is mechanically decidable; whether the named party is
+# an identified human who is not an author is not (section 4 paragraph 4) ->
+# procedure P-A1.
+
+# "not an author" survives markdown emphasis: the shipped reviewer template
+# writes "I am **not** an author", which a bare literal does not match.
+_NOT_AN_AUTHOR = re.compile(r"not[\W_]{0,6}an[\W_]{1,6}author", re.I)
+_CONCLUSION = re.compile(r"^#+.*conclusion|conclusion\b", re.I | re.MULTILINE)
+_ATTESTED_REVISION = re.compile(r"revision (reviewed|attested)", re.I)
+
+REVIEWER_ELEMENTS = {
+    "reviewed revision": _ATTESTED_REVISION,
+    "non-authorship declaration": _NOT_AN_AUTHOR,
     "evidence production": re.compile(r"produce[d]? (any )?evidence", re.I),
     "conflict disclosure": re.compile(r"conflict", re.I),
     "review procedure": re.compile(r"review procedure|procedure actually used", re.I),
-    "conclusion": re.compile(r"^#+.*conclusion|conclusion\b", re.I | re.MULTILINE),
+    "conclusion": _CONCLUSION,
     "competence": re.compile(r"competence", re.I),
     "records examined": re.compile(r"records,? (artifacts,? )?(and )?checks examined|"
                                    r"artifacts? examined", re.I),
 }
 
+ADOPTER_ELEMENTS = {
+    "attested revision": _ATTESTED_REVISION,
+    "identified human": re.compile(r"identified human", re.I),
+    "adoption declaration": re.compile(r"\bI adopt\b", re.I),
+    "authorship disclosure": re.compile(r"author of this change", re.I),
+    "steward assignment": re.compile(r"constitutional steward", re.I),
+    "acknowledged limitations": re.compile(r"limitation", re.I),
+    "conclusion": _CONCLUSION,
+}
+
+ATTESTATION_SCHEMAS = {
+    "independent_reviewer": REVIEWER_ELEMENTS,
+    "adopter": ADOPTER_ELEMENTS,
+}
+
+# The kind is declared in the document, so dispatch does not depend on a
+# filename convention. The filename is a fallback only; a file matching neither
+# is reported NOT_VERIFIED, never passed (section 12 paragraph 1).
+KIND_MARKER = re.compile(r"<!--\s*attestation-kind:\s*(adopter|independent_reviewer)\s*-->",
+                         re.I)
+
 PLACEHOLDER = re.compile(r"\[COMPLETE[^\]]*\]")
+# A declaration left unticked is not a declaration. Matches markdown task-list
+# items only, not `[ ]` inside a table cell.
+UNTICKED = re.compile(r"^[ \t]*[-*][ \t]+\[[ \t]\]", re.MULTILINE)
+
+
+def attestation_kind(path: Path, text: str) -> str | None:
+    m = KIND_MARKER.search(text)
+    if m:
+        return m.group(1).lower()
+    name = path.name.upper()
+    if "ADOPTER" in name:
+        return "adopter"
+    if "REVIEWER" in name:
+        return "independent_reviewer"
+    return None
 
 
 def check_attestations() -> Result:
@@ -429,27 +487,51 @@ def check_attestations() -> Result:
                       "Expected before change D. This check reports PASS only against a "
                       "non-empty set of attestation files.")
     problems = []
+    unclassified = []
+    kinds = []
     for f in files:
         text = read(f)
         if text is None:
             problems.append(f"{rel(f)}: unreadable")
             continue
-        absent = [name for name, pat in ATTESTATION_ELEMENTS.items()
+        kind = attestation_kind(f, text)
+        if kind is None:
+            # Not assessed: no element set applies. Reporting PASS here would
+            # assess nothing and claim conformance (section 12 paragraph 1).
+            unclassified.append(
+                f"{rel(f)}: document kind not declared and not inferable from the "
+                f"filename; expected an `<!-- attestation-kind: adopter | "
+                f"independent_reviewer -->` marker")
+            continue
+        kinds.append(f"{rel(f)}={kind}")
+        absent = [name for name, pat in ATTESTATION_SCHEMAS[kind].items()
                   if not pat.search(text)]
         if absent:
-            problems.append(f"{rel(f)}: missing {', '.join(absent)}")
+            problems.append(f"{rel(f)} [{kind}]: missing {', '.join(absent)}")
         left = len(PLACEHOLDER.findall(text))
         if left:
-            problems.append(f"{rel(f)}: {left} unfilled [COMPLETE] placeholder(s)")
-    status = "FAIL" if problems else "PASS"
-    return Result("A-10", "S13p2", status,
-                  f"{len(files)} attestation file(s) checked for the eight section 13 "
-                  f"paragraph 2 elements and for unfilled placeholders",
-                  problems,
-                  "Lexical presence only. That an element appears does not make its "
+            problems.append(f"{rel(f)} [{kind}]: {left} unfilled [COMPLETE] placeholder(s)")
+        unticked = len(UNTICKED.findall(text))
+        if unticked:
+            problems.append(f"{rel(f)} [{kind}]: {unticked} unticked declaration "
+                            f"checkbox(es); an unticked box is not a declaration")
+
+    detail = (f"{len(files)} attestation file(s) checked against the element set for "
+              f"their declared kind ({'; '.join(kinds) if kinds else 'none classified'}), "
+              f"and for unfilled placeholders and unticked declarations")
+    limitation = ("Lexical presence only. That an element appears does not make its "
                   "content true, and whether the named party is an identified human who "
                   "is not an author is not mechanically decidable (section 4 paragraph "
-                  "4) — that is procedure P-A1.")
+                  "4) — that is procedure P-A1. The adopter element set is derived from "
+                  "section 13 paragraph 3, which does not enumerate content the way "
+                  "paragraph 2 does for the reviewer; it is a floor, not a closed list.")
+    if unclassified:
+        return Result("A-10", "S13p2", "NOT_VERIFIED",
+                      "one or more attestation files could not be matched to an element "
+                      "set, so their completeness was NOT assessed",
+                      unclassified + problems, limitation)
+    status = "FAIL" if problems else "PASS"
+    return Result("A-10", "S13p2", status, detail, problems, limitation)
 
 
 CHECKS = [

@@ -3,7 +3,7 @@
 - **Status:** Draft
 - **Scope:** Directory structure, boundary declarations, and dependency rules for the Project P1 repository
 - **Responsibility:** Define the repository layout, its boundaries, dependencies, and rationale, as the architecture record contemplated by Constitution §10
-- **Authority source:** None. This record has no normative authority. It is the *design* of an architecture record; it becomes one only on activation under G-12 per Constitution §4.
+- **Authority source:** None. This record has no normative authority. It is the *design* of an architecture record; it becomes one only on activation under DG-12 per Constitution §4.
 - **Governing artifact:** `REPOSITORY_CONSTITUTION.md` v1.2.0 §10 (Draft, not adopted)
 - **Version:** 0.1.0
 
@@ -17,11 +17,11 @@ Constitution §10 ¶1:
 
 Three consequences drive this design.
 
-**1.1 Layout is Level-4 material, and is revisable without amendment.** Nothing here binds the Constitution, and the Constitution imposes nothing here beyond §10's form requirements and §2's pin on the Registry path. Reorganisation is an engineering decision under G-12, not a constitutional event. This is deliberate: over a twenty-year horizon, layout will change many times and the Constitution should survive all of them untouched.
+**1.1 Layout is Level-4 material, and is revisable without amendment.** Nothing here binds the Constitution, and the Constitution imposes nothing here beyond §10's form requirements and §2's pin on the Registry path. Reorganisation is an engineering decision under DG-12, not a constitutional event. This is deliberate: over a twenty-year horizon, layout will change many times and the Constitution should survive all of them untouched.
 
-**1.2 A directory is not a boundary.** Because §10 explicitly refuses to let a directory name prove separation, this design pairs every directory with a machine-readable **boundary declaration** (`_BOUNDARY.yaml`) stating its owning standard, the object types it may contain, and the directories it may depend on. The declaration — not the name — is the boundary, and check `A-34` enforces it. A repository whose separation exists only in folder names satisfies §10 in appearance and fails it in substance.
+**1.2 A directory is not a boundary.** Because §10 explicitly refuses to let a directory name prove separation, this design pairs every directory with a machine-readable **boundary declaration** (`_BOUNDARY.yaml`) stating its owning standard, the object types it may contain, and the directories it may depend on. The declaration — not the name — is the boundary, and check `DA-34` enforces it. A repository whose separation exists only in folder names satisfies §10 in appearance and fails it in substance.
 
-**1.3 Two paths are constitutionally pinned.** `GOVERNANCE_REGISTRY.yaml` is pinned by §2 ("the Governance Registry is `GOVERNANCE_REGISTRY.yaml`"). `REPOSITORY_CONSTITUTION.md` is pinned by §14 and by its own Registry entry. Neither may be moved by this record; moving either requires a §13 amendment. This is defect D-3 in `00_ECOSYSTEM_OVERVIEW.md` §8 — a constitutional clause fixing layout inside a Constitution that declares layout non-constitutional. The design accepts the pin and documents the exception rather than proposing an amendment for cosmetic gain.
+**1.3 Two paths are constitutionally pinned.** `GOVERNANCE_REGISTRY.yaml` is pinned by §2 ("the Governance Registry is `GOVERNANCE_REGISTRY.yaml`"). `REPOSITORY_CONSTITUTION.md` is pinned by §14 and by its own Registry entry. Neither may be moved by this record; moving either requires a §13 amendment. This is defect DD-3 in `00_ECOSYSTEM_OVERVIEW.md` §8 — a constitutional clause fixing layout inside a Constitution that declares layout non-constitutional. The design accepts the pin and documents the exception rather than proposing an amendment for cosmetic gain.
 
 ---
 
@@ -46,7 +46,7 @@ P1/
 │
 ├── domain_standards/               ALL Level-2 Domain standards
 │   ├── ontology/                   O-1
-│   ├── governance/                 G-1 … G-13
+│   ├── governance/                 DG-1 … DG-13
 │   ├── scientific/                 S-1 … S-10
 │   └── engineering/                (empty; reserved for future engineering domains)
 │
@@ -54,9 +54,9 @@ P1/
 │   ├── design/                     this design set — Draft, no authority
 │   ├── authority/                  authority assignment records; steward roster
 │   ├── delegations/                delegation records (§4 five-element form)
-│   ├── conflicts/                  conflict records under G-10
-│   ├── containment/                emergency containment action records under G-9
-│   └── reviews/                    review records under G-4
+│   ├── conflicts/                  conflict records under DG-10
+│   ├── containment/                emergency containment action records under DG-9
+│   └── reviews/                    review records under DG-4
 │
 ├── ontology/                       the ontology CONTENT owned by O-1
 │   ├── TYPE_REGISTER.yaml          the governed object types
@@ -82,7 +82,7 @@ P1/
 ├── results/                        S-8 record store  — immutable from creation (§7)
 ├── interpretations/                S-9 record store
 ├── principles/                     S-10 record store
-├── decisions/                      G-13 record store
+├── decisions/                      DG-13 record store
 │
 ├── software/                       Level-4 implementation
 │   ├── p1_os/                      record tooling (schemas, frontmatter, identifiers)
@@ -93,14 +93,14 @@ P1/
 │   ├── specifications/             test specifications = criteria
 │   └── suites/                     executable validation
 │
-├── automation/                     the checks themselves, owned by G-11
+├── automation/                     the checks themselves, owned by DG-11
 │   ├── checks/                     one module per registered check A-xx
 │   ├── CHECK_REGISTER.yaml         scope, limitations, FP/FN disclosure per check
 │   └── ci/                         workflow definitions
 │
-├── audit/                          audit reports under G-6 (§3 ¶5: observation only)
+├── audit/                          audit reports under DG-6 (§3 ¶5: observation only)
 │
-├── custody/                        G-7: external artifact manifests, digests, retention schedules
+├── custody/                        DG-7: external artifact manifests, digests, retention schedules
 │
 └── archive/                        Legacy material (§14). No authority. Read-only.
     ├── legacy_normative/           artifacts that asserted authority pre-adoption
@@ -133,9 +133,9 @@ Columns: **Why it exists** · **Constitutional authority** · **Ownership** · *
 | `constitution/attestations/` | §13 makes attestations Repository evidence; they must be independently locatable and auditable | §13 ¶2 | Independent reviewer (author); steward (custody) | `governance/authority/` for identity | Append-only, immutable once signed. Never edited; a defective attestation is superseded by a new one. |
 | `constitution/adoption/` | The §13 initial-adoption event needs one atomic, inspectable dossier | §13 ¶3 | Adopter | attestations, registry | Written once. Retained permanently even if adoption fails. |
 | `constitution/superseded/` | §9 ¶5 "Prior versions MUST remain recoverable" | §9, §13 ¶4 | Steward | none | Write-once, read-only. |
-| `registry/schema/` | §4 makes the Registry determinative of authority; an unvalidated Registry is an unverified authority source | §4, §12 ¶3 | G-1 | ontology | Versioned with G-1. Breaking schema change requires G-1 amendment. |
-| `registry/jurisdictions/` | §4 requires rejection of overlapping jurisdictions — undecidable against prose, decidable against tuples | §4 ¶2 | G-1 | ontology | One file per standard, created in the standard's activation atomic change. |
-| `registry/transitions/` | §9 ¶3 requires a version-controlled eight-element transition record for every valid transition | §9 ¶3 | G-1 | authority records | Append-only, immutable. |
+| `registry/schema/` | §4 makes the Registry determinative of authority; an unvalidated Registry is an unverified authority source | §4, §12 ¶3 | DG-1 | ontology | Versioned with DG-1. Breaking schema change requires DG-1 amendment. |
+| `registry/jurisdictions/` | §4 requires rejection of overlapping jurisdictions — undecidable against prose, decidable against tuples | §4 ¶2 | DG-1 | ontology | One file per standard, created in the standard's activation atomic change. |
+| `registry/transitions/` | §9 ¶3 requires a version-controlled eight-element transition record for every valid transition | §9 ¶3 | DG-1 | authority records | Append-only, immutable. |
 
 **Note on `registry/` vs `GOVERNANCE_REGISTRY.yaml`.** §2 confines the Registry's responsibility to identifying artifacts, jurisdictions, and authority. Its schema, its validators, and its transition history therefore **cannot** live inside it without violating §2's sole-responsibility limit and §11's one-primary-responsibility rule. They live here.
 
@@ -144,7 +144,7 @@ Columns: **Why it exists** · **Constitutional authority** · **Ownership** · *
 | Directory | Why it exists | Constitutional authority | Ownership | Dependencies | Lifecycle |
 |---|---|---|---|---|---|
 | `domain_standards/ontology/` | O-1 must be locatable and activatable before any type-owning standard | §9 ¶1 | O-1 authority per Registry | none | Draft → Active → Superseded/Withdrawn (§9 ¶4). |
-| `domain_standards/governance/` | G-1…G-13; §2 permits Domain standards over a "governance … domain" | §2, §4, §9 | per-standard Registry authority | ontology | as above |
+| `domain_standards/governance/` | DG-1…DG-13; §2 permits Domain standards over a "governance … domain" | §2, §4, §9 | per-standard Registry authority | ontology | as above |
 | `domain_standards/scientific/` | S-1…S-10; one owner per scientific object type, per §9 | §2, §9 | per-standard Registry authority | ontology, peers by reference | as above |
 | `domain_standards/engineering/` | §2 permits engineering domains; kept empty so the extension point is visible rather than invented later | §2 | unassigned | ontology | Created on first engineering domain activation. |
 
@@ -155,11 +155,11 @@ Co-locating all Level-2 standards in one subtree is deliberate: it makes the §9
 | Directory | Why it exists | Constitutional authority | Ownership | Dependencies | Lifecycle |
 |---|---|---|---|---|---|
 | `governance/design/` | Design work must exist somewhere that cannot be mistaken for a standard | §4 ¶1 (no fields ⇒ no authority) | authors | none | Draft indefinitely. Superseded by activated standards; retained. |
-| `governance/authority/` | §4 requires every authority source to identify jurisdiction and permitted transitions; that must be a record, not folklore | §4 ¶1-2, §13 ¶3 | G-3 | registry | Assign → Active → Revoked/Expired/Succeeded. Never deleted. |
-| `governance/delegations/` | §4 requires delegations to state five elements; unrecorded delegation is void | §4 ¶4 | G-3 | authority | Same as authority records. |
-| `governance/conflicts/` | §4 ¶4 leaves conflicting same-level requirements "both nonconforming" until resolved — that interval needs a tracked object | §4 ¶4 | G-10 | authority | Open → Resolved/Escalated. Retained. |
-| `governance/containment/` | §12 ¶2 permits containment before record creation, requiring the record "immediately afterward" | §12 ¶2 | G-9 | none | Append-only. Each entry is subject to subsequent review by construction. |
-| `governance/reviews/` | §12 ¶1 requires traceable manual inspection procedures and findings | §12 ¶1, §12 ¶4 | G-4 | authority | Requested → Conducted → Attested/Rejected. Retained. |
+| `governance/authority/` | §4 requires every authority source to identify jurisdiction and permitted transitions; that must be a record, not folklore | §4 ¶1-2, §13 ¶3 | DG-3 | registry | Assign → Active → Revoked/Expired/Succeeded. Never deleted. |
+| `governance/delegations/` | §4 requires delegations to state five elements; unrecorded delegation is void | §4 ¶4 | DG-3 | authority | Same as authority records. |
+| `governance/conflicts/` | §4 ¶4 leaves conflicting same-level requirements "both nonconforming" until resolved — that interval needs a tracked object | §4 ¶4 | DG-10 | authority | Open → Resolved/Escalated. Retained. |
+| `governance/containment/` | §12 ¶2 permits containment before record creation, requiring the record "immediately afterward" | §12 ¶2 | DG-9 | none | Append-only. Each entry is subject to subsequent review by construction. |
+| `governance/reviews/` | §12 ¶1 requires traceable manual inspection procedures and findings | §12 ¶1, §12 ¶4 | DG-4 | authority | Requested → Conducted → Attested/Rejected. Retained. |
 
 ### 3.4 Ontology
 
@@ -190,22 +190,22 @@ All ten stores share a common specification:
 | `results/` | S-8 | **immutable from creation** | permanent | §7 ¶1: correction only via a new linked Result; history never rewritten |
 | `interpretations/` | S-9 | state-mutable | permanent | §3: must not alter a Result; §5 ¶5 requires null + strongest alternative |
 | `principles/` | S-10 | state-mutable | permanent | §5 ¶6: falsifiable, reversible, explicitly scoped |
-| `decisions/` | G-13 | append-only | permanent | §2: references but does not contain Evidence; §3: must not alter an Observation or Result |
+| `decisions/` | DG-13 | append-only | permanent | §2: references but does not contain Evidence; §3: must not alter an Observation or Result |
 
-`results/` deserves emphasis. §7 makes Results immutable from the creating transition and forbids history rewriting. That is a *filesystem and version-control* requirement, not merely a policy: it implies branch protection, a prohibition on force-push affecting this subtree, and check `A-14` comparing content digests of Active Results against history.
+`results/` deserves emphasis. §7 makes Results immutable from the creating transition and forbids history rewriting. That is a *filesystem and version-control* requirement, not merely a policy: it implies branch protection, a prohibition on force-push affecting this subtree, and check `DA-14` comparing content digests of Active Results against history.
 
 ### 3.6 Realization and assurance
 
 | Directory | Why it exists | Constitutional authority | Ownership | Dependencies | Lifecycle |
 |---|---|---|---|---|---|
-| `software/` | §3 ¶3 makes implementation a distinct responsibility; §10 requires declared Material state | §3, §10 | G-12 | ontology, custody | Ordinary engineering lifecycle under G-8. |
-| `validation/` | §10 ¶4: "Implementation and validation MUST be independently changeable" — a shared directory makes that structurally impossible | §3 ¶4, §10 ¶4 | G-12 + G-5 | software (by interface only) | Criteria change only in the responsible Normative artifact (§10 ¶4). |
-| `automation/` | §12 ¶3: CI/tests/schemas SHOULD enforce every mechanically decidable requirement; §12 ¶4 limits a check's evidentiary reach to what it assessed | §12 | G-11 | ontology, registry | Check: Proposed → Active → Advisory → Retired. A broken check is Advisory, never silently absent. |
-| `audit/` | §3 ¶5 and §11: audit reports observe conformance at one revision and may not create the requirements they audit | §3 ¶5, §11 | G-6 | everything, read-only | Append-only, immutable, revision-stamped. |
-| `custody/` | §6 ¶2 and §10 ¶5: material excluded from version control still needs a version-controlled manifest | §6, §10 ¶5 | G-7 | none | Append-only manifests; retention schedule per artifact class. |
-| `archive/` | §14: artifacts not activated at adoption become Legacy; §4 ¶5 requires Legacy content to stay distinguishable from Active requirements | §4 ¶5, §14 | G-2 | none | Write-once. Content never edited; re-activation requires satisfying §4 afresh. |
+| `software/` | §3 ¶3 makes implementation a distinct responsibility; §10 requires declared Material state | §3, §10 | DG-12 | ontology, custody | Ordinary engineering lifecycle under DG-8. |
+| `validation/` | §10 ¶4: "Implementation and validation MUST be independently changeable" — a shared directory makes that structurally impossible | §3 ¶4, §10 ¶4 | DG-12 + DG-5 | software (by interface only) | Criteria change only in the responsible Normative artifact (§10 ¶4). |
+| `automation/` | §12 ¶3: CI/tests/schemas SHOULD enforce every mechanically decidable requirement; §12 ¶4 limits a check's evidentiary reach to what it assessed | §12 | DG-11 | ontology, registry | Check: Proposed → Active → Advisory → Retired. A broken check is Advisory, never silently absent. |
+| `audit/` | §3 ¶5 and §11: audit reports observe conformance at one revision and may not create the requirements they audit | §3 ¶5, §11 | DG-6 | everything, read-only | Append-only, immutable, revision-stamped. |
+| `custody/` | §6 ¶2 and §10 ¶5: material excluded from version control still needs a version-controlled manifest | §6, §10 ¶5 | DG-7 | none | Append-only manifests; retention schedule per artifact class. |
+| `archive/` | §14: artifacts not activated at adoption become Legacy; §4 ¶5 requires Legacy content to stay distinguishable from Active requirements | §4 ¶5, §14 | DG-2 | none | Write-once. Content never edited; re-activation requires satisfying §4 afresh. |
 
-The separation of `software/` from `validation/` is the structural expression of §10 ¶4 and of §3's rule that "implementation MUST NOT validate itself merely by executing successfully." Note also §10 ¶4's final sentence: shared code between the two is permitted **only** where it does not make the assessor depend on the behaviour being assessed — a rule that a directory split alone does not enforce, and which therefore also appears as check `A-35`.
+The separation of `software/` from `validation/` is the structural expression of §10 ¶4 and of §3's rule that "implementation MUST NOT validate itself merely by executing successfully." Note also §10 ¶4's final sentence: shared code between the two is permitted **only** where it does not make the assessor depend on the behaviour being assessed — a rule that a directory split alone does not enforce, and which therefore also appears as check `DA-35`.
 
 ---
 
@@ -222,7 +222,7 @@ Directory dependencies form a DAG. The permitted edges, in one statement:
 7. `archive/` is a sink: nothing may depend on it. A dependency on archived material is a nonconformance, since Legacy artifacts have no authority (§4 ¶5).
 8. `domain_standards/` MUST NOT depend on any record store. A standard that depends on the records it governs is circular and unfalsifiable.
 
-Rules 3, 7, and 8 are the load-bearing ones and are enforced by check `A-34`.
+Rules 3, 7, and 8 are the load-bearing ones and are enforced by check `DA-34`.
 
 ---
 
@@ -233,7 +233,7 @@ Rules 3, 7, and 8 are the load-bearing ones and are enforced by check `A-34`.
 **5.1 Flat per-type record stores rather than a single `records/` root.**
 *Chosen:* ten top-level stores. *Rejected:* `records/{type}/`.
 Rationale: §9's "exactly one Active Domain standard per object type" is the invariant most likely to erode over twenty years. Top-level stores make each type's owner visible without opening a file, keep boundary declarations at depth 1, and make ownership violations obvious in a diff. The cost is a wide repository root. A nested `records/` root is tidier but hides the ownership map one level down and invites a single `records/` boundary declaration to stand in for ten distinct ones — precisely the "directory name as proof of separation" failure §10 warns against.
-*Reversal cost:* low. This is a Level-4 decision; a future G-12 revision may nest the stores provided the boundary declarations move with them.
+*Reversal cost:* low. This is a Level-4 decision; a future DG-12 revision may nest the stores provided the boundary declarations move with them.
 
 **5.2 All Level-2 standards co-located, separated from the records they govern.**
 *Chosen:* `domain_standards/{ontology,governance,scientific,engineering}/`. *Rejected:* placing each standard beside its store (e.g. `results/STANDARD.md`).

@@ -32,9 +32,12 @@ Outside this folder, produced for the adoption change:
 | `governance/AR-1_REPOSITORY_ARCHITECTURE_RECORD.md` | Descriptive §10 ¶1 record, Level 4, no Registry entry |
 | `governance/LEGACY_INDEX.md` | Generated inventory: 7 Tier-1, 34 Tier-2, 11 Tier-3 directory rules |
 | `governance/checks/RUN_2026-07-25.md` | Recorded check output, nine-check set, superseded for currency |
-| `governance/checks/RUN_2026-07-25_B.md` | Recorded check output at the current ten-check set |
+| `governance/checks/RUN_2026-07-25_B.md` | Recorded check output at the ten-check set, before the final engineering sprint |
+| `governance/checks/RUN_2026-07-25_C.md` | Recorded check output after the final engineering sprint, with test-suite results and the `AUT-5` disclosure |
 | `scripts/governance/check_adoption.py` | Ten advisory checks, honest about limits |
 | `scripts/governance/generate_legacy_index.py` | Regenerates the index |
+| `tests/governance/` | Four guards that keep the instruments honest: A-10 schema dispatch and fixtures, RS-1 §9 mapping completeness, Registry authority coverage, identifier-namespace segregation |
+| `audits/AF_RESOLUTION_DOSSIER.md` | Engineering decision record for the disputed audit findings, including the routes not taken |
 
 ## 2. Shape of the answer
 
@@ -47,10 +50,10 @@ Latest run: `PASS=5, FINDINGS=3, FAIL=1, NOT_VERIFIED=1`; blocking `A-07`, `A-10
 | Item | State | Owner |
 |---|---|---|
 | A-07 credential in history | **FAIL** — `gcp-key.json.json` added in 9 commits | operator: rotate at the provider. Deletion does not remediate |
-| A-10 attestation completeness | **NOT_VERIFIED** — no attestation exists yet, so the criterion is unassessed, not passed (§12 ¶1) | resolves at change D; blocked behind the second human |
+| A-10 attestation completeness | **NOT_VERIFIED** — no attestation exists yet, so the criterion is unassessed, not passed (§12 ¶1). The check now dispatches by declared document kind and is fixture-tested to pass against both completed templates | resolves at change D; blocked behind the second human |
 | Second identified human | **absent** — every commit by one identity | human. Blocks D and E entirely |
 | A-06 banners | 42 files listed, 0 applied; 0 unresolvable entries | engineering, applied in revision D so the banner text is true when committed |
-| A-05 lexeme findings | 665 matches in 102 live files, after `authoritative` and bare `absolute` were added to the pattern | disposition by Tier assignment plus manual `P-L1` (`VER-4`) |
+| A-05 lexeme findings | 670 matches in 104 live files, after `authoritative` and bare `absolute` were added to the pattern | disposition by Tier assignment plus manual `P-L1` (`VER-4`) |
 | A-09 identity quality | git identity is `purushottam@local`, non-routable | human: §2's "identified human" needs more than a local handle |
 
 Everything else on the engineering path is done or specified. The remaining engineering work is: apply banners and Tier-1 moves in D, complete the dossier, reconcile `p1_os` to RS-1's six owned types, and finish RS-1's §11 checklist.

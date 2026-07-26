@@ -71,9 +71,13 @@ not_owned:
 
 **2.2 Authorization.** Every transition in §1 of an owned type **other than `decision`** MUST be authorized by a `decision` approved by the Registry-listed authority permitted for that transition (§4 ¶5). Authoring a record is not authorizing its transition: the actor who writes an Observation or opens an Unknown supplies content, and the Registry-listed authority supplies the authorization. A tool MAY apply an already-authorized transition; it MUST NOT supply the authority (§4 ¶4).
 
-**2.2.1 The `decision` lifecycle is exempt from §2.2, and must be.** §1 owns `{decision, none → proposed}`. Requiring a prior `decision` to authorize it does not terminate, so under an unexempted §2.2 no first `decision` is creatable and therefore no transition of any type is ever authorizable.
+**2.2.1 The `decision` lifecycle is exempt from §2.2's *prior-decision* requirement, and must be.** §1 owns `{decision, none → proposed}`. Requiring a prior `decision` to authorize it does not terminate, so under an unexempted §2.2 no first `decision` is creatable and therefore no transition of any type is ever authorizable.
 
-The exemption is available without amendment because a `decision` is a **governance** record under §2 and §3 ¶2, not a scientific record. §4 ¶5 governs *scientific* transitions; the transitions of the decision lifecycle itself are governance transitions and fall outside it. Each is instead authorized directly by the authority named in §7, which is Registry-listed for that transition. Every transition RS-1 owns therefore has a named authority, as §9 ¶1 requires, and none depends on itself.
+The exemption is available without amendment because a `decision` is a **governance** record under §2 and §3 ¶2, not a scientific record. §4 ¶5 governs *scientific* transitions, and it is §4 ¶5 that requires an approving Decision; the transitions of the decision lifecycle itself are governance transitions and fall outside it.
+
+**What the exemption does not do.** It does not exempt the decision lifecycle from §4 ¶1. Every one of the five `decision` transitions in §1 is still authorized only by an authority that is listed in `GOVERNANCE_REGISTRY.yaml` with that exact transition tuple among its permitted transitions. RS-1 does not name an authority of its own for any transition, because §2 reserves authority assignment to the Registry and §4 ¶3 bars RS-1 from enlarging who may authorize. The difference between a `decision` transition and every other transition RS-1 owns is therefore exactly one thing: a `decision` transition is recorded **directly** by the permitted Registry-listed authority, with no prior approving `decision` in front of it. Every transition RS-1 owns has a Registry-listed authority, as §4 ¶1 and §9 ¶1 require, and none depends on itself.
+
+**Authoring is not authorizing, here as everywhere.** Any contributor MAY author a proposed `decision` record at any time, without approval and without delay; the Registry-listed authority records the `none → proposed` transition. This is the same authorship/authority separation applied to `observation`, `result`, and `unknown` (§4, §5, §6.3), and it is why the exemption creates no route by which an actor authorizes their own proposal. The approval-throughput consequence is real and is recorded as an activation `unknown` under §6.2 and §6.3 rather than engineered away, because reducing it requires a second Registry-listed authority or a §4 ¶4 delegation — both Registry changes, not RS-1's to make (§4 ¶3).
 
 **2.2.2 Coupled transitions.** A single `decision` MAY authorize one transition or one atomic set of explicitly coupled transitions (§11). This is how a governed execution is authorized without one approval per measurement; the coupled set MUST be enumerated in the `decision`, because §11 permits coupling only where it is explicit.
 
@@ -83,7 +87,9 @@ The exemption is available without amendment because a `decision` is a **governa
 
 **2.5 Retention.** Every record of every owned type MUST be retained permanently. A record MUST NOT be physically deleted because it is rejected, superseded, inconvenient, or negative (§8 ¶2).
 
-**2.6 Reversal.** Every state change MUST be reversible by a later authorized `decision`, and reversal MUST preserve the previous state, rationale, supporting records, and transition history (§8 ¶2).
+**2.6 Reversal.** Every **scientific** state change MUST be reversible by a later authorized `decision`, and reversal MUST preserve the previous state, rationale, supporting records, and transition history (§8 ¶2). The scope word is taken from §8 ¶2 unchanged; RS-1 does not extend it, because a wider claim than the Constitution's would be RS-1 enlarging a higher-level requirement (§4 ¶3) and would collide with the append-only and immutability rules RS-1 states elsewhere.
+
+**2.6.1 What reversal is.** Reversal is effected by a later authorized `decision` that supersedes, withdraws, or otherwise annuls the *effect* of the prior transition while retaining every prior record. It is never effected by editing or deleting a record (§2.5, §5, §7 ¶1). So "reversible" does not mean "the prior state can be re-entered as though the transition had not occurred": for an immutable object it means the transition's consequences can be lawfully undone going forward, with the history preserved. Where a type's only reversal route is supersession, that route is named in the type's `Reversal and correction` row, and naming it is how §8 ¶2 is satisfied rather than avoided.
 
 **2.7 Digest algorithm.** Where an artifact is identified by digest, the algorithm is **SHA-256**, algorithm register version **1**, discharging §6 ¶2. A protocol MAY register a stronger algorithm for its own execution; deprecating an algorithm MUST NOT invalidate existing records, and re-digesting MUST create a new linked record rather than editing the prior one.
 
@@ -106,12 +112,12 @@ The exemption is available without amendment because a `decision` is a **governa
 | Entry criteria — `registered` | All eleven §5 ¶3 elements present and non-empty: sampling frame; sample size or stopping rule; exclusions; assignment; controls; primary outcomes; analysis population; statistical or logical decision rule; multiplicity handling; model selection procedure; randomness plan. Plus: validity criteria determining Valid vs Invalid Result (§2, §7 ¶4); completion criteria (§7 ¶2); the recording authority for Results (§7 ¶2); digest algorithm reference (§2.7). A placeholder value is an absence and fails closed. |
 | Entry criteria — `executing` | State is `registered`; registration time strictly precedes the earliest execution evidence |
 | Entry criteria — `closed` | The protocol's own completion criteria are met, or the execution is abandoned with disposition and rationale recorded (§7 ¶2) |
-| Entry criteria — `withdrawn` | State is `draft`, no governed execution has begun under it, and a statement of why no registration will occur is recorded (§9 ¶4). A `registered` protocol MUST NOT be withdrawn: registration is not reversible, and correction occurs by superseding registration instead |
+| Entry criteria — `withdrawn` | State is `draft`, no governed execution has begun under it, and a statement of why no registration will occur is recorded (§9 ¶4). A `registered` protocol MUST NOT be withdrawn: registration is not undone, and its §8 ¶2 reversal route is supersession instead (§2.6.1) |
 | Exit criteria | `draft` exits to `registered` or `withdrawn`. **`registered` is terminal for content:** the protocol MUST NOT be edited after registration. A change produces a **new** protocol linked to the prior one, and the affected execution MUST be labelled exploratory (§5 ¶3). `withdrawn` and `closed` are terminal. |
 | Permitted transitions | `draft → registered`, `draft → withdrawn`, `registered → executing`, `executing → closed` |
 | Authority | The Registry-listed authority permitted for that transition, via an approved `decision` (§4 ¶5, §2.2) |
 | Required transition evidence | §2.1 record, plus: for `→ registered`, the completeness attestation of the eleven elements and the registration timestamp with precision; for `→ executing`, the identity of the execution; for `→ closed`, the completion or abandonment determination and its rationale |
-| Reversal and correction | Registration is **not reversible**: §2 defines a Registered protocol by registration preceding execution, and reversal would falsify that. Correction occurs only by registering a superseding protocol that identifies the defect. The superseded protocol is retained. |
+| Reversal and correction | Registration is not **undone**: §2 defines a Registered protocol by registration preceding execution, so re-entering the `draft` state would falsify the object's own definition. §8 ¶2's reversal route for this transition is therefore **supersession by a later authorized `decision`** (§2.6.1): a superseding protocol is registered identifying the defect, the superseded protocol is retained with its status, and the previous state, rationale, supporting records, and transition history are preserved. Correction occurs by no other route. |
 | Retention | Permanent |
 
 **3.1 Pre-access requirement.** Before any author of, contributor to, or person communicating analysis-relevant information to a confirmatory analysis accesses an unblinded Observation or any data revealing condition or outcome, the protocol MUST be `registered` (§5 ¶3). Any element selected or changed after such access MUST be labelled exploratory and MUST NOT be represented as confirmatory Evidence for that execution.
@@ -216,7 +222,7 @@ Owned by RS-1 under the explicit permission of §9 ¶2 ("MAY govern subordinate 
 | Entry criteria — `withdrawn` | State is `proposed`, the proposal is retracted before approval, and the rationale for retraction is recorded. The record is retained (§2.5); withdrawal is not deletion |
 | Exit criteria | `proposed` exits to `approved` or `withdrawn`; `approved` exits to `executed`; `executed` exits to `reversed`. `reversed` and `withdrawn` are terminal |
 | Permitted transitions | `none → proposed`, `proposed → approved`, `proposed → withdrawn`, `approved → executed`, `executed → reversed` |
-| Authority | Authoring (`none → proposed`) and retraction (`proposed → withdrawn`): any contributor, recorded without a prior `decision` per §2.2.1. Approval, execution, and reversal: the Registry-listed authority permitted for that transition. Automation MAY apply an approved decision; it MUST NOT approve one (§4 ¶4). |
+| Authority | For **every** one of the five transitions: the Registry-listed authority whose `permitted_transitions` include that exact tuple (§4 ¶1, §4 ¶5). `none → proposed` and `proposed → withdrawn` are recorded **directly** by that authority, with no prior approving `decision`, per §2.2.1; `proposed → approved`, `approved → executed`, and `executed → reversed` are likewise recorded by that authority. Any contributor MAY **author** a proposed `decision` record; authorship is not authority (§4 ¶4). Automation MAY apply an approved decision; it MUST NOT approve one (§4 ¶4). |
 | Required transition evidence | §2.1 record, plus the approving authority's Registry-listed identity and the transition tuple approved |
 | Reversal and correction | By a later `decision`; never by edit or deletion |
 | Retention | Permanent, append-only |
@@ -225,7 +231,9 @@ Owned by RS-1 under the explicit permission of §9 ¶2 ("MAY govern subordinate 
 
 **7.2 Fail closed.** A `decision` whose approving authority is not Registry-listed and permitted for that transition does not authorize it, and the dependent transition fails closed (§4 ¶2, §9 ¶3). This is checked against `GOVERNANCE_REGISTRY.yaml` → `authority_assignments`, which MUST list the transition tuple among that authority's permitted transitions; §4 ¶1 voids an authority whose permitted transitions are absent or inconsistent.
 
-**7.3 Self-authorization is barred, self-reference is not.** A `decision` MUST NOT authorize its own approval, and no `decision` is required to author another (§2.2.1). The distinction matters: exempting the decision lifecycle removes an infinite regress, it does not create a route by which an actor approves their own authorization. Approval remains with the Registry-listed authority in every case, and §4 ¶4 bars automation from supplying it.
+**7.2.1 How the check applies to the decision lifecycle.** For a transition of an owned type other than `decision`, two things are verified: an approving `decision` exists, and its approver is Registry-listed and permitted for the tuple. For a transition **of** the `decision` type there is no prior approving `decision` to locate (§2.2.1), and its absence is not a defect; only the second thing is verified — that the authority recorded in the transition record is Registry-listed and permitted for that exact tuple. A verification procedure that demanded an approving decision for a `decision` transition would fail closed every `decision` this standard permits, and would defeat §2.2.1 at the point of verification rather than in its text. `P-9` is written to this scope.
+
+**7.3 Self-authorization is barred, self-reference is not.** A `decision` MUST NOT authorize its own approval, and no prior `decision` is required to record a transition of the decision lifecycle itself (§2.2.1). The distinction matters: exempting the decision lifecycle from the prior-decision requirement removes an infinite regress, it does not create a route by which an actor approves their own authorization. Approval remains with the Registry-listed authority permitted for the tuple in every case, including `none → proposed`, and §4 ¶4 bars automation from supplying it.
 
 ---
 
@@ -261,35 +269,59 @@ Owned by RS-1 under the explicit permission of §9 ¶2 ("MAY govern subordinate 
 
 §12 ¶1 requires every Affected MUST to trace to a check, a named manual procedure, or a testable non-applicability statement.
 
-**Namespace.** Automated checks are `A-xx`, implemented in `scripts/governance/check_adoption.py`. That is the only check namespace in this repository; no `C-xx` identifier is in use. A check marked **[NOT IMPLEMENTED]** does not exist: under §12 ¶1 it MUST be reported as not verified and MUST NOT be cited as passed, and no requirement below rests on it alone. Manual procedures are `P-xx`, defined in §9.1 within this document so that RS-1 does not depend on a Draft Level-4 record for its own verification (§4 ¶3).
+**Namespace.** Automated checks are `A-xx`, implemented in `scripts/governance/check_adoption.py`. Within this repository's verification vocabulary, a **zero-padded** `A-xx` denotes exactly one thing: a check in that file, either implemented (`A-01`…`A-10`) or specified there and marked unbuilt (`A-11`…`A-15`, which do not yet appear in the file at all). Two neighbouring registers share the letter and are distinguished by padding rather than by mechanism, which is a convention and is stated as one: the **unpadded** `A-1`…`A-7` denote proposed amendments in `audits/CONSTITUTION_v1.2.0_AMENDMENT_RECORD.md` and are always cited with a form of the word "amend"; and the Draft design register in `governance/design/**` uses the segregated `DA-xx` namespace so that no identifier carries two meanings (§11 ¶3). No `C-xx` identifier is in use. A check marked **[NOT IMPLEMENTED]** does not exist: under §12 ¶1 it MUST be reported as not verified and MUST NOT be cited as passed, and no requirement below rests on it alone. Manual procedures are `P-xx`, defined in §9.1 within this document so that RS-1 does not depend on a Draft Level-4 record for its own verification (§4 ¶3).
 
 | Requirement | Mechanically decidable | Verified by |
 |---|---|---|
+| §1 `not_owned` — no record of a type no Active standard owns may be created | yes | `P-12`, which compares each record's `object_type` against §1's `owned_object_types` |
 | §2.1 eight-element transition record | yes | `P-8` — decidable, but no implemented check assesses it |
-| §2.2 authorization by a permitted Registry-listed authority | yes | `P-9` — resolves the approving authority and the transition tuple against the Registry |
+| §2.2 authorization by a permitted Registry-listed authority | yes | `P-9` — resolves the approving authority and the transition tuple against the Registry, dispatching on object type per §7.2.1 |
+| §2.2.1 a `decision` transition needs no prior approving `decision`, but still needs a permitted Registry-listed authority | yes | `P-9`, `decision` branch — confirms the recorded authority is Registry-listed for the tuple and does **not** require an approving decision |
+| §2.2.2 a coupled set is enumerated in full in the `decision` | yes | `P-5` |
+| §2.3 no tool infers maturity, acceptance, or rejection | no | `P-13` |
+| §2.4 recorded time is timezone-qualified, with precision where material | yes | `P-12` |
 | §2.5 retention / no deletion | yes | `P-10` |
+| §2.6, §2.6.1 reversal by a later authorized `decision`, preserving prior state and history; supersession where that is the named route | yes | `P-10` for the no-edit/no-delete property; `P-5` for the authorizing `decision` |
+| §2.7 deprecating a digest algorithm does not invalidate existing records; re-digesting creates a new linked record | yes | `P-10` |
 | §2.8 prohibited labels | yes | `A-05` |
+| §2.9 test success not reported as scientific success | no | `P-3` |
+| §2.10 every record carries the eleven common fields | yes | `P-12` |
 | §3 eleven §5 ¶3 elements present, no placeholders | yes | `A-11` **[NOT IMPLEMENTED]** |
 | §3 registration precedes execution | partially | `P-11`, advisory without an external anchor (§3.2) |
 | §3 protocol immutable after registration | yes | `P-10`, applied to registered protocols |
+| §3.1 protocol is `registered` before unblinded access; any element selected or changed after access is labelled exploratory | partially | `P-11` for the ordering, advisory without an external anchor; `P-14` for the labelling |
 | §4 Observation contains no inference | no | `P-1` |
+| §4.1 an Observation states no Claim and substitutes for no other object kind | no | `P-1` |
+| §4 Observation is append-only; not edited after recording | yes | `P-10` |
+| §4.2 blinding status recorded; unblinding event recorded as it occurs | yes | `P-12` |
+| §4.3 Source identified within the Observation; a citation is not represented as Evidence | partially | `P-12` for the field; `P-14` for the representation |
 | §5 Result immutability and digest match | yes | `P-10` |
 | §5.1 validity criteria registered before execution | yes | `A-12` **[NOT IMPLEMENTED]** — compares cited criteria against the protocol at registration |
 | §5.2 Negative Results retained | partially | `A-13` **[NOT IMPLEMENTED]**, advisory: compares execution evidence to recorded Results; `P-2` |
-| §2.9 test success not reported as scientific success | no | `P-3` |
+| §5.3 an incomplete execution is recorded as a `result` with disposition `abandoned` | yes | `P-12`; gaps found by `P-2` |
+| §5.4 working output MUST NOT be cited as Evidence | no | `P-14` |
+| §6 resolving an Unknown does not remove the record, the kind, or its history; deletion is prohibited absolutely | yes | `P-10` |
 | §6.1 mandatory Unknown intake triggers | no | `P-4` |
 | §6.3 authoring an Unknown is not gated by authority | no | `P-4` |
+| §7 automation MAY apply an approved `decision` but MUST NOT approve one | partially | `P-13` for tool behaviour; `P-9` resolves the approving authority to an identified human |
 | §7.1 Decision embeds no cited content | partially | `A-14` **[NOT IMPLEMENTED]**; `P-5` |
+| §7.2, §7.2.1 an authority not Registry-listed and permitted fails the transition closed, assessed by object-type branch | yes | `P-9` |
+| §7.3 no `decision` authorizes its own approval | yes | `P-9`, which records the authority resolved for each transition and whether it is the proposer |
 | §8 Interpretation null + alternative + discriminator present | yes | `A-15` **[NOT IMPLEMENTED]** |
 | §8 alternative is genuinely the strongest; scope is honest | no | `P-6` |
 | §8.1 no generalization beyond narrowest input limitation | no | `P-6` |
 | §8.2 prohibited support forms | partially | `A-05` lexical; `P-7` |
+| §8.3 reliance on a superseded Result is disclosed | yes | `P-14` |
+| §8.4 no Interpretation asserts a proposition as a Claim while `claim` is unowned | no | `P-14` |
+| §10.1 RS-1 does not authorize its own activation and requires no other standard for its own types | yes | `P-15` |
+| §10.3 an amendment does not retroactively alter any prior record; `rs1_version` retained | yes | `P-15` |
+| §10.4 adding an object type carries the nine §9 ¶1 elements, sole-ownership confirmation, and a verification mapping | yes | `P-15` |
 
 Five checks — `A-11` … `A-15` — are specified and unbuilt. Building them is RS-1's §11 pre-activation item; until then each of their rows rests on the paired manual procedure or is reported not verified. No row cites a check that does not exist without saying so.
 
 ### 9.1 Named manual review procedures (§12 ¶4)
 
-Each states its question and its method; a finding is recorded per review. `P-8` … `P-11` cover the requirements that are mechanically decidable but have no implemented check.
+Each states its question and its method; a finding is recorded per review. `P-8` … `P-12` cover the requirements that are mechanically decidable but have no implemented check; `P-15` binds only on an amendment to RS-1 itself.
 
 | Id | Question | Method |
 |---|---|---|
@@ -301,9 +333,13 @@ Each states its question and its method; a finding is recorded per review. `P-8`
 | `P-6` | Is the alternative genuinely strongest, and the scope honest? | Independently search for a stronger alternative; test the null's non-triviality; recompute the narrowest material limitation of the inputs and compare to the declared scope |
 | `P-7` | Does support rest on analogy, confidence, performance, or citation alone? | Trace each supporting element to a Result; reject those resting only on §5 ¶7's prohibited forms |
 | `P-8` | Does each transition record carry all eight §9 ¶3 elements? | For every transition record in the change, confirm object, prior state, new state, criteria applied, evidence considered, authority, time, and rationale are each present and non-empty. A placeholder is an absence and fails the transition closed |
-| `P-9` | Was each transition authorized by an authority permitted for it? | For each transition record, locate the approving `decision`; confirm the approver appears in `GOVERNANCE_REGISTRY.yaml` → `authority_assignments` and that the exact transition tuple appears among that authority's permitted transitions (§4 ¶1, §7.2) |
+| `P-9` | Was each transition authorized by an authority permitted for it? | Dispatch on the record's object type. **For a type other than `decision`:** locate the approving `decision`; confirm the approver appears in `GOVERNANCE_REGISTRY.yaml` → `authority_assignments` and that the exact transition tuple appears among that authority's permitted transitions (§4 ¶1, §7.2). **For a `decision` transition:** no prior approving `decision` exists and none is required (§2.2.1); confirm instead that the authority named in the transition record appears in `authority_assignments` with that exact tuple among its permitted transitions. In both branches, an authority not so listed fails the transition closed. Record which branch was applied for each transition assessed (§7.2.1) |
 | `P-10` | Was any governed record deleted, edited, or replaced in place? | Diff the change against the prior revision over the record paths; confirm no record file is deleted, and that no `result`, `observation`, or registered protocol is modified rather than superseded by a new linked record (§2.5, §5, §7 ¶1) |
 | `P-11` | Did registration precede execution? | Compare the registration transition record's time against the earliest execution evidence. Advisory only: commit timestamps are author-controlled and §5 ¶3's trigger is unblinded access, which may leave no trace (§3.2). Without an external anchor, record the residual exposure rather than reporting the ordering as verified |
+| `P-12` | Does each record carry every field its type requires, non-empty and non-placeholder? | For each record in the change: confirm its `object_type` is one of §1's `owned_object_types` — a record of an unowned type MUST NOT be created and fails closed (§1, §9 ¶1); confirm the eleven §2.10 common fields; confirm every entry-criterion field for the state being entered (§3–§8 tables); confirm each recorded time is timezone-qualified and states its precision where precision can affect the determination (§2.4); confirm `blinding_status` on every Observation and a recorded unblinding event where one occurred (§4.2); confirm the Source is identified where the Observation derives from one (§4.3); confirm an incomplete execution is recorded as a `result` with disposition `abandoned` and its rationale (§5.3). A placeholder is an absence and fails the transition closed |
+| `P-13` | Did any tool or record infer maturity, acceptance, or rejection? | Read every automated output cited in the change and every record citing one. Confirm no state, status, or acceptance is derived from evidence count, model confidence, test success, or elapsed time (§2.3). Check the check scripts themselves for verdicts computed from counts rather than from criteria, and confirm no check emits approval language (§4 ¶4) |
+| `P-14` | Does any record overstate what RS-1 v0.1 permits it to say? | Confirm no record cites working output as Evidence (§5.4); no citation alone is represented as Evidence (§4.3); every record relying on a superseded or corrected Result discloses that status (§8.3); and no Interpretation asserts a proposition as supported or opposed **as a Claim** while no Active standard owns `claim` (§8.4). Findings are expressed as scoped inferences over identified Results |
+| `P-15` | Is this amendment to RS-1 lawful under its own §10? | Confirm RS-1 does not authorize its own activation and requires no other Domain standard for a type it owns (§10.1); confirm the MAJOR/MINOR/PATCH classification matches the change (§10.2); confirm no prior record's meaning or reported outcome is altered and that each retains its `rs1_version` (§10.3); for an added object type, confirm the nine §9 ¶1 elements, that no other Active standard owns it, a verification mapping for each new MUST, removal from `not_owned`, one steward approval, and one Independent reviewer attestation in one atomic change (§10.4) |
 
 ---
 
@@ -321,12 +357,20 @@ Each states its question and its method; a finding is recorded per review. `P-8`
 
 ## 11. Pre-activation checklist
 
-- [ ] §3.2 external timestamp anchor named, or the exposure recorded as a standing `unknown`
-- [ ] §6.2 activation Unknowns opened, including the §6.3 throughput exposure
-- [ ] Checks `A-11` … `A-15` built
-- [ ] Procedures `P-1` … `P-11` written to be executable by a reviewer who did not author the change
-- [ ] Record templates for six types, including the §2.1 transition record
-- [ ] Registry entry drafted with the §1 jurisdiction tuples — all **21**, including the three `→ withdrawn` exits
-- [ ] The Registry lists an authority whose permitted transitions cover every transition in §1; §4 ¶1 voids an authority whose permitted transitions are absent or inconsistent
-- [ ] Every MUST in this document appears in the §9 mapping
-- [ ] Constitution is Active and a steward is assigned — RS-1 cannot activate before adoption
+Nine items. `State` is measured against this revision, not intended. An item is
+ticked only where the stated evidence exists **in this repository now**; an item
+whose object is drafted but not yet live is recorded as partial with what
+remains, because a tick on a Draft checklist that a reviewer cannot verify is a
+false completion claim (§12 ¶2).
+
+| # | Item | State | Evidence at this revision |
+|---|---|---|---|
+| 1 | §3.2 external timestamp anchor named, or the exposure recorded as a standing `unknown` | [ ] open | `SEC-5` in `05_RELEASE_CANDIDATE_CHECKLIST.md`; anchoring cannot be retroactive, so this precedes the first governed execution |
+| 2 | §6.2 activation Unknowns opened, including the §6.3 throughput exposure | [ ] open | drafted as `U-a`…`U-f` in `02_PREADOPTION_VERIFICATION.md` §6; no record file exists under `p1/records/unknowns/`, and none may exist before RS-1 is Active (§9 ¶1) |
+| 3 | Checks `A-11` … `A-15` built | [ ] open | specified in §9 and marked **[NOT IMPLEMENTED]**; `AUT-4`. Until built, each is reported not verified and cited as passed by nothing (§12 ¶1) |
+| 4 | Procedures `P-1` … `P-15` written to be executable by a reviewer who did not author the change | [x] **done** | §9.1; each states its question, its method, and what it cannot determine |
+| 5 | Record templates for six types, including the §2.1 scientific transition record | [ ] open | `DOC-5`. The **Normative-artifact** transition-record template exists at `governance/activation/templates/NORMATIVE_TRANSITION_RECORD.template.md`; the six owned-type templates and the RS-1 §2.1 template do not |
+| 6 | Registry entry drafted with the §1 jurisdiction tuples — all **21**, including the three `→ withdrawn` exits | [x] **done as a draft target** | `GOVERNANCE_REGISTRY.target.yaml` block E, `active_domain_standards[0].jurisdiction.owned_transitions`, 21 tuples identical to §1. The entry becomes live only when change E is accepted |
+| 7 | The Registry lists an authority whose permitted transitions cover every transition in §1; §4 ¶1 voids an authority whose permitted transitions are absent or inconsistent | [ ] partial — target complete, live Registry not | The target's `authority_assignments.constitutional_steward[0].permitted_transitions` carries **all 21** RS-1 tuples plus the four constitutional strings, verified 21-of-21 by `tests/governance/test_registry_authority_coverage.py`. `GOVERNANCE_REGISTRY.yaml` itself still has `constitutional_steward: []`, so the live condition is closed by `RE-11`/`CE-9`, not here |
+| 8 | Every MUST in this document appears in the §9 mapping | [x] **done** | asserted mechanically by `tests/governance/test_rs1_mapping.py`, which derives the set of sections carrying a MUST and fails on any that the §9 table does not cite; it also fails if the mapping cites a section or a procedure that does not exist, or defines a procedure nothing uses. Measured before this repair: of 39 MUST-bearing sections, 20 had no mapping row. Four sections are excluded with a stated reason: the Draft notice, §9/§9.1 (mapping the mapping is circular), §11 (a work register), §10.2 (states no MUST) |
+| 9 | Constitution is Active and a steward is assigned — RS-1 cannot activate before adoption | [ ] open | `GOVERNANCE_REGISTRY.yaml`: `status: Draft`, `constitutional_steward: []`. Blocked on change D, which is blocked on a second identified human (§4 ¶2, §13 ¶3) |

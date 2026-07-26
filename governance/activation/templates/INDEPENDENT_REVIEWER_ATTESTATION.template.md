@@ -1,5 +1,7 @@
 # Independent Reviewer Attestation — template
 
+<!-- attestation-kind: independent_reviewer -->
+
 - **Status:** Draft (template — not an attestation until completed and committed in the reviewed revision)
 - **Scope:** Independent review of one reviewed revision: the §13 ¶3 adoption change, or a §4 ¶2 Domain standard activation
 - **Responsibility:** Record the Independent reviewer attestation required by §13 ¶2

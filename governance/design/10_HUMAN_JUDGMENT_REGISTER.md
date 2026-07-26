@@ -50,27 +50,27 @@ Items are ordered by blocking effect, not by difficulty.
 
 ---
 
-## H-03 · Adopt amendment A-8, the General Delegation Clause? (defect D-1)
+## H-03 · Adopt amendment DAM-8, the General Delegation Clause? (defect DD-1)
 
 **The situation.** §4 ¶4 requires every delegation of refinement to identify five elements: subject, Scope, recipient, permitted transitions, limits. Three delegations this ecosystem depends on identify at most two:
-- §9 ¶4 "Normative artifacts use the **minimum** lifecycle…" — G-2 depends on it;
-- §12 ¶4 "Requirements not mechanically decidable MUST have a named manual review procedure" — G-4 and G-5 depend on it;
-- §10 ¶1 "MUST be defined in versioned architecture records" — G-12 depends on it.
+- §9 ¶4 "Normative artifacts use the **minimum** lifecycle…" — DG-2 depends on it;
+- §12 ¶4 "Requirements not mechanically decidable MUST have a named manual review procedure" — DG-4 and DG-5 depend on it;
+- §10 ¶1 "MUST be defined in versioned architecture records" — DG-12 depends on it.
 
 A strict reader concludes these standards cannot legitimately refine anything — while §10 simultaneously *requires* architecture records to exist. That is a contradiction that prevents implementation.
 
 **Why engineering cannot settle it.** Whether the Constitution's own delegation-specification requirement applies to its own delegation clauses is a constitutional reading, not a defect to be patched by a tool.
 
 **Options.**
-- **A. Include A-8 in the adoption change** — one additive §4 paragraph enumerating the existing delegations in five-element form. Changes no existing requirement. Cheapest now, while the Constitution is Draft and no records depend on the prior text.
-- **B. Adopt without A-8, activate G-2/G-4/G-5/G-12 anyway** — leaves every activation open to a well-founded challenge. An adversarial reviewer could void the lifecycle machinery of the entire stack.
-- **C. Adopt without A-8 and do not activate the four affected standards** — constitutionally clean, but §10 ¶1's requirement for architecture records becomes unsatisfiable, and N-1 becomes a permanent nonconformance.
+- **A. Include DAM-8 in the adoption change** — one additive §4 paragraph enumerating the existing delegations in five-element form. Changes no existing requirement. Cheapest now, while the Constitution is Draft and no records depend on the prior text.
+- **B. Adopt without DAM-8, activate DG-2/DG-4/DG-5/DG-12 anyway** — leaves every activation open to a well-founded challenge. An adversarial reviewer could void the lifecycle machinery of the entire stack.
+- **C. Adopt without DAM-8 and do not activate the four affected standards** — constitutionally clean, but §10 ¶1's requirement for architecture records becomes unsatisfiable, and N-1 becomes a permanent nonconformance.
 
 **Recommended:** A. Amending a Draft constitution costs almost nothing; amending an Active one costs a full §13 cycle including an independent attestation — the scarcest resource in the project.
 
 ---
 
-## H-04 · Give the Governance Registry a rank in the precedence order? (defect D-2)
+## H-04 · Give the Governance Registry a rank in the precedence order? (defect DD-2)
 
 **The situation.** §4 orders four authority levels and omits the Registry. §2 makes the Registry the sole determinant of what is Active. So a Registry/standard conflict is formally unresolvable: the standard's authority depends on the entry, and the entry's correctness depends on the standard. Finding F-6.
 
@@ -80,13 +80,13 @@ A strict reader concludes these standards cannot legitimately refine anything �
 
 ---
 
-## H-05 · Accept §2's hard-coded Registry path, or generalize it? (defect D-3)
+## H-05 · Accept §2's hard-coded Registry path, or generalize it? (defect DD-3)
 
 **The situation.** §2 pins the Registry to `GOVERNANCE_REGISTRY.yaml`. §10 ¶1 declares repository layout non-constitutional and requires it to live in architecture records. The Registry's location is therefore simultaneously constitutional and prohibited from being constitutional.
 
 **Assessment.** Low severity. Two readings are available: (a) accept the pin as a deliberate exception and document it in §10, or (b) identify the Registry by role in §2 and require the architecture record to bind exactly one path to that role.
 
-**Recommended:** (a) — accept and document. Option (b) is tidier but introduces an indirection in the one artifact whose location should be unambiguous to anyone opening the repository for the first time. Note also that this pin becomes materially limiting only if P1 ever needs multi-repository governance (F-1), at which point it should be revisited alongside that larger question rather than pre-emptively.
+**Recommended:** (a) — accept and document. Option (b) is tidier but introduces an indirection in the one artifact whose location should be unambiguous to anyone opening the repository for the first time. Note also that this pin becomes materially limiting only if P1 ever needs multi-repository governance (DF-1), at which point it should be revisited alongside that larger question rather than pre-emptively.
 
 ---
 
@@ -139,7 +139,7 @@ A strict reader concludes these standards cannot legitimately refine anything �
 
 **Why engineering cannot settle it.** It is a commitment of resources over decades, and the honest question is whether the project can actually keep the promise it is making.
 
-**Options.** Fund permanent retention with tiering under G-7 (digests and manifests permanent, bulk artifacts migrated to cheaper storage with recorded recovery procedures) · constrain what is retained by constraining what is executed · amend the Constitution to permit bounded, recorded, reviewed disposal.
+**Options.** Fund permanent retention with tiering under DG-7 (digests and manifests permanent, bulk artifacts migrated to cheaper storage with recorded recovery procedures) · constrain what is retained by constraining what is executed · amend the Constitution to permit bounded, recorded, reviewed disposal.
 
 **Assessment.** The failure mode to avoid is cost pressure producing quiet deletion — exactly what §7 ¶4 exists to prevent. If the promise cannot be kept, amending openly is far better than breaking it silently. Recommended: tiering first; revisit if infeasible.
 
@@ -175,7 +175,7 @@ Also resolve the direct contradiction in N-7 — two artifacts freezing incompat
 
 ## H-12 · Add clause identifiers to the Constitution?
 
-**The situation.** The Constitution has no addressable clause identifiers (finding F-19). `A-39` requirement coverage — the check that guarantees §12 ¶1 traceability — must therefore be maintained as a hand-curated map, which decays silently as the corpus grows (R-23).
+**The situation.** The Constitution has no addressable clause identifiers (finding F-19). `DA-39` requirement coverage — the check that guarantees §12 ¶1 traceability — must therefore be maintained as a hand-curated map, which decays silently as the corpus grows (R-23).
 
 **Why this is borderline-engineering but ultimately constitutional.** Adding identifiers is a textual change to the Constitution, which §13 governs regardless of how mechanical it looks. It also changes how every existing citation should be written.
 
@@ -217,16 +217,16 @@ Also resolve the direct contradiction in N-7 — two artifacts freezing incompat
 |---|---|---|---|
 | H-01 | Second identified human | **everything** | Recruit external reviewer or federate |
 | H-02 | Adoption vs amendment path | M-0 | Initial adoption under §13 ¶3 |
-| H-03 | Amendment A-8, general delegation (D-1) | G-2, G-4, G-5, G-12 | Include at adoption |
-| H-04 | Registry precedence rank (D-2) | R-10 mitigation | Include at adoption |
-| H-05 | §2 path pin vs §10 (D-3) | nothing | Accept and document |
+| H-03 | Amendment DAM-8, general delegation (DD-1) | DG-2, DG-4, DG-5, DG-12 | Include at adoption |
+| H-04 | Registry precedence rank (DD-2) | R-10 mitigation | Include at adoption |
+| H-05 | §2 path pin vs §10 (DD-3) | nothing | Accept and document |
 | H-06 | Program D corpus disposition | M-6 | Decide before adoption; inventory first |
 | H-07 | AI participation boundary | credibility of all review | Affirm explicitly |
 | H-08 | Steward count and succession | R-17 mitigation | >1 steward, disjoint jurisdictions, named successors |
-| H-09 | Retention horizon and funding | G-7 design | Tiered custody; amend openly if infeasible |
+| H-09 | Retention horizon and funding | DG-7 design | Tiered custody; amend openly if infeasible |
 | H-10 | Fate of frozen constants | M-6 | Classify each; resolve the N-7 contradiction |
 | H-11 | Sustainable governance scope | M-5 onward | Phase, with a decision point after M-4 |
-| H-12 | Clause identifiers (F-19) | A-39 durability | Include at adoption |
+| H-12 | Clause identifiers (F-19) | DA-39 durability | Include at adoption |
 | H-13 | Withdraw the second constitution | R-02 mitigation | Explicit withdrawal + archive |
 | H-14 | External timestamping | confirmatory research | Implement before M-4 |
 

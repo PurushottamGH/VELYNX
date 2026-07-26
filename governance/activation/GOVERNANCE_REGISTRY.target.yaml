@@ -108,8 +108,9 @@ e_target:
         contact: "[COMPLETE]"
         # Two forms in one field, because §4 ¶1 names a single "permitted
         # transitions" per authority source. A bare string is a constitutional
-        # transition; a mapping is a scientific transition tuple, matching the
-        # tuple form in RS-1 §1 so the comparison is mechanical.
+        # transition; a mapping is an RS-1 transition tuple, matching the tuple
+        # form in RS-1 §1 so the comparison is mechanical. All 21 RS-1 tuples
+        # appear, so the comparison is 21-to-21 with no exceptions to track.
         permitted_transitions:
           - amend_constitution
           - supersede_constitution
@@ -126,7 +127,9 @@ e_target:
           - {standard: rs-1, type: unknown, from: none, to: open}
           - {standard: rs-1, type: unknown, from: open, to: resolved}
           - {standard: rs-1, type: unknown, from: resolved, to: open}
+          - {standard: rs-1, type: decision, from: none, to: proposed}
           - {standard: rs-1, type: decision, from: proposed, to: approved}
+          - {standard: rs-1, type: decision, from: proposed, to: withdrawn}
           - {standard: rs-1, type: decision, from: approved, to: executed}
           - {standard: rs-1, type: decision, from: executed, to: reversed}
           - {standard: rs-1, type: interpretation, from: none, to: draft}
@@ -134,11 +137,24 @@ e_target:
           - {standard: rs-1, type: interpretation, from: draft, to: withdrawn}
           - {standard: rs-1, type: interpretation, from: active, to: superseded}
           - {standard: rs-1, type: interpretation, from: active, to: withdrawn}
-        # {decision, none -> proposed} and {decision, proposed -> withdrawn} are
-        # absent by design, not by omission. RS-1 §2.2.1 exempts them: they are
-        # governance transitions under §3 ¶2, authored by any contributor without
-        # a prior decision. Listing them here would imply an approval step that
-        # §2.2.1 removes, and would reintroduce the regress.
+        # All 21 RS-1 tuples are listed, including {decision, none -> proposed}
+        # and {decision, proposed -> withdrawn}. Listing a tuple here records
+        # *permission* for the transition; it does not by itself impose an
+        # approval step. RS-1 §2.2.1 removes the regress by exempting the
+        # decision lifecycle from §2.2's requirement of a **prior approving
+        # decision** — not by removing the requirement that the authority be
+        # Registry-listed and permitted, which §4 ¶1 imposes on every authority
+        # source and which RS-1 cannot waive (§4 ¶3).
+        #
+        # An earlier draft omitted these two tuples and had RS-1 §7 name "any
+        # contributor" as their authority. That created an authority assignment
+        # outside the Registry, which §2 reserves to the Registry, and left an
+        # authority whose permitted transitions were absent — the condition
+        # under which §4 ¶1 voids authority. Under that arrangement no first
+        # decision was creatable either, so the regress returned in a second
+        # form. Authorship remains unrestricted: any contributor MAY author a
+        # proposed decision record (RS-1 §7, §6.3); authorship is not authority
+        # (§4 ¶4).
         successor: "[COMPLETE recommended: named successor]"
 
   active_domain_standards:

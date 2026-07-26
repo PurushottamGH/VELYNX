@@ -2,7 +2,7 @@
 # EXAMPLE ONLY — NOT THE GOVERNANCE REGISTRY
 #
 # status: Draft
-# scope: Illustration of the machine-readable jurisdiction form proposed by G-1
+# scope: Illustration of the machine-readable jurisdiction form proposed by DG-1
 # responsibility: Show what GOVERNANCE_REGISTRY.yaml would contain after M-3, and how
 #                 jurisdiction tuples make Constitution §4 ¶2 overlap rejection decidable
 # authority_source: None. This file has no normative authority, registers nothing,
@@ -13,7 +13,7 @@
 #
 # Reading notes
 #   - Every `jurisdiction` block is a tuple set, not prose. Prose jurisdictions cannot be
-#     mechanically compared, which would leave §4 ¶2 unenforceable. See 05_AUTOMATION §3 A-04.
+#     mechanically compared, which would leave §4 ¶2 unenforceable. See 05_AUTOMATION §3 DA-04.
 #   - `not_owned` is load-bearing: explicit renunciation is what makes an adjacent
 #     standard's ownership provable rather than merely assumed.
 #   - `delegations_relied_upon` cites the delegating clause and restates §4 ¶4's five
@@ -21,7 +21,7 @@
 #   - Only the six M-3 foundation standards are shown in full; the remaining eighteen
 #     follow the identical shape.
 
-schema_version: "2.0"          # G-1-owned; distinct from the current Draft registry's "1.0"
+schema_version: "2.0"          # DG-1-owned; distinct from the current Draft registry's "1.0"
 status: Draft                   # would be Active only after the §13 adoption atomic change
 scope: Project P1 repository governance
 responsibility: >-
@@ -52,7 +52,7 @@ constitution:
       - {type: constitution, from: active, to: amended}
       - {type: constitution, from: active, to: superseded}
       - {type: constitution, from: active, to: withdrawn}
-  # D-2 / H-04: the Constitution assigns the Registry no rank in the §4 precedence order.
+  # DD-2 / H-04: the Constitution assigns the Registry no rank in the §4 precedence order.
   # If H-04 is accepted, the clause resolving this appears in §4, not here — a subordinate
   # artifact resolving its own precedence would enlarge jurisdiction, barred by §4 ¶4.
 
@@ -100,7 +100,7 @@ active_domain_standards:
           MUST reuse §2 terms unchanged within their Scope (§11 ¶3); MUST NOT register a type
           whose lifecycle no Active standard owns (§9 ¶1)
     verification:
-      checks: [A-04, A-09, A-10, A-11, A-27]
+      checks: [DA-04, DA-09, DA-10, DA-11, DA-27]
       manual_procedures: [MRP-15]
     depends_on: []
     dependents: [g-1-registry-spec, g-2-normative-artifact, g-3-authority-delegation,
@@ -109,7 +109,7 @@ active_domain_standards:
                  s-6-claim, s-7-hypothesis, s-8-result, s-9-interpretation, s-10-principle]
 
   - id: g-1-registry-spec
-    path: domain_standards/governance/G-1_REGISTRY_SPECIFICATION.md
+    path: domain_standards/governance/DG-1_REGISTRY_SPECIFICATION.md
     version: "1.0.0"
     status: Active
     domain_class: governance
@@ -133,8 +133,8 @@ active_domain_standards:
       referenced_types: [object_type_registration, authority_assignment]
       not_owned:
         - "Which artifacts are Active, and who holds authority — that is Registry content,
-           assigned under G-3 and approved by the steward, not determined by G-1."
-        - "Precedence between the Registry and a Domain standard (defect D-2) — reserved to §13."
+           assigned under DG-3 and approved by the steward, not determined by DG-1."
+        - "Precedence between the Registry and a Domain standard (defect DD-2) — reserved to §13."
     delegations_relied_upon:
       - delegating_clause: "REPOSITORY_CONSTITUTION.md §4 ¶1-2"
         delegated_subject: form and integrity of the Registry's required fields
@@ -145,12 +145,12 @@ active_domain_standards:
           MUST NOT extend the Registry's responsibility beyond §2's three concerns;
           MUST fail closed on any absent required field (§4 ¶1)
     verification:
-      checks: [A-01, A-03, A-04, A-05, A-22]
+      checks: [DA-01, DA-03, DA-04, DA-05, DA-22]
       manual_procedures: [MRP-14]
     depends_on: [o-1-ontology]
 
   - id: g-2-normative-artifact
-    path: domain_standards/governance/G-2_NORMATIVE_ARTIFACT_STANDARD.md
+    path: domain_standards/governance/DG-2_NORMATIVE_ARTIFACT_STANDARD.md
     version: "1.0.0"
     status: Active
     domain_class: governance
@@ -181,9 +181,9 @@ active_domain_standards:
         - {type: legacy_disposition, from: legacy,     to: reactivated}
       referenced_types: [attestation, authority_assignment, review_record]
       not_owned:
-        - "Software and release versioning — owned by G-8. Different object types with
+        - "Software and release versioning — owned by DG-8. Different object types with
            different change semantics; they MUST NOT share a version number."
-        - "The content of any review or attestation — owned by G-4."
+        - "The content of any review or attestation — owned by DG-4."
     delegations_relied_upon:
       - delegating_clause: "REPOSITORY_CONSTITUTION.md §9 ¶4"
         delegated_subject: extension of the minimum Normative artifact lifecycle
@@ -194,16 +194,16 @@ active_domain_standards:
           MUST retain Draft/Active/Superseded/Withdrawn; MUST keep prior versions
           recoverable (§9 ¶4); MUST NOT permit self-activation (§4 ¶2)
         UNDER_SPECIFIED: >-
-          DEFECT D-1 — §9 ¶4 identifies neither recipient nor permitted transitions nor
-          limits, so it does not satisfy §4 ¶4's own five-element requirement. G-2 SHOULD
+          DEFECT DD-1 — §9 ¶4 identifies neither recipient nor permitted transitions nor
+          limits, so it does not satisfy §4 ¶4's own five-element requirement. DG-2 SHOULD
           NOT activate until H-03 is decided. See 10_HUMAN_JUDGMENT_REGISTER.md.
     verification:
-      checks: [A-02, A-06, A-07, A-22, A-30, A-63]
+      checks: [DA-02, DA-06, DA-07, DA-22, DA-30, DA-63]
       manual_procedures: [MRP-01, MRP-16]
     depends_on: [o-1-ontology]
 
   - id: g-3-authority-delegation
-    path: domain_standards/governance/G-3_AUTHORITY_DELEGATION_STANDARD.md
+    path: domain_standards/governance/DG-3_AUTHORITY_DELEGATION_STANDARD.md
     version: "1.0.0"
     status: Active
     domain_class: governance
@@ -234,9 +234,9 @@ active_domain_standards:
       not_owned:
         - "Creation of authority. All authority originates at §13's steward assignment and
            flows downward through recorded delegations. §4 ¶4 forbids a refinement from
-           creating authority over any transition not expressly delegated. G-3 records and
+           creating authority over any transition not expressly delegated. DG-3 records and
            lifecycles authority; it never mints it."
-        - "Approval of any specific transition — that is a Decision under G-13."
+        - "Approval of any specific transition — that is a Decision under DG-13."
     delegations_relied_upon:
       - delegating_clause: "REPOSITORY_CONSTITUTION.md §4 ¶1, §4 ¶4, §13 ¶3"
         delegated_subject: recording and lifecycle of authority assignments and delegations
@@ -247,12 +247,12 @@ active_domain_standards:
           MUST NOT enlarge any jurisdiction; MUST NOT assign authority to an automated
           system (§4 ¶4); every delegation MUST state all five §4 ¶4 elements or is void
     verification:
-      checks: [A-05, A-23, A-24, A-36, A-37]
+      checks: [DA-05, DA-23, DA-24, DA-36, DA-37]
       manual_procedures: []
     depends_on: [o-1-ontology]
 
   - id: g-4-review-attestation
-    path: domain_standards/governance/G-4_REVIEW_ATTESTATION_STANDARD.md
+    path: domain_standards/governance/DG-4_REVIEW_ATTESTATION_STANDARD.md
     version: "1.0.0"
     status: Active
     domain_class: governance
@@ -277,8 +277,8 @@ active_domain_standards:
         - {type: attestation,    from: attested,  to: withdrawn}
       referenced_types: [authority_assignment, conflict_of_interest_declaration, change_set]
       not_owned:
-        - "The conformance claim that cites a review — owned by G-5."
-        - "Audit reports — owned by G-6."
+        - "The conformance claim that cites a review — owned by DG-5."
+        - "Audit reports — owned by DG-6."
     delegations_relied_upon:
       - delegating_clause: "REPOSITORY_CONSTITUTION.md §12 ¶4"
         delegated_subject: named manual review procedures for non-mechanically-decidable requirements
@@ -289,16 +289,16 @@ active_domain_standards:
           An automated system MUST NOT produce an attestation (§4 ¶4); a self-review MUST NOT
           be labelled independent (§12 ¶1); an unavailable check MUST be reported as
           not verified (§12 ¶1)
-        UNDER_SPECIFIED: "DEFECT D-1 — §12 ¶4 names no recipient artifact or role. See H-03."
+        UNDER_SPECIFIED: "DEFECT DD-1 — §12 ¶4 names no recipient artifact or role. See H-03."
     verification:
-      checks: [A-23, A-24, A-29, A-38, A-39]
+      checks: [DA-23, DA-24, DA-29, DA-38, DA-39]
       manual_procedures: [all MRP-xx are registered here]
     depends_on: [o-1-ontology, g-3-authority-delegation]
-    # BLOCKING NOTE: G-4 is operable only where an Independent reviewer exists (§2).
+    # BLOCKING NOTE: DG-4 is operable only where an Independent reviewer exists (§2).
     # One identified human exists in P1. See risk R-01 and judgment item H-01.
 
   - id: g-13-decision
-    path: domain_standards/governance/G-13_DECISION_STANDARD.md
+    path: domain_standards/governance/DG-13_DECISION_STANDARD.md
     version: "1.0.0"
     status: Active
     domain_class: governance
@@ -337,7 +337,7 @@ active_domain_standards:
           MUST NOT be represented as scientific support (§3 ¶6); every scientific state
           change MUST remain reversible (§8 ¶2)
     verification:
-      checks: [A-12, A-13, A-52, A-53]
+      checks: [DA-12, DA-13, DA-52, DA-53]
       manual_procedures: [MRP-05]
     depends_on: [o-1-ontology, g-3-authority-delegation]
 

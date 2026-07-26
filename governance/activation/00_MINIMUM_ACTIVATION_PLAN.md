@@ -288,7 +288,27 @@ H-9 is a recorded interpretation, not an amendment: the Constitution is Draft an
 
 §12 ¶3 is SHOULD, so none is obligatory. Each declares its scope, limitations, and false negatives, and emits findings only — never approval (§4 ¶4). An unavailable check reports **not verified**, never passed (§12 ¶1).
 
-**One namespace.** Checks are `A-xx`, and `A-xx` means exactly one thing: a check implemented in `scripts/governance/check_adoption.py`. The `C-xx` numbering that earlier drafts of this plan, the dossier, and RS-1 used is withdrawn. It described a *planned* set, and five of its members were cited as evidence routes while having no implementation — which §12 ¶1 forbids, since citing a check makes that check's existence load-bearing for the claim it supports.
+**Identifier namespaces.** Checks are `A-xx`, and `A-xx` means exactly one thing: a check implemented in `scripts/governance/check_adoption.py`. The `C-xx` numbering that earlier drafts of this plan, the dossier, and RS-1 used is withdrawn. It described a *planned* set, and five of its members were cited as evidence routes while having no implementation — which §12 ¶1 forbids, since citing a check makes that check's existence load-bearing for the claim it supports.
+
+That sentence was, until this revision, false. `A-01`…`A-63` were also spent by the Draft design register in `governance/design/05_AUTOMATION_ARCHITECTURE.md` on a *different* set of checks, so fifteen identifiers carried two meanings — and four other prefixes carried two or three. §11 ¶3 forbids identical names concealing distinct types, and `AUT-4` was scheduled to build `A-11`…`A-15` into the very file whose design register had already spent those ids. The register below is the corrected state; the collisions are recorded as `AF-25` in `05_RELEASE_CANDIDATE_CHECKLIST.md`.
+
+| Prefix | Meaning | Owner artifact |
+|---|---|---|
+| `A-01`…`A-15` | implemented advisory checks (`A-11`…`A-15` specified, unbuilt) | `scripts/governance/check_adoption.py`; specified in this plan §7.3 and RS-1 §9 |
+| `P-1`…`P-15` | RS-1's manual review procedures | `RS-1_RESEARCH_STANDARD.draft.md` §9.1 |
+| `P-A1`…`P-A4` | adoption-scope manual procedures | this plan §7.4 |
+| `P-L1` | Legacy disposition manual procedure | `04_LEGACY_DISPOSITION.md` §5 |
+| `G-1`…`G-10` | change-D preflight gates | `03_ADOPTION_CHANGE_MANIFEST.md` §2 |
+| `CD-1`…`CD-11` / `CE-1`…`CE-9` | contents of change D / change E | `03_ADOPTION_CHANGE_MANIFEST.md` §3–§4 |
+| `HG-`, `RE-`, `SEC-`, `DOC-`, `VER-`, `AUT-`, `AF-`, `X-`, `V-` | task, blocker, and finding registers | `05_RELEASE_CANDIDATE_CHECKLIST.md`, `02_PREADOPTION_VERIFICATION.md` |
+| `E-1`…`E-13`, `H-1`…`H-9` | engineering and human-authority tasks | this plan §7.1–7.2 |
+| `T-0001`, `T-0002` | normative-artifact transition records | `governance/transitions/` |
+| `D-0001` | the RS-1 activation Decision | `governance/decisions/` |
+| `U-a`…`U-f` | standing Unknowns | `02_PREADOPTION_VERIFICATION.md` §6 |
+| `DA-`, `DG-`, `DD-`, `DX-`, `DF-`, `DAM-`, `M-`, `N-`, `O-`, `R-`, `S-`, `I-`, `MRP-` | **Draft design-space only** — checks, stack standards, defects, extension points, redesign forces, a design-proposed amendment, milestones, nonconformances, ontology standards, risks, standards, interfaces, manual review procedures | `governance/design/**`, which has no authority (§4 ¶7) and is cited by no conformance row |
+| `A-1`…`A-7`, `D-1`…`D-2`, `F-xx`, `L-xx` (**unpadded**) | proposed amendments, derived amendments, findings, and limitations of the v1.2.0 amendment record | `audits/CONSTITUTION_v1.2.0_AMENDMENT_RECORD.md` |
+
+The last two rows are the residual hazard and are stated rather than renamed. The amendment record is an audit record of one revision (§3 ¶5); re-keying its identifiers after the fact would rewrite an audit. It is distinguished by **zero-padding**: a check is always written `A-05`, an amendment always `A-5`, and an amendment is always cited with a form of the word "amend". `tests/governance/test_identifier_namespaces.py` enforces the separation mechanically, including that the design set cites no amendment id the amendment record actually lacks — an independent audit of this sprint found six citations of a non-existent "amendment `A-8`", now re-keyed `DAM-8` because it was a design proposal rather than a citation.
 
 | # | Check | Clause | Note |
 |---|---|---|---|
@@ -301,7 +321,7 @@ H-9 is a recorded interpretation, not an amendment: the Constitution is Draft an
 | A-07 | Credentials across full history, not HEAD | §10 ¶5 | proves presence, never absence. Permanently FAIL by construction |
 | A-08 | Check honesty in CI: no suppressed exit codes, no shell mismatch | §12 ¶1 | the check that keeps the others truthful |
 | A-09 | Identified humans available for attestation | §13 ¶3 | never returns PASS; git identity is not identity (§4 ¶4) |
-| A-10 | Attestation field completeness: the eight §13 ¶2 elements, no unfilled placeholders | §13 ¶2 | NOT_VERIFIED until attestations exist, which is before change D |
+| A-10 | Attestation field completeness, dispatched by declared document kind: the eight §13 ¶2 elements for an Independent reviewer attestation, the §13 ¶3-derived set for an adopter attestation; no unfilled placeholders and no unticked declarations | §13 ¶2, §13 ¶3 | NOT_VERIFIED until attestations exist, which is before change D, and for any file whose kind it cannot determine. Fixture-tested against both shipped templates (`tests/governance/test_check_adoption.py`) |
 
 **Specified and not implemented.** `A-11` … `A-15` are RS-1's checks, listed in `RS-1_RESEARCH_STANDARD.draft.md` §9 and built under `AUT-4` before change E. Until then each is reported not verified and MUST NOT be cited as passed (§12 ¶1).
 
@@ -311,7 +331,7 @@ Four things remain undetectable from inside the repository and are the reason §
 
 §12 ¶4: a requirement that is not mechanically decidable MUST have a named manual review procedure. These four cover the adoption change; each records a finding per review.
 
-**Identifier scheme.** `P-A*` applies to change D, `P-L*` to Legacy disposition (`04_LEGACY_DISPOSITION.md` §5), and RS-1's `P-1` … `P-11` apply only to objects RS-1 governs, and therefore only after change E. A procedure is never cited outside its scope.
+**Identifier scheme.** `P-A*` applies to change D, `P-L*` to Legacy disposition (`04_LEGACY_DISPOSITION.md` §5), and RS-1's `P-1` … `P-15` apply only to objects RS-1 governs, and therefore only after change E — except `P-15`, which binds only on an amendment to RS-1 itself. A procedure is never cited outside its scope.
 
 | Id | Question | Method | Replaces |
 |---|---|---|---|

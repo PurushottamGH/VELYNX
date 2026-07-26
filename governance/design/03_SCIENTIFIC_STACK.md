@@ -15,7 +15,7 @@ Each standard below owns exactly one region of the scientific object graph, per 
 
 **Fields common to every scientific record** (owned by O-1, not restated by any S-*): `id`, `object_type`, `schema_version`, `status`, `scope`, `created` (§2 recorded time: timezone-qualified, precision identified), `created_by`, `provenance`, `last_reviewed`, `supersedes`, `superseded_by`, `standard_version` (the version of the owning standard under which the record was created — required by §13 ¶4, which preserves each record's originating standard version).
 
-**Transitions.** Every transition produces a §9 ¶3 record with eight elements: object, prior state, new state, criteria applied, evidence considered, authority, time, rationale. Missing information causes the transition to fail closed. Every scientific transition additionally requires a Decision (G-13) approved by the Registry-listed authority (§4 ¶5).
+**Transitions.** Every transition produces a §9 ¶3 record with eight elements: object, prior state, new state, criteria applied, evidence considered, authority, time, rationale. Missing information causes the transition to fail closed. Every scientific transition additionally requires a Decision (DG-13) approved by the Registry-listed authority (§4 ¶5).
 
 **Retention.** Scientific records are never physically deleted, including rejected, superseded, inconvenient, and negative ones (§8 ¶2). Every standard's retention rule is "permanent"; the only variable is state.
 
@@ -34,26 +34,26 @@ Each standard below owns exactly one region of the scientific object graph, per 
 - Registered protocol: `Draft → Registered → Executing → Closed`, plus `Amended` producing a **new** protocol linked to the prior one. **Registration is irreversible and immutable**; a protocol cannot be edited after registration, because §2 defines registration as preceding governed execution and §5 forbids post-access element changes from being represented as confirmatory.
 
 **Required fields.**
-*Registered protocol* — every §5 ¶3 element, fixed before any author, contributor, or person communicating analysis-relevant information accesses an unblinded Observation or any data revealing condition or outcome: sampling frame; sample size or stopping rule; exclusions; assignment; controls; primary outcomes; analysis population; statistical or logical decision rule; multiplicity handling; model selection procedure; randomness plan. Plus: registration timestamp with precision (§2); the validity criteria that determine Valid vs Invalid Result (§2, §7 ¶4); completion criteria and the authority for recording a Result (§7 ¶2, delegated); the digest algorithm reference (by reference to G-7); the Claims or Hypotheses under test (by reference).
+*Registered protocol* — every §5 ¶3 element, fixed before any author, contributor, or person communicating analysis-relevant information accesses an unblinded Observation or any data revealing condition or outcome: sampling frame; sample size or stopping rule; exclusions; assignment; controls; primary outcomes; analysis population; statistical or logical decision rule; multiplicity handling; model selection procedure; randomness plan. Plus: registration timestamp with precision (§2); the validity criteria that determine Valid vs Invalid Result (§2, §7 ¶4); completion criteria and the authority for recording a Result (§7 ¶2, delegated); the digest algorithm reference (by reference to DG-7); the Claims or Hypotheses under test (by reference).
 *Investigation* — question(s) by reference to S-2; scope; protocols by reference; Unknowns opened by reference.
 
 **Relationships.** `investigation --contains--> registered_protocol` · `registered_protocol --tests--> hypothesis|claim` · `registered_protocol --governs--> result` · `registered_protocol --declares--> validity_criteria`.
 
 **Validation rules.**
-1. Registration timestamp strictly precedes the first execution artifact attributable to the protocol (`A-20`).
+1. Registration timestamp strictly precedes the first execution artifact attributable to the protocol (`DA-20`).
 2. All eleven §5 ¶3 elements present and non-empty; a placeholder is an absence and fails closed.
-3. Any element changed after registration produces a new protocol and forces the `exploratory` label on the affected execution (`A-21`).
+3. Any element changed after registration produces a new protocol and forces the `exploratory` label on the affected execution (`DA-21`).
 4. Validity criteria are stated before execution and are independent of favourability (§2 *Valid Result*).
 5. A protocol MUST NOT declare an exclusion rule that references outcome values.
 
 **Failure cases.**
 | Case | Constitutional breach | Detection |
 |---|---|---|
-| Protocol registered after data access | §5 ¶3; execution is exploratory, not confirmatory | `A-20`, `A-21` — but see limitation below |
+| Protocol registered after data access | §5 ¶3; execution is exploratory, not confirmatory | `DA-20`, `DA-21` — but see limitation below |
 | Registration timestamp forged or backdated | §5 ¶3 defeated entirely | **Not detectable from Git alone.** Requires an external timestamp anchor; recorded as risk R-08 and as an Unknown until mitigated |
-| Protocol amended in place | §2 immutability of Registered protocol | `A-14`-class immutability check on `protocols/registered/` |
-| Stopping rule omitted or vague | Optional stopping; §5 ¶3 | `A-21` plus manual `MRP-06` |
-| "Frozen constants" declared outside a revisable standard | §5 ¶6 | `A-07`; current nonconformance N-4 |
+| Protocol amended in place | §2 immutability of Registered protocol | `DA-14`-class immutability check on `protocols/registered/` |
+| Stopping rule omitted or vague | Optional stopping; §5 ¶3 | `DA-21` plus manual `MRP-06` |
+| "Frozen constants" declared outside a revisable standard | §5 ¶6 | `DA-07`; current nonconformance N-4 |
 
 **Migration rules.** Protocols registered under standard version *n* retain version *n* semantics (§13 ¶4). A change to S-1 MUST NOT alter the confirmatory/exploratory status of any prior execution. Pre-adoption preregistrations in `theory/preregistrations/` are **Draft protocols**, not Registered protocols; executions against them are exploratory and may not be relabelled later (see `00_ECOSYSTEM_OVERVIEW.md` §7.5).
 
@@ -71,7 +71,7 @@ Each standard below owns exactly one region of the scientific object graph, per 
 
 **Validation rules.**
 1. A Question MUST NOT assert an answer; declarative claim-shaped text fails review (`MRP-07`).
-2. **If materiality is asserted, a referral to an Unknown MUST exist** — §2: "a Question or uncertainty that is material to a Claim, Interpretation, Decision, Result validity, or governed transition MUST be recorded as an Unknown until resolved" (`A-54`).
+2. **If materiality is asserted, a referral to an Unknown MUST exist** — §2: "a Question or uncertainty that is material to a Claim, Interpretation, Decision, Result validity, or governed transition MUST be recorded as an Unknown until resolved" (`DA-54`).
 3. `Answered` requires a linked Result or Interpretation; a Question is never answered by a Decision (§3 ¶6).
 
 **Failure cases.** Question used as a disguised Claim (breaches §2's object-kind distinction) · material Question never escalated to an Unknown, the most common route by which uncertainty disappears from a research record · Question closed by governance fiat rather than evidence.
@@ -92,7 +92,7 @@ Each standard below owns exactly one region of the scientific object graph, per 
 
 **Validation rules.**
 1. Material missing information, unresolved contradiction, untested assumption, failed replication, and unexplained anomaly MUST each be represented as an Unknown rather than silently closed (§8 ¶1) — five distinct intake triggers, each checkable at review (`MRP-08`).
-2. An Unknown MUST NOT be deleted. Deletion detection is `A-16`.
+2. An Unknown MUST NOT be deleted. Deletion detection is `DA-16`.
 3. §5 ¶5: where no materially distinct alternative to an Interpretation is found, the search and its limits MUST be recorded as an Unknown. S-9 creates the referral; S-3 owns the object.
 4. §6 ¶5: an unretainable input's absence, reason, expected effect, and recovery status MUST be recorded as an Unknown or limitation.
 5. Resolution requires evidence meeting the criterion stated at open time — not a later, weaker criterion.
@@ -103,7 +103,7 @@ Each standard below owns exactly one region of the scientific object graph, per 
 | Unknown quietly closed without meeting its criterion | Uncertainty vanishes from the record; downstream Claims overstate support. §8 ¶1 breach. |
 | Resolution criterion rewritten at resolution time | Post hoc goalpost movement; equivalent to §5 ¶3's prohibited element change |
 | Unknown never opened for a known limitation | The record looks cleaner than the science is — the failure §8 exists to prevent |
-| Unknown deleted during a refactor | `A-16` and `A-15`; protected paths under G-8 |
+| Unknown deleted during a refactor | `DA-16` and `DA-15`; protected paths under DG-8 |
 
 **Migration rules.** Unknowns carry their originating S-3 version. A future S-3 tightening the resolution criterion MUST NOT retroactively reopen resolved Unknowns (§13 ¶4); it MAY require reassessment through a new Interpretation or Decision.
 
@@ -115,7 +115,7 @@ Each standard below owns exactly one region of the scientific object graph, per 
 
 **Lifecycle.** Observation: `Recorded → Verified → Quarantined → Superseded`. Append-only: a correction creates a new Observation linked to the prior one; the prior is never edited. Source: `Identified → Active → Deprecated`.
 
-**Required fields.** *Observation* — measured or stated value; measurement procedure; instrument or method; Source by reference; acquisition time with precision; actor or process; environment and configuration; blinding status; known measurement limitations; raw-artifact custody reference (G-7). *Source* — identity, type, version, access method, retrieval time, stability assessment.
+**Required fields.** *Observation* — measured or stated value; measurement procedure; instrument or method; Source by reference; acquisition time with precision; actor or process; environment and configuration; blinding status; known measurement limitations; raw-artifact custody reference (DG-7). *Source* — identity, type, version, access method, retrieval time, stability assessment.
 
 **Relationships.** `observation --from--> source` · `observation --admitted_as--> evidence` *(edge created by S-5, not S-4)* · `observation --produced_under--> registered_protocol`.
 
@@ -142,12 +142,12 @@ Each standard below owns exactly one region of the scientific object graph, per 
 **Relationships.** `evidence --admits--> observation` · `evidence --supports|opposes--> claim` · `evidence --derived_from--> evidence` (with method, §6 ¶4) · `evidence --custodied_by--> custody_manifest`.
 
 **Validation rules.**
-1. All nine §6 ¶1 items present (`A-17`). Absence of any one is fatal, not advisory.
+1. All nine §6 ¶1 items present (`DA-17`). Absence of any one is fatal, not advisory.
 2. Evidence MUST NOT be promoted, demoted, or discarded because of agreement or disagreement with a preferred conclusion (§6 ¶3). Mechanically undecidable; mapped to manual procedure `MRP-09`, which compares admission/exclusion rates across supporting and opposing Evidence for the same Claim — a statistical tell, not a proof.
 3. Inclusion, exclusion, stopping, and transformation rules MUST be declared before confirmatory analysis; post hoc changes MUST be preserved and labelled (§6 ¶3).
 4. Derived summaries MUST link to inputs and method (§6 ¶4).
-5. A biological analogy, metaphor, mechanism name, model confidence, performance improvement, citation count, authority statement, or absence of an alternative MUST NOT by itself count as Evidence (§5 ¶7) — a lexical screen (`A-55`) plus `MRP-09`.
-6. Digest algorithm resolves to a registered, non-deprecated algorithm in G-7 (`A-43`).
+5. A biological analogy, metaphor, mechanism name, model confidence, performance improvement, citation count, authority statement, or absence of an alternative MUST NOT by itself count as Evidence (§5 ¶7) — a lexical screen (`DA-55`) plus `MRP-09`.
+6. Digest algorithm resolves to a registered, non-deprecated algorithm in DG-7 (`DA-43`).
 
 **Failure cases.**
 | Case | Effect |
@@ -165,7 +165,7 @@ Each standard below owns exactly one region of the scientific object graph, per 
 
 **Ontology.** Owns `claim`: "a proposition that is assessable as supported, opposed, or unresolved within a stated Scope" (§2, as amended by A-6).
 
-**Lifecycle.** `Draft → Active → Supported / Opposed / Unresolved → Retired`. State changes occur **only** by the Claim's own declared decision rule, executed through a Decision (G-13). Tools MUST NOT infer state from evidence count, model confidence, test success, or elapsed time (§9 ¶3).
+**Lifecycle.** `Draft → Active → Supported / Opposed / Unresolved → Retired`. State changes occur **only** by the Claim's own declared decision rule, executed through a Decision (DG-13). Tools MUST NOT infer state from evidence count, model confidence, test success, or elapsed time (§9 ¶3).
 
 **Required fields.** §5 ¶1 requires of *every* Claim: its Scope, and at least one feasible Observation, test outcome, or Result that could count against it. §5 ¶2 requires of every Claim used to justify a scientific conclusion or action, all eight of: (1) operational terms; (2) Scope; (3) observations that could support it; (4) observations that could count against it; (5) credible competing explanations, including a null where applicable; (6) the rule by which evidence changes its state; (7) unresolved assumptions and limitations; (8) links to the Evidence, Interpretations, and Decisions on which its current state depends.
 
@@ -174,11 +174,11 @@ Note the two-tier structure precisely: every Claim needs a falsifier; only justi
 **Relationships.** `claim --supported_by|opposed_by--> evidence` · `claim --limited_by--> unknown` · `claim --paired_with--> hypothesis` (S-7 owns the pairing) · `claim --state_changed_by--> decision` · `claim --generalized_as--> principle` (S-10 owns).
 
 **Validation rules.**
-1. Falsifier present for every Claim (`A-18`).
-2. All eight §5 ¶2 fields present for any Claim referenced by an Interpretation, Decision, or Principle (`A-56`).
+1. Falsifier present for every Claim (`DA-18`).
+2. All eight §5 ¶2 fields present for any Claim referenced by an Interpretation, Decision, or Principle (`DA-56`).
 3. Operational terms satisfy §2's *Operational* definition: observable inputs, procedures, measurements, decision rules, or reproducible transformations sufficient for an Independent reviewer to determine application and what outcome would distinguish the asserted condition from alternatives (`MRP-10`).
 4. A mechanism or understanding claim requires an operational criterion distinguishing it from prediction or performance alone (§5 ¶7) (`MRP-10`).
-5. Status labels MUST NOT imply certainty beyond operational definition; proven, true, final, permanent, certain are prohibited for empirical Claims unless the standard defines a bounded technical meaning that does not imply infallibility (§8 ¶3) (`A-07`).
+5. Status labels MUST NOT imply certainty beyond operational definition; proven, true, final, permanent, certain are prohibited for empirical Claims unless the standard defines a bounded technical meaning that does not imply infallibility (§8 ¶3) (`DA-07`).
 6. Decision-rule evaluation is recorded, with inputs, at each state change.
 
 **Failure cases.** Unfalsifiable Claim admitted because its falsifier is stated but infeasible · decision rule written after the evidence arrives, converting confirmation into a formality · scope creep, where a Claim proven in one setting is cited generally · "supported" used as "true," which §8 ¶3 forbids.
@@ -198,7 +198,7 @@ Note the two-tier structure precisely: every Claim needs a falsifier; only justi
 **Relationships.** `hypothesis --pairs--> claim` · `hypothesis --tested_by--> registered_protocol` · `hypothesis --discriminates_from--> hypothesis|alternative` · `hypothesis --outcome_recorded_in--> result`.
 
 **Validation rules.**
-1. The paired Claim exists, is Active, and satisfies §5 ¶2 (`A-57`).
+1. The paired Claim exists, is Active, and satisfies §5 ¶2 (`DA-57`).
 2. The operational test is executable and its counting-against outcome is stated before execution.
 3. **Mutual distinguishability**: where two Hypotheses predict identical observables under all registered protocols, they are not independently testable, and that must be recorded as an Unknown rather than presented as two supported hypotheses. This is not hypothetical — `theory/HYPOTHESIS_DISCRIMINATION_MATRIX.md` already records that T-01 and T-02 "are not mutually distinguishable." Under S-7 that finding would force an Unknown and block independent support claims for either (`MRP-11`).
 4. No Hypothesis set is constitutional (§5 ¶6); the register is revisable and additions require no amendment.
@@ -220,13 +220,13 @@ Note the two-tier structure precisely: every Claim needs a falsifier; only justi
 **Relationships.** `result --produced_under--> registered_protocol` · `result --corrects--> result` · `result --interpreted_by--> interpretation` · `result --custodied_by--> custody_manifest`.
 
 **Validation rules.**
-1. Immutability: content digest of every Active Result matches its creating revision; no history rewrite touches `results/` (`A-14`, `A-45`).
-2. Correction occurs only through a new linked Result identifying the error and superseded content; history MUST NOT be rewritten to conceal the prior Result (§7 ¶1) (`A-58`).
-3. The correction MUST state whether and to what Scope the prior Result is invalid, corrected, or superseded for inference; later Evidence or Interpretation relying on the prior Result MUST disclose that status (§7 ¶1) (`A-59` — a propagation check across dependents).
-4. **Negative Results are retained under identical provenance and retention rules** and MUST NOT be deleted, hidden, relabelled as a failed run, or excluded from synthesis solely because they oppose a preferred Claim (§7 ¶4) (`A-60` compares Negative Result counts against execution counts per protocol; a large gap is a finding, not a proof).
+1. Immutability: content digest of every Active Result matches its creating revision; no history rewrite touches `results/` (`DA-14`, `DA-45`).
+2. Correction occurs only through a new linked Result identifying the error and superseded content; history MUST NOT be rewritten to conceal the prior Result (§7 ¶1) (`DA-58`).
+3. The correction MUST state whether and to what Scope the prior Result is invalid, corrected, or superseded for inference; later Evidence or Interpretation relying on the prior Result MUST disclose that status (§7 ¶1) (`DA-59` — a propagation check across dependents).
+4. **Negative Results are retained under identical provenance and retention rules** and MUST NOT be deleted, hidden, relabelled as a failed run, or excluded from synthesis solely because they oppose a preferred Claim (§7 ¶4) (`DA-60` compares Negative Result counts against execution counts per protocol; a large gap is a finding, not a proof).
 5. An Invalid Result may be excluded from inference **only** by its Registered protocol's validity rule, with the Result and applied rationale preserved (§7 ¶4).
 6. Validity is independent of favourability (§2) — a validity criterion may not reference whether the outcome was desired.
-7. Passing software tests establishes only conformance to those tests and MUST NOT be reported as scientific success unless a Registered protocol independently makes that test output relevant Evidence (§3 ¶7) (`A-61`).
+7. Passing software tests establishes only conformance to those tests and MUST NOT be reported as scientific success unless a Registered protocol independently makes that test output relevant Evidence (§3 ¶7) (`DA-61`).
 
 **Failure cases.**
 | Case | Effect |
@@ -252,13 +252,13 @@ Note the two-tier structure precisely: every Claim needs a falsifier; only justi
 **Relationships.** `interpretation --infers_from--> result|evidence` · `interpretation --considers--> alternative_explanation` · `interpretation --discriminated_by--> proposed_observation` · `interpretation --qualified_by--> unknown`.
 
 **Validation rules.**
-1. Null explanation present and non-trivial (`A-19`).
-2. Strongest materially distinct alternative present, with the search documented — method, sources, date, limits (`A-19`, `MRP-12`).
-3. Discriminating Observation or experiment stated (`A-19`).
-4. Where no alternative was found, an Unknown exists recording the search and its limits (`A-54`).
+1. Null explanation present and non-trivial (`DA-19`).
+2. Strongest materially distinct alternative present, with the search documented — method, sources, date, limits (`DA-19`, `MRP-12`).
+3. Discriminating Observation or experiment stated (`DA-19`).
+4. Where no alternative was found, an Unknown exists recording the search and its limits (`DA-54`).
 5. Description is distinguished from inference (§7 ¶3) (`MRP-12`).
-6. **MUST NOT generalize beyond the narrowest material limitation of its inputs** without additional justification (§7 ¶3) — scope is computed from inputs and compared to the stated scope (`A-62` for the mechanical part; `MRP-12` for the rest).
-7. Reliance on a corrected or superseded Result requires disclosure of that status (§7 ¶1) (`A-59`).
+6. **MUST NOT generalize beyond the narrowest material limitation of its inputs** without additional justification (§7 ¶3) — scope is computed from inputs and compared to the stated scope (`DA-62` for the mechanical part; `MRP-12` for the rest).
+7. Reliance on a corrected or superseded Result requires disclosure of that status (§7 ¶1) (`DA-59`).
 
 **Failure cases.** Interpretation stated over a scope wider than any input supports — the most common overclaiming route · the null omitted or written as a strawman · "no alternative explanation exists" used as positive support, which §5 ¶5 explicitly forbids · an Interpretation quietly amending a Result's meaning without a correcting Result.
 
@@ -277,11 +277,11 @@ Note the two-tier structure precisely: every Claim needs a falsifier; only justi
 **Relationships.** `principle --generalizes--> claim|interpretation` · `principle --falsified_by--> result` · `principle --bounded_by--> scope` · `principle --challenged_by--> unknown`.
 
 **Validation rules.**
-1. Falsifiable per §2: within its stated Scope it identifies at least one feasible Observation, test outcome, or Result that would count against it under its declared decision rule (`A-18`).
+1. Falsifiable per §2: within its stated Scope it identifies at least one feasible Observation, test outcome, or Result that would count against it under its declared decision rule (`DA-18`).
 2. Scope stated as §2 requires — population, environment, conditions, versions, and time interval, sufficiently identifiable for an Independent reviewer to determine membership (`MRP-13`).
 3. **No Principle is constitutional** (§5 ¶6). A Principle MUST NOT be cited to justify a governance transition, and no scientific constant, threshold, model, ontology, or hypothesis set may be elevated beyond a revisable standard.
-4. Prohibited certainty labels (§8 ¶3) (`A-07`).
-5. Acceptance requires a Decision (G-13); accumulated support alone never promotes a Principle (§9 ¶3).
+4. Prohibited certainty labels (§8 ¶3) (`DA-07`).
+5. Acceptance requires a Decision (DG-13); accumulated support alone never promotes a Principle (§9 ¶3).
 
 **Failure cases.** A Principle hardening into an unquestionable assumption — the failure §5 ¶6 exists to prevent, and the reason "provisional" appears in the definition · Principle cited as governance authority, conflating scientific support with repository authority (§3 ¶6) · scope quietly widened after acceptance, without a new Decision.
 
@@ -302,7 +302,7 @@ S-8 result recorded       (validity judged by pre-registered criteria only)
         ↓
 S-5 evidence admitted     (nine §6 ¶1 items; admission rule declared pre-analysis)
         ↓
-S-6 claim state changed   (by its own pre-declared decision rule, via a G-13 Decision)
+S-6 claim state changed   (by its own pre-declared decision rule, via a DG-13 Decision)
         ↓
 S-9 interpretation        (null + strongest alternative + discriminator)
         ↓

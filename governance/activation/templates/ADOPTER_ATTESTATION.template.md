@@ -1,5 +1,7 @@
 # Adopter Attestation — template
 
+<!-- attestation-kind: adopter -->
+
 - **Status:** Draft (template — not an attestation until completed and committed in the adoption revision)
 - **Scope:** Initial adoption of `REPOSITORY_CONSTITUTION.md` v1.2.0 under §13 ¶3
 - **Responsibility:** Record the adopter's attestation

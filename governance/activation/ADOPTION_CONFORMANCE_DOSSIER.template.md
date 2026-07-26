@@ -21,7 +21,17 @@ At adoption the repository contains no scientific records and no Active Domain s
 
 This is the difference between a reviewable adoption and an unreviewable one. It is not a loophole: §12 ¶1 names route 3 explicitly, and each N/A below states the condition that would make the requirement applicable, so the discharge expires the moment the condition changes.
 
-**Scale.** Of roughly 112 MUSTs and 44 MUST NOTs, the applicable set at adoption is confined to §1–§4 and §10–§14. Everything else is N/A with a testable reason.
+**Scale, measured.** `REPOSITORY_CONSTITUTION.md` v1.2.0 contains **115** RFC-2119 MUST-family occurrences: **44** are `MUST NOT` and **71** are bare `MUST`. Reproduce with a single portable command, from the repository root:
+
+```
+python -c "import re,pathlib; t=pathlib.Path('REPOSITORY_CONSTITUTION.md').read_text(encoding='utf-8'); mn=len(re.findall(r'\bMUST NOT\b',t)); m=len(re.findall(r'\bMUST\b',t)); print('MUST NOT',mn,'| bare MUST',m-mn,'| total',m)"
+```
+
+These are **occurrences**, not distinct requirements: one sentence may carry several, and §2's definition list restates some. The count is the upper bound on what an Independent reviewer must trace, and it is stated as a token count rather than a requirement count because no clause-identifier scheme exists to key requirements against (an acknowledged limitation, and the reason coverage is hand-traced in §2 below).
+
+An earlier revision of this template said "roughly 112 MUSTs and 44 MUST NOTs". The MUST NOT figure was right; the MUST figure was not. Since this number is what justifies the not-applicable strategy to the reviewer, it is now measured and reproducible rather than estimated.
+
+The applicable set at adoption is confined to §1–§4 and §10–§14. Everything else is N/A with a testable reason.
 
 ---
 
@@ -121,7 +131,7 @@ These sections bind at adoption and require route 1 or route 2. Every row must b
 |---|---|---|
 | Registry contains active Normative artifacts, jurisdictions, and authority assignments **only** | manual | `[COMPLETE]` — confirm no rationale, roadmap, or narrative has crept in |
 | README is navigation and non-normative description | manual | `[COMPLETE]` — `P-L1`; confirm no requirement is introduced. `A-06` assesses banner coverage, not README content |
-| Terminology from a higher artifact reused unchanged | manual | `[COMPLETE]` — §11 ¶3. Check in particular that no artifact in this change uses `Active` of an object that is neither Registry-listed nor standard-governed |
+| Terminology from a higher artifact reused unchanged | manual | `[COMPLETE]` — §11 ¶3. Two specific things to verify. First, that no artifact in this change uses `Active` of an object that is neither Registry-listed nor standard-governed: `AR-1` deliberately declares `Status: Current — descriptive Level-4 record` for exactly this reason (see `AF-13`). Second, that no identifier carries two meanings: the namespace register in `00_MINIMUM_ACTIVATION_PLAN.md` §7.3 states which register owns each prefix, and `tests/governance/test_identifier_namespaces.py` enforces it (see `AF-25`) |
 
 ### §12 Conformance and enforcement
 
@@ -137,7 +147,7 @@ These sections bind at adoption and require route 1 or route 2. Every row must b
 | Requirement | Route | Evidence |
 |---|---|---|
 | Attestations by two identified humans, adopter and Independent reviewer | manual | `[COMPLETE]` — `P-A1`; both files, both humans named, both resolvable outside the repository |
-| Attestation identifies reviewed revision, non-authorship, Evidence production, conflicts, procedure, conclusion, competence, records examined | check | `A-10` — all eight elements present and no unfilled placeholder. Whether the declarations are *true* is `P-A1` |
+| Attestation identifies reviewed revision, non-authorship, Evidence production, conflicts, procedure, conclusion, competence, records examined | check | `A-10`, reviewer branch — all eight §13 ¶2 elements present, no unfilled placeholder, no unticked declaration. The check dispatches on the document's declared kind, so the adopter attestation is assessed against its own §13 ¶3-derived element set and is **not** required to declare non-authorship. Whether the declarations are *true* is `P-A1` |
 | Same atomic change activates Constitution, creates or activates Registry, assigns ≥1 steward | check | `A-03` |
 | Adoption becomes Active only when the complete change is accepted to the default branch | manual | `[COMPLETE]` — confirmed at merge by `VER-6`, and recorded in the post-merge re-verification record, not here (§1.1) |
 | Amendments do not retroactively alter prior scientific records | N/A | testable reason: this is an initial adoption, not an amendment, and no prior record's meaning is altered — see §4 |

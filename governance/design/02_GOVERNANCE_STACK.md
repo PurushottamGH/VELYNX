@@ -1,4 +1,4 @@
-# Governance Stack — O-1 and G-1 … G-13
+# Governance Stack — O-1 and DG-1 … DG-13
 
 - **Status:** Draft
 - **Scope:** Design of the ontological and governance Domain standards for Project P1
@@ -47,19 +47,19 @@ Where a field below says *"(reserved)"*, the matter is fixed by the Constitution
 
 **Lifecycle.** Draft → Active → Superseded/Withdrawn. Type addition: minor version. Type removal or identifier-grammar change: major version plus a migration record naming every affected record.
 
-**Verification.** `A-09` identifier uniqueness and grammar · `A-10` record-frontmatter conformance to the registered type · `A-11` relationship referential integrity · `A-27` terminology drift against §2 · `A-04` every registered type has exactly one owning standard.
+**Verification.** `DA-09` identifier uniqueness and grammar · `DA-10` record-frontmatter conformance to the registered type · `DA-11` relationship referential integrity · `DA-27` terminology drift against §2 · `DA-04` every registered type has exactly one owning standard.
 
 **Failure modes.**
 | Mode | Effect | Mitigation |
 |---|---|---|
-| Type registered with no owner | §9 violation invisible until a transition is attempted, then fails closed mid-work | `A-04` blocks activation of a type without an owner |
-| Silent redefinition of a §2 term | Every downstream standard inherits the drift; historical records change meaning | `A-27`; §13 ¶4 forbids retroactive meaning change |
+| Type registered with no owner | §9 violation invisible until a transition is attempted, then fails closed mid-work | `DA-04` blocks activation of a type without an owner |
+| Silent redefinition of a §2 term | Every downstream standard inherits the drift; historical records change meaning | `DA-27`; §13 ¶4 forbids retroactive meaning change |
 | Identifier reuse after retirement | Historical citations resolve to the wrong object; undetectable by link-checking | Grammar reserves retired identifiers permanently |
 | Ontology reconciliation deferred | The 12-type Research OS and the 11-kind Constitution diverge in code and prose | Roadmap M-3 gates O-1 activation on reconciliation |
 
 ---
 
-## G-1 — Registry Specification
+## DG-1 — Registry Specification
 
 **Purpose.** Define the form, schema, and integrity constraints of `GOVERNANCE_REGISTRY.yaml`, including the machine-readable jurisdiction representation that makes §4's overlap rejection decidable.
 
@@ -67,7 +67,7 @@ Where a field below says *"(reserved)"*, the matter is fixed by the Constitution
 
 **Jurisdiction (owned).** Object types: `registry_schema`, `jurisdiction_declaration`, `registry_transition_record`. Transitions: publish schema version, register jurisdiction declaration, record registry transition.
 
-**Explicitly not owned.** *Which* artifacts are Active and *who* holds authority — that is the Registry's own content, and assigning it is G-3's and the steward's business. G-1 governs the container's form, never its contents' truth.
+**Explicitly not owned.** *Which* artifacts are Active and *who* holds authority — that is the Registry's own content, and assigning it is DG-3's and the steward's business. DG-1 governs the container's form, never its contents' truth.
 
 **Inputs.** Constitution §2 and §4; O-1 identifiers; activation dossiers from each standard.
 
@@ -77,35 +77,35 @@ Where a field below says *"(reserved)"*, the matter is fixed by the Constitution
 - MUST NOT extend the Registry's responsibility beyond §2's three items. A Registry that also carries rationale, roadmap, or narrative violates §2 and §11.
 - MUST require jurisdiction as a structured tuple *(owned object types, owned transitions, scope)*. Prose jurisdictions are not mechanically comparable and make §4 ¶2 unenforceable — this is the design decision that makes the whole stack checkable.
 - MUST fail closed: any required field absent ⇒ the artifact has no authority (§4 ¶1), and the check MUST report "no authority," not "warning."
-- MUST NOT define precedence between the Registry and a Domain standard — that gap is defect D-2 and is a matter for §13, not for G-1. A subordinate standard resolving its own precedence would enlarge jurisdiction, prohibited by §4 ¶4.
+- MUST NOT define precedence between the Registry and a Domain standard — that gap is defect DD-2 and is a matter for §13, not for DG-1. A subordinate standard resolving its own precedence would enlarge jurisdiction, prohibited by §4 ¶4.
 
 **Lifecycle.** Draft → Active → Superseded/Withdrawn. Schema versions are additive within a major version; a field becoming required is a major version and requires migrating every existing entry in one Atomic change.
 
-**Verification.** `A-01` schema validation · `A-03` Registry↔artifact field consistency · `A-04` jurisdiction overlap · `A-05` authority-exists-for-declared-transition · `A-22` atomic-change completeness.
+**Verification.** `DA-01` schema validation · `DA-03` Registry↔artifact field consistency · `DA-04` jurisdiction overlap · `DA-05` authority-exists-for-declared-transition · `DA-22` atomic-change completeness.
 
 **Failure modes.**
 | Mode | Effect | Mitigation |
 |---|---|---|
 | Prose jurisdictions accepted | Overlap becomes a matter of opinion; §4 ¶2 silently unenforced | Schema rejects non-tuple jurisdictions |
-| Registry/artifact drift | An artifact appears Active while its own header disagrees; §4 ¶1 says it has no authority, but nothing detects it | `A-03` on every change |
+| Registry/artifact drift | An artifact appears Active while its own header disagrees; §4 ¶1 says it has no authority, but nothing detects it | `DA-03` on every change |
 | Registry corruption or loss | Every Active artifact's authority becomes unverifiable simultaneously | Append-only transitions in `registry/transitions/` permit reconstruction; risk R-10 |
-| Schema permits an entry with no authority assignment | Activation appears to succeed but §4 ¶2 requires fail-closed | `A-05` blocks |
+| Schema permits an entry with no authority assignment | Activation appears to succeed but §4 ¶2 requires fail-closed | `DA-05` blocks |
 
 ---
 
-## G-2 — Normative Artifact Standard
+## DG-2 — Normative Artifact Standard
 
 **Purpose.** Govern the object type *Normative artifact*: how a standard is drafted, versioned, activated, amended, superseded, and withdrawn; and what a Domain standard must contain to be reviewable at all. Subsumes the brief's Governance Standard, Version Policy (normative artifacts), Change Policy (normative artifacts), Release Policy (normative artifacts), and Phase 4's domain framework.
 
 **Authority.** §9 ¶4 (minimum Normative artifact lifecycle — see caveat); §4 ¶1-2 (required fields, activation procedure); §11 ¶1-2 (one primary responsibility; informative sections).
 
-**Caveat — depends on an under-specified delegation.** §9 ¶4's "minimum lifecycle" implies extension is permitted but does not identify recipient, permitted transitions, or limits as §4 ¶4 requires. G-2's legitimacy therefore rests on defect **D-1**. Until D-1 is resolved by human judgment, G-2 should be drafted but **not activated**, or activated only in a form that adds procedure without adding states.
+**Caveat — depends on an under-specified delegation.** §9 ¶4's "minimum lifecycle" implies extension is permitted but does not identify recipient, permitted transitions, or limits as §4 ¶4 requires. DG-2's legitimacy therefore rests on defect **DD-1**. Until DD-1 is resolved by human judgment, DG-2 should be drafted but **not activated**, or activated only in a form that adds procedure without adding states.
 
 **Jurisdiction (owned).** Object types: `normative_artifact`, `domain_standard`, `standard_version`, `activation_dossier`, `legacy_disposition`. Transitions: draft, submit for activation, activate, amend, supersede, withdraw, classify as Legacy, re-activate from Legacy.
 
-**Self-reference.** G-2 owns the type `domain_standard`, and G-2 is one. This is permitted: §9's "exactly one Active Domain standard per object type" is satisfied, and §4 ¶2's prohibition on self-activation is honoured by requiring the constitutional steward to activate G-2 directly under §13. G-2 MUST state that it does not authorize its own activation.
+**Self-reference.** DG-2 owns the type `domain_standard`, and DG-2 is one. This is permitted: §9's "exactly one Active Domain standard per object type" is satisfied, and §4 ¶2's prohibition on self-activation is honoured by requiring the constitutional steward to activate DG-2 directly under §13. DG-2 MUST state that it does not authorize its own activation.
 
-**Inputs.** Constitution §4, §9, §11, §13, §14; drafts; review records from G-4; Registry entries from G-1.
+**Inputs.** Constitution §4, §9, §11, §13, §14; drafts; review records from DG-4; Registry entries from DG-1.
 
 **Outputs.** The Domain Standard Interface (see `04_DOMAIN_STANDARD_INTERFACE.md`); the activation dossier template; the versioning scheme; the Legacy disposition procedure discharging §14.
 
@@ -119,19 +119,19 @@ Where a field below says *"(reserved)"*, the matter is fixed by the Constitution
 
 **Lifecycle.** Draft → Active → Superseded/Withdrawn (§9 ¶4). Versioning: MAJOR for a changed or removed requirement, or a jurisdiction change; MINOR for an added requirement that no existing record violates; PATCH for non-normative clarification only, which MUST be verifiable as non-normative.
 
-**Verification.** `A-02` header completeness · `A-06` RFC-2119 usage in Draft/Legacy/informative text · `A-07` prohibited self-authority lexemes · `A-30` Legacy/Draft authority-claim detection · `A-22` atomic-change completeness · manual: `MRP-01` requirement-diff review.
+**Verification.** `DA-02` header completeness · `DA-06` RFC-2119 usage in Draft/Legacy/informative text · `DA-07` prohibited self-authority lexemes · `DA-30` Legacy/Draft authority-claim detection · `DA-22` atomic-change completeness · manual: `MRP-01` requirement-diff review.
 
 **Failure modes.**
 | Mode | Effect | Mitigation |
 |---|---|---|
-| D-1 unresolved but G-2 activated anyway | The whole stack's lifecycle machinery rests on a delegation the Constitution does not grant; an adversarial reviewer can void every activation | Gate G-2 activation on H-03 |
+| DD-1 unresolved but DG-2 activated anyway | The whole stack's lifecycle machinery rests on a delegation the Constitution does not grant; an adversarial reviewer can void every activation | Gate DG-2 activation on H-03 |
 | PATCH used to smuggle a requirement | Requirements change without review | `MRP-01` diffs normative sentences, not lines |
 | Legacy corpus never dispositioned | §14 makes ~13 artifacts Legacy at adoption while live work still cites them | Roadmap phase M-6; risk R-02 |
 | Batch activation misread as one approval | Several standards activate on one reviewer's attestation without per-standard review | Dossier requires per-standard attestation even in a batched Atomic change |
 
 ---
 
-## G-3 — Authority & Delegation Standard
+## DG-3 — Authority & Delegation Standard
 
 **Purpose.** Govern authority assignment records, delegation records, steward appointment, succession, and revocation. Subsumes the brief's Authority Policy, Delegation Policy, and Steward Policy.
 
@@ -139,7 +139,7 @@ Where a field below says *"(reserved)"*, the matter is fixed by the Constitution
 
 **Jurisdiction (owned).** Object types: `authority_assignment`, `delegation_record`, `role_definition`, `conflict_of_interest_declaration`. Transitions: assign, delegate, sub-delegate, revoke, expire, transfer on succession, declare conflict.
 
-**The central constraint.** G-3 **records and lifecycles** authority; it never **creates** it. §4 ¶4: "A refinement MUST NOT create authority over a transition, object type, or jurisdiction not expressly delegated." All authority in P1 originates at §13's constitutional steward assignment and flows downward through recorded delegations. A G-3 that could mint authority would invert the Constitution.
+**The central constraint.** DG-3 **records and lifecycles** authority; it never **creates** it. §4 ¶4: "A refinement MUST NOT create authority over a transition, object type, or jurisdiction not expressly delegated." All authority in P1 originates at §13's constitutional steward assignment and flows downward through recorded delegations. A DG-3 that could mint authority would invert the Constitution.
 
 **Inputs.** The adoption dossier's steward assignment; delegation proposals; conflict declarations; Registry entries.
 
@@ -155,19 +155,19 @@ Where a field below says *"(reserved)"*, the matter is fixed by the Constitution
 
 **Lifecycle.** Proposed → Active → Revoked / Expired / Succeeded. Never deleted. Time-bounded assignments SHOULD be preferred over indefinite ones, with renewal as a reviewed transition.
 
-**Verification.** `A-05` every declared transition has a living authority · `A-23` reviewer ≠ author · `A-24` self-review detection · `A-36` delegation five-element completeness · `A-37` sub-delegation containment.
+**Verification.** `DA-05` every declared transition has a living authority · `DA-23` reviewer ≠ author · `DA-24` self-review detection · `DA-36` delegation five-element completeness · `DA-37` sub-delegation containment.
 
 **Failure modes.**
 | Mode | Effect | Mitigation |
 |---|---|---|
 | Sole steward becomes unavailable | No activation, amendment, or reversal is possible; the repository freezes permanently | Mandatory successor; escalated as H-08 |
-| Delegation drafted in prose without the five elements | Void under §4 but treated as valid in practice; every dependent transition is nonconforming | `A-36` blocks |
-| Role name used as authority ("the Research Director approved") | Authority asserted without a Registry-backed assignment — the current repository's dominant pattern | `A-05` requires resolution to a Registry entry |
-| Conflict of interest undeclared | The reviewer is not independent, so §13 attestations are void (§2) | `A-23`/`A-24` plus mandatory declaration in the attestation |
+| Delegation drafted in prose without the five elements | Void under §4 but treated as valid in practice; every dependent transition is nonconforming | `DA-36` blocks |
+| Role name used as authority ("the Research Director approved") | Authority asserted without a Registry-backed assignment — the current repository's dominant pattern | `DA-05` requires resolution to a Registry entry |
+| Conflict of interest undeclared | The reviewer is not independent, so §13 attestations are void (§2) | `DA-23`/`DA-24` plus mandatory declaration in the attestation |
 
 ---
 
-## G-4 — Review & Attestation Standard
+## DG-4 — Review & Attestation Standard
 
 **Purpose.** Govern review records and Independent reviewer attestations: how review is requested, conducted, evidenced, and attested, including the named manual review procedures §12 ¶4 requires.
 
@@ -175,7 +175,7 @@ Where a field below says *"(reserved)"*, the matter is fixed by the Constitution
 
 **Jurisdiction (owned).** Object types: `review_request`, `review_record`, `attestation`, `manual_review_procedure`. Transitions: request, assign reviewer, conduct, attest, reject, withdraw attestation.
 
-**Inputs.** Change sets from G-8; authority and conflict records from G-3; check outputs from G-11; the artifact under review.
+**Inputs.** Change sets from DG-8; authority and conflict records from DG-3; check outputs from DG-11; the artifact under review.
 
 **Outputs.** `governance/reviews/*`; `constitution/attestations/*`; the register of named manual review procedures `MRP-xx`.
 
@@ -188,19 +188,19 @@ Where a field below says *"(reserved)"*, the matter is fixed by the Constitution
 
 **Lifecycle.** Requested → In review → Attested / Rejected / Withdrawn. Attestations are immutable once signed; defects are corrected by a superseding attestation that identifies the defect.
 
-**Verification.** `A-23` non-authorship · `A-24` self-review · `A-38` attestation field completeness · `A-39` every MUST maps to a check or an `MRP-xx` or a recorded non-applicability · `A-29` unavailable-check reporting.
+**Verification.** `DA-23` non-authorship · `DA-24` self-review · `DA-38` attestation field completeness · `DA-39` every MUST maps to a check or an `MRP-xx` or a recorded non-applicability · `DA-29` unavailable-check reporting.
 
 **Failure modes.**
 | Mode | Effect | Mitigation |
 |---|---|---|
 | **No second human exists** | No attestation can be produced; every activation path is closed; the entire stack is inert | The blocking item H-01. No engineering mitigation exists. |
 | Reviewer pool too small for genuine independence | Attestations become formalities; §2's guarantee hollows out | External reviewers; recorded as risk R-14 and limitation L-4 in the v1.2.0 record |
-| AI review treated as independent review | §4 ¶4 violated at the root; every downstream activation void | `A-38` requires an identified human; attestations record competence |
+| AI review treated as independent review | §4 ¶4 violated at the root; every downstream activation void | `DA-38` requires an identified human; attestations record competence |
 | Attestation cites a revision that later changes | Review no longer covers the accepted content | Revision pinning; re-attestation required if the change set moves |
 
 ---
 
-## G-5 — Conformance Standard
+## DG-5 — Conformance Standard
 
 **Purpose.** Govern the conformance claim: the record asserting that a stated revision conforms to stated requirements within a stated Scope.
 
@@ -208,9 +208,9 @@ Where a field below says *"(reserved)"*, the matter is fixed by the Constitution
 
 **Jurisdiction (owned).** Object types: `conformance_claim`, `nonconformance_record`, `non_applicability_statement`. Transitions: assert, verify, publish, revoke, close nonconformance.
 
-**Explicitly not owned.** The checks themselves (G-11), the review that supports the claim (G-4), and audit reports about conformance (G-6). G-5 owns the *assertion*.
+**Explicitly not owned.** The checks themselves (DG-11), the review that supports the claim (DG-4), and audit reports about conformance (DG-6). DG-5 owns the *assertion*.
 
-**Inputs.** Check outputs (G-11); review records (G-4); the requirement inventory extracted from Active standards.
+**Inputs.** Check outputs (DG-11); review records (DG-4); the requirement inventory extracted from Active standards.
 
 **Outputs.** Conformance claims per change set and per release; the nonconformance register.
 
@@ -223,18 +223,18 @@ Where a field below says *"(reserved)"*, the matter is fixed by the Constitution
 
 **Lifecycle.** Asserted → Verified → Published → Revoked. Revocation on discovering the claim was false; the claim is retained with its refutation (§8 ¶2).
 
-**Verification.** `A-39` requirement-to-evidence coverage · `A-29` unavailable-check reporting · `A-40` non-applicability statements are testable · manual `MRP-02` conformance claim review.
+**Verification.** `DA-39` requirement-to-evidence coverage · `DA-29` unavailable-check reporting · `DA-40` non-applicability statements are testable · manual `MRP-02` conformance claim review.
 
 **Failure modes.**
 | Mode | Effect | Mitigation |
 |---|---|---|
-| Green CI read as conformance | The most likely institutional failure: passing tests reported as compliance, contrary to §3 ¶3 and §12 ¶4 | Claims must enumerate criteria actually assessed; `A-29` |
-| Non-applicability used as an escape hatch | Requirements silently disabled | `A-40` requires a *testable* reason |
-| Coverage decays as standards grow | New MUSTs land with no mapped check or `MRP` | `A-39` fails the change set that adds an unmapped MUST |
+| Green CI read as conformance | The most likely institutional failure: passing tests reported as compliance, contrary to §3 ¶3 and §12 ¶4 | Claims must enumerate criteria actually assessed; `DA-29` |
+| Non-applicability used as an escape hatch | Requirements silently disabled | `DA-40` requires a *testable* reason |
+| Coverage decays as standards grow | New MUSTs land with no mapped check or `MRP` | `DA-39` fails the change set that adds an unmapped MUST |
 
 ---
 
-## G-6 — Audit Standard
+## DG-6 — Audit Standard
 
 **Purpose.** Govern audit reports: observations about conformance at one identified revision and time.
 
@@ -242,7 +242,7 @@ Where a field below says *"(reserved)"*, the matter is fixed by the Constitution
 
 **Jurisdiction (owned).** Object types: `audit_report`, `audit_finding`, `audit_response`. Transitions: commission, conduct, publish, respond, close finding.
 
-**Inputs.** The repository at a pinned revision; Active standards; conformance claims (G-5); check outputs (G-11).
+**Inputs.** The repository at a pinned revision; Active standards; conformance claims (DG-5); check outputs (DG-11).
 
 **Outputs.** `audit/*` reports, each revision-stamped and immutable.
 
@@ -251,22 +251,22 @@ Where a field below says *"(reserved)"*, the matter is fixed by the Constitution
 - MUST NOT audit against an unregistered or "implicit" standard. The requirement basis MUST be an Active artifact identified by Registry entry and version.
 - MUST identify the revision and time with §2's timezone-qualified precision.
 - MUST NOT alter the audited object (§3 ¶6, by analogy with the validation rule).
-- Findings are observations; closing a finding requires a Decision (G-13) or a conformance change, not an audit edit.
+- Findings are observations; closing a finding requires a Decision (DG-13) or a conformance change, not an audit edit.
 
 **Lifecycle.** Commissioned → Conducted → Published (immutable) → Responded. Superseded by a later audit; never edited.
 
-**Verification.** `A-41` audit basis resolves to an Active registered artifact · `A-42` audit reports contain no RFC-2119 requirement-creating sentences · `A-14` immutability.
+**Verification.** `DA-41` audit basis resolves to an Active registered artifact · `DA-42` audit reports contain no RFC-2119 requirement-creating sentences · `DA-14` immutability.
 
 **Failure modes.**
 | Mode | Effect | Mitigation |
 |---|---|---|
-| Audit invents its own standard | Governance forks; the audited party cannot conform to an unpublished rule | `A-41` |
+| Audit invents its own standard | Governance forks; the audited party cannot conform to an unpublished rule | `DA-41` |
 | Audit edited after publication to soften findings | Record of nonconformance destroyed, breaching §8 ¶2 | Immutability + append-only |
 | Audit findings never responded to | Nonconformance accumulates silently | Findings tracked as Unknowns under S-3 when material |
 
 ---
 
-## G-7 — Records Custody & Retention Standard
+## DG-7 — Records Custody & Retention Standard
 
 **Purpose.** Govern the custody of Repository evidence that cannot live in Git: external artifact manifests, digest algorithms, retention schedules, and recovery procedures. This is the governance half of the brief's Evidence Policy; the scientific half is S-5.
 
@@ -283,22 +283,22 @@ Where a field below says *"(reserved)"*, the matter is fixed by the Constitution
 - Deprecating a digest algorithm MUST NOT invalidate historical manifests; re-digesting under a new algorithm MUST be recorded as a new manifest linked to the prior one, never as an edit. Over twenty years this will happen at least once (risk R-09).
 - Loss of a retained artifact MUST be recorded as an Unknown or limitation under §6 ¶5 — never silently dropped.
 - Credentials and private keys MUST NOT be committed (§10 ¶5); custody manifests MUST NOT embed secrets.
-- Retention for Results, Negative Results, and Unknowns is permanent (§7 ¶4, §8 ¶1); G-7 MUST NOT schedule their expiry.
+- Retention for Results, Negative Results, and Unknowns is permanent (§7 ¶4, §8 ¶1); DG-7 MUST NOT schedule their expiry.
 
 **Lifecycle.** Manifest: Registered → Verified → Degraded → Lost/Recovered. All states retained.
 
-**Verification.** `A-31` external references have manifests · `A-25` secret scanning · `A-43` digest algorithm is registered and non-deprecated · `A-44` periodic digest re-verification.
+**Verification.** `DA-31` external references have manifests · `DA-25` secret scanning · `DA-43` digest algorithm is registered and non-deprecated · `DA-44` periodic digest re-verification.
 
 **Failure modes.**
 | Mode | Effect | Mitigation |
 |---|---|---|
 | Digest algorithm becomes broken | Historical identity claims weaken; §6 ¶2 no longer satisfied for old manifests | Versioned algorithm register; linked re-digest procedure |
-| Silent bit rot in external storage | Evidence unverifiable when needed, years later | `A-44` scheduled re-verification; Degraded state |
+| Silent bit rot in external storage | Evidence unverifiable when needed, years later | `DA-44` scheduled re-verification; Degraded state |
 | Storage cost pressure vs permanent retention | Institutional temptation to delete Negative Results — prohibited by §7 ¶4 | Retention schedule cannot expire permanent classes; risk R-16 |
 
 ---
 
-## G-8 — Change & Release Standard
+## DG-8 — Change & Release Standard
 
 **Purpose.** Govern change sets and software releases: how a proposed default-branch revision is composed, reviewed, accepted, released, and rolled back. Owns the §4 "Atomic change" composition rules.
 
@@ -306,7 +306,7 @@ Where a field below says *"(reserved)"*, the matter is fixed by the Constitution
 
 **Jurisdiction (owned).** Object types: `change_set`, `release`, `rollback_record`, `deprecation_record`. Transitions: propose, review, accept, reject, release, roll back, deprecate.
 
-**Inputs.** Proposed revisions; review records (G-4); conformance claims (G-5); check outputs (G-11).
+**Inputs.** Proposed revisions; review records (DG-4); conformance claims (DG-5); check outputs (DG-11).
 
 **Outputs.** Accepted revisions; release records; rollback records.
 
@@ -315,22 +315,22 @@ Where a field below says *"(reserved)"*, the matter is fixed by the Constitution
 - Merge permission MUST NOT be represented as scientific authorization (§4 ¶5). A merged Result is not an accepted Result.
 - Rollback MUST preserve the previous state, rationale, supporting records, and transition history (§8 ¶2).
 - Force-push, history rewriting, and branch deletion affecting `results/`, `evidence/`, `observations/`, `decisions/`, `unknowns/`, `constitution/attestations/`, or `registry/transitions/` MUST be prohibited at the platform level, not merely by policy (§7 ¶1, §8 ¶2).
-- Release versioning of software is independent of Normative artifact versioning (G-2); the two MUST NOT share a version number, because their change semantics differ.
+- Release versioning of software is independent of Normative artifact versioning (DG-2); the two MUST NOT share a version number, because their change semantics differ.
 
 **Lifecycle.** Proposed → Under review → Accepted / Rejected → Released → Deprecated. Rollback creates a new record; it never erases.
 
-**Verification.** `A-22` atomic-change completeness · `A-15` scientific-record deletion detection · `A-45` protected-path history integrity · `A-46` release artifact digests.
+**Verification.** `DA-22` atomic-change completeness · `DA-15` scientific-record deletion detection · `DA-45` protected-path history integrity · `DA-46` release artifact digests.
 
 **Failure modes.**
 | Mode | Effect | Mitigation |
 |---|---|---|
-| Split activation across two commits | §2's atomicity breached; there exists a revision where an artifact is Active with no Registry entry | `A-22` on the merge |
-| History rewrite on a protected path | Prior Results concealed, breaching §7 ¶1 — undetectable after the fact without an external anchor | Platform-level protection + `A-45` + external timestamp anchor |
+| Split activation across two commits | §2's atomicity breached; there exists a revision where an artifact is Active with no Registry entry | `DA-22` on the merge |
+| History rewrite on a protected path | Prior Results concealed, breaching §7 ¶1 — undetectable after the fact without an external anchor | Platform-level protection + `DA-45` + external timestamp anchor |
 | Rollback implemented as revert-and-forget | Prior state and rationale lost, breaching §8 ¶2 | Rollback record required |
 
 ---
 
-## G-9 — Emergency & Containment Standard
+## DG-9 — Emergency & Containment Standard
 
 **Purpose.** Govern records of security containment actions taken before the normal record-creation sequence.
 
@@ -338,7 +338,7 @@ Where a field below says *"(reserved)"*, the matter is fixed by the Constitution
 
 **Jurisdiction (owned).** Object type: `containment_action_record`. Transitions: record action, review action, ratify or reverse.
 
-**The narrowness is the point.** §12 ¶2 is the *only* constitutional emergency provision, and it authorizes exactly one thing: deferring a record. It does not authorize deferring review, bypassing §13, altering a scientific record, activating a standard, or granting temporary authority. G-9 MUST state this explicitly, because "emergency policy" is the classic vector by which governance systems acquire an unbounded override.
+**The narrowness is the point.** §12 ¶2 is the *only* constitutional emergency provision, and it authorizes exactly one thing: deferring a record. It does not authorize deferring review, bypassing §13, altering a scientific record, activating a standard, or granting temporary authority. DG-9 MUST state this explicitly, because "emergency policy" is the classic vector by which governance systems acquire an unbounded override.
 
 **Inputs.** The containment event; the acting party's identity; the harm assessment.
 
@@ -348,22 +348,22 @@ Where a field below says *"(reserved)"*, the matter is fixed by the Constitution
 - MUST NOT authorize any transition other than deferral of the containment record itself.
 - MUST NOT permit a scientific transition, a standard activation, an amendment, or an authority assignment under emergency conditions.
 - The record MUST follow "immediately afterward" and MUST state the harm rationale; a delayed record is itself a nonconformance to be reported, not excused.
-- Every containment action remains subject to review (§12 ¶2) — G-9 MUST NOT create a ratification path that terminates review.
+- Every containment action remains subject to review (§12 ¶2) — DG-9 MUST NOT create a ratification path that terminates review.
 
 **Lifecycle.** Action taken → Recorded → Reviewed → Ratified / Reversed. Always retained.
 
-**Verification.** `A-47` containment record exists within the declared window · `A-48` no containment record authorizes a non-containment transition · manual `MRP-03` post-incident review.
+**Verification.** `DA-47` containment record exists within the declared window · `DA-48` no containment record authorizes a non-containment transition · manual `MRP-03` post-incident review.
 
 **Failure modes.**
 | Mode | Effect | Mitigation |
 |---|---|---|
-| Emergency scope creep | Becomes a general override of §13 and §4 — the most dangerous failure in the stack | `A-48`; jurisdiction owns exactly one object type |
-| Containment used to delete records | §8 ¶2 breached under cover of urgency | Deletion is never containment; `A-15` |
-| Record never filed | The exception swallows the rule | `A-47` |
+| Emergency scope creep | Becomes a general override of §13 and §4 — the most dangerous failure in the stack | `DA-48`; jurisdiction owns exactly one object type |
+| Containment used to delete records | §8 ¶2 breached under cover of urgency | Deletion is never containment; `DA-15` |
+| Record never filed | The exception swallows the rule | `DA-47` |
 
 ---
 
-## G-10 — Conflict Resolution Standard
+## DG-10 — Conflict Resolution Standard
 
 **Purpose.** Govern the conflict record: the tracked object representing a same-level requirement conflict during the interval §4 leaves open.
 
@@ -371,9 +371,9 @@ Where a field below says *"(reserved)"*, the matter is fixed by the Constitution
 
 **Jurisdiction (owned).** Object type: `conflict_record`. Transitions: open, escalate to common parent authority, resolve, withdraw.
 
-**Explicitly not owned.** The resolution *rule* — §4 fixes it, and G-10 restating it would create a same-level duplicate of a Level-1 requirement, which §4 ¶4 itself prohibits enlarging. G-10 owns tracking and escalation only.
+**Explicitly not owned.** The resolution *rule* — §4 fixes it, and DG-10 restating it would create a same-level duplicate of a Level-1 requirement, which §4 ¶4 itself prohibits enlarging. DG-10 owns tracking and escalation only.
 
-**Inputs.** Detected conflicts (from `A-28`, review, or audit); the Registry's jurisdiction map, used to compute the common parent authority.
+**Inputs.** Detected conflicts (from `DA-28`, review, or audit); the Registry's jurisdiction map, used to compute the common parent authority.
 
 **Outputs.** `governance/conflicts/*`.
 
@@ -385,18 +385,18 @@ Where a field below says *"(reserved)"*, the matter is fixed by the Constitution
 
 **Lifecycle.** Open → Escalated → Resolved / Withdrawn. Retained permanently as governance history.
 
-**Verification.** `A-28` contradiction detection (partial; see limitations) · `A-49` open conflicts block dependent transitions.
+**Verification.** `DA-28` contradiction detection (partial; see limitations) · `DA-49` open conflicts block dependent transitions.
 
 **Failure modes.**
 | Mode | Effect | Mitigation |
 |---|---|---|
-| Conflicts detected only by humans, rarely | Contradictory requirements coexist for years — the repository's current condition (N-7, N-9) | `A-28` catches lexical and jurisdictional cases; `MRP-04` for semantic ones |
+| Conflicts detected only by humans, rarely | Contradictory requirements coexist for years — the repository's current condition (N-7, N-9) | `DA-28` catches lexical and jurisdictional cases; `MRP-04` for semantic ones |
 | No common parent identifiable | Escalation stalls | Default escalation to constitutional steward |
-| Conflict record used as a resolution | Nonconformance persists while appearing handled | Resolution requires an amendment, verified by `A-49` |
+| Conflict record used as a resolution | Nonconformance persists while appearing handled | Resolution requires an amendment, verified by `DA-49` |
 
 ---
 
-## G-11 — Automation & Tooling Standard
+## DG-11 — Automation & Tooling Standard
 
 **Purpose.** Govern registered checks: their declared scope, algorithm, limitations, false-positive and false-negative characteristics, and operational status.
 
@@ -417,24 +417,24 @@ Where a field below says *"(reserved)"*, the matter is fixed by the Constitution
 
 **Lifecycle.** Proposed → Active → Advisory → Broken → Retired. A Broken check is loudly Broken; silence is prohibited.
 
-**Verification.** `A-29` unavailable-check reporting · `A-50` check register completeness · `A-51` no check emits an approval · self-test fixtures per check (checks are themselves validated).
+**Verification.** `DA-29` unavailable-check reporting · `DA-50` check register completeness · `DA-51` no check emits an approval · self-test fixtures per check (checks are themselves validated).
 
 **Failure modes.**
 | Mode | Effect | Mitigation |
 |---|---|---|
 | Check silently stops matching (renamed paths) | Zero findings misread as conformance — present today: `ci.yml` lints `core/`, `validation/`, which no longer exist | Checks assert their target set is non-empty |
 | False negatives undisclosed | Conformance claims overstate coverage | Mandatory FP/FN disclosure at registration |
-| Automation drifts into authority | "CI approved the merge" | `A-51`; G-5 claims cite checks as evidence, never as approval |
+| Automation drifts into authority | "CI approved the merge" | `DA-51`; DG-5 claims cite checks as evidence, never as approval |
 
 ---
 
-## G-12 — Architecture Standard
+## DG-12 — Architecture Standard
 
 **Purpose.** Govern architecture records: repository layout, module boundaries, dependency rules, and Material state declarations.
 
 **Authority.** §10 ¶1 (architecture and layout MUST be defined in versioned architecture records with explicit boundaries, dependencies, and rationale); §10 ¶2 (Material state declarations); §10 ¶4 (independent changeability of implementation and validation); §10 ¶5 (fixtures).
 
-**Caveat.** §10 ¶1 names the recipient artifact kind but not permitted transitions or limits, so G-12 partially depends on defect **D-1**. It is the least affected of the four, because §10 states the required content directly.
+**Caveat.** §10 ¶1 names the recipient artifact kind but not permitted transitions or limits, so DG-12 partially depends on defect **DD-1**. It is the least affected of the four, because §10 states the required content directly.
 
 **Jurisdiction (owned).** Object types: `architecture_record`, `boundary_declaration`, `material_state_declaration`, `architecture_decision`. Transitions: draft, activate, supersede, withdraw.
 
@@ -447,23 +447,23 @@ Where a field below says *"(reserved)"*, the matter is fixed by the Constitution
 - Material state MUST NOT depend on an undocumented global, cache, service, environment value, mutable default, clock, random source, or local file (§10 ¶2).
 - A directory name MUST NOT be treated as proof of separation (§10 ¶1) — hence machine-readable boundary declarations.
 - Changing implementation MUST NOT silently change acceptance criteria (§10 ¶4).
-- Generated, cached, secret, personal, and runtime-only material MUST be separated from canonical records and excluded from version control unless G-12 explicitly requires a safe reproducible fixture (§10 ¶5).
+- Generated, cached, secret, personal, and runtime-only material MUST be separated from canonical records and excluded from version control unless DG-12 explicitly requires a safe reproducible fixture (§10 ¶5).
 - MUST NOT relocate `GOVERNANCE_REGISTRY.yaml` (pinned by §2) or purport to authorize doing so.
 
 **Lifecycle.** Draft → Active → Superseded/Withdrawn, versioned. Layout changes are ordinary revisions, not constitutional events.
 
-**Verification.** `A-34` boundary and dependency conformance · `A-32` Material state declaration presence · `A-26` generated/cached material in VCS · `A-25` secrets · `A-35` assessor/assessed shared-code independence.
+**Verification.** `DA-34` boundary and dependency conformance · `DA-32` Material state declaration presence · `DA-26` generated/cached material in VCS · `DA-25` secrets · `DA-35` assessor/assessed shared-code independence.
 
 **Failure modes.**
 | Mode | Effect | Mitigation |
 |---|---|---|
-| Layout drifts from the record | The record describes a repository that no longer exists — the current condition | `A-34` runs on every change |
-| Boundary declarations become decorative | §10's warning realized exactly | Declarations are executable inputs to `A-34`, not prose |
-| Undeclared Material state | Irreproducible executions; §10 ¶3 breached | `A-32` plus determinism testing in `validation/` |
+| Layout drifts from the record | The record describes a repository that no longer exists — the current condition | `DA-34` runs on every change |
+| Boundary declarations become decorative | §10's warning realized exactly | Declarations are executable inputs to `DA-34`, not prose |
+| Undeclared Material state | Irreproducible executions; §10 ¶3 breached | `DA-32` plus determinism testing in `validation/` |
 
 ---
 
-## G-13 — Decision Standard
+## DG-13 — Decision Standard
 
 **Purpose.** Govern the Decision: the governance record authorizing declared transitions or actions.
 
@@ -473,12 +473,12 @@ Where a field below says *"(reserved)"*, the matter is fixed by the Constitution
 
 **Jurisdiction (owned).** Object types: `decision`. Transitions: propose, approve, execute, reverse, supersede.
 
-**Inputs.** The proposed transition; the specifying Domain standard; the authority assignment (G-3); the Evidence and Interpretations cited (by reference only).
+**Inputs.** The proposed transition; the specifying Domain standard; the authority assignment (DG-3); the Evidence and Interpretations cited (by reference only).
 
 **Outputs.** `decisions/*`.
 
 **Constraints.**
-- A Decision references but does not contain Evidence or Interpretations, and it does not make its rationale true (§2). This sentence should appear verbatim in G-13.
+- A Decision references but does not contain Evidence or Interpretations, and it does not make its rationale true (§2). This sentence should appear verbatim in DG-13.
 - A Decision MUST NOT alter an Observation or Result (§3 ¶6).
 - Governance approval MUST NOT be represented as scientific support (§3 ¶6).
 - One Decision authorizes one transition or one atomic set of explicitly coupled transitions (§11).
@@ -488,12 +488,12 @@ Where a field below says *"(reserved)"*, the matter is fixed by the Constitution
 
 **Lifecycle.** Proposed → Approved → Executed → Reversed / Superseded. Append-only; never deleted.
 
-**Verification.** `A-12` transition record completeness · `A-13` illegal transition detection · `A-52` Decision contains no embedded Evidence or Interpretation · `A-53` approving authority is Registry-listed and permitted for that transition.
+**Verification.** `DA-12` transition record completeness · `DA-13` illegal transition detection · `DA-52` Decision contains no embedded Evidence or Interpretation · `DA-53` approving authority is Registry-listed and permitted for that transition.
 
 **Failure modes.**
 | Mode | Effect | Mitigation |
 |---|---|---|
-| Decision embeds its evidence | §2 breached; the Decision becomes self-justifying and the evidence escapes S-5's admission rules | `A-52` |
-| Decision approved by an unlisted role | Transition void under §4 ¶5, but recorded as valid | `A-53` fails closed |
+| Decision embeds its evidence | §2 breached; the Decision becomes self-justifying and the evidence escapes S-5's admission rules | `DA-52` |
+| Decision approved by an unlisted role | Transition void under §4 ¶5, but recorded as valid | `DA-53` fails closed |
 | Approval read as scientific support | The most consequential §3 violation available to a research institution | Mandatory disclaimer clause; `MRP-05` review |
 | Irreversible transition designed in | §8 ¶2 breached structurally | Every transition definition must name its reversal |

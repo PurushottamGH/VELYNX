@@ -3,7 +3,7 @@
 - **Status:** Draft
 - **Scope:** The verification pipeline for every governed change in Project P1, and the register of named manual review procedures
 - **Responsibility:** Specify the stages, actors, entry and exit criteria, artifacts, and fail-closed behaviour of verification
-- **Authority source:** None. This record has no normative authority. On activation its stages would be owned jointly by G-4, G-5, G-6, G-8, and G-11 within their declared jurisdictions.
+- **Authority source:** None. This record has no normative authority. On activation its stages would be owned jointly by DG-4, DG-5, DG-6, DG-8, and DG-11 within their declared jurisdictions.
 - **Governing artifact:** `REPOSITORY_CONSTITUTION.md` v1.2.0 (Draft)
 - **Version:** 0.1.0
 
@@ -62,7 +62,7 @@ Five rules constrain every stage. They come from §3, §4, and §12, and violati
                         ┌─────────────────────────────────────────────┐                           │
                         │  V7  AUTHORITY DECISION                     │                           │
                         │  actor: Registry-listed authority           │                           │
-                        │  output: Decision (G-13) + transition rec.  │                           │
+                        │  output: Decision (DG-13) + transition rec.  │                           │
                         │  fails closed if no permitted authority     │                           │
                         └───────────────────┬─────────────────────────┘                           │
                                             ▼                                                     │
@@ -77,7 +77,7 @@ Five rules constrain every stage. They come from §3, §4, and §12, and violati
 │ V9  AUDIT    │                  │ V10  RELEASE     │                  │ V11  ROLLBACK    │      │
 │ post-hoc, at │                  │ versioned, with  │                  │ new record;      │      │
 │ a revision   │                  │ digests          │                  │ preserves prior  │      │
-│ (§3 ¶5)      │                  │ (G-8)            │                  │ state (§8 ¶2)    │      │
+│ (§3 ¶5)      │                  │ (DG-8)            │                  │ state (§8 ¶2)    │      │
 └──────┬───────┘                  └──────────────────┘                  └──────────────────┘      │
        │                                                                                          │
        ▼                                                                                          │
@@ -100,7 +100,7 @@ V2–V5 run **concurrently**, not in sequence. They are different lenses on one 
 **Activity:** declare the change class — `standard_activation`, `standard_amendment`, `constitutional_amendment`, `scientific_transition`, `implementation`, `validation`, `audit`, `containment`, `release`. Declare Affected requirements (§2): every requirement whose subject, condition, output, evidence, or enforcement can change because of this change.
 **Exit:** class declared; Affected requirement list attached.
 **Fails closed if:** class undeclared, or the Affected list is empty for a change touching normative or record paths.
-**Must not:** narrow the Affected requirement definition. §2 fixes it, and understating it is the cheapest way to evade the whole pipeline — which is why `A-22` independently re-derives the class from the diff and `A-03` catches an undeclared activation.
+**Must not:** narrow the Affected requirement definition. §2 fixes it, and understating it is the cheapest way to evade the whole pipeline — which is why `DA-22` independently re-derives the class from the diff and `DA-03` catches an undeclared activation.
 
 ### V1 — Automated conformance gate
 **Actor:** automation. **Authority:** none (I-2).
@@ -145,7 +145,7 @@ V2–V5 run **concurrently**, not in sequence. They are different lenses on one 
 ### V5 — Verification review
 **Actor:** an identified human, distinct from the change's authors.
 **Activity:** the §12 ¶1 traceability test, executed literally. For every Affected requirement expressed as MUST or MUST NOT, confirm traceability to exactly one of: an automated check and its output; a manual inspection procedure and a version-controlled finding; a statement that the requirement is not applicable, with a **testable** reason.
-**Output:** a conformance claim (G-5) identifying revision, Scope, checks performed, results, reviewer, unresolved violations, and limitations (§12 ¶1).
+**Output:** a conformance claim (DG-5) identifying revision, Scope, checks performed, results, reviewer, unresolved violations, and limitations (§12 ¶1).
 **Fails closed if:** any Affected requirement is untraceable, or a non-applicability statement is not testable.
 **Must not:** redefine nonconformance away, or report an unavailable check as passed (§12 ¶1).
 
@@ -159,8 +159,8 @@ V2–V5 run **concurrently**, not in sequence. They are different lenses on one 
 
 ### V7 — Authority decision
 **Actor:** a Registry-listed authority permitted for the specific transition.
-**Output:** a Decision (G-13) plus a §9 ¶3 eight-element transition record.
-**Fails closed if:** no authority permitted for that jurisdiction exists (§4 ¶2); the approver's assignment does not include the transition (`A-53`); the Decision embeds Evidence or Interpretation (§2, `A-52`).
+**Output:** a Decision (DG-13) plus a §9 ¶3 eight-element transition record.
+**Fails closed if:** no authority permitted for that jurisdiction exists (§4 ¶2); the approver's assignment does not include the transition (`DA-53`); the Decision embeds Evidence or Interpretation (§2, `DA-52`).
 **Must not:** be represented as scientific support (§3 ¶6); infer acceptance from evidence count, model confidence, test success, or elapsed time (§9 ¶3).
 
 ### V8 — Ratification
@@ -172,20 +172,20 @@ V2–V5 run **concurrently**, not in sequence. They are different lenses on one 
 ### V9 — Repository audit
 **Actor:** an auditor who is not the author of the audited content.
 **Activity:** observe conformance at a stated revision and time (§3 ¶5), against Active registered requirements only.
-**Output:** an immutable, revision-stamped audit report (G-6).
+**Output:** an immutable, revision-stamped audit report (DG-6).
 **Must not:** create or amend the requirement it audits (§3 ¶6); audit against an implicit or derived standard; alter the audited object. Material findings become Unknowns (S-3), not audit-internal to-do items.
 
 ### V10 — Version release
-**Actor:** release authority under G-8.
-**Activity:** version, build, digest, and record. Software release versioning is independent of Normative artifact versioning (G-2 vs G-8).
-**Output:** a release record with source revision and artifact digests (`A-46`).
+**Actor:** release authority under DG-8.
+**Activity:** version, build, digest, and record. Software release versioning is independent of Normative artifact versioning (DG-2 vs DG-8).
+**Output:** a release record with source revision and artifact digests (`DA-46`).
 **Must not:** report build success as scientific success (§3 ¶7).
 
 ### V11 — Rollback
 **Actor:** the authority permitted to reverse the original transition.
 **Activity:** every scientific state change must be reversible by a later authorized Decision (§8 ¶2). Reversal preserves the previous state, rationale, supporting records, and transition history.
 **Output:** a rollback record; a new Decision. Never a deletion, never a history rewrite.
-**Fails closed if:** the original transition defined no reversal path — which is why G-13 requires every transition definition to name its reversal at design time.
+**Fails closed if:** the original transition defined no reversal path — which is why DG-13 requires every transition definition to name its reversal at design time.
 
 ### V12 — Deprecation
 **Activity:** move a Normative artifact to Superseded (identifying its replacement) or Withdrawn (stating why no replacement applies), per §9 ¶4. Prior versions remain recoverable.
@@ -195,14 +195,14 @@ V2–V5 run **concurrently**, not in sequence. They are different lenses on one 
 
 ## 4. Named manual review procedures
 
-§12 ¶4: "Requirements not mechanically decidable MUST have a named manual review procedure." Each procedure below names its requirement, its question, its method, and its recorded output. `A-39` verifies that every non-decidable MUST maps to one.
+§12 ¶4: "Requirements not mechanically decidable MUST have a named manual review procedure." Each procedure below names its requirement, its question, its method, and its recorded output. `DA-39` verifies that every non-decidable MUST maps to one.
 
 | Id | Requirement | Question | Method | Output |
 |---|---|---|---|---|
-| MRP-01 | §11 ¶2, G-2 | Did this version change a requirement while claiming to be a clarification? | Diff normative sentences, not lines; classify each as added, removed, strengthened, weakened, or unchanged; a PATCH with any non-unchanged classification fails | Requirement-diff finding |
+| MRP-01 | §11 ¶2, DG-2 | Did this version change a requirement while claiming to be a clarification? | Diff normative sentences, not lines; classify each as added, removed, strengthened, weakened, or unchanged; a PATCH with any non-unchanged classification fails | Requirement-diff finding |
 | MRP-02 | §12 ¶1 | Does the conformance claim overstate what was assessed? | Sample three claimed traces; re-execute or re-inspect; verify the check's declared scope actually covers the requirement | Sampling finding |
 | MRP-03 | §12 ¶2 | Was containment proportionate, and did it stay within deferral of recording? | Reconstruct the timeline; verify no other transition occurred under emergency cover | Post-incident finding |
-| MRP-04 | §4 ¶4 | Do two Active requirements conflict semantically? | For each requirement pair flagged by `A-28`, and for each pair sharing a subject, construct a case satisfying one and violating the other | Conflict record or dismissal |
+| MRP-04 | §4 ¶4 | Do two Active requirements conflict semantically? | For each requirement pair flagged by `DA-28`, and for each pair sharing a subject, construct a case satisfying one and violating the other | Conflict record or dismissal |
 | MRP-05 | §3 ¶6 | Is governance approval being represented as scientific support? | Read every Decision citing scientific records; verify the Decision claims authorization only | Separation finding |
 | MRP-06 | §5 ¶3 | Is the stopping rule specific enough to prevent optional stopping? | Attempt to construct two defensible stopping points consistent with the stated rule; if both are defensible the rule fails | Protocol finding |
 | MRP-07 | §2 | Is this Question actually a Claim? | Test whether the text asserts a proposition assessable as supported or opposed | Object-kind finding |
@@ -229,7 +229,7 @@ V2–V5 run **concurrently**, not in sequence. They are different lenses on one 
 | Required field absent from an artifact | V1 | Artifact has no authority (§4 ¶1); change blocked |
 | Active check reports `FAIL` | V1 | Blocked |
 | Active check reports `NOT_VERIFIED` | V1 | Blocked (§12 ¶1) — never downgraded to a warning |
-| Registered check did not run | V1 | Blocked (`A-29`) |
+| Registered check did not run | V1 | Blocked (`DA-29`) |
 | Jurisdiction overlap detected | V1 / V2 | Registry must reject (§4 ¶2) |
 | No authority permitted for the transition | V7 | Activation fails closed (§4 ¶2) |
 | No Independent reviewer available | V6 | Blocked; **no substitute exists** |
@@ -256,7 +256,7 @@ This pipeline is expensive by design, and pretending otherwise would be the desi
 
 Two mitigations are legitimate under the Constitution:
 
-**Tiered application by change class.** §12 ¶1 scopes conformance to *Affected requirements*. A change touching only `software/` has a small Affected set and correspondingly small V2–V5 obligations. The pipeline is proportional by construction, provided the Affected set is honestly declared — which is why V0's declaration is independently re-derived by `A-22`.
+**Tiered application by change class.** §12 ¶1 scopes conformance to *Affected requirements*. A change touching only `software/` has a small Affected set and correspondingly small V2–V5 obligations. The pipeline is proportional by construction, provided the Affected set is honestly declared — which is why V0's declaration is independently re-derived by `DA-22`.
 
 **Batched activation with per-standard attestation.** §4 ¶2 requires each activation to be atomic, not solitary. Six mutually-dependent standards may activate in one change with six attestations. This reduces coordination overhead without reducing review.
 

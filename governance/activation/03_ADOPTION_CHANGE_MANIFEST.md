@@ -42,12 +42,14 @@ Fail-closed: an unknown answer is a blocked gate, never a note.
 | G-6 | Dossier complete: every Affected MUST traced to check, procedure, or testable N/A (§12 ¶1) | engineering, then reviewer |
 | G-7 | `p1/records/**` contains zero record files, verified, so the dossier's N/A discharges hold | automated |
 | G-8 | Known violations are listed in the dossier, not omitted — including V-1 (§12 ¶1) | engineering |
-| G-9 | Both attestations name identified humans, and no tool output substitutes for either (§4 ¶4, §13 ¶2) | reviewer |
+| G-9 | Both attestations name identified humans with **routable** contact addresses, the commits carrying them are **signed and verify** (`git log --pretty=%G?` returns `G`), and no tool output substitutes for either (§4 ¶4, §13 ¶2) | reviewer |
 | G-10 | `T-0001` exists and carries all eight §9 ¶3 elements, none left as a placeholder (`P-A2`) | engineering, then reviewer |
 
 G-3's wording is precise on purpose. The candidate revision *does* set `Active`, and that is not a breach: it is a branch commit, never a default-branch revision. The gate is about what the default branch ever contained, which is why the merge must be a squash (§1) and why `VER-6` audits it afterwards.
 
 G-1 is the only gate that cannot be closed by work inside this repository. Everything else can be finished before it, and should be.
+
+**G-9 absorbs signing and identity on purpose.** As first written, G-9 was closable by an unsigned commit from a non-routable identity — every commit inspected in this repository returns `%G? = N` and the sole author is `purushottam@local` — so the gate asserted "identified humans" while accepting evidence that identifies no one. Commit signing cannot be applied retroactively to a committed attestation, so `SEC-3` (signing enabled and verifying) and `HG-1` (routable identity) are prerequisites of `HG-5` and `HG-6`, not parallel hygiene. A reviewer closing G-9 must inspect the signature status of the attestation commits themselves, not of the repository in general.
 
 ---
 
@@ -55,17 +57,17 @@ G-1 is the only gate that cannot be closed by work inside this repository. Every
 
 | # | Path | Action | Clause |
 |---|---|---|---|
-| D-1 | `REPOSITORY_CONSTITUTION.md` | `Status:` → `Active; adopted under Section 13` | §13 ¶3 |
-| D-2 | `GOVERNANCE_REGISTRY.yaml` | `status: Active`; `constitution.status: Active`; `constitutional_steward: [<name>]`; both attestation fields populated with paths; `active_domain_standards: []` | §13 ¶3, §4 ¶1 |
-| D-3 | `governance/attestations/ADOPTER_ATTESTATION.md` | new, signed content | §13 ¶2 |
-| D-4 | `governance/attestations/INDEPENDENT_REVIEWER_ATTESTATION.md` | new, signed content | §13 ¶2 |
-| D-5 | `governance/AR-1_REPOSITORY_ARCHITECTURE_RECORD.md` | new, descriptive, Level 4 | §10 ¶1 |
-| D-6 | `governance/LEGACY_INDEX.md` | new; complete inventory with §14 basis | §4 ¶5, §14 |
-| D-7 | `governance/conformance/ADOPTION_CONFORMANCE_DOSSIER.md` | new, completed from the template | §12 ¶1 |
-| D-8 | Tier-1 Legacy banners | edits per `04_LEGACY_DISPOSITION.md` | §4 ¶5 |
-| D-9 | `governance/checks/` + the run recorded at the **candidate** revision | new; advisory checks and their recorded output | §12 ¶3 (SHOULD) |
-| D-10 | `governance/design/**`, `governance/activation/**` | committed as Draft, non-normative | §4 ¶5 |
-| D-11 | `governance/transitions/T-0001-constitution-draft-to-active.md` | new; the eight §9 ¶3 elements for the Constitution's `Draft → Active` | §2, §9 ¶3 |
+| CD-1 | `REPOSITORY_CONSTITUTION.md` | `Status:` → `Active; adopted under Section 13` | §13 ¶3 |
+| CD-2 | `GOVERNANCE_REGISTRY.yaml` | `status: Active`; `constitution.status: Active`; `constitutional_steward: [<name>]`; both attestation fields populated with paths; `active_domain_standards: []` | §13 ¶3, §4 ¶1 |
+| CD-3 | `governance/attestations/ADOPTER_ATTESTATION.md` | new, signed content | §13 ¶2 |
+| CD-4 | `governance/attestations/INDEPENDENT_REVIEWER_ATTESTATION.md` | new, signed content | §13 ¶2 |
+| CD-5 | `governance/AR-1_REPOSITORY_ARCHITECTURE_RECORD.md` | new, descriptive, Level 4 | §10 ¶1 |
+| CD-6 | `governance/LEGACY_INDEX.md` | new; complete inventory with §14 basis | §4 ¶5, §14 |
+| CD-7 | `governance/conformance/ADOPTION_CONFORMANCE_DOSSIER.md` | new, completed from the template | §12 ¶1 |
+| CD-8 | Tier-1 Legacy banners | edits per `04_LEGACY_DISPOSITION.md` | §4 ¶5 |
+| CD-9 | `governance/checks/` + the run recorded at the **candidate** revision | new; advisory checks and their recorded output | §12 ¶3 (SHOULD) |
+| CD-10 | `governance/design/**`, `governance/activation/**` | committed as Draft, non-normative | §4 ¶5 |
+| CD-11 | `governance/transitions/T-0001-constitution-draft-to-active.md` | new; the eight §9 ¶3 elements for the Constitution's `Draft → Active` | §2, §9 ¶3 |
 
 `active_domain_standards: []` is deliberate and conforming: §13 ¶3's list is Constitution, Registry, steward, two attestations, and §9 ¶1 excepts Domain standards from per-type ownership.
 
@@ -77,21 +79,21 @@ G-1 is the only gate that cannot be closed by work inside this repository. Every
 
 | # | Path | Action | Clause |
 |---|---|---|---|
-| E-1 | `governance/standards/RS-1_RESEARCH_STANDARD.md` | Draft → `Active`, promoted from the activation folder, `Version: 1.0.0` | §9 ¶4 |
-| E-2 | `GOVERNANCE_REGISTRY.yaml` | RS-1 entry with identity, status, scope, responsibility, authority, jurisdiction tuples | §4 ¶1–2 |
-| E-3 | `governance/decisions/D-0001-activate-rs1.md` | steward approval of the activation transition | §4 ¶2 |
-| E-4 | `governance/attestations/RS-1_INDEPENDENT_REVIEWER_ATTESTATION.md` | new | §4 ¶2 |
-| E-5 | `p1/records/unknowns/*` | standing Unknowns U-a … U-f from `02_PREADOPTION_VERIFICATION.md` §6 | §8 ¶1 |
-| E-6 | `p1/tooling/p1_os` validation profile | restricted to RS-1's six owned types | §9 ¶1 |
-| E-7 | `governance/conformance/RS-1_CONFORMANCE_RECORD.md` | §12 ¶1 traceability for RS-1's MUSTs | §12 ¶1 |
-| E-8 | `governance/transitions/T-0002-rs1-draft-to-active.md` | new; the eight §9 ¶3 elements for RS-1's `Draft → Active` | §2, §9 ¶3, RS-1 §2.1 |
-| E-9 | `GOVERNANCE_REGISTRY.yaml` → `authority_assignments` | steward's `permitted_transitions` extended to cover every RS-1 transition | §4 ¶1, §4 ¶5 |
+| CE-1 | `governance/standards/RS-1_RESEARCH_STANDARD.md` | Draft → `Active`, promoted from the activation folder, `Version: 1.0.0` | §9 ¶4 |
+| CE-2 | `GOVERNANCE_REGISTRY.yaml` | RS-1 entry with identity, status, scope, responsibility, authority, jurisdiction tuples | §4 ¶1–2 |
+| CE-3 | `governance/decisions/D-0001-activate-rs1.md` | steward approval of the activation transition | §4 ¶2 |
+| CE-4 | `governance/attestations/RS-1_INDEPENDENT_REVIEWER_ATTESTATION.md` | new | §4 ¶2 |
+| CE-5 | `p1/records/unknowns/*` | standing Unknowns U-a … U-f from `02_PREADOPTION_VERIFICATION.md` §6 | §8 ¶1 |
+| CE-6 | `p1/tooling/p1_os` validation profile | restricted to RS-1's six owned types | §9 ¶1 |
+| CE-7 | `governance/conformance/RS-1_CONFORMANCE_RECORD.md` | §12 ¶1 traceability for RS-1's MUSTs | §12 ¶1 |
+| CE-8 | `governance/transitions/T-0002-rs1-draft-to-active.md` | new; the eight §9 ¶3 elements for RS-1's `Draft → Active` | §2, §9 ¶3, RS-1 §2.1 |
+| CE-9 | `GOVERNANCE_REGISTRY.yaml` → `authority_assignments` | steward's `permitted_transitions` extended to cover every RS-1 transition | §4 ¶1, §4 ¶5 |
 
 RS-1's pre-activation checklist (its §11) gates E. The overlap test in §4 ¶2 is trivially satisfied: RS-1's jurisdiction is compared against an empty `active_domain_standards`.
 
-`E-8` and `E-3` are different objects and both are required. `D-0001` is the steward's *approval* of the transition; `T-0002` is the record *that the transition occurred*, with its eight §9 ¶3 elements. RS-1 §2.1 requires the record in addition to the authorizing decision.
+`CE-8` and `CE-3` are different objects and both are required. `D-0001` is the steward's *approval* of the transition; `T-0002` is the record *that the transition occurred*, with its eight §9 ¶3 elements. RS-1 §2.1 requires the record in addition to the authorizing decision.
 
-`E-9` is easy to miss and fatal to omit. Without it the Registry lists a steward permitted only for the four constitutional transitions, so after E no Registry-listed authority is permitted for any of RS-1's 21 transitions: §4 ¶5 has no authority to name, §4 ¶1 voids an authority whose permitted transitions are inconsistent, and every research transition fails closed under §9 ¶3. E would activate a standard that authorizes nothing. Target state is in `GOVERNANCE_REGISTRY.target.yaml`, block E.
+`CE-9` is easy to miss and fatal to omit. Without it the Registry lists a steward permitted only for the four constitutional transitions, so after E no Registry-listed authority is permitted for any of RS-1's 21 transitions: §4 ¶5 has no authority to name, §4 ¶1 voids an authority whose permitted transitions are inconsistent, and every research transition fails closed under §9 ¶3. E would activate a standard that authorizes nothing. Target state is in `GOVERNANCE_REGISTRY.target.yaml`, block E.
 
 ---
 
@@ -148,7 +150,7 @@ Expected results at the accepted revision:
 | `A-07` credentials in history | **FAIL, disclosed** — V-1 is a known unresolved violation |
 | `A-08` check honesty | pass |
 | `A-09` identified humans | findings — never returns pass |
-| `A-10` attestation completeness | pass — this is its first revision with a non-empty target set |
+| `A-10` attestation completeness | pass — this is its first revision with a non-empty target set. Reachable only because the check dispatches by document kind: the adopter and reviewer attestations are assessed against different element sets, and both shipped templates are fixture-tested to pass once completed (`tests/governance/test_check_adoption.py`). Every `[COMPLETE]` placeholder must be filled and every declaration checkbox ticked, or this reports FAIL |
 
 A dossier claiming all checks pass would itself be a nonconformance. The correct output is "conforming with listed violations," with V-1 listed.
 

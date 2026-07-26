@@ -49,7 +49,7 @@ Level 3   Active Registered protocol; Decision authorized by a Level-2 standard
 Level 4   Implementation and explanatory documentation
 ```
 
-`GOVERNANCE_REGISTRY.yaml` has **no assigned rank** in this order. That is a real defect (see §8, finding D-2).
+`GOVERNANCE_REGISTRY.yaml` has **no assigned rank** in this order. That is a real defect (see §8, finding DD-2).
 
 **Dependency order (designed, acyclic, carries no authority).** A Level-2 standard may *reference* definitions owned by a peer Level-2 standard. It gains no precedence by doing so. Because §4 states that conflicting requirements at the same level are *both nonconforming* until the common parent authority resolves them, peer dependency must be constrained:
 
@@ -75,11 +75,11 @@ Worked examples of the rule resolving otherwise-ambiguous boundaries:
 | Escalating a Question to an Unknown | Question Standard | **S-3 Unknown Standard** | An Unknown is created. S-2 records the referral only. |
 | Recording working output as a Result | Research/Protocol Standard | **S-8 Result Standard** | The Result is created. §7 delegates the *time and authority* to "an applicable Domain standard or Registered protocol"; S-8 owns the object, the protocol supplies the criteria. |
 | Changing a Claim's state on new Evidence | Evidence Standard | **S-6 Claim Standard** | The Claim's state changes. Evidence is an input. |
-| Approving a scientific transition | The scientific standard | **G-13 Decision Standard** owns the *Decision record*; the scientific standard owns the *transition* | §4: a scientific transition is "specified by an Active Domain standard and authorized by a Decision." Specification and authorization are different objects. |
-| Declaring a check's scope and known false negatives | Conformance Standard | **G-11 Automation Standard** | The check is the object. G-5 owns the conformance *claim* that cites the check. |
-| Retaining an external artifact by digest | Evidence Standard | **G-7 Custody Standard** | The custody record is the object. §6's digest-algorithm delegation is assigned to G-7 to keep it single-homed. |
+| Approving a scientific transition | The scientific standard | **DG-13 Decision Standard** owns the *Decision record*; the scientific standard owns the *transition* | §4: a scientific transition is "specified by an Active Domain standard and authorized by a Decision." Specification and authorization are different objects. |
+| Declaring a check's scope and known false negatives | Conformance Standard | **DG-11 Automation Standard** | The check is the object. DG-5 owns the conformance *claim* that cites the check. |
+| Retaining an external artifact by digest | Evidence Standard | **DG-7 Custody Standard** | The custody record is the object. §6's digest-algorithm delegation is assigned to DG-7 to keep it single-homed. |
 
-Every governed object type appears in exactly one row of the "owns lifecycle" column across `02_GOVERNANCE_STACK.md` and `03_SCIENTIFIC_STACK.md`. That table is the machine-checkable statement of §9 compliance, and check `A-04` in `05_AUTOMATION_ARCHITECTURE.md` verifies it.
+Every governed object type appears in exactly one row of the "owns lifecycle" column across `02_GOVERNANCE_STACK.md` and `03_SCIENTIFIC_STACK.md`. That table is the machine-checkable statement of §9 compliance, and check `DA-04` in `05_AUTOMATION_ARCHITECTURE.md` verifies it.
 
 ---
 
@@ -97,14 +97,14 @@ Auditing the Constitution clause by clause yields the following delegation surfa
 | §2 *Active* | Entry to Active state for non-normative objects | "the applicable Domain standard" | each type's standard |
 | §5 ¶3 | Preregistration element set (sampling frame, stopping rule, exclusions, assignment, controls, outcomes, analysis population, decision rule, multiplicity, model selection, randomness plan) | Registered protocol | S-1 |
 | §5 ¶6 | Governance of constants, thresholds, models, ontologies, hypothesis sets, conclusions | "a revisable domain standard or registered protocol" | O-1, S-10, S-1 |
-| §6 ¶2 | Collision-resistant digest algorithm and version | Domain standard or Registered protocol | G-7 |
+| §6 ¶2 | Collision-resistant digest algorithm and version | Domain standard or Registered protocol | DG-7 |
 | §6 ¶4 | Authority, criteria, and recorded procedure for admitting, excluding, or revising Evidence | Domain standard or Registered protocol | S-5 |
 | §7 ¶2 | When a governed execution is complete; time and authority for recording working output as Result / Invalid Result / abandoned execution | Domain standard or Registered protocol | S-8 |
 | §7 ¶4 | Validity rule permitting exclusion of an Invalid Result from inference | Registered protocol | S-1 (form), S-8 (application) |
 | §9 ¶1 | Nine-element lifecycle definition for every subordinate object type | "exactly one Active Domain standard within a given Scope" | every G-* and S-* |
-| §10 ¶1 | Software architecture and repository layout | "versioned architecture records" | G-12 |
-| §10 ¶5 | Whether a safe reproducible fixture may be version-controlled | "a domain standard explicitly requires" | G-12, G-7 |
-| §12 ¶4 | Named manual review procedure for non-mechanically-decidable requirements | unnamed recipient | G-4, G-5 |
+| §10 ¶1 | Software architecture and repository layout | "versioned architecture records" | DG-12 |
+| §10 ¶5 | Whether a safe reproducible fixture may be version-controlled | "a domain standard explicitly requires" | DG-12, DG-7 |
+| §12 ¶4 | Named manual review procedure for non-mechanically-decidable requirements | unnamed recipient | DG-4, DG-5 |
 
 ### 4.2 Reserved to the Constitution (not delegable; no artifact may refine)
 
@@ -118,9 +118,9 @@ Three delegations are load-bearing yet do not satisfy §4's own five-element req
 
 | Clause | What is missing |
 |---|---|
-| §9 ¶4 "Normative artifacts use the **minimum** lifecycle Draft → Active → Superseded or Withdrawn" | "Minimum" implies extension is permitted, but no recipient, permitted transitions, or limits are identified. G-2 depends on this. |
-| §12 ¶4 "Requirements not mechanically decidable MUST have a named manual review procedure" | No recipient artifact or role is identified. G-4/G-5 depend on this. |
-| §10 ¶1 "versioned architecture records" | Recipient artifact kind is named, but permitted transitions and limits are not. G-12 depends on this. |
+| §9 ¶4 "Normative artifacts use the **minimum** lifecycle Draft → Active → Superseded or Withdrawn" | "Minimum" implies extension is permitted, but no recipient, permitted transitions, or limits are identified. DG-2 depends on this. |
+| §12 ¶4 "Requirements not mechanically decidable MUST have a named manual review procedure" | No recipient artifact or role is identified. DG-4/DG-5 depend on this. |
+| §10 ¶1 "versioned architecture records" | Recipient artifact kind is named, but permitted transitions and limits are not. DG-12 depends on this. |
 
 ---
 
@@ -129,25 +129,25 @@ Three delegations are load-bearing yet do not satisfy §4's own five-element req
 ```
 TIER 0  CONSTITUTIONAL
         REPOSITORY_CONSTITUTION.md .................. Level 1 authority
-        GOVERNANCE_REGISTRY.yaml .................... rank unassigned (defect D-2)
+        GOVERNANCE_REGISTRY.yaml .................... rank unassigned (defect DD-2)
 
 TIER 1  ONTOLOGICAL                                   Level 2, peer
         O-1  Ontology Standard ...................... object-type register, identifiers, relationships
 
 TIER 2  GOVERNANCE DOMAIN STANDARDS                   Level 2, peers
-        G-1  Registry Specification
-        G-2  Normative Artifact Standard             (subsumes: Governance Std, Version, Change, Release-of-normative-artifacts)
-        G-3  Authority & Delegation Standard         (subsumes: Authority, Delegation, Steward policies)
-        G-4  Review & Attestation Standard
-        G-5  Conformance Standard
-        G-6  Audit Standard
-        G-7  Records Custody & Retention Standard    (the governance half of "Evidence Policy")
-        G-8  Change & Release Standard               (change sets and software releases)
-        G-9  Emergency & Containment Standard
-        G-10 Conflict Resolution Standard
-        G-11 Automation & Tooling Standard
-        G-12 Architecture Standard
-        G-13 Decision Standard
+        DG-1  Registry Specification
+        DG-2  Normative Artifact Standard             (subsumes: Governance Std, Version, Change, Release-of-normative-artifacts)
+        DG-3  Authority & Delegation Standard         (subsumes: Authority, Delegation, Steward policies)
+        DG-4  Review & Attestation Standard
+        DG-5  Conformance Standard
+        DG-6  Audit Standard
+        DG-7  Records Custody & Retention Standard    (the governance half of "Evidence Policy")
+        DG-8  Change & Release Standard               (change sets and software releases)
+        DG-9  Emergency & Containment Standard
+        DG-10 Conflict Resolution Standard
+        DG-11 Automation & Tooling Standard
+        DG-12 Architecture Standard
+        DG-13 Decision Standard
 
 TIER 3  SCIENTIFIC DOMAIN STANDARDS                   Level 2, peers
         S-1  Research Standard        (Investigation, Registered protocol)
@@ -174,14 +174,14 @@ The brief lists artifacts that cannot coexist as separate Registry entries witho
 
 | Brief artifact | Disposition | Constitutional reason |
 |---|---|---|
-| Governance Standard | Merged into **G-2** | A standard governing Domain standards *is* a Normative Artifact Standard. Two entries would own the same object type, violating §9's "exactly one." |
-| Version Policy | Split: normative-artifact versions → **G-2**; software/release versions → **G-8** | These are different object types. A single "Version Policy" would own two unrelated types and overlap both. |
-| Change Policy · Release Policy | Merged into **G-8** | Both own the change-set/release object; §11 one-primary-responsibility permits one document, and separate entries would overlap. |
-| Authority Policy · Delegation Policy · Steward Policy | Merged into **G-3** | All three own *authority assignment records*. Three entries = three owners of one object type. |
-| Evidence Policy | Split: scientific admission → **S-5**; custody, retention, digests → **G-7** | §2 makes Evidence a scientific record kind; §6 delegates admission separately from external-artifact identification. |
-| Conflict Resolution Policy | Retained as **G-10**, narrowed to the *conflict record* object | §4 already fixes the substantive resolution rule. G-10 may own only the record and escalation procedure; owning the rule would enlarge jurisdiction, prohibited by §4. |
-| Emergency Policy | Retained as **G-9**, narrowed to *containment action records* | §12 delegates only post-hoc recording of security containment. G-9 MUST NOT create authority to bypass §13 or any scientific transition. |
-| Phase 4 "domain framework" | Merged into **G-2** as the Domain Standard Interface | A framework imposing requirements on future Domain standards owns the Domain standard object type — G-2's jurisdiction. |
+| Governance Standard | Merged into **DG-2** | A standard governing Domain standards *is* a Normative Artifact Standard. Two entries would own the same object type, violating §9's "exactly one." |
+| Version Policy | Split: normative-artifact versions → **DG-2**; software/release versions → **DG-8** | These are different object types. A single "Version Policy" would own two unrelated types and overlap both. |
+| Change Policy · Release Policy | Merged into **DG-8** | Both own the change-set/release object; §11 one-primary-responsibility permits one document, and separate entries would overlap. |
+| Authority Policy · Delegation Policy · Steward Policy | Merged into **DG-3** | All three own *authority assignment records*. Three entries = three owners of one object type. |
+| Evidence Policy | Split: scientific admission → **S-5**; custody, retention, digests → **DG-7** | §2 makes Evidence a scientific record kind; §6 delegates admission separately from external-artifact identification. |
+| Conflict Resolution Policy | Retained as **DG-10**, narrowed to the *conflict record* object | §4 already fixes the substantive resolution rule. DG-10 may own only the record and escalation procedure; owning the rule would enlarge jurisdiction, prohibited by §4. |
+| Emergency Policy | Retained as **DG-9**, narrowed to *containment action records* | §12 delegates only post-hoc recording of security containment. DG-9 MUST NOT create authority to bypass §13 or any scientific transition. |
+| Phase 4 "domain framework" | Merged into **DG-2** as the Domain Standard Interface | A framework imposing requirements on future Domain standards owns the Domain standard object type — DG-2's jurisdiction. |
 | Observation Standard | Extended to **S-4 Observation & Source** | §2 defines Source as a distinct referenced object with no other candidate owner; leaving it unowned violates §9. |
 
 Net: 25 brief artifacts + ontology → **24 Registry entries** with a provably disjoint partition.
@@ -190,7 +190,7 @@ Net: 25 brief artifacts + ontology → **24 Registry entries** with a provably d
 
 ## 6. Dependency graph
 
-Edges denote *reference dependency* (A reads definitions owned by B). No edge confers authority. The graph is acyclic; acyclicity is check `A-33`.
+Edges denote *reference dependency* (A reads definitions owned by B). No edge confers authority. The graph is acyclic; acyclicity is check `DA-33`.
 
 ```
                         REPOSITORY_CONSTITUTION.md  (Level 1)
@@ -201,23 +201,23 @@ Edges denote *reference dependency* (A reads definitions owned by B). No edge co
                                      |
       +-----------+---------+--------+--------+---------+-----------+
       |           |         |        |        |         |           |
-    G-1         G-2       G-3      G-7     G-11      G-12         S-2
+    DG-1         DG-2       DG-3      DG-7     DG-11      DG-12         S-2
   Registry   Normative  Authority Custody Automation Architecture Question
    Spec       Artifact  Delegation                                   |
                 |          |        |                                |
-                |        G-4        |                              S-3  Unknown
+                |        DG-4        |                              S-3  Unknown
                 |     Review &      |                                |
                 |    Attestation    |                                |
                 |        |          |                                |
-                |      G-13 <-------+                                |
+                |      DG-13 <-------+                                |
                 |     Decision                                       |
                 |        |                                           |
       +---------+--------+---------+                                 |
       |         |        |         |                                 |
-    G-8       G-5      G-10      S-1  Research  <--------------------+
+    DG-8       DG-5      DG-10      S-1  Research  <--------------------+
    Change  Conformance Conflict   (Investigation, Registered protocol)
       |         |                   |
-    G-9       G-6                   +---------------+
+    DG-9       DG-6                   +---------------+
   Emergency  Audit                  |               |
                                   S-4  Observation & Source
                                     |               |
@@ -234,7 +234,7 @@ Edges denote *reference dependency* (A reads definitions owned by B). No edge co
                                                  S-10  Principle
 ```
 
-**Critical-path reading.** O-1 gates everything. G-3 gates every authorized transition. G-4 gates every attestation, and therefore gates activation of all 22 remaining standards. G-13 gates every scientific state change. Nothing scientific can move before `O-1 → G-3 → G-4 → G-13` are Active.
+**Critical-path reading.** O-1 gates everything. DG-3 gates every authorized transition. DG-4 gates every attestation, and therefore gates activation of all 22 remaining standards. DG-13 gates every scientific state change. Nothing scientific can move before `O-1 → DG-3 → DG-4 → DG-13` are Active.
 
 ---
 
@@ -258,15 +258,15 @@ Point 5 is the expensive one and should be understood plainly: **work executed b
 
 The brief permits constitutional change only where a direct contradiction prevents implementation. Three qualify. Each is stated as a defect with a minimal proposed remedy; none is applied, and each is escalated to `10_HUMAN_JUDGMENT_REGISTER.md`.
 
-**D-1 — Delegation clauses do not satisfy the Constitution's own delegation requirement.**
-§4 requires every delegation of refinement to identify subject, Scope, recipient, permitted transitions, and limits. The three delegations in §4.3 above identify at most two of the five. A strict reader concludes that G-2, G-4, G-5, and G-12 cannot legitimately refine anything, which leaves the Normative artifact lifecycle, manual review procedures, and architecture records permanently unrefinable — and §10 simultaneously *requires* architecture records to exist. That is a contradiction that prevents implementation.
+**DD-1 — Delegation clauses do not satisfy the Constitution's own delegation requirement.**
+§4 requires every delegation of refinement to identify subject, Scope, recipient, permitted transitions, and limits. The three delegations in §4.3 above identify at most two of the five. A strict reader concludes that DG-2, DG-4, DG-5, and DG-12 cannot legitimately refine anything, which leaves the Normative artifact lifecycle, manual review procedures, and architecture records permanently unrefinable — and §10 simultaneously *requires* architecture records to exist. That is a contradiction that prevents implementation.
 *Minimal remedy:* a single new §4 paragraph — a General Delegation Clause enumerating the delegations of §4.1 and §4.3 in the five-element form. Additive; changes no existing requirement.
 
-**D-2 — The Governance Registry has no rank in the precedence order.**
+**DD-2 — The Governance Registry has no rank in the precedence order.**
 §4 orders four levels and omits the Registry. §2 makes the Registry the sole determinant of what is Active, so a Registry/standard conflict is unresolvable: the standard's authority depends on the Registry entry, and the Registry entry's correctness depends on the standard. Already recorded as finding F-6 in `audits/CONSTITUTION_v1.2.0_AMENDMENT_RECORD.md`.
 *Minimal remedy:* state in §4 that the Registry is determinative of identity, status, jurisdiction, and authority assignment, and that on conflict the artifact is nonconforming until reconciled — i.e. the Registry decides *whether* an artifact has authority, never *what* it requires.
 
-**D-3 — §2 fixes a repository path while §10 declares layout non-constitutional.**
+**DD-3 — §2 fixes a repository path while §10 declares layout non-constitutional.**
 §2 hardcodes `GOVERNANCE_REGISTRY.yaml`; §10 states "repository layout are not constitutional" and "MUST be defined in versioned architecture records." The Registry's location is therefore simultaneously constitutional and prohibited from being constitutional. Practical effect: the Registry can never be relocated without a constitutional amendment, and any architecture record that specifies its location exceeds its authority.
 *Minimal remedy:* in §2, identify the Registry by role and require the architecture record to bind exactly one path to that role; or accept the pin and note the exception explicitly in §10. This one is low-severity and may reasonably be left as-is with the exception documented.
 

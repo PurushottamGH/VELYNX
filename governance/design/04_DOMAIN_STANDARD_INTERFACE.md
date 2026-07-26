@@ -3,7 +3,7 @@
 - **Status:** Draft
 - **Scope:** The constitutional interface that any future Domain standard must satisfy, and the framework by which new scientific, governance, or engineering domains enter P1
 - **Responsibility:** Specify the form, not the method, of future domain standards
-- **Authority source:** None. This record has no normative authority. On activation it would form part of G-2.
+- **Authority source:** None. This record has no normative authority. On activation it would form part of DG-2.
 - **Governing artifact:** `REPOSITORY_CONSTITUTION.md` v1.2.0 (Draft)
 - **Version:** 0.1.0
 
@@ -17,7 +17,7 @@ The Constitution already agrees. §5 ¶6: "No scientific constant, threshold, mo
 
 So the interface must constrain **form** — declarations, jurisdiction shape, lifecycle completeness, terminology discipline, verification mapping — and must say nothing whatever about **method**. A domain standard for LLM evaluation and one for knowledge graphs must be equally accommodated, and the interface must not encode a preference for either. A useful test: if the interface could not accept a domain that the authors did not anticipate, it is a methodology in disguise.
 
-This interface lives inside **G-2** rather than as a separate Registry entry, because a framework imposing requirements on Domain standards owns the `domain_standard` object type, which is G-2's jurisdiction. A separate entry would overlap and be rejected under §4 ¶2.
+This interface lives inside **DG-2** rather than as a separate Registry entry, because a framework imposing requirements on Domain standards owns the `domain_standard` object type, which is DG-2's jurisdiction. A separate entry would overlap and be rejected under §4 ¶2.
 
 ---
 
@@ -29,16 +29,16 @@ Every Domain standard MUST declare the following. Absence of any item means the 
 
 | Field | Requirement | Verified by |
 |---|---|---|
-| `id` | Unique, from O-1's identifier grammar, never reused | `A-09` |
+| `id` | Unique, from O-1's identifier grammar, never reused | `DA-09` |
 | `title` | Human-readable | — |
-| `version` | Semantic, per G-2's scheme | `A-02` |
-| `status` | One of Draft, Active, Superseded, Withdrawn (§9 ¶4) | `A-02` |
-| `scope` | §2-conforming: population, environment, conditions, versions, time interval, sufficiently identifiable for an Independent reviewer | `A-02`, `MRP-14` |
+| `version` | Semantic, per DG-2's scheme | `DA-02` |
+| `status` | One of Draft, Active, Superseded, Withdrawn (§9 ¶4) | `DA-02` |
+| `scope` | §2-conforming: population, environment, conditions, versions, time interval, sufficiently identifiable for an Independent reviewer | `DA-02`, `MRP-14` |
 | `responsibility` | Exactly one primary responsibility (§11 ¶1) | `MRP-14` |
-| `authority_source` | The Registry entry and the authority permitted to activate this jurisdiction | `A-03`, `A-05` |
-| `domain_class` | `scientific` \| `governance` \| `engineering` (§2) | `A-02` |
+| `authority_source` | The Registry entry and the authority permitted to activate this jurisdiction | `DA-03`, `DA-05` |
+| `domain_class` | `scientific` \| `governance` \| `engineering` (§2) | `DA-02` |
 
-The Registry MUST carry the same identity, status, Scope, responsibility, authority, and jurisdiction **without contradiction** (§4 ¶1), checked by `A-03`.
+The Registry MUST carry the same identity, status, Scope, responsibility, authority, and jurisdiction **without contradiction** (§4 ¶1), checked by `DA-03`.
 
 ### 2.2 Jurisdiction declaration (machine-readable)
 
@@ -75,7 +75,7 @@ delegations_relied_upon:
     limits: <...>
 ```
 
-A refinement with no citable delegation is void under §4 ¶4, and the check (`A-63`) must fail the activation rather than warn. Note that three of the delegations this stack relies on are themselves under-specified — defect **D-1** in `00_ECOSYSTEM_OVERVIEW.md` §8 — so a standard relying on §9 ¶4, §12 ¶4, or §10 ¶1 must say so and accept the recorded weakness.
+A refinement with no citable delegation is void under §4 ¶4, and the check (`DA-63`) must fail the activation rather than warn. Note that three of the delegations this stack relies on are themselves under-specified — defect **DD-1** in `00_ECOSYSTEM_OVERVIEW.md` §8 — so a standard relying on §9 ¶4, §12 ¶4, or §10 ¶1 must say so and accept the recorded weakness.
 
 ### 2.4 Lifecycle definition (§9 ¶1, nine elements)
 
@@ -108,7 +108,7 @@ verification:
     manual_procedure: <MRP-xx>   # if not
 ```
 
-This is the field that prevents a standard from being unenforceable by construction. `A-39` fails any activation with an unmapped MUST. It also implies a practical obligation the Constitution does not currently support well: **requirements need addressable clause identifiers.** The v1.2.0 amendment record already flags this as finding F-19; without clause IDs, the mapping degrades to prose references that no check can follow.
+This is the field that prevents a standard from being unenforceable by construction. `DA-39` fails any activation with an unmapped MUST. It also implies a practical obligation the Constitution does not currently support well: **requirements need addressable clause identifiers.** The v1.2.0 amendment record already flags this as finding F-19; without clause IDs, the mapping degrades to prose references that no check can follow.
 
 ### 2.7 Failure-mode declaration
 
@@ -153,7 +153,7 @@ These are illustrative, to demonstrate that the interface accommodates them with
 | **Knowledge graphs** | scientific | `graph_version`, `schema_mapping`, `assertion_set` | §11 ¶3 terminology collision with O-1: a KG "entity" is not a P1 governed object; requires explicit disambiguation |
 | **Neurosymbolic systems** | scientific | `symbolic_component`, `neural_component`, `integration_contract` | §5 ¶7's mechanism criterion: an operational test distinguishing "reasoning" from performance is the domain's hardest obligation |
 | **Reasoning systems** | scientific | `reasoning_trace`, `derivation`, `soundness_check` | Traces are working output until admitted; §2 forbids citing working output as Evidence |
-| **Human subjects research** | scientific | `consent_record`, `participant_cohort` | §10 ¶5 personal material exclusion vs §6 provenance completeness — a genuine tension needing a domain-specific custody arrangement under G-7 |
+| **Human subjects research** | scientific | `consent_record`, `participant_cohort` | §10 ¶5 personal material exclusion vs §6 provenance completeness — a genuine tension needing a domain-specific custody arrangement under DG-7 |
 
 Two observations from this table. First, the recurring stress point is not governance mechanics but the **Observation/Evidence boundary** — every computational domain is tempted to treat its own output as an observation of the world. Second, several candidates would need to reference each other (LLM evaluation and benchmarking overlap heavily), which is exactly what the `not_owned` field and the Peer Reference Rule exist to discipline.
 
@@ -178,7 +178,7 @@ Each of these is method. Encoding any of them here would make P1's constitution 
 
 ## 6. Interface versioning and the compatibility problem
 
-The interface is part of G-2 and versions with it. The twenty-year concern is straightforward: an interface change invalidates the declarations of every Active standard simultaneously.
+The interface is part of DG-2 and versions with it. The twenty-year concern is straightforward: an interface change invalidates the declarations of every Active standard simultaneously.
 
 Rules:
 
