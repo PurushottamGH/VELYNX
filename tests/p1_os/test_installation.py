@@ -35,6 +35,40 @@ def test_p1_os_is_an_installed_distribution():
     assert dist.version == "0.1.0"
 
 
+def test_imported_p1_os_is_the_real_package_not_a_shadow(tooling_dir: Path):
+    """In-process guard against `tests/p1_os/` shadowing `p1/tooling/p1_os/`.
+
+    A whole-repository pytest session puts `tests/` on sys.path, at which
+    point the bare directory `tests/p1_os/` is a candidate namespace
+    package named `p1_os`. `PathFinder` runs before the editable install's
+    meta-path finder, so without `p1/tooling` on sys.path the namespace
+    portion wins, `p1_os.__file__` becomes None, and `p1_os.schemas`
+    resolves to the empty `tests/p1_os/schemas/` directory. These
+    assertions run in the collecting session itself, so they fail in a
+    whole-repository run even though the isolated suite would pass.
+    """
+    import p1_os
+    import p1_os.schemas
+
+    expected_root = tooling_dir / "p1_os"
+
+    assert p1_os.__file__ is not None, (
+        "p1_os resolved to a namespace package; the real package at "
+        f"{expected_root} was shadowed. __path__={list(p1_os.__path__)}"
+    )
+    assert Path(p1_os.__file__).resolve() == (expected_root / "__init__.py").resolve()
+
+    assert p1_os.schemas.__file__ is not None, (
+        "p1_os.schemas resolved to a namespace package; expected the real "
+        f"subpackage at {expected_root / 'schemas'}. "
+        f"__path__={list(p1_os.schemas.__path__)}"
+    )
+    assert (
+        Path(p1_os.schemas.__file__).resolve()
+        == (expected_root / "schemas" / "__init__.py").resolve()
+    )
+
+
 def test_p1_os_declares_pinned_pydantic_and_pyyaml_dependencies():
     requires = metadata.requires("p1-os") or []
     normalized = {req.split(";")[0].strip() for req in requires}

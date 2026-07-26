@@ -27,8 +27,20 @@ include = [
 exclude = ["archive*", "backend*", "data*", "docs*"]
 
 [tool.pytest.ini_options]
+# `p1/tooling` is the package root of the editable-installed `p1-os`
+# distribution. It must be on sys.path, not merely reachable through the
+# editable install's meta-path finder: setuptools appends that finder
+# *after* `PathFinder`, so `PathFinder` wins any name race. A whole-repo
+# pytest session puts `tests/` on sys.path (its `unit`/`integration`/
+# `validation`/`fixtures` subdirectories are packages while `tests/`
+# itself is not), and the bare directory `tests/p1_os/` then resolves as
+# a namespace package named `p1_os` before the finder is ever consulted.
+# Listing the real package root here makes `p1/tooling/p1_os/__init__.py`
+# a regular package on sys.path, which deterministically beats a
+# namespace portion regardless of sys.path order.
 pythonpath = [
     ".",
+    "p1/tooling",
     "archive/program_a",
     "archive/program_b",
     "archive/program_c",
