@@ -25,7 +25,8 @@ EXCLUDED = {
     "(header)",
     # §9 is the mapping itself and §9.1 the procedures: mapping the mapping is
     # circular. Their MUSTs are statements about how citation works.
-    "§9", "§9.1",
+    "§9",
+    "§9.1",
     # §11 is the pre-activation checklist: a work register, not a requirement.
     "§11",
     # §10.2 is the versioning scheme; it states no MUST.
@@ -73,12 +74,10 @@ def test_every_rs1_must_section_is_in_the_section_9_mapping():
     cited = _mapping_sections(text)
 
     unmapped = {
-        sec: line for sec, line in with_musts.items()
-        if sec not in EXCLUDED and sec not in cited
+        sec: line for sec, line in with_musts.items() if sec not in EXCLUDED and sec not in cited
     }
-    assert not unmapped, (
-        "RS-1 sections carrying a MUST with no §9 mapping row: "
-        + ", ".join(f"{s} (first at line {l})" for s, l in sorted(unmapped.items()))
+    assert not unmapped, "RS-1 sections carrying a MUST with no §9 mapping row: " + ", ".join(
+        f"{s} (first at line {l})" for s, l in sorted(unmapped.items())
     )
 
 
@@ -89,12 +88,13 @@ def test_mapping_cites_no_section_that_does_not_exist():
     for sec in cited:
         num = sec.lstrip("§")
         top = num.split(".")[0]
-        assert re.search(rf"^##\s+{top}\.\s", text, re.MULTILINE), \
-            f"mapping cites {sec} but no section {top} exists"
+        assert re.search(
+            rf"^##\s+{top}\.\s", text, re.MULTILINE
+        ), f"mapping cites {sec} but no section {top} exists"
         if "." in num:
-            assert re.search(rf"\*\*{re.escape(num)}\s", text) or \
-                   re.search(rf"^###\s+{re.escape(num)}\s", text, re.MULTILINE), \
-                   f"mapping cites {sec} but no such clause exists"
+            assert re.search(rf"\*\*{re.escape(num)}\s", text) or re.search(
+                rf"^###\s+{re.escape(num)}\s", text, re.MULTILINE
+            ), f"mapping cites {sec} but no such clause exists"
 
 
 def test_mapping_cites_no_procedure_that_does_not_exist():
@@ -117,8 +117,7 @@ def test_every_defined_procedure_is_used():
     end = text.index("### 9.1 Named manual review procedures")
     defined = set(re.findall(r"^\|\s*`(P-\d{1,2})`\s*\|", text[end:], re.MULTILINE))
     body = text[:end] + text[end:]
-    unused = sorted(p for p in defined
-                    if len(re.findall(rf"`{p}`", body)) < 2)
+    unused = sorted(p for p in defined if len(re.findall(rf"`{p}`", body)) < 2)
     assert not unused, f"procedures defined but never cited: {unused}"
 
 
@@ -129,9 +128,11 @@ def test_mapping_marks_unbuilt_checks_and_cites_no_other_namespace():
     for cid in ("A-11", "A-12", "A-13", "A-14", "A-15"):
         for line in text.splitlines():
             if cid in line and line.lstrip().startswith("|"):
-                assert "[NOT IMPLEMENTED]" in line, \
-                    f"{cid} cited without the unbuilt marker: {line.strip()[:120]}"
+                assert (
+                    "[NOT IMPLEMENTED]" in line
+                ), f"{cid} cited without the unbuilt marker: {line.strip()[:120]}"
     assert not re.search(r"(?<![A-Za-z])C-\d\d", text), "C-xx namespace is withdrawn"
-    assert not re.search(r"(?<![A-Za-z])DA-\d\d(?!.*segregated)", text) or \
-        "segregated `DA-xx` namespace" in text, \
-        "RS-1 must not cite design-register identifiers as checks"
+    assert (
+        not re.search(r"(?<![A-Za-z])DA-\d\d(?!.*segregated)", text)
+        or "segregated `DA-xx` namespace" in text
+    ), "RS-1 must not cite design-register identifiers as checks"

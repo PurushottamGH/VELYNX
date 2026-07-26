@@ -2,6 +2,7 @@
 
 Tests each component of the E0 experiment pipeline in isolation.
 """
+
 from __future__ import annotations
 
 import math
@@ -40,7 +41,6 @@ from experiments.E0.run import (
     SeedRegistry,
 )
 from framework.core.mdl.mdl_growth import should_grow, compute_lambda_model
-
 
 # ─── Environment tests ─────────────────────────────────────────────
 
@@ -180,9 +180,7 @@ class TestAnalysis:
     def test_held_out_ll_with_explicit_test(self):
         train_lls = [-1.0] * 100
         test_lls = [-0.5] * 20
-        result = compute_held_out_log_likelihood(
-            train_lls, [0] * 100, test_lls, [0] * 20
-        )
+        result = compute_held_out_log_likelihood(train_lls, [0] * 100, test_lls, [0] * 20)
         assert result["n_held_out"] == 20
         assert result["mean_log_likelihood"] == pytest.approx(-0.5)
         assert result["mean_log_loss"] == pytest.approx(0.5)
@@ -204,6 +202,7 @@ class TestAnalysis:
         # Create environment and predictor
         env = NonlinearLatentEnvironment(num_latent_states=3, observation_dim=4, seed=42)
         from framework.core.predictors.dirichlet_markov import DirichletMarkovPredictor
+
         predictor = DirichletMarkovPredictor(initial_capacity=2, alpha=1.0, rng_seed=99)
 
         env.reset()
@@ -275,12 +274,24 @@ class TestAnalysis:
     def test_generate_e0_report(self):
         analysis = {
             "T": {
-                "held_out_ll": {"mean_log_likelihood": -0.5, "mean_log_loss": 0.5, "n_held_out": 10},
-                "emergence_statistic": {"m_statistic": 0.3, "nmi_learned_true": 0.5, "nmi_learned_shuffled": 0.2},
+                "held_out_ll": {
+                    "mean_log_likelihood": -0.5,
+                    "mean_log_loss": 0.5,
+                    "n_held_out": 10,
+                },
+                "emergence_statistic": {
+                    "m_statistic": 0.3,
+                    "nmi_learned_true": 0.5,
+                    "nmi_learned_shuffled": 0.2,
+                },
                 "growth_events": 3,
             },
             "C1": {
-                "held_out_ll": {"mean_log_likelihood": -1.0, "mean_log_loss": 1.0, "n_held_out": 10},
+                "held_out_ll": {
+                    "mean_log_likelihood": -1.0,
+                    "mean_log_loss": 1.0,
+                    "n_held_out": 10,
+                },
                 "growth_events": 0,
             },
         }
@@ -335,8 +346,16 @@ class TestDecision:
             },
             "analysis": {
                 "T": {
-                    "held_out_ll": {"mean_log_likelihood": -0.5, "mean_log_loss": 0.5, "n_held_out": 20},
-                    "emergence_statistic": {"m_statistic": 0.15, "nmi_learned_true": 0.3, "nmi_learned_shuffled": 0.15},
+                    "held_out_ll": {
+                        "mean_log_likelihood": -0.5,
+                        "mean_log_loss": 0.5,
+                        "n_held_out": 20,
+                    },
+                    "emergence_statistic": {
+                        "m_statistic": 0.15,
+                        "nmi_learned_true": 0.3,
+                        "nmi_learned_shuffled": 0.15,
+                    },
                 },
             },
         }
@@ -351,19 +370,29 @@ class TestDecision:
 
         per_seed = []
         for s in range(3):
-            per_seed.append({
-                "conditions": {
-                    "T": {"log_likelihoods": [-0.5 + s * 0.1] * 100},
-                    "C1": {"log_likelihoods": [-1.0] * 100},
-                    "C2": {"log_likelihoods": [-0.8] * 100},
-                },
-                "analysis": {
-                    "T": {
-                        "held_out_ll": {"mean_log_likelihood": -0.5 + s * 0.1, "mean_log_loss": 0.5, "n_held_out": 20},
-                        "emergence_statistic": {"m_statistic": 0.15 + s * 0.05, "nmi_learned_true": 0.3, "nmi_learned_shuffled": 0.15},
+            per_seed.append(
+                {
+                    "conditions": {
+                        "T": {"log_likelihoods": [-0.5 + s * 0.1] * 100},
+                        "C1": {"log_likelihoods": [-1.0] * 100},
+                        "C2": {"log_likelihoods": [-0.8] * 100},
                     },
-                },
-            })
+                    "analysis": {
+                        "T": {
+                            "held_out_ll": {
+                                "mean_log_likelihood": -0.5 + s * 0.1,
+                                "mean_log_loss": 0.5,
+                                "n_held_out": 20,
+                            },
+                            "emergence_statistic": {
+                                "m_statistic": 0.15 + s * 0.05,
+                                "nmi_learned_true": 0.3,
+                                "nmi_learned_shuffled": 0.15,
+                            },
+                        },
+                    },
+                }
+            )
 
         decision = decider.evaluate_multi_seed(per_seed)
         assert "verdict" in decision
@@ -382,8 +411,16 @@ class TestDecision:
             },
             "analysis": {
                 "T": {
-                    "held_out_ll": {"mean_log_likelihood": -1.0, "mean_log_loss": 1.0, "n_held_out": 20},
-                    "emergence_statistic": {"m_statistic": 0.01, "nmi_learned_true": 0.1, "nmi_learned_shuffled": 0.09},
+                    "held_out_ll": {
+                        "mean_log_likelihood": -1.0,
+                        "mean_log_loss": 1.0,
+                        "n_held_out": 20,
+                    },
+                    "emergence_statistic": {
+                        "m_statistic": 0.01,
+                        "nmi_learned_true": 0.1,
+                        "nmi_learned_shuffled": 0.09,
+                    },
                 },
             },
         }
@@ -422,6 +459,7 @@ class TestConditionRunners:
     @pytest.fixture
     def predictor(self):
         from framework.core.predictors.dirichlet_markov import DirichletMarkovPredictor
+
         return DirichletMarkovPredictor(
             initial_capacity=2,
             alpha=1.0,
@@ -455,6 +493,7 @@ class TestConditionRunners:
 
     def test_run_fixed_capacity(self, env):
         from framework.core.predictors.dirichlet_markov import DirichletMarkovPredictor
+
         p = DirichletMarkovPredictor(initial_capacity=2, alpha=1.0)
         result = run_fixed_capacity(
             env=env,
@@ -467,6 +506,7 @@ class TestConditionRunners:
 
     def test_apply_growth_at_random_times(self, env):
         from framework.core.predictors.dirichlet_markov import DirichletMarkovPredictor
+
         p = DirichletMarkovPredictor(initial_capacity=2, alpha=1.0)
         rng = np.random.RandomState(42)
         result = apply_growth_at_random_times(
@@ -481,6 +521,7 @@ class TestConditionRunners:
 
     def test_run_shuffled_input(self, env):
         from framework.core.predictors.dirichlet_markov import DirichletMarkovPredictor
+
         p = DirichletMarkovPredictor(initial_capacity=2, alpha=1.0)
         result = run_shuffled_input(
             env=env,
@@ -535,13 +576,14 @@ class TestC2CapacityMatched:
             "results_dir": None,
         }
         import tempfile
+
         with tempfile.TemporaryDirectory() as tmpdir:
             results = run_single_seed(seed=42, env_seed=101, config=config, output_dir=tmpdir)
             t_events = len(results["conditions"]["T"]["growth_events"])
             c2_events = len(results["conditions"]["C2"]["growth_events"])
-            assert c2_events == t_events, (
-                f"C2 growth events ({c2_events}) must equal T growth events ({t_events})"
-            )
+            assert (
+                c2_events == t_events
+            ), f"C2 growth events ({c2_events}) must equal T growth events ({t_events})"
 
     def test_c2_has_same_final_capacity_as_t(self):
         """C2 final capacity must equal T's final capacity."""
@@ -571,17 +613,19 @@ class TestC2CapacityMatched:
             "results_dir": None,
         }
         import tempfile
+
         with tempfile.TemporaryDirectory() as tmpdir:
             results = run_single_seed(seed=42, env_seed=101, config=config, output_dir=tmpdir)
             t_cap = results["conditions"]["T"]["final_capacity"]
             c2_cap = results["conditions"]["C2"]["final_capacity"]
-            assert c2_cap == t_cap, (
-                f"C2 final capacity ({c2_cap}) must equal T final capacity ({t_cap})"
-            )
+            assert (
+                c2_cap == t_cap
+            ), f"C2 final capacity ({c2_cap}) must equal T final capacity ({t_cap})"
 
     def test_c2_starts_with_same_initial_capacity(self):
         """C2 must start with same initial capacity as T."""
         from framework.core.predictors.dirichlet_markov import DirichletMarkovPredictor
+
         env = NonlinearLatentEnvironment(num_latent_states=3, observation_dim=4, seed=42)
         rng = np.random.RandomState(42)
         p = DirichletMarkovPredictor(initial_capacity=2, alpha=1.0)
@@ -624,6 +668,7 @@ class TestC2CapacityMatched:
             "results_dir": None,
         }
         import tempfile
+
         with tempfile.TemporaryDirectory() as tmpdir:
             results = run_single_seed(seed=42, env_seed=101, config=config, output_dir=tmpdir)
             # C2 growth events must be different from T growth events
@@ -644,9 +689,9 @@ class TestC2CapacityMatched:
                 c2_second_half = len(c2_events) - c2_first_half
                 # No more than 80% of events in either half
                 max_ratio = max(c2_first_half, c2_second_half) / len(c2_events)
-                assert max_ratio < 0.9, (
-                    f"C2 growth events too concentrated: {c2_first_half}/{c2_second_half}"
-                )
+                assert (
+                    max_ratio < 0.9
+                ), f"C2 growth events too concentrated: {c2_first_half}/{c2_second_half}"
 
 
 # ─── Blocker 4: Growth Decision Only After G > λ_model ──────────
@@ -663,27 +708,28 @@ class TestGrowthDecision:
     def test_growth_only_after_positive_gain(self):
         """predictor.grow() must only be called when should_grow returns True."""
         from framework.core.mdl.mdl_growth import should_grow, compute_lambda_model
+
         lam = compute_lambda_model(k=2, n=2, N=50)
         # G = N·ΔH - (b + log₂N) = 50*0.1 - 6.64 = -1.64 => should NOT grow
         decision, gain, _ = should_grow(
             entropy_before=30.0,
             entropy_after=29.9,
-            k=2, n=2, N=50,
+            k=2,
+            n=2,
+            N=50,
         )
-        assert decision is False, (
-            f"Negative MDL gain ({gain:.4f}) should not trigger growth"
-        )
+        assert decision is False, f"Negative MDL gain ({gain:.4f}) should not trigger growth"
 
     def test_growth_commits_when_gain_positive(self):
         """predictor.grow() must be called when should_grow returns True."""
         decision, gain, _ = should_grow(
             entropy_before=30.0,
             entropy_after=1.0,
-            k=2, n=2, N=50,
+            k=2,
+            n=2,
+            N=50,
         )
-        assert decision is True, (
-            f"Large positive gain ({gain:.4f}) should trigger growth"
-        )
+        assert decision is True, f"Large positive gain ({gain:.4f}) should trigger growth"
 
     def test_no_speculative_growth_in_run(self):
         """Run treatment should not call grow() before verifying MDL gain.
@@ -717,6 +763,7 @@ class TestGrowthDecision:
             "results_dir": None,
         }
         import tempfile
+
         with tempfile.TemporaryDirectory() as tmpdir:
             results = run_single_seed(seed=42, env_seed=101, config=config, output_dir=tmpdir)
             t = results["conditions"]["T"]
@@ -725,9 +772,9 @@ class TestGrowthDecision:
             log = t.get("per_step_log", [])
             for entry in log:
                 if entry.get("grew", False):
-                    assert entry["gain"] > 0, (
-                        f"Growth recorded at step {entry['step']} but gain={entry['gain']:.4f} <= 0"
-                    )
+                    assert (
+                        entry["gain"] > 0
+                    ), f"Growth recorded at step {entry['step']} but gain={entry['gain']:.4f} <= 0"
 
     def test_decider_honors_m_static_margin(self):
         """[BLOCKER 4] DV-b must require M > pre-registered margin."""
@@ -756,16 +803,24 @@ class TestLatentStateRegression:
         in every condition result, not aliased or copied from predictor."""
         config = {
             "experiment_id": "E0_TEST",
-            "seed": 42, "env_seed": 101,
-            "num_train_steps": 200, "num_test_steps": 50,
-            "environment": {"num_latent_states": 3, "observation_dim": 4,
-                            "transition_alpha": 1.0, "noise_sigma": 0.05},
+            "seed": 42,
+            "env_seed": 101,
+            "num_train_steps": 200,
+            "num_test_steps": 50,
+            "environment": {
+                "num_latent_states": 3,
+                "observation_dim": 4,
+                "transition_alpha": 1.0,
+                "noise_sigma": 0.05,
+            },
             "predictor": {"initial_capacity": 2, "alpha": 1.0},
             "growth": {"b": 1.0, "evaluate_every": 50, "warmup_steps": 50},
             "conditions": ["T", "C1", "C2", "C3"],
-            "num_seeds": 1, "results_dir": None,
+            "num_seeds": 1,
+            "results_dir": None,
         }
         import tempfile
+
         with tempfile.TemporaryDirectory() as tmpdir:
             results = run_single_seed(42, 101, config, tmpdir)
             for cond in ["T", "C1", "C2", "C3"]:
@@ -773,9 +828,9 @@ class TestLatentStateRegression:
                 assert "true_latent_states" in c, f"{cond} missing true_latent_states"
                 assert "latent_states" in c, f"{cond} missing latent_states"
                 # Must be different object references
-                assert c["true_latent_states"] is not c["latent_states"], (
-                    f"{cond}: true_latent_states aliased to latent_states"
-                )
+                assert (
+                    c["true_latent_states"] is not c["latent_states"]
+                ), f"{cond}: true_latent_states aliased to latent_states"
                 # true_latent_states must have same length as latent_states
                 assert len(c["true_latent_states"]) == len(c["latent_states"]), (
                     f"{cond}: length mismatch true_latent({len(c['true_latent_states'])}) "
@@ -795,23 +850,32 @@ class TestLatentStateRegression:
         env2 = NonlinearLatentEnvironment(num_latent_states=3, observation_dim=4, seed=42)
         s1, _ = env1.generate_sequence(100)
         s2, _ = env2.generate_sequence(100)
-        assert s1.tolist() == s2.tolist(), (
-            "Environment must be deterministic: same seed = same latent sequence"
-        )
+        assert (
+            s1.tolist() == s2.tolist()
+        ), "Environment must be deterministic: same seed = same latent sequence"
 
         # (2) In a real E0 run, all conditions share the same env_seed, so
         # true_latent_states should be identical across conditions, while
         # latent_states (predictor) may differ.
         import tempfile
+
         config = {
-            "experiment_id": "E0_TEST", "seed": 42, "env_seed": 101,
-            "num_train_steps": 100, "num_test_steps": 20,
-            "environment": {"num_latent_states": 3, "observation_dim": 4,
-                            "transition_alpha": 1.0, "noise_sigma": 0.05},
+            "experiment_id": "E0_TEST",
+            "seed": 42,
+            "env_seed": 101,
+            "num_train_steps": 100,
+            "num_test_steps": 20,
+            "environment": {
+                "num_latent_states": 3,
+                "observation_dim": 4,
+                "transition_alpha": 1.0,
+                "noise_sigma": 0.05,
+            },
             "predictor": {"initial_capacity": 2, "alpha": 1.0},
             "growth": {"b": 1.0, "evaluate_every": 50, "warmup_steps": 30},
             "conditions": ["T", "C1", "C2", "C3"],
-            "num_seeds": 1, "results_dir": None,
+            "num_seeds": 1,
+            "results_dir": None,
         }
         with tempfile.TemporaryDirectory() as tmpdir:
             results = run_single_seed(42, 101, config, tmpdir)
@@ -819,8 +883,7 @@ class TestLatentStateRegression:
             t_true = results["conditions"]["T"]["true_latent_states"]
             c1_true = results["conditions"]["C1"]["true_latent_states"]
             assert t_true == c1_true, (
-                "true_latent_states must be identical across conditions "
-                "(same env_seed)"
+                "true_latent_states must be identical across conditions " "(same env_seed)"
             )
             # But predictor latent_states differ (different agent seeds)
             t_latent = results["conditions"]["T"]["latent_states"]
@@ -829,9 +892,9 @@ class TestLatentStateRegression:
             # -> latents almost certainly differ at some point
             # (There's a tiny chance of collision, so we check they're not
             # the same object, and that at least one index differs.)
-            assert t_latent is not c1_latent, (
-                "latent_states across conditions must be separate lists"
-            )
+            assert (
+                t_latent is not c1_latent
+            ), "latent_states across conditions must be separate lists"
 
     def test_analyze_conditions_rejects_missing_true_latents(self):
         """analyze_conditions must raise KeyError if true_latent_states is missing
@@ -895,39 +958,61 @@ class TestGrowthOrderingRegression:
     def test_every_growth_event_has_positive_gain(self):
         """Every recorded growth event must have gain > 0 in the per_step_log."""
         config = {
-            "experiment_id": "E0_TEST", "seed": 42, "env_seed": 101,
-            "num_train_steps": 500, "num_test_steps": 50,
-            "environment": {"num_latent_states": 4, "observation_dim": 6,
-                            "transition_alpha": 1.0, "noise_sigma": 0.05},
+            "experiment_id": "E0_TEST",
+            "seed": 42,
+            "env_seed": 101,
+            "num_train_steps": 500,
+            "num_test_steps": 50,
+            "environment": {
+                "num_latent_states": 4,
+                "observation_dim": 6,
+                "transition_alpha": 1.0,
+                "noise_sigma": 0.05,
+            },
             "predictor": {"initial_capacity": 2, "alpha": 1.0},
             "growth": {"b": 1.0, "evaluate_every": 50, "warmup_steps": 100},
-            "conditions": ["T"], "num_seeds": 1, "results_dir": None,
+            "conditions": ["T"],
+            "num_seeds": 1,
+            "results_dir": None,
         }
         import tempfile
+
         with tempfile.TemporaryDirectory() as tmpdir:
             results = run_single_seed(42, 101, config, tmpdir)
             log = results["conditions"]["T"].get("per_step_log", [])
             assert len(log) > 0, "per_step_log should not be empty"
             for entry in log:
                 if entry.get("grew", False):
-                    msg = (f"Growth at step {entry['step']} has gain={entry['gain']:.6f} "
-                           f"but must be > 0. H_before={entry['entropy_before']:.4f}, "
-                           f"H_after={entry['entropy_after']:.4f}, "
-                           f"λ={entry['lambda_model']:.4f}")
+                    msg = (
+                        f"Growth at step {entry['step']} has gain={entry['gain']:.6f} "
+                        f"but must be > 0. H_before={entry['entropy_before']:.4f}, "
+                        f"H_after={entry['entropy_after']:.4f}, "
+                        f"λ={entry['lambda_model']:.4f}"
+                    )
                     assert entry["gain"] > 0, msg
 
     def test_no_growth_when_gain_not_positive(self):
         """When per_step_log shows gain <= 0, grew must be False."""
         config = {
-            "experiment_id": "E0_TEST", "seed": 42, "env_seed": 101,
-            "num_train_steps": 300, "num_test_steps": 50,
-            "environment": {"num_latent_states": 5, "observation_dim": 8,
-                            "transition_alpha": 1.0, "noise_sigma": 0.05},
+            "experiment_id": "E0_TEST",
+            "seed": 42,
+            "env_seed": 101,
+            "num_train_steps": 300,
+            "num_test_steps": 50,
+            "environment": {
+                "num_latent_states": 5,
+                "observation_dim": 8,
+                "transition_alpha": 1.0,
+                "noise_sigma": 0.05,
+            },
             "predictor": {"initial_capacity": 4, "alpha": 1.0},
             "growth": {"b": 1.0, "evaluate_every": 50, "warmup_steps": 50},
-            "conditions": ["T"], "num_seeds": 1, "results_dir": None,
+            "conditions": ["T"],
+            "num_seeds": 1,
+            "results_dir": None,
         }
         import tempfile
+
         with tempfile.TemporaryDirectory() as tmpdir:
             results = run_single_seed(42, 101, config, tmpdir)
             log = results["conditions"]["T"].get("per_step_log", [])
@@ -943,6 +1028,7 @@ class TestGrowthOrderingRegression:
         predictor.grow() is called, and the predictor capacity does not change
         between the computation and the decision."""
         from framework.core.predictors.dirichlet_markov import DirichletMarkovPredictor
+
         pred = DirichletMarkovPredictor(initial_capacity=2, alpha=1.0, rng_seed=42)
         # Feed some data
         for _ in range(20):
@@ -975,19 +1061,27 @@ class TestMultiSeedRunner:
     def small_config(self):
         return {
             "experiment_id": "E0_TEST",
-            "seed": 42, "env_seed": 101,
-            "num_train_steps": 100, "num_test_steps": 20,
-            "environment": {"num_latent_states": 3, "observation_dim": 4,
-                            "transition_alpha": 1.0, "noise_sigma": 0.05},
+            "seed": 42,
+            "env_seed": 101,
+            "num_train_steps": 100,
+            "num_test_steps": 20,
+            "environment": {
+                "num_latent_states": 3,
+                "observation_dim": 4,
+                "transition_alpha": 1.0,
+                "noise_sigma": 0.05,
+            },
             "predictor": {"initial_capacity": 2, "alpha": 1.0},
             "growth": {"b": 1.0, "evaluate_every": 50, "warmup_steps": 30},
             "conditions": ["T", "C1", "C2", "C3"],
-            "num_seeds": 5, "results_dir": None,
+            "num_seeds": 5,
+            "results_dir": None,
         }
 
     def test_multi_seed_runs_all_seeds(self, small_config):
         """run_multi_seed runs num_seeds seeds and produces aggregated results."""
         import tempfile
+
         with tempfile.TemporaryDirectory() as tmpdir:
             results = run_multi_seed(
                 num_seeds=3,
@@ -1003,6 +1097,7 @@ class TestMultiSeedRunner:
     def test_multi_seed_aggregated_decision(self, small_config):
         """Aggregated decision includes DV-a and DV-b evaluations."""
         import tempfile
+
         with tempfile.TemporaryDirectory() as tmpdir:
             results = run_multi_seed(
                 num_seeds=3,
@@ -1018,6 +1113,7 @@ class TestMultiSeedRunner:
     def test_multi_seed_different_env_per_seed(self, small_config):
         """Each seed gets a different environment seed -> different latent sequence."""
         import tempfile
+
         with tempfile.TemporaryDirectory() as tmpdir:
             results = run_multi_seed(
                 num_seeds=3,
@@ -1034,6 +1130,7 @@ class TestMultiSeedRunner:
     def test_multi_seed_requires_min_seeds_in_decider(self, small_config):
         """Multi-seed decider must respect min_seeds threshold."""
         import tempfile
+
         with tempfile.TemporaryDirectory() as tmpdir:
             results = run_multi_seed(
                 num_seeds=2,
@@ -1049,6 +1146,7 @@ class TestMultiSeedRunner:
         """Aggregated results are saved to output directory."""
         import tempfile
         import os
+
         with tempfile.TemporaryDirectory() as tmpdir:
             results = run_multi_seed(
                 num_seeds=3,
@@ -1057,6 +1155,6 @@ class TestMultiSeedRunner:
                 output_dir=tmpdir,
             )
             aggregated_path = os.path.join(tmpdir, "aggregated_results.json")
-            assert os.path.exists(aggregated_path), (
-                f"Aggregated results not saved to {aggregated_path}"
-            )
+            assert os.path.exists(
+                aggregated_path
+            ), f"Aggregated results not saved to {aggregated_path}"

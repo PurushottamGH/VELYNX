@@ -58,8 +58,8 @@ def test_energy_formula_matches_E_equals_H_plus_2S_plus_half_A():
 def test_deltas_are_before_minus_after():
     """Signed improvement is before - after for every vital (lower-is-better)."""
     policy = DecisionPolicy()
-    before = _m(1.0, 2.0, 8.0)   # E = 2*1 + 2 + 4 = 8
-    after = _m(0.5, 1.0, 7.0)    # E = 1 + 1 + 3.5 = 5.5
+    before = _m(1.0, 2.0, 8.0)  # E = 2*1 + 2 + 4 = 8
+    after = _m(0.5, 1.0, 7.0)  # E = 1 + 1 + 3.5 = 5.5
     verdict = policy.evaluate_metrics(before, after)
     assert verdict["delta_prediction"] == pytest.approx(0.5)
     assert verdict["delta_entropy"] == pytest.approx(1.0)
@@ -128,13 +128,11 @@ def test_pareto_accepts_when_any_single_vital_improves():
 
 def test_pareto_and_free_energy_can_disagree():
     """A merge that raises energy but improves load: pareto keeps, free-energy drops."""
-    before = _m(0.0, 0.0, 4.0)   # E = 2.0
-    after = _m(5.0, 0.0, 3.0)    # E = 10 + 1.5 = 11.5 (energy worse, load better)
+    before = _m(0.0, 0.0, 4.0)  # E = 2.0
+    after = _m(5.0, 0.0, 3.0)  # E = 10 + 1.5 = 11.5 (energy worse, load better)
     assert DecisionPolicy().evaluate_metrics(before, after)["accepted"] is False
     assert (
-        DecisionPolicy(strategy=STRATEGY_PARETO)
-        .evaluate_metrics(before, after)["accepted"]
-        is True
+        DecisionPolicy(strategy=STRATEGY_PARETO).evaluate_metrics(before, after)["accepted"] is True
     )
 
 
@@ -147,9 +145,7 @@ def test_invalid_strategy_and_tolerance_raise():
 
 def test_decide_unpacks_a_decision_score():
     policy = DecisionPolicy()
-    score = DecisionScore(
-        metrics_before=_m(1.0, 1.0, 8.0), metrics_after=_m(1.0, 1.0, 6.0)
-    )
+    score = DecisionScore(metrics_before=_m(1.0, 1.0, 8.0), metrics_after=_m(1.0, 1.0, 6.0))
     assert policy.decide(score)["accepted"] is True
 
 
@@ -168,9 +164,7 @@ def _two_identical_clusters():
 def test_simulate_returns_before_after_vitals_and_no_decision():
     engine = _two_identical_clusters()
     recent = [[0.0, 0.0]] * 5
-    score = ReplayEngine().simulate_proposal(
-        engine, {"target_a": 0, "target_b": 1}, recent
-    )
+    score = ReplayEngine().simulate_proposal(engine, {"target_a": 0, "target_b": 1}, recent)
 
     assert isinstance(score, DecisionScore)
     for snap in (score.metrics_before, score.metrics_after):
@@ -190,9 +184,7 @@ def test_simulate_returns_before_after_vitals_and_no_decision():
 def test_simulate_does_not_mutate_the_live_engine():
     engine = _two_identical_clusters()
     before_count = engine.cluster_count
-    ReplayEngine().simulate_proposal(
-        engine, {"target_a": 0, "target_b": 1}, [[0.0, 0.0]]
-    )
+    ReplayEngine().simulate_proposal(engine, {"target_a": 0, "target_b": 1}, [[0.0, 0.0]])
     assert engine.cluster_count == before_count  # live engine untouched
 
 
@@ -208,9 +200,7 @@ def test_policy_accepts_beneficial_merge_from_simulation():
     score = ReplayEngine().simulate_proposal(
         engine, {"target_a": 0, "target_b": 1}, [[0.0, 0.0]] * 5
     )
-    verdict = DecisionPolicy().evaluate_metrics(
-        score.metrics_before, score.metrics_after
-    )
+    verdict = DecisionPolicy().evaluate_metrics(score.metrics_before, score.metrics_after)
     assert verdict["accepted"] is True
     assert verdict["delta_load"] == pytest.approx(1.0)
 
@@ -218,18 +208,14 @@ def test_policy_accepts_beneficial_merge_from_simulation():
 def test_policy_rejects_merge_that_spikes_surprise():
     """Fusing two well-separated clusters wrecks prediction => free-energy reject."""
     engine = ClusterEngine(proximity_threshold=0.25, max_clusters=10)
-    engine._create_cluster([0.0, 0.0])    # id 0
+    engine._create_cluster([0.0, 0.0])  # id 0
     engine._create_cluster([10.0, 10.0])  # id 1
     recent = [[0.0, 0.0], [0.0, 0.0], [10.0, 10.0], [10.0, 10.0]]
 
-    score = ReplayEngine().simulate_proposal(
-        engine, {"target_a": 0, "target_b": 1}, recent
-    )
+    score = ReplayEngine().simulate_proposal(engine, {"target_a": 0, "target_b": 1}, recent)
     # Sanity: surprise must rise materially after the merge.
     assert score.metrics_after[PREDICTION_ERROR] > score.metrics_before[PREDICTION_ERROR]
 
-    verdict = DecisionPolicy().evaluate_metrics(
-        score.metrics_before, score.metrics_after
-    )
+    verdict = DecisionPolicy().evaluate_metrics(score.metrics_before, score.metrics_after)
     assert verdict["accepted"] is False
     assert verdict["delta_energy"] < 0

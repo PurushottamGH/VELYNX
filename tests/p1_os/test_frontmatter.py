@@ -22,7 +22,6 @@ from p1_os.schemas import Claim, Experiment
 from helpers import QUESTION_BODY, QUESTION_METADATA, make_raw
 from payloads import valid_payload
 
-
 # --- Delimiters ----------------------------------------------------------
 
 
@@ -150,9 +149,7 @@ def test_invalid_utf8_bytes_fail():
 
 
 def test_unicode_content_is_preserved():
-    metadata = QUESTION_METADATA.replace(
-        'title: Example title', 'title: "Étude de cas — café ☃"'
-    )
+    metadata = QUESTION_METADATA.replace("title: Example title", 'title: "Étude de cas — café ☃"')
     body = "## Research Question\n日本語テキスト\n\n## Rationale\nText.\n\n## Scope\nText.\n\n## Selection Criteria\nText.\n"
     raw = make_raw(metadata_yaml=metadata, body=body)
     doc = parse_document(raw)
@@ -245,7 +242,9 @@ def test_body_preserves_code_fences_and_wrapping():
 
 
 def test_missing_required_heading_fails():
-    body = "## Research Question\nx\n\n## Rationale\nx\n\n## Scope\nx\n"  # missing Selection Criteria
+    body = (
+        "## Research Question\nx\n\n## Rationale\nx\n\n## Scope\nx\n"  # missing Selection Criteria
+    )
     raw = make_raw(body=body)
     with pytest.raises(HeadingError):
         parse_document(raw)
@@ -267,9 +266,7 @@ def test_out_of_order_required_headings_fail():
 
 def test_additional_headings_are_allowed():
     body = (
-        "## Preamble\nExtra heading, allowed.\n\n"
-        + QUESTION_BODY
-        + "## Appendix\nAlso allowed.\n"
+        "## Preamble\nExtra heading, allowed.\n\n" + QUESTION_BODY + "## Appendix\nAlso allowed.\n"
     )
     raw = make_raw(body=body)
     doc = parse_document(raw)
@@ -294,7 +291,9 @@ def test_wrong_heading_level_does_not_count():
 
 
 def test_heading_that_only_appears_at_wrong_level_fails():
-    body = "### Research Question\nx\n\n## Rationale\nx\n\n## Scope\nx\n\n## Selection Criteria\nx\n"
+    body = (
+        "### Research Question\nx\n\n## Rationale\nx\n\n## Scope\nx\n\n## Selection Criteria\nx\n"
+    )
     raw = make_raw(body=body)
     with pytest.raises(HeadingError):
         parse_document(raw)
@@ -308,10 +307,7 @@ def test_indented_heading_does_not_count():
 
 
 def test_heading_inside_backtick_fence_does_not_count():
-    body = (
-        "```\n## Research Question\n```\n\n"
-        + QUESTION_BODY
-    )
+    body = "```\n## Research Question\n```\n\n" + QUESTION_BODY
     raw = make_raw(body=body)
     doc = parse_document(raw)
     assert doc.record.id == "P1-Q000001"
@@ -332,7 +328,9 @@ def test_unterminated_fence_fails():
 
 
 def test_validate_headings_standalone():
-    validate_headings(QUESTION_BODY, ("## Research Question", "## Rationale", "## Scope", "## Selection Criteria"))
+    validate_headings(
+        QUESTION_BODY, ("## Research Question", "## Rationale", "## Scope", "## Selection Criteria")
+    )
     with pytest.raises(HeadingError):
         validate_headings("no headings here", ("## Research Question",))
 
@@ -361,11 +359,18 @@ def test_serialized_metadata_field_order_matches_common_then_declared():
     lines = [line for line in text.split("\n") if line and not line.startswith(" ")]
     keys = [line.split(":", 1)[0] for line in lines]
     expected_prefix = [
-        "id", "title", "object_type", "status", "schema_version",
-        "created", "last_reviewed", "created_by", "provenance",
+        "id",
+        "title",
+        "object_type",
+        "status",
+        "schema_version",
+        "created",
+        "last_reviewed",
+        "created_by",
+        "provenance",
     ]
     assert keys[: len(expected_prefix)] == expected_prefix
-    assert keys[len(expected_prefix):] == ["selected", "scope"]
+    assert keys[len(expected_prefix) :] == ["selected", "scope"]
 
 
 def test_serialization_quotes_schema_version():

@@ -4,6 +4,7 @@ Preserves the input marginal distribution but destroys temporal structure
 by shuffling. This tests whether temporal dependencies are necessary for
 the observed cognitive behavior.
 """
+
 import numpy as np
 from typing import List, Optional
 

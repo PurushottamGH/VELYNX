@@ -72,7 +72,9 @@ class _StrictSafeLoader(yaml.SafeLoader):
     pass
 
 
-def _construct_mapping_no_duplicates(loader: yaml.SafeLoader, node: yaml.Node, deep: bool = False) -> dict:
+def _construct_mapping_no_duplicates(
+    loader: yaml.SafeLoader, node: yaml.Node, deep: bool = False
+) -> dict:
     if not isinstance(node, yaml.MappingNode):
         raise yaml.constructor.ConstructorError(
             None, None, f"expected a mapping node, but found {node.id}", node.start_mark
@@ -114,15 +116,15 @@ def _flatten_mapping_reject_merge_keys(loader: yaml.SafeLoader, node: yaml.Mappi
     return yaml.SafeLoader.flatten_mapping(loader, node)
 
 
-def _compose_node_reject_aliases(loader: yaml.SafeLoader, parent: yaml.Node | None, index: Any) -> yaml.Node:
+def _compose_node_reject_aliases(
+    loader: yaml.SafeLoader, parent: yaml.Node | None, index: Any
+) -> yaml.Node:
     # PyYAML's composed Node objects do not carry an `.anchor` attribute;
     # anchor/alias information only exists on the (peeked) event, so it
     # must be inspected here, before delegating to the real composer.
     event = loader.peek_event()
     if isinstance(event, yaml.events.AliasEvent):
-        raise yaml.composer.ComposerError(
-            None, None, "aliases are not allowed", event.start_mark
-        )
+        raise yaml.composer.ComposerError(None, None, "aliases are not allowed", event.start_mark)
     anchor = getattr(event, "anchor", None)
     if anchor:
         raise yaml.composer.ComposerError(
@@ -194,7 +196,7 @@ def _split_frontmatter(text: str, newline: str) -> tuple[str, str]:
     if not text.startswith(opening):
         raise DelimiterError("Canonical files must begin with '---' at byte one")
 
-    rest = text[len(opening):]
+    rest = text[len(opening) :]
 
     search_start = 0
     closing_span: tuple[int, int] | None = None
@@ -218,7 +220,7 @@ def _split_frontmatter(text: str, newline: str) -> tuple[str, str]:
         raise DelimiterError("Unterminated YAML frontmatter: no closing '---' found")
 
     yaml_text = rest[: closing_span[0]]
-    body = rest[closing_span[1]:]
+    body = rest[closing_span[1] :]
     return yaml_text, body
 
 

@@ -79,9 +79,11 @@ def test_both_shipped_templates_pass_when_completed(ca, attestations):
     unreachable.
     """
     (attestations / "ADOPTER_ATTESTATION.md").write_text(
-        _complete(ADOPTER_TEMPLATE.read_text(encoding="utf-8")), encoding="utf-8")
+        _complete(ADOPTER_TEMPLATE.read_text(encoding="utf-8")), encoding="utf-8"
+    )
     (attestations / "INDEPENDENT_REVIEWER_ATTESTATION.md").write_text(
-        _complete(REVIEWER_TEMPLATE.read_text(encoding="utf-8")), encoding="utf-8")
+        _complete(REVIEWER_TEMPLATE.read_text(encoding="utf-8")), encoding="utf-8"
+    )
 
     r = ca.check_attestations()
     assert r.status == "PASS", r.items
@@ -92,7 +94,8 @@ def test_adopter_is_not_held_to_reviewer_only_elements(ca, attestations):
     """The adopter is the author of the change; requiring a non-authorship
     declaration of them is the schema-dispatch defect, not a real element."""
     (attestations / "ADOPTER_ATTESTATION.md").write_text(
-        _complete(ADOPTER_TEMPLATE.read_text(encoding="utf-8")), encoding="utf-8")
+        _complete(ADOPTER_TEMPLATE.read_text(encoding="utf-8")), encoding="utf-8"
+    )
 
     r = ca.check_attestations()
     assert r.status == "PASS", r.items
@@ -101,12 +104,15 @@ def test_adopter_is_not_held_to_reviewer_only_elements(ca, attestations):
     assert "non-authorship declaration" in ca.REVIEWER_ELEMENTS
 
 
-@pytest.mark.parametrize("written", [
-    "I am **not** an author of the reviewed change.",
-    "I am not an author of the reviewed change.",
-    "I am *not* an author of the reviewed change.",
-    "I am __not__ an author of the reviewed change.",
-])
+@pytest.mark.parametrize(
+    "written",
+    [
+        "I am **not** an author of the reviewed change.",
+        "I am not an author of the reviewed change.",
+        "I am *not* an author of the reviewed change.",
+        "I am __not__ an author of the reviewed change.",
+    ],
+)
 def test_non_authorship_matcher_survives_markdown_emphasis(ca, written):
     """The shipped reviewer template writes `**not** an author`. A bare literal
     `not an author` does not match it, which made the reviewer document fail
@@ -117,18 +123,19 @@ def test_non_authorship_matcher_survives_markdown_emphasis(ca, written):
 # --------------------------------------------------------------------------
 # Negative fixtures — each element must actually be load-bearing
 # --------------------------------------------------------------------------
-@pytest.mark.parametrize("element,line", [
-    ("non-authorship declaration", r".*not[\W_]{0,6}an[\W_]{1,6}author.*"),
-    ("competence", r".*[Cc]ompetence.*"),
-    ("conflict disclosure", r".*[Cc]onflict.*"),
-])
+@pytest.mark.parametrize(
+    "element,line",
+    [
+        ("non-authorship declaration", r".*not[\W_]{0,6}an[\W_]{1,6}author.*"),
+        ("competence", r".*[Cc]ompetence.*"),
+        ("conflict disclosure", r".*[Cc]onflict.*"),
+    ],
+)
 def test_removing_a_reviewer_element_fails(ca, attestations, element, line):
     text = _complete(REVIEWER_TEMPLATE.read_text(encoding="utf-8"))
-    stripped = "\n".join(l for l in text.splitlines()
-                         if not re.fullmatch(line, l))
+    stripped = "\n".join(l for l in text.splitlines() if not re.fullmatch(line, l))
     assert stripped != text, "fixture did not remove anything"
-    (attestations / "INDEPENDENT_REVIEWER_ATTESTATION.md").write_text(
-        stripped, encoding="utf-8")
+    (attestations / "INDEPENDENT_REVIEWER_ATTESTATION.md").write_text(stripped, encoding="utf-8")
 
     r = ca.check_attestations()
     assert r.status == "FAIL"
@@ -197,9 +204,11 @@ def test_uncompleted_templates_would_fail(ca, attestations):
     """Guard against the opposite error: the raw templates must not pass. They
     are templates, not attestations."""
     (attestations / "ADOPTER_ATTESTATION.md").write_text(
-        ADOPTER_TEMPLATE.read_text(encoding="utf-8"), encoding="utf-8")
+        ADOPTER_TEMPLATE.read_text(encoding="utf-8"), encoding="utf-8"
+    )
     (attestations / "INDEPENDENT_REVIEWER_ATTESTATION.md").write_text(
-        REVIEWER_TEMPLATE.read_text(encoding="utf-8"), encoding="utf-8")
+        REVIEWER_TEMPLATE.read_text(encoding="utf-8"), encoding="utf-8"
+    )
 
     r = ca.check_attestations()
     assert r.status == "FAIL"

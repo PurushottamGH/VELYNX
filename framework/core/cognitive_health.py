@@ -60,14 +60,24 @@ __all__ = [
     # type alias
     "Vector",
     # constants
-    "LAMBDA", "MU", "NU",
-    "ENTROPY_HIGH", "SURPRISE_HIGH", "SURPRISE_MILD",
-    "PRESSURE_HIGH", "PRESSURE_MILD", "ENERGY_EXHAUSTION",
+    "LAMBDA",
+    "MU",
+    "NU",
+    "ENTROPY_HIGH",
+    "SURPRISE_HIGH",
+    "SURPRISE_MILD",
+    "PRESSURE_HIGH",
+    "PRESSURE_MILD",
+    "ENERGY_EXHAUSTION",
     # enum
     "Regime",
     # pure functions
-    "euclidean_distance", "transition_entropy", "surprise",
-    "anomaly_spatial_volume", "active_load", "cognitive_energy",
+    "euclidean_distance",
+    "transition_entropy",
+    "surprise",
+    "anomaly_spatial_volume",
+    "active_load",
+    "cognitive_energy",
     # rendering
     "HealthReport",
 ]

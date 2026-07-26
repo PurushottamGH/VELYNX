@@ -1,4 +1,5 @@
 """EXP-1 report rendering utilities."""
+
 from __future__ import annotations
 
 import csv
@@ -68,7 +69,9 @@ def seed_report_markdown(decision: SeedDecision) -> str:
         lines.extend(f"- {reason}" for reason in decision.kill_reasons)
     else:
         lines.append("- None")
-    lines.extend(["", "## Reliability Table", _markdown_reliability_table(decision.calibration), ""])
+    lines.extend(
+        ["", "## Reliability Table", _markdown_reliability_table(decision.calibration), ""]
+    )
     return "\n".join(lines)
 
 
@@ -123,7 +126,9 @@ def write_seed_report(decision: SeedDecision, output_dir: str | Path) -> dict[st
     return {"report": report_path, "reliability_table": csv_path}
 
 
-def write_experiment_report(decision: ExperimentDecision, output_dir: str | Path) -> dict[str, Path]:
+def write_experiment_report(
+    decision: ExperimentDecision, output_dir: str | Path
+) -> dict[str, Path]:
     """Write experiment markdown and pooled reliability CSV report artifacts."""
 
     output_path = Path(output_dir)

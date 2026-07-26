@@ -4,6 +4,7 @@ Single entry point for all registered experiments.
 Usage:
     python -m experiments.runner <experiment_id> [--config <path>] [--seed <n>]
 """
+
 import argparse
 import importlib
 import os
@@ -13,7 +14,6 @@ import yaml
 import json
 from pathlib import Path
 from datetime import datetime, timezone
-
 
 EXPERIMENT_REGISTRY_PATH = Path(__file__).resolve().parent.parent / "experiment_registry.yaml"
 PARAMETER_REGISTRY_PATH = Path(__file__).resolve().parent.parent / "parameter_registry.yaml"
@@ -85,14 +85,20 @@ def run_experiment(experiment_id, config_override=None, seed=None):
         return
 
     try:
-        spec = importlib.util.spec_from_file_location(f"experiments.{experiment_id}.run", entry_point)
+        spec = importlib.util.spec_from_file_location(
+            f"experiments.{experiment_id}.run", entry_point
+        )
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
 
         if hasattr(module, "main"):
-            module.main(output_dir=str(output_dir), config=config_override, seed=int(env["BENCHMARK_SEED"]))
+            module.main(
+                output_dir=str(output_dir), config=config_override, seed=int(env["BENCHMARK_SEED"])
+            )
         elif hasattr(module, "run"):
-            module.run(output_dir=str(output_dir), config=config_override, seed=int(env["BENCHMARK_SEED"]))
+            module.run(
+                output_dir=str(output_dir), config=config_override, seed=int(env["BENCHMARK_SEED"])
+            )
         else:
             print(f"Warning: experiment {experiment_id} has no main() or run() entry point")
 
@@ -113,7 +119,13 @@ def run_experiment(experiment_id, config_override=None, seed=None):
 def _get_git_commit():
     try:
         import subprocess
-        result = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True, cwd=Path(__file__).parent.parent)
+
+        result = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            capture_output=True,
+            text=True,
+            cwd=Path(__file__).parent.parent,
+        )
         return result.stdout.strip()
     except Exception:
         return "unknown"

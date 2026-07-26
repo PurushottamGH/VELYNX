@@ -42,7 +42,11 @@ def test_canonical_path_for_every_object_type(root: Path, object_type, dirname):
     path = root / "records" / dirname / f"{identifier}.md"
     resolved = validate_record_path(path, root, object_type, identifier)
     assert resolved == path.absolute()
-    assert expected_relative_path(object_type, identifier).parts == ("records", dirname, f"{identifier}.md")
+    assert expected_relative_path(object_type, identifier).parts == (
+        "records",
+        dirname,
+        f"{identifier}.md",
+    )
 
 
 def test_wrong_directory_fails(root: Path):

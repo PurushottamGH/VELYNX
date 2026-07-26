@@ -450,9 +450,7 @@ class DirichletMarkovModel:
         support.add(NOVEL)
         return tuple(sorted(support))
 
-    def _distribution(
-        self, context: Context, extra: Sequence[Symbol] = ()
-    ) -> Dict[Symbol, float]:
+    def _distribution(self, context: Context, extra: Sequence[Symbol] = ()) -> Dict[Symbol, float]:
         """Smoothed predictive distribution P(. | context) over the support."""
         counter = self._counts.get(context)
         support = self._support(context, extra)
@@ -816,9 +814,7 @@ class StableBeliefModel:
             support.update(belief.exceptions.keys())
         return tuple(sorted(support))
 
-    def _distribution(
-        self, context: Context, extra: Sequence[Symbol] = ()
-    ) -> Dict[Symbol, float]:
+    def _distribution(self, context: Context, extra: Sequence[Symbol] = ()) -> Dict[Symbol, float]:
         """Predictive distribution synthesised from the context's belief.
 
         The rule's consequent receives mass equal to its ``confidence``; the
@@ -906,9 +902,7 @@ class StableBeliefModel:
 
         total_events = float(belief.support_count + belief.contradiction_count)
         exceptions: list = []
-        for sym, exc in sorted(
-            belief.exceptions.items(), key=lambda kv: (-kv[1].count, kv[0])
-        ):
+        for sym, exc in sorted(belief.exceptions.items(), key=lambda kv: (-kv[1].count, kv[0])):
             freq = (exc.count / total_events) if total_events > 0 else 0.0
             exceptions.append((sym, freq))
 
@@ -1031,9 +1025,7 @@ class StableBeliefModel:
             concepts.append(f"novel::{observation}")
 
         if belief.consequent == observation and belief.support_count >= self.motif_threshold:
-            concepts.append(
-                f"motif::({ctx_repr})->{observation} x{belief.support_count}"
-            )
+            concepts.append(f"motif::({ctx_repr})->{observation} x{belief.support_count}")
 
         if belief.consequent is not None and belief.confidence >= self.crystallize_threshold:
             concepts.append(
@@ -1135,16 +1127,16 @@ class ProbationaryConcept:
     promotion to a real rule is a later milestone's job.
     """
 
-    label: str                       #: Human handle, e.g. ``"Concept_01"``.
-    context: Context                 #: The context whose quarantine it abstracts.
-    members: frozenset               #: Exception symbols the concept absorbs.
-    rule_symbol: Optional[Symbol]    #: The incumbent rule at birth (a non-deviation).
-    promised_bits: float             #: Predictive bits the birth math promised to save.
-    born_tick: int                   #: Engine tick at which probation opened.
-    trials: int = 0                  #: Deviation ticks witnessed since birth.
-    hits: int = 0                    #: Deviations that fell inside ``members``.
-    realized_bits: float = 0.0       #: Bits actually re-confirmed at verdict time.
-    verdict: str = "PROBATION"       #: PROBATION | CONFIRMED | REJECTED.
+    label: str  #: Human handle, e.g. ``"Concept_01"``.
+    context: Context  #: The context whose quarantine it abstracts.
+    members: frozenset  #: Exception symbols the concept absorbs.
+    rule_symbol: Optional[Symbol]  #: The incumbent rule at birth (a non-deviation).
+    promised_bits: float  #: Predictive bits the birth math promised to save.
+    born_tick: int  #: Engine tick at which probation opened.
+    trials: int = 0  #: Deviation ticks witnessed since birth.
+    hits: int = 0  #: Deviations that fell inside ``members``.
+    realized_bits: float = 0.0  #: Bits actually re-confirmed at verdict time.
+    verdict: str = "PROBATION"  #: PROBATION | CONFIRMED | REJECTED.
 
     @property
     def coverage(self) -> float:
@@ -1168,9 +1160,7 @@ class PipelineTick:
     alerts: List[str] = field(default_factory=list)
 
 
-def _render_candidate_banner(
-    pc: ProbationaryConcept, decision: "ConceptBirthDecision"
-) -> str:
+def _render_candidate_banner(pc: ProbationaryConcept, decision: "ConceptBirthDecision") -> str:
     """Render the massive ``[!] CANDIDATE HYPOTHESIS GENERATED`` alert."""
     members = ", ".join(sorted(pc.members))
     ctx = " ".join(pc.context) if pc.context else "(empty)"
@@ -1243,7 +1233,9 @@ class CognitiveEngine:
         # explicit ``DirichletMarkovModel`` to fall back to the flat C1-C3
         # substrate for comparison.
         self.model: GenerativeModel = (
-            model if model is not None else StableBeliefModel(order=order, base_rate=base_learning_rate)
+            model
+            if model is not None
+            else StableBeliefModel(order=order, base_rate=base_learning_rate)
         )
         self.order: int = order
         #: Retained for surprise/attention *reporting* only. Under C6 it no
@@ -1293,12 +1285,10 @@ class CognitiveEngine:
         context = prediction.context
 
         probability = prediction.probability_of(observation)
-        prediction_error = -_safe_log2(probability)          # surprisal, in bits
-        attention_weight = 1.0 - probability                 # precision of the residual, [0, 1]
+        prediction_error = -_safe_log2(probability)  # surprisal, in bits
+        attention_weight = 1.0 - probability  # precision of the residual, [0, 1]
 
-        confidence_delta, latent_concepts = self.adapt(
-            context, observation, attention_weight
-        )
+        confidence_delta, latent_concepts = self.adapt(context, observation, attention_weight)
 
         # C2: read back the localized world model *after* assimilation, so the
         # REPL shows the engine's current theory of this context.
@@ -1309,9 +1299,7 @@ class CognitiveEngine:
         # a missing intermediate cause rather than silently absorbing it.
         causal_hypothesis: Optional[str] = None
         if prediction_error > self.surprise_threshold:
-            causal_hypothesis = self._generate_hypothesis(
-                prediction, observation, internal_model
-            )
+            causal_hypothesis = self._generate_hypothesis(prediction, observation, internal_model)
 
         experience = Experience(
             timestamp=time.time(),
@@ -1804,22 +1792,20 @@ def _occupancy_entropy(counts: Sequence[float]) -> float:
 class SensoriumVitals:
     """The Free-Energy vitals computed for a single sensorium tick."""
 
-    error: float              #: Euclidean prediction error (surprise) this tick.
-    threshold: float          #: The surprise bar in force.
-    breached: bool            #: Did this tick fire a [SURPRISE] event?
-    breaches_in_window: int   #: Breaches across the last ``BREACH_WINDOW`` ticks.
-    entropy: float            #: H — uncertainty over cluster occupancy.
-    energy: float             #: E = lam*H + mu*S + nu*A — the headline budget.
-    clusters: int             #: Distinct regimes the predictor has named.
-    quarantine: int           #: Total vectors the predictor refused to cluster.
-    pending: int              #: Un-mined anomalies since the last discovery.
-    regime: str               #: OPTIMAL | LEARNING | EXHAUSTION.
+    error: float  #: Euclidean prediction error (surprise) this tick.
+    threshold: float  #: The surprise bar in force.
+    breached: bool  #: Did this tick fire a [SURPRISE] event?
+    breaches_in_window: int  #: Breaches across the last ``BREACH_WINDOW`` ticks.
+    entropy: float  #: H — uncertainty over cluster occupancy.
+    energy: float  #: E = lam*H + mu*S + nu*A — the headline budget.
+    clusters: int  #: Distinct regimes the predictor has named.
+    quarantine: int  #: Total vectors the predictor refused to cluster.
+    pending: int  #: Un-mined anomalies since the last discovery.
+    regime: str  #: OPTIMAL | LEARNING | EXHAUSTION.
 
     @property
     def glyph(self) -> str:
-        return {"OPTIMAL": "[~]", "LEARNING": "[^]", "EXHAUSTION": "[!]"}.get(
-            self.regime, "[?]"
-        )
+        return {"OPTIMAL": "[~]", "LEARNING": "[^]", "EXHAUSTION": "[!]"}.get(self.regime, "[?]")
 
 
 class SensoriumMonitor:
@@ -1846,9 +1832,7 @@ class SensoriumMonitor:
                 "vector_prediction_core / latent_cause_engine)."
             )
         self.env = Environment(seed=seed)
-        self.sensors = SensorArray(
-            noise_sigma=0.05, seed=None if seed is None else seed + 1
-        )
+        self.sensors = SensorArray(noise_sigma=0.05, seed=None if seed is None else seed + 1)
         self.core = VectorPredictionCore(
             proximity_threshold=proximity,
             surprise_threshold=surprise_threshold,

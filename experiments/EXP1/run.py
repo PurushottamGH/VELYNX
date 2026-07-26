@@ -4,6 +4,7 @@ This module defines callable orchestration only. It does not execute Program A a
 import time and does not own correctness adjudication; callers must inject both
 the Program A answer function and the frozen-rubric adjudicator.
 """
+
 from __future__ import annotations
 
 import asyncio
@@ -22,7 +23,12 @@ from experiments.EXP1.dataset import (
     records_to_jsonl,
     validate_query_records,
 )
-from experiments.EXP1.decision import ExperimentDecision, SeedDecision, decide_experiment, decide_seed
+from experiments.EXP1.decision import (
+    ExperimentDecision,
+    SeedDecision,
+    decide_experiment,
+    decide_seed,
+)
 from experiments.EXP1.manifest import (
     ExecutionManifest,
     build_execution_manifest,
@@ -35,9 +41,10 @@ from experiments.EXP1.program_a_adapter import (
     coerce_program_a_adapter,
 )
 
-
 AnswerFunction = Callable[[QueryRecord, int], AnswerRecord | Mapping[str, Any] | Awaitable[Any]]
-AdjudicatorFunction = Callable[[QueryRecord, AnswerRecord], int | Mapping[str, Any] | Awaitable[Any]]
+AdjudicatorFunction = Callable[
+    [QueryRecord, AnswerRecord], int | Mapping[str, Any] | Awaitable[Any]
+]
 
 
 def load_config(path: str | Path | None = None) -> dict[str, Any]:
@@ -246,9 +253,7 @@ def _coerce_answer_record(value: Any, query_id: str, seed: int) -> AnswerRecord:
                 f"answer query_id={value.query_id!r} does not match expected {query_id!r}"
             )
         if value.seed != seed:
-            raise ValueError(
-                f"answer query_id={query_id!r} has seed={value.seed}, expected {seed}"
-            )
+            raise ValueError(f"answer query_id={query_id!r} has seed={value.seed}, expected {seed}")
         return value
     if not isinstance(value, Mapping):
         raise TypeError("answer_fn must return AnswerRecord or mapping")

@@ -41,10 +41,10 @@ from validation.metrics import (
     transition_entropy,
 )
 
-
 # ---------------------------------------------------------------------------
 # The Vitals Screen
 # ---------------------------------------------------------------------------
+
 
 @dataclass
 class HealthReport:
@@ -203,10 +203,8 @@ class HealthReport:
             f" pressure: {self.anomaly_pressure:>5.2f}  |",
             f"|  anomaly spatial volume (variance): {self.anomaly_volume:>10.4f} |",
             "+" + "-" * 52 + "+",
-            f"|  E = ({LAMBDA}*H) + ({MU}*S) + ({NU}*A)"
-            f"{'':<19}|",
-            f"|  >> COGNITIVE ENERGY  E = {self.energy:8.2f}"
-            f"{'':<17}|",
+            f"|  E = ({LAMBDA}*H) + ({MU}*S) + ({NU}*A)" f"{'':<19}|",
+            f"|  >> COGNITIVE ENERGY  E = {self.energy:8.2f}" f"{'':<17}|",
             line,
         ]
         return "\n".join(rows)
@@ -222,6 +220,7 @@ __all__ = ["HealthReport", "run_demo"]
 # Mock run: a vector brain travelling from Optimal -> Exhaustion
 # ---------------------------------------------------------------------------
 
+
 def run_demo() -> None:
     """Render the Optimal -> Exhaustion vitals walkthrough.
 
@@ -234,7 +233,7 @@ def run_demo() -> None:
             "label": "t0  dawn / rested",
             "transitions": {0: {1: 20}, 1: {2: 19}, 2: {0: 18}},
             "predicted_centroid": [0.50, 0.50, 0.50, 0.50],
-            "observed_vector":    [0.51, 0.49, 0.50, 0.52],
+            "observed_vector": [0.51, 0.49, 0.50, 0.52],
             "cluster_count": 3,
             "anomaly_vectors": [],
         },
@@ -242,7 +241,7 @@ def run_demo() -> None:
             "label": "t1  first anomaly",
             "transitions": {0: {1: 18, 2: 3}, 1: {2: 16, 0: 2}, 2: {0: 15}},
             "predicted_centroid": [0.50, 0.50, 0.50, 0.50],
-            "observed_vector":    [0.62, 0.41, 0.55, 0.44],
+            "observed_vector": [0.62, 0.41, 0.55, 0.44],
             "cluster_count": 4,
             "anomaly_vectors": [[0.91, 0.10, 0.88, 0.12]],
         },
@@ -250,7 +249,7 @@ def run_demo() -> None:
             "label": "t2  active learning",
             "transitions": {0: {1: 10, 2: 7}, 1: {2: 8, 0: 6}, 2: {0: 7, 1: 5}},
             "predicted_centroid": [0.50, 0.50, 0.50, 0.50],
-            "observed_vector":    [0.78, 0.30, 0.66, 0.35],
+            "observed_vector": [0.78, 0.30, 0.66, 0.35],
             "cluster_count": 6,
             "anomaly_vectors": [
                 [0.91, 0.10, 0.88, 0.12],
@@ -260,11 +259,13 @@ def run_demo() -> None:
         {
             "label": "t3  strain rising",
             "transitions": {
-                0: {1: 5, 2: 4, 3: 4}, 1: {2: 5, 0: 4, 3: 3},
-                2: {0: 4, 1: 4, 3: 4}, 3: {0: 3, 1: 4, 2: 3},
+                0: {1: 5, 2: 4, 3: 4},
+                1: {2: 5, 0: 4, 3: 3},
+                2: {0: 4, 1: 4, 3: 4},
+                3: {0: 3, 1: 4, 2: 3},
             },
             "predicted_centroid": [0.50, 0.50, 0.50, 0.50],
-            "observed_vector":    [0.95, 0.08, 0.90, 0.05],
+            "observed_vector": [0.95, 0.08, 0.90, 0.05],
             "cluster_count": 8,
             "anomaly_vectors": [
                 [0.91, 0.10, 0.88, 0.12],
@@ -284,13 +285,17 @@ def run_demo() -> None:
                 5: {0: 2, 1: 2, 2: 1, 3: 2, 4: 2},
             },
             "predicted_centroid": [0.50, 0.50, 0.50, 0.50],
-            "observed_vector":    [0.99, 0.02, 0.97, 0.01],
+            "observed_vector": [0.99, 0.02, 0.97, 0.01],
             "cluster_count": 9,
             "anomaly_vectors": [
-                [0.91, 0.10, 0.88, 0.12], [0.15, 0.83, 0.20, 0.79],
-                [0.05, 0.95, 0.50, 0.10], [0.88, 0.40, 0.05, 0.92],
-                [0.02, 0.30, 0.97, 0.44], [0.70, 0.99, 0.01, 0.33],
-                [0.44, 0.01, 0.66, 0.98], [0.99, 0.55, 0.33, 0.02],
+                [0.91, 0.10, 0.88, 0.12],
+                [0.15, 0.83, 0.20, 0.79],
+                [0.05, 0.95, 0.50, 0.10],
+                [0.88, 0.40, 0.05, 0.92],
+                [0.02, 0.30, 0.97, 0.44],
+                [0.70, 0.99, 0.01, 0.33],
+                [0.44, 0.01, 0.66, 0.98],
+                [0.99, 0.55, 0.33, 0.02],
             ],
         },
     ]

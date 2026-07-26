@@ -30,6 +30,7 @@ from backend.agency.health_sentinel import HealthSentinel
 
 # Phase 50 predictive core (seeded on warmup)
 from backend.cognition.predictive_core import seed_concept_states_from_soul, seed_transition_rules_from_living_edges
+from backend.models.llm_client import LLMMessage, llm_client
 
 MEMORY = MemoryCore()
 _code_writer = None

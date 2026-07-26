@@ -51,6 +51,7 @@ DEFAULT_TOLERANCE = 0.05
 # Result data structure
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class RegressionResult:
     """The itemised verdict of a single :class:`RegressionGate` evaluation.
@@ -85,6 +86,7 @@ class RegressionResult:
 # ---------------------------------------------------------------------------
 # The gate
 # ---------------------------------------------------------------------------
+
 
 class RegressionGate(Regression):
     """Compare candidate metrics against a baseline and enforce the Freeze Rule.
@@ -289,9 +291,7 @@ class RegressionGate(Regression):
             for name in missing_list:
                 lines.append(f"    - {name}: not reported (cannot prove no regression)")
 
-        tolerated = {
-            name: val for name, val in regressions.items() if name not in breach_set
-        }
+        tolerated = {name: val for name, val in regressions.items() if name not in breach_set}
         if tolerated:
             lines.append("  Tolerated regressions (within margin):")
             for name in sorted(tolerated):
@@ -318,6 +318,7 @@ class RegressionGate(Regression):
 # ---------------------------------------------------------------------------
 # The Enforcer
 # ---------------------------------------------------------------------------
+
 
 def assert_no_regression(result: RegressionResult) -> None:
     """Hard-fail the Freeze Rule if ``result`` did not pass.

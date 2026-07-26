@@ -3,6 +3,7 @@
 
 Verifies that benchmarks/ package is importable and basic metrics compute correctly.
 """
+
 import sys
 from pathlib import Path
 
@@ -11,10 +12,19 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 def test_metrics_import():
     from experiments.metrics import (
-        LAMBDA, MU, NU, ENTROPY_HIGH, SURPRISE_HIGH, ENERGY_EXHAUSTION,
-        MetricsCollector, MetricsReport,
-        bootstrap_ci, effect_size_cohens_d, permutation_test,
+        LAMBDA,
+        MU,
+        NU,
+        ENTROPY_HIGH,
+        SURPRISE_HIGH,
+        ENERGY_EXHAUSTION,
+        MetricsCollector,
+        MetricsReport,
+        bootstrap_ci,
+        effect_size_cohens_d,
+        permutation_test,
     )
+
     assert LAMBDA == 1.0
     assert MU == 2.0
     assert NU == 0.5
@@ -62,6 +72,7 @@ def test_artifact_store():
 
 def test_kill_criteria():
     from experiments.metrics import MetricsCollector
+
     collector = MetricsCollector("test", "kill")
     kc = collector.check_kill_criteria(free_energy=5.0, entropy=0.5, surprise=0.1)
     assert len(kc) == 0
@@ -95,6 +106,7 @@ def test_stats():
 def test_runner_import():
     from experiments.runner import load_registry, list_experiments
     import yaml
+
     reg_path = Path(__file__).resolve().parent.parent / "experiment_registry.yaml"
     reg = load_registry(reg_path)
     assert "E0" in reg.get("experiment_registry", {})
@@ -121,6 +133,7 @@ def main():
         except Exception as e:
             print(f"[FAIL] {test.__name__}: {e}")
             import traceback
+
             traceback.print_exc()
             failures += 1
 

@@ -12,6 +12,7 @@ taxonomy leaking into the EXP-1 path).
 Scope: tests only. No production-code changes. No retriever/synthesizer
 binding. No tier computation. No canonical-document edits.
 """
+
 from __future__ import annotations
 
 import pytest
@@ -216,6 +217,7 @@ def test_coerce_rejects_both_none() -> None:
 
 def test_callable_adapter_passes_through_each_canonical_tier() -> None:
     for tier in CONFIDENCE_TIERS:
+
         def fn(query: QueryRecord, seed: int, tier: str = tier) -> AnswerRecord:
             return AnswerRecord(query_id=query.query_id, answer="a", tier=tier, seed=seed)
 
@@ -231,9 +233,7 @@ def test_from_mapping_rejects_non_canonical_synthesizer_grades() -> None:
     # Mapping return path).
     for bad_tier in ("INSUFFICIENT", "SPECULATIVE", "UNCERTAIN", "MAYBE", ""):
         with pytest.raises(ValueError, match="must be one of"):
-            AnswerRecord.from_mapping(
-                {"query_id": "q", "answer": "a", "tier": bad_tier}
-            )
+            AnswerRecord.from_mapping({"query_id": "q", "answer": "a", "tier": bad_tier})
 
 
 @pytest.mark.parametrize(
@@ -255,17 +255,13 @@ def test_direct_construction_rejects_non_canonical_tier(bad_tier: str) -> None:
 
 
 def test_answer_record_from_mapping_uppercases_tier() -> None:
-    record = AnswerRecord.from_mapping(
-        {"query_id": "q", "answer": "a", "tier": "certain"}
-    )
+    record = AnswerRecord.from_mapping({"query_id": "q", "answer": "a", "tier": "certain"})
     assert record.tier == "CERTAIN"
 
 
 def test_answer_record_from_mapping_rejects_speculative_after_uppercase() -> None:
     with pytest.raises(ValueError, match="must be one of"):
-        AnswerRecord.from_mapping(
-            {"query_id": "q", "answer": "a", "tier": "speculative"}
-        )
+        AnswerRecord.from_mapping({"query_id": "q", "answer": "a", "tier": "speculative"})
 
 
 def test_answer_record_from_mapping_accepts_aliases_and_coerces_types() -> None:

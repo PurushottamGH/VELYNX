@@ -22,7 +22,6 @@ from backend.cognition.vector_prediction_core import ClusterEngine
 from validation.interfaces import Dataset
 from validation.runner import BenchmarkRunner, _MAX_MERGES_PER_CYCLE
 
-
 # ---------------------------------------------------------------------------
 # Test doubles
 # ---------------------------------------------------------------------------
@@ -144,8 +143,8 @@ def test_anomaly_pressure_alias_back_compat():
 def test_reingest_joins_nearby_cluster_and_resolves_without_duplicate():
     """A quarantined vector close to a cluster joins it and is marked absorbed."""
     engine = ClusterEngine(proximity_threshold=0.25, max_clusters=2)
-    engine._create_cluster([0.0, 0.0])     # id 0
-    engine._create_cluster([10.0, 10.0])   # id 1  (budget now full)
+    engine._create_cluster([0.0, 0.0])  # id 0
+    engine._create_cluster([10.0, 10.0])  # id 1  (budget now full)
 
     rec = engine._open_quarantine([0.05, 0.05])  # within 0.25 of cluster 0
     assert rec.status == "active"
@@ -163,8 +162,8 @@ def test_reingest_joins_nearby_cluster_and_resolves_without_duplicate():
 def test_reingest_fails_when_budget_full_then_seeds_after_slot_freed():
     """Far vector cannot place while budget is full; seeds once a slot opens."""
     engine = ClusterEngine(proximity_threshold=0.25, max_clusters=2)
-    engine._create_cluster([0.0, 0.0])     # id 0
-    engine._create_cluster([10.0, 10.0])   # id 1  (budget full)
+    engine._create_cluster([0.0, 0.0])  # id 0
+    engine._create_cluster([10.0, 10.0])  # id 1  (budget full)
 
     rec = engine._open_quarantine([5.0, 5.0])  # far from both, budget full
     assert engine.reingest_quarantined(rec.id) is False

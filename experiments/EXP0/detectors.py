@@ -36,6 +36,7 @@ EXP0_RUNBOOK.md for the mandatory reset-before-every-trial procedure this
 module assumes the CALLER (run_exp0.py) performs -- this module does not
 reset state itself, so it stays a pure, testable unit.
 """
+
 from __future__ import annotations
 
 import time
@@ -44,13 +45,13 @@ from dataclasses import dataclass, field
 
 @dataclass(frozen=True)
 class DetectorResult:
-    tier: str                 # "tier1_v2" | "tier2_legacy" | "tier3_full"
+    tier: str  # "tier1_v2" | "tier2_legacy" | "tier3_full"
     query: str
     concepts_detected: list[str] = field(default_factory=list)
-    confidence: str | None = None      # populated for tier3_full only
-    answer_text: str | None = None     # populated for tier3_full only
+    confidence: str | None = None  # populated for tier3_full only
+    answer_text: str | None = None  # populated for tier3_full only
     latency_seconds: float = 0.0
-    error: str | None = None           # non-None if the call raised
+    error: str | None = None  # non-None if the call raised
 
     def hit(self, target_concept: str) -> bool:
         """Whether ``target_concept`` is among the concepts this call
@@ -64,17 +65,21 @@ def tier1_v2(query: str) -> DetectorResult:
     t0 = time.perf_counter()
     try:
         from backend.pipeline.soul_router import soul_lookup
+
         result = soul_lookup(query)
     except Exception as exc:  # noqa: BLE001 -- surfaced in the artifact, not swallowed
         return DetectorResult(
-            tier="tier1_v2", query=query,
-            latency_seconds=time.perf_counter() - t0, error=f"{type(exc).__name__}: {exc}",
+            tier="tier1_v2",
+            query=query,
+            latency_seconds=time.perf_counter() - t0,
+            error=f"{type(exc).__name__}: {exc}",
         )
     elapsed = time.perf_counter() - t0
     if not result:
         return DetectorResult(tier="tier1_v2", query=query, latency_seconds=elapsed)
     return DetectorResult(
-        tier="tier1_v2", query=query,
+        tier="tier1_v2",
+        query=query,
         concepts_detected=list(result.get("concepts", [])),
         latency_seconds=elapsed,
     )
@@ -86,17 +91,21 @@ def tier2_legacy(query: str) -> DetectorResult:
     t0 = time.perf_counter()
     try:
         from backend.pipeline.soul_router import soul_lookup_legacy
+
         result = soul_lookup_legacy(query)
     except Exception as exc:  # noqa: BLE001
         return DetectorResult(
-            tier="tier2_legacy", query=query,
-            latency_seconds=time.perf_counter() - t0, error=f"{type(exc).__name__}: {exc}",
+            tier="tier2_legacy",
+            query=query,
+            latency_seconds=time.perf_counter() - t0,
+            error=f"{type(exc).__name__}: {exc}",
         )
     elapsed = time.perf_counter() - t0
     if not result:
         return DetectorResult(tier="tier2_legacy", query=query, latency_seconds=elapsed)
     return DetectorResult(
-        tier="tier2_legacy", query=query,
+        tier="tier2_legacy",
+        query=query,
         concepts_detected=list(result.get("concepts", [])),
         latency_seconds=elapsed,
     )
@@ -110,16 +119,20 @@ async def tier3_full(query: str, session_id: str) -> DetectorResult:
     t0 = time.perf_counter()
     try:
         from backend.app.pipeline import answer_question
+
         resp = await answer_question(query, session_id=session_id)
     except Exception as exc:  # noqa: BLE001
         return DetectorResult(
-            tier="tier3_full", query=query,
-            latency_seconds=time.perf_counter() - t0, error=f"{type(exc).__name__}: {exc}",
+            tier="tier3_full",
+            query=query,
+            latency_seconds=time.perf_counter() - t0,
+            error=f"{type(exc).__name__}: {exc}",
         )
     elapsed = time.perf_counter() - t0
     concepts_detected = list(getattr(resp, "resonance_scores", {}) or {}).copy()
     return DetectorResult(
-        tier="tier3_full", query=query,
+        tier="tier3_full",
+        query=query,
         concepts_detected=concepts_detected,
         confidence=str(getattr(resp, "confidence", "") or ""),
         answer_text=str(getattr(resp, "answer", "") or ""),

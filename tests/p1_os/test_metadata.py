@@ -121,16 +121,12 @@ def test_provenance_entry_rejects_non_artifact_id_for_artifact_id_field():
 
 def test_provenance_entry_rejects_duplicate_derived_from_ids():
     with pytest.raises(ValueError):
-        ProvenanceEntry.model_validate(
-            {"derived_from_ids": ["P1-C000001", "P1-C000001"]}
-        )
+        ProvenanceEntry.model_validate({"derived_from_ids": ["P1-C000001", "P1-C000001"]})
 
 
 def test_provenance_entry_rejects_unknown_fields():
     with pytest.raises(ValueError):
-        ProvenanceEntry.model_validate(
-            {"artifact_id": "P1-AR000001", "bogus": "nope"}
-        )
+        ProvenanceEntry.model_validate({"artifact_id": "P1-AR000001", "bogus": "nope"})
 
 
 def test_record_with_populated_provenance_entry():

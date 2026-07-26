@@ -37,16 +37,12 @@ def test_claim_link_claim_id_must_be_claim_prefixed():
 
 def test_claim_link_unknown_field_fails():
     payload = valid_payload("evidence")
-    payload["claim_links"] = [
-        {"claim_id": "P1-C000001", "stance": "supports", "extra": 1}
-    ]
+    payload["claim_links"] = [{"claim_id": "P1-C000001", "stance": "supports", "extra": 1}]
     with pytest.raises(ValidationError):
         Evidence.model_validate(payload)
 
 
-@pytest.mark.parametrize(
-    "value", ["pending", "partially_verified", "verified", "unverifiable"]
-)
+@pytest.mark.parametrize("value", ["pending", "partially_verified", "verified", "unverifiable"])
 def test_all_verification_statuses_valid(value):
     payload = valid_payload("evidence")
     payload["verification_status"] = value

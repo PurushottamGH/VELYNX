@@ -46,9 +46,7 @@ def test_claim_maturity_ladder_l0_to_l5():
     assert [m.value for m in ClaimMaturity] == ["L0", "L1", "L2", "L3", "L4", "L5"]
 
 
-@pytest.mark.parametrize(
-    "value", ["candidate", "competing", "constraint", "scope_limit"]
-)
+@pytest.mark.parametrize("value", ["candidate", "competing", "constraint", "scope_limit"])
 def test_claim_role_members(value):
     assert ClaimRole(value).value == value
 
@@ -67,9 +65,7 @@ def test_stance_members(value):
     assert Stance(value).value == value
 
 
-@pytest.mark.parametrize(
-    "value", ["pending", "partially_verified", "verified", "unverifiable"]
-)
+@pytest.mark.parametrize("value", ["pending", "partially_verified", "verified", "unverifiable"])
 def test_verification_status_members(value):
     assert VerificationStatus(value).value == value
 

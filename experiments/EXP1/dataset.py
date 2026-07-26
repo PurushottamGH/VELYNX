@@ -3,6 +3,7 @@
 The EXP-1 outcome is binary answer correctness under the frozen query-specific
 gold rubric. Query family and confidence tier are kept as separate label spaces.
 """
+
 from __future__ import annotations
 
 import json
@@ -12,7 +13,6 @@ from pathlib import Path
 from typing import Any, Iterable, Mapping, Sequence
 
 from experiments.EXP1.rubric import validate_gold_rubrics
-
 
 CONFIDENCE_TIERS: tuple[str, ...] = ("UNKNOWN", "DEBATED", "PROBABLE", "CERTAIN")
 QUERY_FAMILIES: tuple[str, ...] = (
@@ -150,7 +150,9 @@ class AnswerRecord:
         if not self.query_id:
             raise ValueError("query_id is required")
         if self.tier not in CONFIDENCE_TIERS:
-            raise ValueError(f"tier for query_id={self.query_id!r} must be one of {CONFIDENCE_TIERS}")
+            raise ValueError(
+                f"tier for query_id={self.query_id!r} must be one of {CONFIDENCE_TIERS}"
+            )
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -201,7 +203,9 @@ class EvaluatedRecord:
         if not self.query_id:
             raise ValueError("query_id is required")
         if self.tier not in CONFIDENCE_TIERS:
-            raise ValueError(f"tier for query_id={self.query_id!r} must be one of {CONFIDENCE_TIERS}")
+            raise ValueError(
+                f"tier for query_id={self.query_id!r} must be one of {CONFIDENCE_TIERS}"
+            )
         if self.correctness not in (0, 1):
             raise ValueError(f"correctness for query_id={self.query_id!r} must be binary 0/1")
         if self.query_family not in QUERY_FAMILIES:
@@ -330,9 +334,9 @@ def validate_frozen_dataset_records(records: Sequence[QueryRecord]) -> dict[str,
 
 
 def _order_hash(records: Sequence[QueryRecord]) -> str:
-    payload = "\n".join(
-        json.dumps(record.to_dict(), sort_keys=True) for record in records
-    ).encode("utf-8")
+    payload = "\n".join(json.dumps(record.to_dict(), sort_keys=True) for record in records).encode(
+        "utf-8"
+    )
     return hashlib.sha256(payload).hexdigest()
 
 
@@ -349,7 +353,9 @@ def validate_answer_records(
     for answer in answer_records:
         answer.validate()
         if seed is not None and answer.seed != seed:
-            raise ValueError(f"answer query_id={answer.query_id!r} has seed={answer.seed}, expected {seed}")
+            raise ValueError(
+                f"answer query_id={answer.query_id!r} has seed={answer.seed}, expected {seed}"
+            )
         if answer.query_id not in expected_ids:
             raise ValueError(f"answer query_id={answer.query_id!r} is not in frozen query set")
         if answer.query_id in seen:

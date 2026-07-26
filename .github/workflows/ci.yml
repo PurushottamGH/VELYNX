@@ -25,11 +25,16 @@ jobs:
           python -m pip install --upgrade pip
           pip install flake8 black mypy
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          if [ -f backend/requirements.txt ]; then pip install -r backend/requirements.txt; fi
       - name: Lint with flake8
         run: flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+      # Scoped to the released surface: the `velynx` wheel (framework, validation,
+      # experiments, scripts, tests) plus the `p1-os` distribution under p1/tooling.
+      # `backend/` is excluded pending its disposition (W-008) — it accounts for 261
+      # of the 457 unformatted files and is not part of any shipped distribution.
+      # `archive/` is a frozen vault. A full-repository pass is tracked in
+      # CRITICAL_PATH.md Priority 2.
       - name: Check formatting with black
-        run: black --check . --diff
+        run: black --check --diff framework/ validation/ experiments/ scripts/ tests/ p1/tooling/
       # Advisory under Constitution S12p3 (SHOULD). `continue-on-error` marks the
       # step as failed without failing the job, so an unassessed criterion is not
       # reported as passed (S12p1). `|| true` would report it as passed.
@@ -54,7 +59,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install pytest pytest-cov
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          if [ -f backend/requirements.txt ]; then pip install -r backend/requirements.txt; fi
           pip install -e .
       # No suppressed exit codes: a failing test suite fails the job (S12p1).
       # Coverage targets are packages that exist in the tree; `core/` and
@@ -86,7 +90,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install pyyaml
           pip install -r requirements.txt
-          if [ -f backend/requirements.txt ]; then pip install -r backend/requirements.txt; fi
       - name: Verify reproducibility spec
         run: python scripts/verify_reproducibility.py
 
@@ -104,7 +107,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install pyyaml
           pip install -r requirements.txt
-          if [ -f backend/requirements.txt ]; then pip install -r backend/requirements.txt; fi
       - name: Validate experiment registry
         run: python scripts/validate_experiment_registry.py
       - name: Validate parameter registry consistency
@@ -124,7 +126,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install pyyaml numpy
           pip install -r requirements.txt
-          if [ -f backend/requirements.txt ]; then pip install -r backend/requirements.txt; fi
       - name: Run benchmark smoke test
         run: python scripts/smoke_benchmark.py
 

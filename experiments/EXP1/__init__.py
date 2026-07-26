@@ -1,4 +1,5 @@
 """EXP-1 Program A calibration gate implementation."""
+
 from experiments.EXP1.calibration import (
     BIN_BOUNDARIES,
     BIN_COUNT,
@@ -64,7 +65,6 @@ from experiments.EXP1.program_a_adapter import (
     coerce_program_a_adapter,
 )
 from experiments.EXP1.rubric import RubricValidationResult, validate_gold_rubrics
-
 
 __all__ = [
     "AnswerRecord",

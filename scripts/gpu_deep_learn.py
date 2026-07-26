@@ -52,46 +52,95 @@ MODELS_DIR = ROOT / "models"
 # Domain expansion topics — used when seed topics are exhausted
 DOMAIN_EXPANSION = {
     "physics": [
-        "quantum entanglement", "dark matter", "black hole thermodynamics",
-        "Higgs boson", "gravitational waves", "string theory",
-        "quantum computing", "superconductivity", "nuclear fusion",
-        "cosmic microwave background", "particle physics standard model",
+        "quantum entanglement",
+        "dark matter",
+        "black hole thermodynamics",
+        "Higgs boson",
+        "gravitational waves",
+        "string theory",
+        "quantum computing",
+        "superconductivity",
+        "nuclear fusion",
+        "cosmic microwave background",
+        "particle physics standard model",
     ],
     "mathematics": [
-        "Riemann hypothesis", "P vs NP problem", "Fibonacci sequence",
-        "Euler's identity", "prime number theorem", "group theory",
-        "topology", "differential equations", "number theory",
-        "mathematical induction", "Gödel's incompleteness theorems",
+        "Riemann hypothesis",
+        "P vs NP problem",
+        "Fibonacci sequence",
+        "Euler's identity",
+        "prime number theorem",
+        "group theory",
+        "topology",
+        "differential equations",
+        "number theory",
+        "mathematical induction",
+        "Gödel's incompleteness theorems",
     ],
     "biology": [
-        "CRISPR gene editing", "mRNA vaccines", "photosynthesis",
-        "mitochondria", "DNA replication", "evolution by natural selection",
-        "biodiversity", "stem cells", "neuroscience",
-        "microbiome", "epigenetics",
+        "CRISPR gene editing",
+        "mRNA vaccines",
+        "photosynthesis",
+        "mitochondria",
+        "DNA replication",
+        "evolution by natural selection",
+        "biodiversity",
+        "stem cells",
+        "neuroscience",
+        "microbiome",
+        "epigenetics",
     ],
     "chemistry": [
-        "chemical bonding", "periodic table", "organic chemistry",
-        "catalysis", "electrochemistry", "polymer chemistry",
-        "thermodynamics", "reaction kinetics", "acid-base chemistry",
-        "spectroscopy", "nanotechnology",
+        "chemical bonding",
+        "periodic table",
+        "organic chemistry",
+        "catalysis",
+        "electrochemistry",
+        "polymer chemistry",
+        "thermodynamics",
+        "reaction kinetics",
+        "acid-base chemistry",
+        "spectroscopy",
+        "nanotechnology",
     ],
     "computer_science": [
-        "machine learning", "neural networks", "blockchain",
-        "cryptography", "operating systems", "compiler design",
-        "distributed systems", "computer vision", "natural language processing",
-        "reinforcement learning", "graph algorithms",
+        "machine learning",
+        "neural networks",
+        "blockchain",
+        "cryptography",
+        "operating systems",
+        "compiler design",
+        "distributed systems",
+        "computer vision",
+        "natural language processing",
+        "reinforcement learning",
+        "graph algorithms",
     ],
     "history": [
-        "World War II", "Industrial Revolution", "Renaissance",
-        "ancient Rome", "ancient Egypt", "Cold War",
-        "French Revolution", "scientific revolution", "Age of Exploration",
-        "Mesopotamia", "Silk Road",
+        "World War II",
+        "Industrial Revolution",
+        "Renaissance",
+        "ancient Rome",
+        "ancient Egypt",
+        "Cold War",
+        "French Revolution",
+        "scientific revolution",
+        "Age of Exploration",
+        "Mesopotamia",
+        "Silk Road",
     ],
     "astronomy": [
-        "exoplanets", "neutron stars", "supernovae",
-        "dark energy", "Milky Way galaxy", "Mars exploration",
-        "James Webb Space Telescope", "solar system formation",
-        "asteroid belt", "cosmic inflation", "multiverse theory",
+        "exoplanets",
+        "neutron stars",
+        "supernovae",
+        "dark energy",
+        "Milky Way galaxy",
+        "Mars exploration",
+        "James Webb Space Telescope",
+        "solar system formation",
+        "asteroid belt",
+        "cosmic inflation",
+        "multiverse theory",
     ],
 }
 
@@ -149,6 +198,7 @@ class VRAMManager:
     def _check_gpu(self):
         try:
             import torch
+
             if torch.cuda.is_available():
                 self._gpu_available = True
                 self._device = "cuda"
@@ -164,6 +214,7 @@ class VRAMManager:
         """Load sentence-transformers on GPU. Both models coexist in 8GB VRAM."""
         if self._embedder is None:
             from sentence_transformers import SentenceTransformer
+
             model_name = "all-MiniLM-L6-v2"
             self._embedder = SentenceTransformer(model_name, device=self._device)
             logger.info(f"Loaded {model_name} on {self._device}")
@@ -178,6 +229,7 @@ class VRAMManager:
                 return None
 
             from ctransformers import AutoModelForCausalLM
+
             gpu_layers = 50 if self._gpu_available else 0
             self._llm = AutoModelForCausalLM.from_pretrained(
                 str(model_path),
@@ -204,6 +256,7 @@ class VRAMManager:
         self._embedder = None
         try:
             import torch
+
             torch.cuda.empty_cache()
         except Exception:
             pass
@@ -296,6 +349,7 @@ def _load_kg_weak_topics() -> list[str]:
     try:
         sys.path.insert(0, str(ROOT / "backend"))
         from memory.knowledge_graph import knowledge_graph
+
         for node in knowledge_graph._nodes.values():
             if node.effective_confidence < 0.5:
                 topics.append(node.concept)
@@ -322,8 +376,11 @@ async def learn_single_topic(topic: str, vram: VRAMManager) -> TopicResult:
         sources = await retrieve_all(topic)
         if not sources:
             return TopicResult(
-                topic=topic, domain="general", success=False,
-                error="No sources found", duration_s=time.time() - t0,
+                topic=topic,
+                domain="general",
+                success=False,
+                error="No sources found",
+                duration_s=time.time() - t0,
             )
 
         # 2. Score and filter sources
@@ -338,8 +395,16 @@ async def learn_single_topic(topic: str, vram: VRAMManager) -> TopicResult:
             sources=filtered[:5],
             constitution="",
         )
-        answer = answer_result.get("draft", "") if isinstance(answer_result, dict) else str(answer_result)
-        confidence = answer_result.get("confidence", "PROBABLE") if isinstance(answer_result, dict) else "PROBABLE"
+        answer = (
+            answer_result.get("draft", "")
+            if isinstance(answer_result, dict)
+            else str(answer_result)
+        )
+        confidence = (
+            answer_result.get("confidence", "PROBABLE")
+            if isinstance(answer_result, dict)
+            else "PROBABLE"
+        )
 
         if not answer or len(answer) < 20:
             # Fallback: use top snippet
@@ -347,7 +412,11 @@ async def learn_single_topic(topic: str, vram: VRAMManager) -> TopicResult:
             confidence = "LOW"
 
         # 4. Detect domain
-        domain = knowledge_graph._detect_domain(topic, answer) if hasattr(knowledge_graph, '_detect_domain') else "general"
+        domain = (
+            knowledge_graph._detect_domain(topic, answer)
+            if hasattr(knowledge_graph, "_detect_domain")
+            else "general"
+        )
 
         # 5. Integrate into knowledge graph
         knowledge_graph.integrate(
@@ -366,6 +435,7 @@ async def learn_single_topic(topic: str, vram: VRAMManager) -> TopicResult:
             # Store in ChromaDB
             try:
                 from memory.vector_backend import create_backend
+
                 vb = create_backend()
                 vb.upsert(
                     key=topic.lower().replace(" ", "_"),
@@ -394,11 +464,19 @@ async def learn_single_topic(topic: str, vram: VRAMManager) -> TopicResult:
                     )
                     answer = enhanced
             # Expand topics using LLM
+            # FIXME: `checkpoint` is a local of main(), not of learn_single_topic(), so both
+            # references below raise NameError and the surrounding `except Exception` swallows
+            # it — topic expansion has never run. Fixing it means threading `checkpoint`
+            # through the signature. Recorded in CRITICAL_PATH.md Priority 2.
             try:
-                existing = set(t.lower() for t in checkpoint.topics_completed + checkpoint.topics_remaining)
+                existing = set(
+                    t.lower()
+                    for t in checkpoint.topics_completed  # noqa: F821
+                    + checkpoint.topics_remaining  # noqa: F821
+                )
                 new_topics = _expand_topics_with_llm(vram.get_llm(), topic, existing)
                 if new_topics:
-                    checkpoint.topics_remaining.extend(new_topics)
+                    checkpoint.topics_remaining.extend(new_topics)  # noqa: F821
                     logger.debug(f"Expanded: +{len(new_topics)} subtopics from '{topic[:40]}'")
             except Exception:
                 pass
@@ -417,8 +495,11 @@ async def learn_single_topic(topic: str, vram: VRAMManager) -> TopicResult:
 
     except Exception as e:
         return TopicResult(
-            topic=topic, domain="general", success=False,
-            error=str(e)[:200], duration_s=time.time() - t0,
+            topic=topic,
+            domain="general",
+            success=False,
+            error=str(e)[:200],
+            duration_s=time.time() - t0,
         )
 
 
@@ -427,7 +508,7 @@ def _extract_facts_with_llm(llm, topic: str, sources: list[dict]) -> str:
     context = "\n\n".join(
         f"Source {i+1}: {s.get('snippet', '')[:300]}"
         for i, s in enumerate(sources)
-        if s.get('snippet')
+        if s.get("snippet")
     )
 
     if not context:
@@ -510,7 +591,10 @@ def _quick_domain(topic: str) -> str:
         return "biology"
     if any(w in t for w in ["chem", "molecule", "reaction", "element", "compound"]):
         return "chemistry"
-    if any(w in t for w in ["computer", "algorithm", "software", "programming", "ai", "machine learning"]):
+    if any(
+        w in t
+        for w in ["computer", "algorithm", "software", "programming", "ai", "machine learning"]
+    ):
         return "cs"
     if any(w in t for w in ["history", "war", "revolution", "ancient", "civilization"]):
         return "history"
@@ -527,7 +611,9 @@ async def run_deep_learning(hours: float = 10.0, batch_size: int = 8, resume: bo
     if resume:
         checkpoint = Checkpoint.load()
         if checkpoint:
-            logger.info(f"Resuming from checkpoint: {len(checkpoint.topics_completed)} completed, {len(checkpoint.topics_remaining)} remaining")
+            logger.info(
+                f"Resuming from checkpoint: {len(checkpoint.topics_completed)} completed, {len(checkpoint.topics_remaining)} remaining"
+            )
         else:
             logger.info("No checkpoint found — starting fresh")
             checkpoint = Checkpoint()
@@ -544,7 +630,9 @@ async def run_deep_learning(hours: float = 10.0, batch_size: int = 8, resume: bo
     session_start = time.time()
     batch_num = 0
 
-    logger.info(f"Starting {hours}h deep learning session with {len(checkpoint.topics_remaining)} topics")
+    logger.info(
+        f"Starting {hours}h deep learning session with {len(checkpoint.topics_remaining)} topics"
+    )
     logger.info(f"Batch size: {batch_size} | GPU: {vram._device}")
 
     while time.time() < end_time and checkpoint.topics_remaining:
@@ -563,7 +651,9 @@ async def run_deep_learning(hours: float = 10.0, batch_size: int = 8, resume: bo
 
             if result.success:
                 checkpoint.topics_completed.append(topic)
-                logger.info(f"  [{i+1}/{len(batch)}] ✓ {topic} ({result.domain}, {result.kg_confidence}, {result.duration_s:.1f}s)")
+                logger.info(
+                    f"  [{i+1}/{len(batch)}] ✓ {topic} ({result.domain}, {result.kg_confidence}, {result.duration_s:.1f}s)"
+                )
             else:
                 checkpoint.topics_failed.append({"topic": topic, "error": result.error})
                 logger.warning(f"  [{i+1}/{len(batch)}] ✗ {topic}: {result.error[:60]}")
@@ -649,6 +739,7 @@ def show_status():
 async def run_brain_mode(hours: float = 10.0, batch_size: int = 5):
     """Brain mode: solve coding and math problems with GPU LLM."""
     import sys
+
     sys.path.insert(0, "backend")
 
     from brain.problem_solver import ProblemSolver, Problem
@@ -669,23 +760,27 @@ async def run_brain_mode(hours: float = 10.0, batch_size: int = 5):
 
     # Load all problems
     all_problems = load_problems()
-    logger.info(f"Loaded {len(all_problems)} problems across {len(get_all_topics()['coding'])} coding + {len(get_all_topics()['math'])} math topics")
+    logger.info(
+        f"Loaded {len(all_problems)} problems across {len(get_all_topics()['coding'])} coding + {len(get_all_topics()['math'])} math topics"
+    )
 
     # Convert to Problem objects
     problems = []
     for p in all_problems:
-        problems.append(Problem(
-            id=p["id"],
-            type=p["type"],
-            topic=p["topic"],
-            difficulty=p.get("difficulty", 5),
-            title=p["title"],
-            description=p["description"],
-            template=p.get("template", ""),
-            test_cases=p.get("test_cases", []),
-            solution=p.get("solution", ""),
-            techniques=p.get("techniques", []),
-        ))
+        problems.append(
+            Problem(
+                id=p["id"],
+                type=p["type"],
+                topic=p["topic"],
+                difficulty=p.get("difficulty", 5),
+                title=p["title"],
+                description=p["description"],
+                template=p.get("template", ""),
+                test_cases=p.get("test_cases", []),
+                solution=p.get("solution", ""),
+                techniques=p.get("techniques", []),
+            )
+        )
 
     # Sort by difficulty
     problems.sort(key=lambda p: p.difficulty)
@@ -700,7 +795,9 @@ async def run_brain_mode(hours: float = 10.0, batch_size: int = 5):
         if time.time() >= t_end:
             break
 
-        logger.info(f"[{i+1}/{len(problems)}] {problem.title} ({problem.type}, difficulty={problem.difficulty})")
+        logger.info(
+            f"[{i+1}/{len(problems)}] {problem.title} ({problem.type}, difficulty={problem.difficulty})"
+        )
 
         result = solver.solve_problem(problem)
 
@@ -708,10 +805,14 @@ async def run_brain_mode(hours: float = 10.0, batch_size: int = 5):
             solved += 1
             technique = result.technique_used
             techniques_seen[technique] = techniques_seen.get(technique, 0) + 1
-            logger.info(f"  ✓ Solved in {result.attempts} attempt(s), technique={technique}, {result.duration_ms:.0f}ms")
+            logger.info(
+                f"  ✓ Solved in {result.attempts} attempt(s), technique={technique}, {result.duration_ms:.0f}ms"
+            )
         else:
             failed += 1
-            logger.info(f"  ✗ Failed after {result.attempts} attempts: {result.failures[-1][:80] if result.failures else 'unknown'}")
+            logger.info(
+                f"  ✗ Failed after {result.attempts} attempts: {result.failures[-1][:80] if result.failures else 'unknown'}"
+            )
 
         # Progress every 10 problems
         if (i + 1) % 10 == 0:
@@ -743,7 +844,9 @@ def main():
     parser.add_argument("--batch-size", type=int, default=8, help="Topics per batch (default: 8)")
     parser.add_argument("--resume", action="store_true", help="Resume from checkpoint")
     parser.add_argument("--status", action="store_true", help="Show checkpoint status")
-    parser.add_argument("--brain", action="store_true", help="Brain mode: solve coding & math problems")
+    parser.add_argument(
+        "--brain", action="store_true", help="Brain mode: solve coding & math problems"
+    )
     args = parser.parse_args()
 
     if args.status:
@@ -751,16 +854,20 @@ def main():
         return
 
     if args.brain:
-        asyncio.run(run_brain_mode(
-            hours=args.hours,
-            batch_size=args.batch_size,
-        ))
+        asyncio.run(
+            run_brain_mode(
+                hours=args.hours,
+                batch_size=args.batch_size,
+            )
+        )
     else:
-        asyncio.run(run_deep_learning(
-            hours=args.hours,
-            batch_size=args.batch_size,
-            resume=args.resume,
-        ))
+        asyncio.run(
+            run_deep_learning(
+                hours=args.hours,
+                batch_size=args.batch_size,
+                resume=args.resume,
+            )
+        )
 
 
 if __name__ == "__main__":

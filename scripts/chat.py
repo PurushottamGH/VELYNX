@@ -1,4 +1,5 @@
 """Terminal chat with VELYNX — live conversation interface."""
+
 import asyncio
 import json
 import sys

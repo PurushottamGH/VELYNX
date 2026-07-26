@@ -25,6 +25,7 @@ invoking this script. What this script DOES do, every run:
 This script never modifies backend/soul/concepts.json, paraphrases.json, or
 any production source file.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -48,10 +49,10 @@ _REPO_ROOT = _HERE.parent.parent
 if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
 
-import dataset as exp0_dataset          # noqa: E402
-import detectors                        # noqa: E402
-import leakage_check                    # noqa: E402
-import analysis                         # noqa: E402
+import dataset as exp0_dataset  # noqa: E402
+import detectors  # noqa: E402
+import leakage_check  # noqa: E402
+import analysis  # noqa: E402
 
 DEFAULT_SEED = 1  # matches research/'s DEFAULT_SEEDS[0] convention
 DEFAULT_ALPHA = 0.01  # matches foundation/program_d_scientific_foundation_v0.1.md Phase 6's p<0.01
@@ -62,6 +63,7 @@ def _reset_state(verbose: bool = True) -> bool:
     EXP-0 does not reimplement (and risk diverging from) the one already-
     validated reset path in this repo."""
     import importlib.util
+
     wipe_path = _REPO_ROOT / "scripts" / "wipe_db.py"
     if not wipe_path.exists():
         if verbose:
@@ -90,8 +92,9 @@ def _trial_order(items, seed: int) -> list[tuple[int, str]]:
     originals, then all 32 paraphrases) bounds how much within-run state
     drift (Tier-1/Tier-3 Hebbian plasticity) can differ systematically
     between the two conditions."""
-    pairs = [(i, "original") for i in range(len(items))] + \
-            [(i, "paraphrase") for i in range(len(items))]
+    pairs = [(i, "original") for i in range(len(items))] + [
+        (i, "paraphrase") for i in range(len(items))
+    ]
     random.Random(seed).shuffle(pairs)
     return pairs
 
@@ -100,8 +103,10 @@ def run_tier2(items) -> dict:
     """Pure-function tier. No reset needed between trials."""
     raw = []
     for item in items:
-        for cond, query in (("original", item.original_query),
-                             ("paraphrase", item.paraphrase_query)):
+        for cond, query in (
+            ("original", item.original_query),
+            ("paraphrase", item.paraphrase_query),
+        ):
             result = detectors.tier2_legacy(query)
             raw.append({"concept": item.concept, "condition": cond, **asdict(result)})
     return {"tier": "tier2_legacy", "raw": raw}
@@ -150,17 +155,26 @@ def analyze_tier(tier_result: dict, items, alpha: float) -> dict:
     m = analysis.mcnemar_exact(hits_o, hits_p)
     b = analysis.paired_bootstrap_ci(hits_o, hits_p, seed=0)
     report_text = analysis.render_report(
-        tier_name=tier_result["tier"], concepts=[i.concept for i in items],
-        hits_original=hits_o, hits_paraphrase=hits_p,
-        mcnemar=m, bootstrap=b, alpha_used=alpha,
+        tier_name=tier_result["tier"],
+        concepts=[i.concept for i in items],
+        hits_original=hits_o,
+        hits_paraphrase=hits_p,
+        mcnemar=m,
+        bootstrap=b,
+        alpha_used=alpha,
     )
     return {
         "tier": tier_result["tier"],
         "hit_rate_original": analysis.hit_rate(hits_o),
         "hit_rate_paraphrase": analysis.hit_rate(hits_p),
-        "mcnemar": {"n01": m.n01, "n10": m.n10, "n_concordant": m.n_concordant,
-                    "n_discordant": m.n_discordant, "p_value": m.p_value,
-                    "direction": m.direction},
+        "mcnemar": {
+            "n01": m.n01,
+            "n10": m.n10,
+            "n_concordant": m.n_concordant,
+            "n_discordant": m.n_discordant,
+            "p_value": m.p_value,
+            "direction": m.direction,
+        },
         "bootstrap_ci": b,
         "significant_at_alpha": m.p_value <= alpha,
         "report_text": report_text,
@@ -169,15 +183,32 @@ def analyze_tier(tier_result: dict, items, alpha: float) -> dict:
 
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description="EXP-0: paraphrase-invariance test")
-    parser.add_argument("--tier", type=int, nargs="+", default=[1, 2], choices=[1, 2, 3],
-                        help="Which detector tier(s) to run. 1+2 are the pre-registered "
-                             "primary tiers; 3 is exploratory/secondary (heaviest deps).")
-    parser.add_argument("--seed", type=int, default=DEFAULT_SEED,
-                        help="RNG seed for trial-order randomization (default: %(default)s)")
-    parser.add_argument("--alpha", type=float, default=DEFAULT_ALPHA,
-                        help="Significance threshold before Holm correction (default: %(default)s)")
-    parser.add_argument("--dry-run", action="store_true",
-                        help="Validate dataset + leakage + imports; call no detector.")
+    parser.add_argument(
+        "--tier",
+        type=int,
+        nargs="+",
+        default=[1, 2],
+        choices=[1, 2, 3],
+        help="Which detector tier(s) to run. 1+2 are the pre-registered "
+        "primary tiers; 3 is exploratory/secondary (heaviest deps).",
+    )
+    parser.add_argument(
+        "--seed",
+        type=int,
+        default=DEFAULT_SEED,
+        help="RNG seed for trial-order randomization (default: %(default)s)",
+    )
+    parser.add_argument(
+        "--alpha",
+        type=float,
+        default=DEFAULT_ALPHA,
+        help="Significance threshold before Holm correction (default: %(default)s)",
+    )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Validate dataset + leakage + imports; call no detector.",
+    )
     parser.add_argument("--quiet", action="store_true", help="Suppress reset-step logging.")
     args = parser.parse_args(argv)
 
@@ -198,8 +229,10 @@ def main(argv=None) -> int:
                 from backend.pipeline.soul_router import soul_lookup_legacy  # noqa: F401
             elif tier == 3:
                 from backend.app.pipeline import answer_question  # noqa: F401
-        print("DRY RUN OK -- dataset valid, leakage-free, all requested tier imports resolve. "
-              "No detector was called; no artifacts were written.")
+        print(
+            "DRY RUN OK -- dataset valid, leakage-free, all requested tier imports resolve. "
+            "No detector was called; no artifacts were written."
+        )
         return 0
 
     run_dir = _allocate_run_dir(args.seed, args.tier)
@@ -222,6 +255,7 @@ def main(argv=None) -> int:
         # leave an empty directory that looks like a valid-but-trivial result --
         # mark it unambiguously as failed instead.
         import traceback
+
         (run_dir / "_FAILED.txt").write_text(
             f"EXP-0 run crashed before completing.\n"
             f"Tiers completed before failure: {sorted(tier_results.keys())}\n"
@@ -258,7 +292,8 @@ def main(argv=None) -> int:
 
     summary = {"per_tier": analyzed, "holm_bonferroni_primary": holm}
     (run_dir / "exp0_summary.json").write_text(
-        json.dumps(summary, indent=2, default=str), encoding="utf-8",
+        json.dumps(summary, indent=2, default=str),
+        encoding="utf-8",
     )
 
     report_lines = ["# EXP-0 Report", "", f"Seed: {args.seed}  |  Tiers run: {args.tier}", ""]
@@ -267,8 +302,10 @@ def main(argv=None) -> int:
     if holm:
         report_lines.append("### Holm-Bonferroni correction across primary tiers (1, 2)")
         for name, r in holm.items():
-            report_lines.append(f"- {name}: p={r['p_value']:.5f}, threshold={r['threshold']:.5f}, "
-                                 f"significant after correction: {r['significant_after_correction']}")
+            report_lines.append(
+                f"- {name}: p={r['p_value']:.5f}, threshold={r['threshold']:.5f}, "
+                f"significant after correction: {r['significant_after_correction']}"
+            )
     report_text = "\n".join(report_lines) + "\n"
     (run_dir / "exp0_report.md").write_text(report_text, encoding="utf-8")
 

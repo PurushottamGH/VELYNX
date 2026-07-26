@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 
+
 def generate_implementation_audit():
     return """# IMPLEMENTATION AUDIT
 
@@ -26,6 +27,7 @@ This document audits the engineering implementation of each experiment in Progra
 - **Verdict**: Non-compliant. Fatally flawed implementation.
 - **Status**: Scientifically invalid.
 """
+
 
 def generate_metric_validation():
     return """# METRIC VALIDATION
@@ -57,6 +59,7 @@ This document verifies the metrics, statistics, and kill criteria for each exper
 - **Status**: Scientifically invalid.
 """
 
+
 def generate_experiment_certification():
     return """# EXPERIMENT CERTIFICATION
 
@@ -87,6 +90,7 @@ Evaluation of Controls, Baselines, and Experimental Validity for Program D.
 - **Status**: Scientifically invalid.
 """
 
+
 def generate_reproducibility_certification():
     return """# REPRODUCIBILITY CERTIFICATION
 
@@ -113,6 +117,7 @@ This document verifies the reproducibility guarantees of Program D experiments.
 - **Status**: Scientifically invalid.
 """
 
+
 def generate_scientific_certification():
     return """# SCIENTIFIC CERTIFICATION
 
@@ -134,27 +139,29 @@ The canonical scientific specifications dictate strict adherence to the stated h
 Program D engineering is **NOT YET CERTIFIABLE**. Only EXP-0 meets the rigor required for scientific execution. EXP-1 and EXP-2 are blocked by a lack of engineering implementation. E0 requires a total rewrite to discard the falsified `free_energy` metric and correctly instantiate the $H^*$ protocol. The science remains frozen; engineering must reconcile these deficiencies to proceed.
 """
 
+
 def main():
     script_dir = Path(__file__).resolve().parent
     if script_dir.name == "scripts":
         root_dir = script_dir.parent
     else:
         root_dir = script_dir
-    
+
     files_to_write = {
         "evidence/reports/IMPLEMENTATION_AUDIT.md": generate_implementation_audit(),
         "evidence/certifications/METRIC_VALIDATION.md": generate_metric_validation(),
         "evidence/certifications/EXPERIMENT_CERTIFICATION.md": generate_experiment_certification(),
         "evidence/certifications/REPRODUCIBILITY_CERTIFICATION.md": generate_reproducibility_certification(),
-        "evidence/certifications/SCIENTIFIC_CERTIFICATION.md": generate_scientific_certification()
+        "evidence/certifications/SCIENTIFIC_CERTIFICATION.md": generate_scientific_certification(),
     }
-    
+
     for relative_path, content in files_to_write.items():
         file_path = root_dir / relative_path
         file_path.parent.mkdir(parents=True, exist_ok=True)
         with open(file_path, "w", encoding="utf-8") as f:
             f.write(content)
         print(f"Generated {relative_path}")
+
 
 if __name__ == "__main__":
     main()

@@ -3,6 +3,7 @@
 This module validates rubric records before EXP-1 execution. It does not
 adjudicate answers and does not infer correctness.
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass

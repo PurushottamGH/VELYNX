@@ -8,6 +8,7 @@ linear or fixed-capacity predictor cannot recover the latent structure
 Reference: PROGRAM_D_CANONICAL.md §7 (E0)
            SCIENTIFIC_EXECUTION_SPEC.md §E0
 """
+
 from __future__ import annotations
 
 import math

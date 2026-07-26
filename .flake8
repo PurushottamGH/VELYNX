@@ -1,0 +1,42 @@
+# flake8 configuration.
+#
+# flake8 does not read `pyproject.toml` without the Flake8-pyproject plugin, so the
+# `[tool.flake8]` block there has always been inert. This file is the effective
+# configuration and is picked up automatically by CI's bare `flake8 .` invocation,
+# so no workflow change is required.
+
+[flake8]
+max-line-length = 100
+extend-ignore = E203, W503
+
+# `archive/` is the Programs A/B/C vault: immutable historical content, not runnable
+# source. It is already excluded from packaging (`pyproject.toml` -> `exclude`), and a
+# frozen vault produces no actionable lint signal. Its single finding is
+# `archive/code/diagnostics/velynx_soul.py` — 20 bytes of UTF-16LE `'Created\r\n'`, a
+# shell-redirect artifact containing no code — which cannot be repaired without
+# modifying vault contents.
+#
+# Verified at the time of exclusion: 71 tracked `.py` files under `archive/` yield
+# exactly 1 finding across E9,F63,F7,F82 — the artifact named above. No defect in an
+# active package is hidden by this entry. Re-verify with:
+#   flake8 --select=E9,F63,F7,F82 $(git ls-files 'archive/*.py')
+#
+# The remaining entries are local-only environment and worktree directories; none is
+# present in a CI checkout, so they do not narrow the CI surface.
+extend-exclude =
+    archive,
+    .venv,
+    .venv314,
+    node_modules,
+    P1.worktrees,
+    dist,
+    build
+
+# `p1/tooling/p1_os/schemas/*.py` declare fields as `claim_ids: IdListField("claim")`
+# under `from __future__ import annotations`. pyflakes parses the string argument as a
+# forward-reference *type name* and reports F821 for it. The annotation is never
+# evaluated as a type at runtime — pydantic resolves the call in module scope, where
+# `"claim"` is a plain str argument. These reports are artifacts of the analysis, not
+# defects, and the suppression is scoped to one code in one directory.
+per-file-ignores =
+    p1/tooling/p1_os/schemas/*.py:F821

@@ -11,7 +11,9 @@ results = retriever.retrieve_by_context(active_query, top_k=3)
 
 print("\n=== TOP K RETRIEVAL RESULTS ===")
 for i, res in enumerate(results):
-    print(f"Rank {i+1}: ID {res['turn_index']} | Trigger: '{res['trigger']}' | Strength: {res['strength']}")
+    print(
+        f"Rank {i+1}: ID {res['turn_index']} | Trigger: '{res['trigger']}' | Strength: {res['strength']}"
+    )
 
 print("\n=== RAW TELEMETRY CANDIDATE POOL ===")
 for entry in retriever.last_raw_candidates:

@@ -66,8 +66,8 @@ class HiddenState:
     """
 
     atmosphere: float = 0.5  # barometric "pressure" proxy
-    light: float = 0.5       # ambient illumination
-    moisture: float = 0.5    # humidity / water content
+    light: float = 0.5  # ambient illumination
+    moisture: float = 0.5  # humidity / water content
 
     def as_tuple(self) -> Tuple[float, float, float]:
         return (self.atmosphere, self.light, self.moisture)
@@ -87,7 +87,7 @@ class Regime:
 
     name: str
     target: Tuple[float, float, float]  # (atmosphere, light, moisture) attractor
-    dwell: float                        # probability of staying next step, [0, 1]
+    dwell: float  # probability of staying next step, [0, 1]
 
 
 # The default generative world. Each regime pins the hidden state toward a
@@ -95,10 +95,10 @@ class Regime:
 # a representation learner can — in principle — recover without any labels.
 DEFAULT_REGIMES: Tuple[Regime, ...] = (
     #        name        atmosphere  light  moisture   dwell
-    Regime("CALM_DAY",   (0.70,      0.90,  0.25),     0.90),
-    Regime("CALM_NIGHT", (0.65,      0.10,  0.30),     0.90),
-    Regime("STORM",      (0.15,      0.20,  0.92),     0.80),
-    Regime("FOG",        (0.50,      0.45,  0.85),     0.75),
+    Regime("CALM_DAY", (0.70, 0.90, 0.25), 0.90),
+    Regime("CALM_NIGHT", (0.65, 0.10, 0.30), 0.90),
+    Regime("STORM", (0.15, 0.20, 0.92), 0.80),
+    Regime("FOG", (0.50, 0.45, 0.85), 0.75),
 )
 
 
@@ -214,9 +214,9 @@ class SensorArray:
     # variables so no single sensor is a clean label for any one latent factor —
     # the mind has to disentangle them.
     _DEFAULT_SENSORS: Tuple[_Sensor, ...] = (
-        _Sensor(weights=(0.10, 0.95, 0.05), bias=0.00),   # mostly light
-        _Sensor(weights=(0.90, 0.05, 0.10), bias=0.00),   # mostly atmosphere
-        _Sensor(weights=(0.05, 0.10, 0.95), bias=0.00),   # mostly moisture
+        _Sensor(weights=(0.10, 0.95, 0.05), bias=0.00),  # mostly light
+        _Sensor(weights=(0.90, 0.05, 0.10), bias=0.00),  # mostly atmosphere
+        _Sensor(weights=(0.05, 0.10, 0.95), bias=0.00),  # mostly moisture
         _Sensor(weights=(0.45, 0.50, 0.30), bias=-0.10),  # entangled mixture
     )
 

@@ -1,4 +1,5 @@
 """VELYNX CLI — unified entry point for terminal usage."""
+
 from __future__ import annotations
 
 import asyncio
@@ -17,6 +18,7 @@ sys.path.append(str(project_root / "backend"))
 from app.pipeline import answer_question
 from cli import main as backend_cli_main
 from pipeline.reasoning_core import reason as _reason
+
 # DeepLearner is an optional dependency. Import it lazily/defensively so the CLI
 # can boot even when the deep_learner module (or its deps) is unavailable.
 try:
@@ -108,15 +110,18 @@ def _run_direct_question(question: str) -> int:
 def _run_e0(args: list[str]) -> int:
     """Run the E0 emergence-vs-injection experiment."""
     import argparse
+
     parser = argparse.ArgumentParser(description="E0: Emergence-vs-Injection Discrimination")
     parser.add_argument("--output-dir", help="Output directory for results")
     parser.add_argument("--config", help="Path to experiment config JSON")
     parser.add_argument("--seed", type=int, default=42, help="Base master random seed")
-    parser.add_argument("--num-seeds", type=int, default=5,
-                        help="Number of seeds to run (default: 5, min 5)")
+    parser.add_argument(
+        "--num-seeds", type=int, default=5, help="Number of seeds to run (default: 5, min 5)"
+    )
     parsed = parser.parse_args(args)
 
     from experiments.E0.run import main as e0_main
+
     e0_main(
         output_dir=parsed.output_dir,
         config=parsed.config,

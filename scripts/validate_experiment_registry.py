@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Validate experiment registry against actual filesystem structure."""
+
 import sys
 import yaml
 from pathlib import Path
@@ -38,7 +39,9 @@ def main():
         components = entry.get("components", [])
         for comp in components:
             comp_path = root / comp
-            ext_path = root / comp.replace("backend/", "program_c/").replace("backend/", "program_b/").replace("backend/", "program_a/")
+            ext_path = root / comp.replace("backend/", "program_c/").replace(
+                "backend/", "program_b/"
+            ).replace("backend/", "program_a/")
             if not comp_path.exists():
                 if not ext_path.exists():
                     print(f"  [WARN] {eid}: component not found: {comp}")

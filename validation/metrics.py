@@ -56,19 +56,19 @@ Vector = Sequence[float]
 # ---------------------------------------------------------------------------
 # Coupling coefficients (the "physics constants" of this cognitive universe)
 # ---------------------------------------------------------------------------
-LAMBDA = 1.0   # weight on transition uncertainty (Entropy H)
-MU = 2.0       # weight on spatial prediction error (Surprise S)
-NU = 0.5       # weight on structural load (Active clusters + anomaly volume)
+LAMBDA = 1.0  # weight on transition uncertainty (Entropy H)
+MU = 2.0  # weight on spatial prediction error (Surprise S)
+NU = 0.5  # weight on structural load (Active clusters + anomaly volume)
 
 
 # ---------------------------------------------------------------------------
 # Regime thresholds (tuned for continuous / spatial scales)
 # ---------------------------------------------------------------------------
-ENTROPY_HIGH = 2.0        # bits of next-cluster uncertainty considered high
-SURPRISE_HIGH = 0.50      # Euclidean prediction error considered high
-SURPRISE_MILD = 0.20      # threshold for "actively learning" surprise
-PRESSURE_HIGH = 1.00      # anomalies-per-cluster considered overwhelming
-PRESSURE_MILD = 0.25      # anomalies-per-cluster considered "adapting"
+ENTROPY_HIGH = 2.0  # bits of next-cluster uncertainty considered high
+SURPRISE_HIGH = 0.50  # Euclidean prediction error considered high
+SURPRISE_MILD = 0.20  # threshold for "actively learning" surprise
+PRESSURE_HIGH = 1.00  # anomalies-per-cluster considered overwhelming
+PRESSURE_MILD = 0.25  # anomalies-per-cluster considered "adapting"
 ENERGY_EXHAUSTION = 18.0  # total free energy that signals fragmentation
 
 
@@ -93,6 +93,7 @@ class Regime(Enum):
 # stays import-light and standard-library only)
 # ---------------------------------------------------------------------------
 
+
 def euclidean_distance(a: Vector, b: Vector) -> float:
     """Euclidean distance between two equal-dimension vectors.
 
@@ -109,6 +110,7 @@ def euclidean_distance(a: Vector, b: Vector) -> float:
 # ---------------------------------------------------------------------------
 # H -- Entropy of the Markov transition chain across K-Means clusters
 # ---------------------------------------------------------------------------
+
 
 def transition_entropy(
     transitions: Mapping[int, Mapping[int, float]],
@@ -151,6 +153,7 @@ def transition_entropy(
 # S -- Surprise as raw Euclidean prediction error
 # ---------------------------------------------------------------------------
 
+
 def surprise(predicted_centroid: Vector, observed_vector: Vector) -> float:
     """Spatial surprise S = || predicted_centroid - observed_vector ||.
 
@@ -163,6 +166,7 @@ def surprise(predicted_centroid: Vector, observed_vector: Vector) -> float:
 # ---------------------------------------------------------------------------
 # A -- Active load: live clusters + spatial volume of the quarantine cloud
 # ---------------------------------------------------------------------------
+
 
 def anomaly_spatial_volume(anomaly_vectors: Sequence[Vector]) -> float:
     """Spatial volume of the quarantined anomaly cloud (total variance).
@@ -211,6 +215,7 @@ def cognitive_energy(
 # ---------------------------------------------------------------------------
 # Each wraps one of the pure functions above behind the Metric ABC so the
 # validation harness can score any run uniformly via ``calculate(logs)``.
+
 
 def _field(logs: Any, name: str, default: Any = None) -> Any:
     """Read ``name`` from ``logs`` whether it is a mapping or an object."""
@@ -289,15 +294,27 @@ __all__ = [
     # type alias
     "Vector",
     # constants
-    "LAMBDA", "MU", "NU",
-    "ENTROPY_HIGH", "SURPRISE_HIGH", "SURPRISE_MILD",
-    "PRESSURE_HIGH", "PRESSURE_MILD", "ENERGY_EXHAUSTION",
+    "LAMBDA",
+    "MU",
+    "NU",
+    "ENTROPY_HIGH",
+    "SURPRISE_HIGH",
+    "SURPRISE_MILD",
+    "PRESSURE_HIGH",
+    "PRESSURE_MILD",
+    "ENERGY_EXHAUSTION",
     # enum
     "Regime",
     # pure functions
-    "euclidean_distance", "transition_entropy", "surprise",
-    "anomaly_spatial_volume", "active_load", "cognitive_energy",
+    "euclidean_distance",
+    "transition_entropy",
+    "surprise",
+    "anomaly_spatial_volume",
+    "active_load",
+    "cognitive_energy",
     # Metric ABC implementations
-    "EntropyMetric", "SurpriseMetric", "ActiveLoadMetric",
+    "EntropyMetric",
+    "SurpriseMetric",
+    "ActiveLoadMetric",
     "CognitiveEnergyMetric",
 ]

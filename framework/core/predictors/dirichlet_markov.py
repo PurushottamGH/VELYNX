@@ -12,6 +12,7 @@ is deliberately absent — this is a mechanical predictor, not a cognitive agent
 
 Reference: PROGRAM_D_CANONICAL.md §5.2
 """
+
 from __future__ import annotations
 
 import math
@@ -50,9 +51,7 @@ class DirichletMarkovPredictor(Predictor):
         self._rng = np.random.RandomState(rng_seed)
 
         # Transition count matrix: counts[i][j] = observed i->j transitions
-        self._counts: List[List[int]] = [
-            [0] * self._k for _ in range(self._k)
-        ]
+        self._counts: List[List[int]] = [[0] * self._k for _ in range(self._k)]
 
         # Current latent state (None before first observation)
         self._current_state: Optional[int] = None
@@ -108,6 +107,7 @@ class DirichletMarkovPredictor(Predictor):
         """
         k = trans_probs.shape[0]
         import warnings
+
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", RuntimeWarning)
             try:

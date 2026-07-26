@@ -4,6 +4,7 @@ Walk every .py file, parse it with ast, and rewrite any from-import whose
 first-level module is an internal VELYNX subpackage (under backend/) but
 lacks the backend. prefix.
 """
+
 import ast
 import os
 import re
@@ -31,11 +32,15 @@ print(f"Internal subpackages: {sorted(INTERNAL_PKGS)}")
 # Pattern: from <internal_pkg>.<rest> import ...  or  from <internal_pkg> import ...
 # or import <internal_pkg>.<rest>
 FROM_RE = re.compile(
-    r"^(from\s+)(" + "|".join(re.escape(p) for p in sorted(INTERNAL_PKGS, key=len, reverse=True)) + r")(\.|\s+import\s)",
+    r"^(from\s+)("
+    + "|".join(re.escape(p) for p in sorted(INTERNAL_PKGS, key=len, reverse=True))
+    + r")(\.|\s+import\s)",
     re.MULTILINE,
 )
 IMPORT_RE = re.compile(
-    r"^(import\s+)(" + "|".join(re.escape(p) for p in sorted(INTERNAL_PKGS, key=len, reverse=True)) + r")\.(?=\w)",
+    r"^(import\s+)("
+    + "|".join(re.escape(p) for p in sorted(INTERNAL_PKGS, key=len, reverse=True))
+    + r")\.(?=\w)",
     re.MULTILINE,
 )
 

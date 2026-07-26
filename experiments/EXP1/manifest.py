@@ -1,4 +1,5 @@
 """Deterministic EXP-1 execution manifest support."""
+
 from __future__ import annotations
 
 import hashlib
@@ -10,7 +11,6 @@ from pathlib import Path
 from typing import Any
 
 from experiments.EXP1.dataset import FrozenDataset, QueryRecord, load_frozen_dataset
-
 
 MANIFEST_FILENAME = "execution_manifest.json"
 
@@ -73,7 +73,11 @@ def build_execution_manifest(
         seed_list=seed_list,
         program_a_adapter_id=program_a_adapter_id,
         adjudicator_id=adjudicator_id,
-        config_path=str(Path(config_path) if config_path is not None else Path(__file__).with_name("config.json")),
+        config_path=str(
+            Path(config_path)
+            if config_path is not None
+            else Path(__file__).with_name("config.json")
+        ),
     )
     validate_execution_manifest(manifest)
     return manifest, dataset
@@ -106,7 +110,11 @@ def manifest_for_records(
         seed_list=(int(seed),),
         program_a_adapter_id=program_a_adapter_id,
         adjudicator_id=adjudicator_id,
-        config_path=str(Path(config_path) if config_path is not None else Path(__file__).with_name("config.json")),
+        config_path=str(
+            Path(config_path)
+            if config_path is not None
+            else Path(__file__).with_name("config.json")
+        ),
     )
     validate_execution_manifest(manifest)
     return manifest

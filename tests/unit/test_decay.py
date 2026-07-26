@@ -15,7 +15,9 @@ from backend.memory.memory_graph import HEALING_THRESHOLD, MemoryCore
 TEST_DB = Path("data") / "test_decay_verify.db"
 
 
-def _force_insert(db_path: Path, timestamp_str: str, soul: str, domain: str, confidence: float) -> None:
+def _force_insert(
+    db_path: Path, timestamp_str: str, soul: str, domain: str, confidence: float
+) -> None:
     db_path.parent.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(str(db_path))
     conn.execute("""
@@ -28,11 +30,14 @@ def _force_insert(db_path: Path, timestamp_str: str, soul: str, domain: str, con
             confidence_score REAL DEFAULT 0.0
         )
     """)
-    conn.execute("""
+    conn.execute(
+        """
         INSERT INTO experiences (timestamp, route_type, primary_soul_concept,
                                  primary_domain_concept, confidence_score)
         VALUES (?, ?, ?, ?, ?)
-    """, (timestamp_str, "personal", soul, domain, confidence))
+    """,
+        (timestamp_str, "personal", soul, domain, confidence),
+    )
     conn.commit()
     conn.close()
 
@@ -61,19 +66,19 @@ def test_24h_decay() -> None:
     # After 24 h with a 12 h half-life, weight should be ~0.25 of original
     # 0.85 * exp(-0.693/12 * 24) = 0.85 * exp(-1.386) ≈ 0.85 * 0.25 = 0.2125
     expected_approx = 0.85 * (0.5 ** (24 / 12))  # 0.85 * 0.25 = 0.2125
-    assert current < initial, (
-        f"Decayed intensity {current:.4f} should be less than initial {initial:.4f}"
-    )
-    assert abs(current - expected_approx) < 0.02, (
-        f"Expected ~{expected_approx:.4f}, got {current:.4f}"
-    )
+    assert (
+        current < initial
+    ), f"Decayed intensity {current:.4f} should be less than initial {initial:.4f}"
+    assert (
+        abs(current - expected_approx) < 0.02
+    ), f"Expected ~{expected_approx:.4f}, got {current:.4f}"
     print(f"  Expected ~{expected_approx:.4f}, got {current:.4f} — OK")
 
     # With half-life 12h, after 24h intensity should be > threshold
     # since 0.85 * 0.25 = 0.2125 which is > HEALING_THRESHOLD (0.15)
-    assert status != "healed", (
-        f"24h memory at intensity={current:.4f} should not yet be 'healed' (threshold={HEALING_THRESHOLD})"
-    )
+    assert (
+        status != "healed"
+    ), f"24h memory at intensity={current:.4f} should not yet be 'healed' (threshold={HEALING_THRESHOLD})"
 
     TEST_DB.unlink()
 
@@ -95,9 +100,9 @@ def test_fresh_memory() -> None:
 
     print(f"Fresh memory: initial={initial:.4f}, current={current:.4f}")
 
-    assert current >= 0.99 * initial, (
-        f"Fresh memory intensity {current:.4f} should be >= {0.99 * initial:.4f}"
-    )
+    assert (
+        current >= 0.99 * initial
+    ), f"Fresh memory intensity {current:.4f} should be >= {0.99 * initial:.4f}"
     assert entry.get("status") != "healed"
     print("  Fresh memory retains full intensity — OK")
 
@@ -123,12 +128,12 @@ def test_fully_healed() -> None:
 
     print(f"100h-old memory: initial=0.50, current={current:.6f}, status={status}")
 
-    assert status == "healed", (
-        f"100h-old memory should be 'healed', got status='{status}', intensity={current:.6f}"
-    )
-    assert current < HEALING_THRESHOLD, (
-        f"Intensity {current:.6f} should be below HEALING_THRESHOLD {HEALING_THRESHOLD}"
-    )
+    assert (
+        status == "healed"
+    ), f"100h-old memory should be 'healed', got status='{status}', intensity={current:.6f}"
+    assert (
+        current < HEALING_THRESHOLD
+    ), f"Intensity {current:.6f} should be below HEALING_THRESHOLD {HEALING_THRESHOLD}"
     print("  Correctly marked as healed — OK")
 
     TEST_DB.unlink()

@@ -1163,7 +1163,11 @@ class NarrativeCompressor:
             )
 
         if summaries:
-            return self._stitch(summaries) if len(summaries) > 1 else (summaries[0] or "")
+            return (
+                NarrativeCompressor._stitch(summaries)
+                if len(summaries) > 1
+                else (summaries[0] or "")
+            )
 
         return f"I have no narratable history for {entity}."
 

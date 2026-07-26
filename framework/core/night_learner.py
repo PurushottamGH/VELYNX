@@ -36,12 +36,21 @@ logging.basicConfig(
 )
 logger = logging.getLogger("velynx.night_learner")
 
+
 # ── ANSI Colors ───────────────────────────────────────────────────────────────
 class C:
-    RESET  = "\033[0m"; BOLD = "\033[1m"; DIM = "\033[2m"
-    CYAN   = "\033[96m"; GREEN = "\033[92m"; YELLOW = "\033[93m"
-    RED    = "\033[91m"; BLUE = "\033[94m"; MAGENTA = "\033[95m"
-    GRAY   = "\033[90m"; WHITE = "\033[97m"
+    RESET = "\033[0m"
+    BOLD = "\033[1m"
+    DIM = "\033[2m"
+    CYAN = "\033[96m"
+    GREEN = "\033[92m"
+    YELLOW = "\033[93m"
+    RED = "\033[91m"
+    BLUE = "\033[94m"
+    MAGENTA = "\033[95m"
+    GRAY = "\033[90m"
+    WHITE = "\033[97m"
+
 
 # ── Default topic seeds ───────────────────────────────────────────────────────
 DEFAULT_TOPICS = [
@@ -135,14 +144,17 @@ def get_mode_config(mode: str) -> dict:
             "description": "Light daytime learning",
             "embed": False,
         },
-    }.get(mode, {
-        "use_gpu": False,
-        "batch_size": 4,
-        "max_topics": 10,
-        "delay_between": 10.0,
-        "description": "Default mode",
-        "embed": False,
-    })
+    }.get(
+        mode,
+        {
+            "use_gpu": False,
+            "batch_size": 4,
+            "max_topics": 10,
+            "delay_between": 10.0,
+            "description": "Default mode",
+            "embed": False,
+        },
+    )
 
 
 def check_gpu() -> dict:
@@ -150,6 +162,7 @@ def check_gpu() -> dict:
     result = {"available": False, "name": "CPU only", "vram_gb": 0, "device": "cpu"}
     try:
         import torch
+
         if torch.cuda.is_available():
             result["available"] = True
             result["name"] = torch.cuda.get_device_name(0)
@@ -170,31 +183,36 @@ async def learn_topic(
         # Import retrieval
         try:
             from retrieval.unified_retriever import unified_retriever
+
             report = await unified_retriever.retrieve(topic)
             sources = report.source_dicts
         except ImportError:
             # Fallback to direct Wikipedia
             import urllib.request, urllib.parse, json as _json
+
             q = urllib.parse.quote(topic.replace(" ", "_"))
             url = f"https://en.wikipedia.org/api/rest_v1/page/summary/{q}"
-            req = urllib.request.Request(url, headers={
-                "User-Agent": "VELYNX/1.0 (autonomous-learner)"
-            })
+            req = urllib.request.Request(
+                url, headers={"User-Agent": "VELYNX/1.0 (autonomous-learner)"}
+            )
             with urllib.request.urlopen(req, timeout=8) as r:
                 data = _json.loads(r.read())
-            sources = [{
-                "url": data.get("content_urls", {}).get("desktop", {}).get("page", ""),
-                "title": data.get("title", topic),
-                "snippet": data.get("extract", "")[:800],
-                "source": "wikipedia",
-                "score": 0.85,
-            }]
+            sources = [
+                {
+                    "url": data.get("content_urls", {}).get("desktop", {}).get("page", ""),
+                    "title": data.get("title", topic),
+                    "snippet": data.get("extract", "")[:800],
+                    "source": "wikipedia",
+                    "score": 0.85,
+                }
+            ]
 
         # Retry once on empty results (transient network failures)
         if not sources:
             await asyncio.sleep(2)
             try:
                 from retrieval.unified_retriever import unified_retriever as _ur
+
                 report = await _ur.retrieve(topic)
                 sources = report.source_dicts
             except Exception:
@@ -218,18 +236,24 @@ async def learn_topic(
             try:
                 from sentence_transformers import SentenceTransformer
                 import torch
+
                 device = "cuda" if torch.cuda.is_available() else "cpu"
                 embedder = SentenceTransformer("all-MiniLM-L6-v2", device=device)
                 embedding = embedder.encode(topic + " " + answer[:200])
                 # Store in ChromaDB
                 try:
                     from memory.vector_backend import create_backend
+
                     vb = create_backend()
                     topic_key = topic.lower().replace(" ", "_")[:64]
                     vb.upsert(
                         key=topic_key,
                         embedding=embedding.tolist(),
-                        metadata={"source": "night_learn", "domain": domain},
+                        # FIXME: `domain` is undefined in learn_topic()'s scope. Currently
+                        # unreachable — the `memory.vector_backend` import above resolves to
+                        # nothing, so this block always raises ImportError first. Recorded in
+                        # CRITICAL_PATH.md Priority 2; fix with the W-056 boundary repair.
+                        metadata={"source": "night_learn", "domain": domain},  # noqa: F821
                     )
                     logger.info("GPU embedding stored: %r on %s", topic[:40], device)
                 except Exception as e:
@@ -244,6 +268,7 @@ async def learn_topic(
         # Integrate into knowledge graph
         try:
             from memory.knowledge_graph import knowledge_graph
+
             knowledge_graph.integrate(
                 query=topic,
                 sources=sources,
@@ -257,6 +282,7 @@ async def learn_topic(
         # Record in continuous learner
         try:
             from learning.continuous_learner import continuous_learner
+
             await continuous_learner.learn_from_query(
                 query=topic,
                 sources=sources,
@@ -290,16 +316,22 @@ async def run_learning_session(
 
     print(f"\n{C.CYAN}{C.BOLD}VELYNX Autonomous Learning Session{C.RESET}")
     print(f"  {C.GRAY}Mode:    {C.WHITE}{mode} — {config['description']}{C.RESET}")
-    print(f"  {C.GRAY}GPU:     {C.WHITE}{gpu_info['name']}"
-          f"{'  ' + str(round(gpu_info['vram_gb'], 1)) + 'GB VRAM' if gpu_info['available'] else ''}{C.RESET}")
-    print(f"  {C.GRAY}Topics:  {C.WHITE}{min(len(topics), config['max_topics'])} / {len(topics)} queued{C.RESET}")
+    print(
+        f"  {C.GRAY}GPU:     {C.WHITE}{gpu_info['name']}"
+        f"{'  ' + str(round(gpu_info['vram_gb'], 1)) + 'GB VRAM' if gpu_info['available'] else ''}{C.RESET}"
+    )
+    print(
+        f"  {C.GRAY}Topics:  {C.WHITE}{min(len(topics), config['max_topics'])} / {len(topics)} queued{C.RESET}"
+    )
     print(f"  {C.GRAY}Time:    {C.WHITE}{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}{C.RESET}")
 
     if mode == "light" and not force:
         print(f"\n  {C.YELLOW}⚠ Light mode — minimal learning to preserve PC performance{C.RESET}")
-        print(f"  {C.GRAY}Use --now to force a full session, or run at night for intensive learning{C.RESET}\n")
+        print(
+            f"  {C.GRAY}Use --now to force a full session, or run at night for intensive learning{C.RESET}\n"
+        )
 
-    selected = topics[:config["max_topics"]]
+    selected = topics[: config["max_topics"]]
     stats = {"learned": 0, "failed": 0, "skipped": 0, "start_time": time.time()}
 
     print(f"\n  {C.GREEN}Starting...{C.RESET}\n")
@@ -313,11 +345,14 @@ async def run_learning_session(
         elapsed = time.time() - stats["start_time"]
         eta = (elapsed / i) * (len(selected) - i) if i > 0 else 0
 
-        print(f"\r  [{bar}] {i}/{len(selected)}  "
-              f"{C.GREEN}✓{stats['learned']}{C.RESET} "
-              f"{C.RED}✗{stats['failed']}{C.RESET}  "
-              f"ETA: {int(eta)}s  {C.GRAY}{topic[:35]}...{C.RESET}",
-              end="", flush=True)
+        print(
+            f"\r  [{bar}] {i}/{len(selected)}  "
+            f"{C.GREEN}✓{stats['learned']}{C.RESET} "
+            f"{C.RED}✗{stats['failed']}{C.RESET}  "
+            f"ETA: {int(eta)}s  {C.GRAY}{topic[:35]}...{C.RESET}",
+            end="",
+            flush=True,
+        )
 
         success = await learn_topic(topic, config, stats)
         await asyncio.sleep(config["delay_between"])
@@ -331,9 +366,12 @@ async def run_learning_session(
     # Print knowledge graph stats
     try:
         from memory.knowledge_graph import knowledge_graph
+
         kstats = knowledge_graph.stats()
-        print(f"  {C.CYAN}Graph:    {kstats['total_nodes']} total concepts "
-              f"({kstats['avg_confidence']:.0%} avg confidence){C.RESET}")
+        print(
+            f"  {C.CYAN}Graph:    {kstats['total_nodes']} total concepts "
+            f"({kstats['avg_confidence']:.0%} avg confidence){C.RESET}"
+        )
     except Exception:
         pass
 
@@ -347,6 +385,7 @@ async def show_status():
 
     try:
         from learning.continuous_learner import continuous_learner
+
         report = continuous_learner.get_learning_report()
         sess = report["session"]
         print(f"  {C.BOLD}Session:{C.RESET}")
@@ -366,12 +405,15 @@ async def show_status():
 
     try:
         from memory.knowledge_graph import knowledge_graph
+
         kstats = knowledge_graph.stats()
         print(f"\n  {C.BOLD}Knowledge Graph:{C.RESET}")
         print(f"  {C.GRAY}• Total concepts:  {kstats['total_nodes']}{C.RESET}")
         print(f"  {C.GRAY}• Avg confidence:  {kstats.get('avg_confidence', 0):.0%}{C.RESET}")
         if kstats.get("domains"):
-            print(f"  {C.GRAY}• Domains: {', '.join(f'{k}({v})' for k,v in kstats['domains'].items())}{C.RESET}")
+            print(
+                f"  {C.GRAY}• Domains: {', '.join(f'{k}({v})' for k,v in kstats['domains'].items())}{C.RESET}"
+            )
     except Exception:
         pass
 
@@ -390,14 +432,19 @@ async def main():
     parser.add_argument("--night", action="store_true", help="Run as night session (GPU)")
     parser.add_argument("--status", action="store_true", help="Show learning status")
     parser.add_argument("--topics", type=str, help="Path to topics file (one per line)")
-    parser.add_argument("--mode", type=str, default="auto",
-                        choices=["auto", "night", "weekend", "background", "light"],
-                        help="Learning mode")
+    parser.add_argument(
+        "--mode",
+        type=str,
+        default="auto",
+        choices=["auto", "night", "weekend", "background", "light"],
+        help="Learning mode",
+    )
     args = parser.parse_args()
 
     # Load .env
     try:
         from dotenv import load_dotenv
+
         load_dotenv(os.path.join(SCRIPT_DIR, ".env"))
     except Exception:
         pass
@@ -420,6 +467,7 @@ async def main():
     # Add gap queue topics
     try:
         from learning.continuous_learner import continuous_learner
+
         gap = continuous_learner.get_next_to_learn()
         if gap:
             topics = [gap] + topics

@@ -1,4 +1,5 @@
 """Simple CLI calculator."""
+
 import sys
 
 

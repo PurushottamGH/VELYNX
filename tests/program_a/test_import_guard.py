@@ -30,6 +30,7 @@ Scope: tests only, no production-code changes.
 Reference: PROGRAM_A_FINAL_ARCHITECTURE.md Section 2, Section 7;
 PROGRAM_A_MODULE_SPEC.md (per-module allow/deny lists).
 """
+
 from __future__ import annotations
 
 import ast
@@ -100,6 +101,7 @@ def _imported_names(node: ast.AST) -> list[tuple[str, int, bool]]:
                     walk(stmt.orelse, nested_top_level)
                 if hasattr(stmt, "finalbody"):
                     walk(stmt.finalbody, nested_top_level)
+
     walk(node.body, top_level=True)
     return results
 
@@ -113,7 +115,9 @@ def _parse(path: Path) -> ast.Module:
     return ast.parse(path.read_text(encoding="utf-8-sig"), filename=str(path))
 
 
-@pytest.mark.parametrize("module_path", _iter_program_a_modules(), ids=lambda p: str(p.relative_to(PROGRAM_A_ROOT)))
+@pytest.mark.parametrize(
+    "module_path", _iter_program_a_modules(), ids=lambda p: str(p.relative_to(PROGRAM_A_ROOT))
+)
 def test_program_a_module_never_imports_always_denied_targets(module_path: Path) -> None:
     tree = _parse(module_path)
     for name, lineno, _top_level in _imported_names(tree):
@@ -124,7 +128,9 @@ def test_program_a_module_never_imports_always_denied_targets(module_path: Path)
             )
 
 
-@pytest.mark.parametrize("module_path", _iter_program_a_modules(), ids=lambda p: str(p.relative_to(PROGRAM_A_ROOT)))
+@pytest.mark.parametrize(
+    "module_path", _iter_program_a_modules(), ids=lambda p: str(p.relative_to(PROGRAM_A_ROOT))
+)
 def test_only_binding_module_imports_experiments(module_path: Path) -> None:
     tree = _parse(module_path)
     imports_experiments = any(
@@ -146,7 +152,9 @@ def test_only_binding_module_imports_experiments(module_path: Path) -> None:
         )
 
 
-@pytest.mark.parametrize("module_path", _iter_program_a_modules(), ids=lambda p: str(p.relative_to(PROGRAM_A_ROOT)))
+@pytest.mark.parametrize(
+    "module_path", _iter_program_a_modules(), ids=lambda p: str(p.relative_to(PROGRAM_A_ROOT))
+)
 def test_backend_retrieval_only_imported_deferred_in_snapshot_builder(module_path: Path) -> None:
     tree = _parse(module_path)
     for name, lineno, top_level in _imported_names(tree):
@@ -164,7 +172,9 @@ def test_backend_retrieval_only_imported_deferred_in_snapshot_builder(module_pat
             )
 
 
-@pytest.mark.parametrize("module_path", _iter_program_a_modules(), ids=lambda p: str(p.relative_to(PROGRAM_A_ROOT)))
+@pytest.mark.parametrize(
+    "module_path", _iter_program_a_modules(), ids=lambda p: str(p.relative_to(PROGRAM_A_ROOT))
+)
 def test_no_program_a_module_imports_other_forbidden_backend_subsystems(module_path: Path) -> None:
     # Broader sweep: no program_a module may import ANY backend.* other than
     # the one sanctioned, deferred backend.retrieval seam.

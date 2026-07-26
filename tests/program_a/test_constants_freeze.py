@@ -92,6 +92,6 @@ def test_constants_contain_no_exp1_probability_or_bin_value() -> None:
     for name in constants.__all__:
         value = getattr(constants, name)
         if isinstance(value, (int, float)) and not isinstance(value, bool):
-            assert value not in forbidden, (
-                f"{name}={value} collides with a frozen EXP-1 value (CR-8/L8)"
-            )
+            assert (
+                value not in forbidden
+            ), f"{name}={value} collides with a frozen EXP-1 value (CR-8/L8)"

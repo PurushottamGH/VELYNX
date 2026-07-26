@@ -117,5 +117,4 @@ class BaselineTracker:
         data.update(self.get_concept_metrics())
         data.update(self.get_belief_metrics())
         data.update(self.get_long_term_trends())
-        return data   data.update(self.get_long_term_trends())
         return data

@@ -5,6 +5,7 @@
 Where H_0 is the null hypothesis that observed structure is no different from
 a shuffled or capacity-matched random process.
 """
+
 import numpy as np
 from typing import Callable, Optional
 

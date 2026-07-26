@@ -9,6 +9,7 @@ This covers every MDL growth-check event in the Treatment (T) condition
 across all seeds. C2 is excluded because it does not perform MDL checks --
 it applies growth at predetermined positions independent of prediction error.
 """
+
 from __future__ import annotations
 
 import json
@@ -54,17 +55,19 @@ def extract_growth_diagnostics(results_path: str) -> List[Dict[str, Any]]:
                 lam = entry.get("lambda_model", 0.0)
                 margin = g_raw - lam  # = gain from should_grow
 
-                diagnostics.append({
-                    "seed": seed,
-                    "condition": cond_name,
-                    "step": entry.get("step"),
-                    "H_before": h_before,
-                    "H_after": h_after,
-                    "G_raw": g_raw,
-                    "lambda_model": lam,
-                    "decision": bool(entry.get("grew", False)),
-                    "margin": margin,
-                })
+                diagnostics.append(
+                    {
+                        "seed": seed,
+                        "condition": cond_name,
+                        "step": entry.get("step"),
+                        "H_before": h_before,
+                        "H_after": h_after,
+                        "G_raw": g_raw,
+                        "lambda_model": lam,
+                        "decision": bool(entry.get("grew", False)),
+                        "margin": margin,
+                    }
+                )
 
     return diagnostics
 
@@ -101,17 +104,18 @@ def format_table(diagnostics: List[Dict[str, Any]]) -> str:
     mean_margin = sum(d["margin"] for d in diagnostics) / max(len(diagnostics), 1)
     never_grew = growth_events == 0
 
-    lines.extend([
-        "",
-        "### Summary",
-        "",
-        f"- **Total MDL checks:** {total_checks} "
-        f"({t_checks} from T, {c3_checks} from C3)",
-        f"- **Growth events (Decision=GROW):** {growth_events}",
-        f"- **Max margin:** {max_margin:.6f}",
-        f"- **Mean margin:** {mean_margin:.6f}",
-        "",
-    ])
+    lines.extend(
+        [
+            "",
+            "### Summary",
+            "",
+            f"- **Total MDL checks:** {total_checks} " f"({t_checks} from T, {c3_checks} from C3)",
+            f"- **Growth events (Decision=GROW):** {growth_events}",
+            f"- **Max margin:** {max_margin:.6f}",
+            f"- **Mean margin:** {mean_margin:.6f}",
+            "",
+        ]
+    )
 
     if never_grew:
         lines.append(

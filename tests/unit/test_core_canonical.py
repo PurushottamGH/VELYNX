@@ -8,6 +8,7 @@ Verifies:
 
 Reference: PROGRAM_D_CANONICAL.md §5
 """
+
 from __future__ import annotations
 
 import math
@@ -17,14 +18,18 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from framework.core.mdl.mdl_growth import compute_lambda_model, compute_lambda_model_corrected, should_grow, mdl_gain
+from framework.core.mdl.mdl_growth import (
+    compute_lambda_model,
+    compute_lambda_model_corrected,
+    should_grow,
+    mdl_gain,
+)
 from framework.core.measurement.proper_scoring import (
     predictive_log_likelihood,
     scoring_loss,
 )
 from framework.core.emergence.emergence_statistic import compute_nmi
 from framework.core.predictors.dirichlet_markov import DirichletMarkovPredictor
-
 
 # ─── Test 1: λ_model = k·b + n·log₂N ──────────────────────────────────
 
@@ -44,9 +49,9 @@ class TestLambdaModel:
         ]
         for k, n, N, b, expected in test_cases:
             lam = compute_lambda_model(k=k, n=n, N=N, b=b)
-            assert lam == pytest.approx(expected, rel=1e-9), (
-                f"λ_model({k},{n},{N}) = {lam}, expected {expected}"
-            )
+            assert lam == pytest.approx(
+                expected, rel=1e-9
+            ), f"λ_model({k},{n},{N}) = {lam}, expected {expected}"
 
     def test_lambda_not_readable_from_config(self):
         """λ_model must be computed, never read from JSON/config."""
@@ -84,9 +89,9 @@ class TestLambdaModel:
         ]
         for N, b, expected in test_cases:
             lam = compute_lambda_model_corrected(N=N, b=b)
-            assert lam == pytest.approx(expected, rel=1e-12), (
-                f"λ_corrected({N}, {b}) = {lam}, expected {expected}"
-            )
+            assert lam == pytest.approx(
+                expected, rel=1e-12
+            ), f"λ_corrected({N}, {b}) = {lam}, expected {expected}"
 
     def test_corrected_lambda_raises_on_invalid_inputs(self):
         """λ_corrected must reject N < 1 or b <= 0."""
@@ -102,7 +107,9 @@ class TestLambdaModel:
         decision, gain, lam = should_grow(
             entropy_before=30.0,
             entropy_after=1.0,
-            k=2, n=2, N=100,
+            k=2,
+            n=2,
+            N=100,
         )
         assert decision is True, f"Large gain (G={gain}) should trigger growth"
         assert gain > 0
@@ -115,7 +122,9 @@ class TestLambdaModel:
         decision, gain, _ = should_grow(
             entropy_before=5.0,
             entropy_after=5.0,
-            k=10, n=10, N=1000,
+            k=10,
+            n=10,
+            N=1000,
         )
         assert decision is False, "Zero gain should not trigger growth"
         assert gain < 0
@@ -125,7 +134,9 @@ class TestLambdaModel:
         decision, gain, _ = should_grow(
             entropy_before=4.9,
             entropy_after=5.0,
-            k=10, n=10, N=1000,
+            k=10,
+            n=10,
+            N=1000,
         )
         assert decision is False, "Negative gain should not trigger growth"
         assert gain < 0
@@ -219,6 +230,7 @@ class TestEmergenceStatistic:
         shuffled = [2, 2, 2, 1, 0, 0, 1, 0, 1]
 
         from experiments.E0.analysis import compute_emergence_statistic
+
         result = compute_emergence_statistic(learned, true, shuffled)
         m = result["m_statistic"]
         assert m > 0, f"M should be positive when learned correlates with true, got {m}"
@@ -235,9 +247,7 @@ class TestEmergenceStatistic:
             random_true = rng.randint(0, 5, size=n).tolist()
             random_shuffled = rng.randint(0, 5, size=n).tolist()
 
-            result = compute_emergence_statistic(
-                random_learned, random_true, random_shuffled
-            )
+            result = compute_emergence_statistic(random_learned, random_true, random_shuffled)
             m = result["m_statistic"]
             abs_m = abs(m)
             assert abs_m < 0.3, f"M should be near 0 for random data, got {m}"
@@ -353,9 +363,7 @@ class TestBannedSymbols:
             content = py_file.read_text()
             for pattern in self.BANNED_PATTERNS:
                 matches = re.findall(pattern, content)
-                assert not matches, (
-                    f"Banned pattern '{pattern}' found in {py_file}: {matches}"
-                )
+                assert not matches, f"Banned pattern '{pattern}' found in {py_file}: {matches}"
 
 
 # ─── Test 6: Description Length helpers ──────────────────────────────

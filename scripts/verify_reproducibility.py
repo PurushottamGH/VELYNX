@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Verify reproducibility specification compliance."""
+
 import sys
 import yaml
 from pathlib import Path
@@ -66,7 +67,9 @@ def main():
     try:
         with open(root / "reproducibility.yaml") as f:
             spec = yaml.safe_load(f)
-        print(f"  [OK] reproducibility.yaml parsed: v{spec.get('reproducibility', {}).get('version', '?')}")
+        print(
+            f"  [OK] reproducibility.yaml parsed: v{spec.get('reproducibility', {}).get('version', '?')}"
+        )
     except Exception as e:
         print(f"  [ERROR] reproducibility.yaml: {e}")
         errors.append(str(e))

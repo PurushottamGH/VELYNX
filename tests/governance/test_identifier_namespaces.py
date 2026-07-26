@@ -74,7 +74,8 @@ def test_design_cites_no_amendment_id_that_does_not_exist():
                 if m.group(1) not in defined:
                     problems.append(
                         f"{p.name}:{n}: cites A-{m.group(1)}, which the amendment "
-                        f"record does not define (defines {sorted(defined)})")
+                        f"record does not define (defines {sorted(defined)})"
+                    )
     assert not problems, "\n".join(problems)
 
 
@@ -89,8 +90,10 @@ def test_design_unpadded_amendment_citations_are_disambiguated():
             continue  # the disambiguation table names the ids to warn about them
         for n, line in enumerate(_read(p).splitlines(), 1):
             if DESIGN_ALLOWED_UNPADDED_A.search(line) and not ok.search(line):
-                problems.append(f"{p.name}:{n}: unpadded A-n with nothing to "
-                                f"distinguish it from a check id: {line.strip()[:110]}")
+                problems.append(
+                    f"{p.name}:{n}: unpadded A-n with nothing to "
+                    f"distinguish it from a check id: {line.strip()[:110]}"
+                )
     assert not problems, "\n".join(problems)
 
 
@@ -98,13 +101,11 @@ def test_design_extension_point_range_is_stated_correctly():
     """`DX-15` was cited in the README while only DX-1..DX-14 exist — in the
     document written to fix identifier hygiene."""
     ext = _read(DESIGN / "07_EXTENSION_ARCHITECTURE.md")
-    defined = {int(x) for x in
-               re.findall(r"(?<![A-Za-z0-9])DX-(\d{1,2})(?![0-9])", ext)}
+    defined = {int(x) for x in re.findall(r"(?<![A-Za-z0-9])DX-(\d{1,2})(?![0-9])", ext)}
     assert defined, "no DX ids found"
     assert defined == set(range(1, max(defined) + 1)), f"gap: {sorted(defined)}"
     for p in _files(DESIGN):
-        cited = {int(x) for x in
-                 re.findall(r"(?<![A-Za-z0-9])DX-(\d{1,2})(?![0-9])", _read(p))}
+        cited = {int(x) for x in re.findall(r"(?<![A-Za-z0-9])DX-(\d{1,2})(?![0-9])", _read(p))}
         dangling = sorted(cited - defined)
         assert not dangling, f"{p.name} cites undefined DX-{dangling}"
 
@@ -177,20 +178,23 @@ def test_no_c_namespace_survives_as_a_check_citation():
     """`C-xx` is withdrawn. It may be named only as history — in a "Replaces"
     column or alongside a word marking it as withdrawn — never as an evidence
     route."""
-    historical = re.compile(r"withdrawn|[Rr]eplaces|had no implementation|"
-                            r"^\| `P-A\d`|`C-4`, `C-7`")
+    historical = re.compile(
+        r"withdrawn|[Rr]eplaces|had no implementation|" r"^\| `P-A\d`|`C-4`, `C-7`"
+    )
     for p in _files(ACTIVATION):
         for line in _read(p).splitlines():
             if re.search(r"(?<![A-Za-z0-9])C-\d{1,2}(?![0-9])", line):
-                assert historical.search(line.strip()), \
-                    f"{p.name}: live citation of a withdrawn C-xx id: {line.strip()[:120]}"
+                assert historical.search(
+                    line.strip()
+                ), f"{p.name}: live citation of a withdrawn C-xx id: {line.strip()[:120]}"
 
 
 def test_plan_namespace_register_exists_and_is_not_the_old_false_claim():
     text = _read(PLAN)
     assert "**Identifier namespaces.**" in text
-    assert "That sentence was, until this revision, false." in text, \
-        "the plan must record that its uniqueness claim was false, not silently drop it"
+    assert (
+        "That sentence was, until this revision, false." in text
+    ), "the plan must record that its uniqueness claim was false, not silently drop it"
     assert "**One namespace.**" not in text
 
 

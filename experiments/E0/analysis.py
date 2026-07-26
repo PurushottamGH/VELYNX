@@ -7,6 +7,7 @@ Computes:
 Reference: PROGRAM_D_CANONICAL.md §5.3, §5.5
            SCIENTIFIC_EXECUTION_SPEC.md §E0
 """
+
 from __future__ import annotations
 
 import math
@@ -16,7 +17,6 @@ import numpy as np
 from sklearn.metrics.cluster import normalized_mutual_info_score as sklearn_nmi
 
 from framework.core.emergence.emergence_statistic import compute_nmi
-
 
 # --- DV-a: Held-out Predictive Log-Likelihood ---
 
@@ -150,7 +150,8 @@ def compute_emergence_statistic(
         # Generate random partition as null
         rng = np.random.RandomState(42)
         random_states = rng.randint(
-            0, max(2, len(set(t_states))),
+            0,
+            max(2, len(set(t_states))),
             size=min_len,
         ).tolist()
         nmi_shuffled = compute_nmi(random_states, t_states)
@@ -258,7 +259,9 @@ def analyze_conditions(
         elif lls:
             result["held_out_type"] = "last_20_percent"
         if lls:
-            result["recent_mean_ll"] = float(np.mean(lls[-1000:])) if len(lls) >= 1000 else float(np.mean(lls))
+            result["recent_mean_ll"] = (
+                float(np.mean(lls[-1000:])) if len(lls) >= 1000 else float(np.mean(lls))
+            )
             result["recent_mean_loss"] = -result["recent_mean_ll"]
 
         analysis[cond_name] = result
@@ -340,7 +343,9 @@ def generate_e0_report(analysis: Dict[str, Dict]) -> str:
         if emergence:
             lines.append(f"- M statistic: {_safe_float(emergence.get('m_statistic', '?'))}")
             lines.append(f"- NMI(true): {_safe_float(emergence.get('nmi_learned_true', '?'))}")
-            lines.append(f"- NMI(shuffled): {_safe_float(emergence.get('nmi_learned_shuffled', '?'))}")
+            lines.append(
+                f"- NMI(shuffled): {_safe_float(emergence.get('nmi_learned_shuffled', '?'))}"
+            )
         lines.append("")
 
     # Comparative

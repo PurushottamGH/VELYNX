@@ -16,6 +16,7 @@ Measurements:
 Reference: PROGRAM_D_CANONICAL.md §7 (E0)
            SCIENTIFIC_EXECUTION_SPEC.md §E0
 """
+
 from __future__ import annotations
 
 import hashlib
@@ -43,7 +44,6 @@ from experiments.E0.analysis import (  # noqa: E402
 )
 from experiments.E0.decision import E0Decider, M_STATISTIC_MARGIN
 
-
 # --- Default configuration ---
 
 DEFAULT_CONFIG: Dict[str, Any] = {
@@ -65,7 +65,7 @@ DEFAULT_CONFIG: Dict[str, Any] = {
     "growth": {
         "b": 1.0,  # Bits per parameter (scientific constant)
         "evaluate_every": 500,  # Steps between growth evaluations
-        "warmup_steps": 1000,   # Minimum steps before first growth
+        "warmup_steps": 1000,  # Minimum steps before first growth
     },
     "conditions": ["T", "C1", "C2", "C3"],
     "num_seeds": 5,
@@ -100,8 +100,6 @@ class SeedRegistry:
         seed_bytes = f"agent::{condition}::{seed_idx}".encode()
         digest = hashlib.sha256(seed_bytes).hexdigest()
         return self.master_seed + int(digest[:8], 16) % (2**31)
-
-
 
 
 # --- Held-out evaluation ---
@@ -208,10 +206,7 @@ def run_treatment(
         # Evaluate growth periodically:
         #   Compute hypothetical entropy after growth WITHOUT calling grow()
         #   Only commit growth AFTER G > λ_model is verified
-        if (
-            step >= warmup_steps
-            and step % evaluate_every == 0
-        ):
+        if step >= warmup_steps and step % evaluate_every == 0:
             k = predictor.capacity
             n = k  # parameter dimension = current capacity
             N = predictor.n_observations
@@ -237,16 +232,18 @@ def run_treatment(
                 predictor.grow()
                 growth_events.append(step)
 
-            per_step_log.append({
-                "step": step,
-                "capacity_before": k,
-                "capacity_after": predictor.capacity,
-                "entropy_before": entropy_before,
-                "entropy_after": entropy_after,
-                "lambda_model": lam,
-                "gain": gain,
-                "grew": decision,
-            })
+            per_step_log.append(
+                {
+                    "step": step,
+                    "capacity_before": k,
+                    "capacity_after": predictor.capacity,
+                    "entropy_before": entropy_before,
+                    "entropy_after": entropy_after,
+                    "lambda_model": lam,
+                    "gain": gain,
+                    "grew": decision,
+                }
+            )
 
         context = obs_list
 
@@ -357,7 +354,9 @@ def apply_growth_at_random_times(
     with prediction error.
     """
     if growth_count <= 0:
-        result = run_fixed_capacity(env, predictor, train_steps, evaluate_every=0, test_steps=test_steps)
+        result = run_fixed_capacity(
+            env, predictor, train_steps, evaluate_every=0, test_steps=test_steps
+        )
         result["condition"] = "C2"
         return result
 
@@ -499,22 +498,27 @@ def run_shuffled_input(
             decision, gain, lam = should_grow(
                 entropy_before=entropy_before,
                 entropy_after=entropy_after,
-                k=k, n=n, N=N, b=b,
+                k=k,
+                n=n,
+                N=N,
+                b=b,
             )
             if decision:
                 predictor.grow()
                 growth_events.append(step)
 
-            per_step_log.append({
-                "step": step,
-                "capacity_before": k,
-                "capacity_after": predictor.capacity,
-                "entropy_before": entropy_before,
-                "entropy_after": entropy_after,
-                "lambda_model": lam,
-                "gain": gain,
-                "grew": decision,
-            })
+            per_step_log.append(
+                {
+                    "step": step,
+                    "capacity_before": k,
+                    "capacity_after": predictor.capacity,
+                    "entropy_before": entropy_before,
+                    "entropy_after": entropy_after,
+                    "lambda_model": lam,
+                    "gain": gain,
+                    "grew": decision,
+                }
+            )
 
         context = obs_list
 
@@ -701,8 +705,7 @@ def run_multi_seed(
         per_seed_results.append(result)
 
         decision = result.get("decision", {})
-        print(f"[E0]   seed {seed}: {decision.get('verdict', '?')} "
-              f"({seed_elapsed:.1f}s)")
+        print(f"[E0]   seed {seed}: {decision.get('verdict', '?')} " f"({seed_elapsed:.1f}s)")
 
     total_elapsed = time.time() - total_start
 
@@ -734,8 +737,10 @@ def run_multi_seed(
 
     print(f"\n[E0] Multi-seed run completed in {total_elapsed:.1f}s")
     print(f"[E0] Aggregated decision: {aggregated_decision['verdict']}")
-    print(f"[E0] Seeds: {aggregated_decision.get('n_seeds', '?')} / "
-          f"{aggregated_decision.get('min_seeds', '?')} required")
+    print(
+        f"[E0] Seeds: {aggregated_decision.get('n_seeds', '?')} / "
+        f"{aggregated_decision.get('min_seeds', '?')} required"
+    )
 
     return aggregated
 
@@ -779,7 +784,11 @@ def main(
     if output_dir is None:
         timestamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
         output_dir = str(
-            _project_root / "artifacts" / "experiments" / "E0" / f"run_{timestamp}_s{seed}_n{n_seeds}"
+            _project_root
+            / "artifacts"
+            / "experiments"
+            / "E0"
+            / f"run_{timestamp}_s{seed}_n{n_seeds}"
         )
 
     output_path = Path(output_dir)
@@ -792,9 +801,11 @@ def main(
     # Run multi-seed experiment
     print(f"[E0] Starting multi-seed experiment: {n_seeds} seeds")
     print(f"[E0] Output: {output_dir}")
-    print(f"[E0] Config: env_states={cfg['environment']['num_latent_states']}, "
-          f"obs_dim={cfg['environment']['observation_dim']}, "
-          f"train_steps={cfg['num_train_steps']}")
+    print(
+        f"[E0] Config: env_states={cfg['environment']['num_latent_states']}, "
+        f"obs_dim={cfg['environment']['observation_dim']}, "
+        f"train_steps={cfg['num_train_steps']}"
+    )
 
     all_results = run_multi_seed(
         num_seeds=n_seeds,
@@ -821,12 +832,17 @@ def _json_serialize(obj: Any) -> Any:
 
 if __name__ == "__main__":
     import argparse
+
     parser = argparse.ArgumentParser(description="E0: Emergence-vs-Injection Discrimination")
     parser.add_argument("--output-dir", help="Output directory for results")
     parser.add_argument("--config", help="Path to experiment config JSON")
     parser.add_argument("--seed", type=int, default=42, help="Base master random seed")
-    parser.add_argument("--num-seeds", type=int, default=None,
-                        help="Number of seeds to run (default: config value, min 5)")
+    parser.add_argument(
+        "--num-seeds",
+        type=int,
+        default=None,
+        help="Number of seeds to run (default: config value, min 5)",
+    )
     args = parser.parse_args()
 
     main(

@@ -122,7 +122,7 @@ class LatentCause:
     cause_id: str
     variable: LatentVariable
     score: ScoreBreakdown
-    support: int          # how many quarantined vectors it explains
+    support: int  # how many quarantined vectors it explains
     false_positives: int  # how many baseline vectors it wrongly fires on
 
     def matches(self, vector: SensoryVector) -> bool:
@@ -150,12 +150,12 @@ class LatentCauseEngine:
     def __init__(
         self,
         *,
-        alpha: float = 0.50,      # weight on PredictionGain
-        beta: float = 0.30,       # weight on CompressionGain
-        gamma: float = 0.20,      # weight on Stability
+        alpha: float = 0.50,  # weight on PredictionGain
+        beta: float = 0.30,  # weight on CompressionGain
+        gamma: float = 0.20,  # weight on Stability
         threshold: float = 0.50,  # promotion bar for Score
         bits_per_value: int = 8,  # MDL quantisation precision
-        pin_std_max: float = 0.18,    # a dim is "pinned" only if this tight
+        pin_std_max: float = 0.18,  # a dim is "pinned" only if this tight
         separation_min: float = 0.20,  # ...and this far from the baseline mean
     ) -> None:
         self.alpha = alpha
@@ -219,9 +219,7 @@ class LatentCauseEngine:
             return []
 
         candidates = self._generate_candidates(quarantine, baseline)
-        scored = [
-            (var, self._score(var, quarantine, baseline)) for var in candidates
-        ]
+        scored = [(var, self._score(var, quarantine, baseline)) for var in candidates]
         scored.sort(key=lambda pair: pair[1].total, reverse=True)
         return scored
 
@@ -373,11 +371,10 @@ def _demo() -> None:  # pragma: no cover - illustrative only
 
     def cloud(center, n):
         return [
-            tuple(min(1.0, max(0.0, c + rng.gauss(0.0, 0.05))) for c in center)
-            for _ in range(n)
+            tuple(min(1.0, max(0.0, c + rng.gauss(0.0, 0.05))) for c in center) for _ in range(n)
         ]
 
-    baseline = cloud((0.85, 0.90, 0.25, 0.55), 60)   # calm/bright/dry
+    baseline = cloud((0.85, 0.90, 0.25, 0.55), 60)  # calm/bright/dry
     quarantine = cloud((0.20, 0.18, 0.90, 0.42), 25)  # the un-named anomaly
 
     engine = LatentCauseEngine()

@@ -10,6 +10,7 @@ This module does not import anything from backend.* or cognition.* -- it
 only reads two JSON files. It is safe to import with no VELYNX dependencies
 installed.
 """
+
 from __future__ import annotations
 
 import hashlib

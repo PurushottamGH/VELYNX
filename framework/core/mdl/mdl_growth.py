@@ -17,11 +17,11 @@ hardcoded and non-tunable.
 Reference: F_A_TRIGGER_FIX_PREREGISTRATION.md §2-3
            PROGRAM_D_CANONICAL.md §5.4
 """
+
 from __future__ import annotations
 
 import math
 from typing import List, Optional, Tuple
-
 
 # --- Canonical constants ---
 
@@ -262,6 +262,7 @@ def two_part_description_length(
 
 
 # --- Deprecated / legacy compatibility shim ---
+
 
 def description_length(data: List[float], model_params: int) -> float:
     """Legacy description length (kept for backward compatibility).

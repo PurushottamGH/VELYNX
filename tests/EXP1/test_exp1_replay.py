@@ -16,6 +16,7 @@ Program A answer function").
 
 Scope: tests only, no production-code changes.
 """
+
 from __future__ import annotations
 
 import json

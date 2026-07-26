@@ -3,6 +3,7 @@
 Adapters expose only the public answer surface required by EXP-1. They do not
 own rubric adjudication, calibration, or decision rules.
 """
+
 from __future__ import annotations
 
 from collections.abc import Awaitable, Mapping
@@ -10,7 +11,6 @@ from dataclasses import dataclass
 from typing import Any, Protocol, runtime_checkable
 
 from experiments.EXP1.dataset import AnswerRecord, QueryRecord
-
 
 ProgramAAnswer = AnswerRecord | Mapping[str, Any] | Awaitable[Any]
 

@@ -7,6 +7,7 @@ Generates publication-ready artifacts from experiment data:
 - Summary figures (JSON for plotting)
 - Publication manifest
 """
+
 import sys
 import json
 import csv
@@ -20,12 +21,16 @@ from experiments.metrics import MetricsRecord, MetricsReport
 from experiments.artifacts import ArtifactStore
 from scripts.statistical_analysis import analyze_experiment, generate_publication_report
 
-
 PUBLICATION_METADATA = {
     "project": "VELYNX",
     "title": "Predictive Processing Without LLMs: A Minimal Cognitive Architecture",
     "authors": ["Program D Team"],
-    "venue_targets": ["NeurIPS 2026", "ICML 2026", "Nature Machine Intelligence", "Cognitive Science"],
+    "venue_targets": [
+        "NeurIPS 2026",
+        "ICML 2026",
+        "Nature Machine Intelligence",
+        "Cognitive Science",
+    ],
     "generated_at": None,
 }
 
@@ -56,13 +61,15 @@ def generate_latex_table(analysis: Dict) -> str:
                 f"{m['mean']:.4f} & {m['std']:.4f} & "
                 f"{m['min']:.4f} & {m['max']:.4f} \\\\"
             )
-    lines.extend([
-        r"\bottomrule",
-        r"\end{tabular}",
-        r"\caption{Summary statistics for " + analysis.get("experiment_id", "?") + "}",
-        r"\label{tab:" + analysis.get("experiment_id", "exp") + "}",
-        r"\end{table}",
-    ])
+    lines.extend(
+        [
+            r"\bottomrule",
+            r"\end{tabular}",
+            r"\caption{Summary statistics for " + analysis.get("experiment_id", "?") + "}",
+            r"\label{tab:" + analysis.get("experiment_id", "exp") + "}",
+            r"\end{table}",
+        ]
+    )
     return "\n".join(lines)
 
 
@@ -88,11 +95,13 @@ def main():
             latest_run = runs[0]
 
             artifacts = store.list_artifacts(experiment_id, latest_run)
-            all_experiments.append({
-                "experiment_id": experiment_id,
-                "latest_run": latest_run,
-                "artifacts": artifacts,
-            })
+            all_experiments.append(
+                {
+                    "experiment_id": experiment_id,
+                    "latest_run": latest_run,
+                    "artifacts": artifacts,
+                }
+            )
 
             pub_dir = store.export_for_publication(experiment_id, latest_run, output_dir)
             print(f"[EXPORT] {experiment_id}/{latest_run} -> {pub_dir}")
@@ -128,7 +137,9 @@ def main():
         "-" * 60,
     ]
     for exp in all_experiments:
-        summary.append(f"  {exp['experiment_id']} ({exp['latest_run']}): {len(exp['artifacts'])} artifacts")
+        summary.append(
+            f"  {exp['experiment_id']} ({exp['latest_run']}): {len(exp['artifacts'])} artifacts"
+        )
     summary.append("=" * 60)
     print("\n".join(summary))
 

@@ -8,16 +8,34 @@ Verifies:
 
 Reference: F_A_TRIGGER_FIX_PREREGISTRATION.md §2
 """
+
 from __future__ import annotations
 
 from framework.core.mdl.mdl_growth import should_grow
 
-
 FIRING_SEEDS = frozenset({46, 49, 54, 60})
 NON_FIRING_SEEDS = frozenset({42, 43, 44, 45, 47, 48, 50, 51, 52, 53, 55, 56, 57, 58, 59, 61})
 
-STEPS = [1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000,
-         5500, 6000, 6500, 7000, 7500, 8000, 8500, 9000, 9500]
+STEPS = [
+    1000,
+    1500,
+    2000,
+    2500,
+    3000,
+    3500,
+    4000,
+    4500,
+    5000,
+    5500,
+    6000,
+    6500,
+    7000,
+    7500,
+    8000,
+    8500,
+    9000,
+    9500,
+]
 
 # Firing seeds' T-condition checks (step, H_before, H_after) from Sprint-1 diagnostics.
 # All other checks (C3 for all seeds; T for non-firing seeds) have ΔH < 0 → G < 0 automatically.
@@ -169,11 +187,13 @@ class TestSeed54Fires:
         decision, gain, threshold = should_grow(
             entropy_before=0.967520,
             entropy_after=0.918413,
-            k=2, n=2, N=1000,
+            k=2,
+            n=2,
+            N=1000,
         )
-        assert decision is True, (
-            f"Seed 54 step 1000 should fire (gain={gain:.4f}, threshold={threshold:.4f})"
-        )
+        assert (
+            decision is True
+        ), f"Seed 54 step 1000 should fire (gain={gain:.4f}, threshold={threshold:.4f})"
         assert gain > 0
 
     def test_seed_54_all_checks_fire(self):
@@ -181,7 +201,9 @@ class TestSeed54Fires:
             decision, gain, threshold = should_grow(
                 entropy_before=h_before,
                 entropy_after=h_after,
-                k=2, n=2, N=step,
+                k=2,
+                n=2,
+                N=step,
             )
             assert decision is True, (
                 f"Seed 54 step {step} should fire (ΔH={h_before - h_after:.6f}, "
@@ -196,19 +218,41 @@ class TestSeed42NeverFires:
         decision, gain, _ = should_grow(
             entropy_before=0.760136,
             entropy_after=0.781195,
-            k=2, n=2, N=1000,
+            k=2,
+            n=2,
+            N=1000,
         )
         assert decision is False, f"Seed 42 step 1000 should not fire (gain={gain:.4f})"
         assert gain < 0
 
     def test_seed_42_all_steps_do_not_fire(self):
-        steps = [1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000,
-                 5500, 6000, 6500, 7000, 7500, 8000, 8500, 9000, 9500]
+        steps = [
+            1000,
+            1500,
+            2000,
+            2500,
+            3000,
+            3500,
+            4000,
+            4500,
+            5000,
+            5500,
+            6000,
+            6500,
+            7000,
+            7500,
+            8000,
+            8500,
+            9000,
+            9500,
+        ]
         for step in steps:
             _, gain, _ = should_grow(
                 entropy_before=0.0,
                 entropy_after=0.0,
-                k=2, n=2, N=step,
+                k=2,
+                n=2,
+                N=step,
             )
             # ΔH = 0 still yields G < 0 because threshold > 0
             assert gain < 0
@@ -224,7 +268,9 @@ class TestRegression720Checks:
         decision, _, _ = should_grow(
             entropy_before=h_before,
             entropy_after=h_after,
-            k=2, n=2, N=N,
+            k=2,
+            n=2,
+            N=N,
         )
         return decision
 
@@ -253,8 +299,7 @@ class TestRegression720Checks:
                 decision = self._apply_should_grow(h_before, h_after, step)
                 if step >= first_fire:
                     assert decision is True, (
-                        f"Seed {seed} should fire at step {step} "
-                        f"(ΔH={h_before - h_after:.6f})"
+                        f"Seed {seed} should fire at step {step} " f"(ΔH={h_before - h_after:.6f})"
                     )
 
     def test_non_firing_seeds_never_fire(self):
@@ -288,16 +333,16 @@ class TestRegression720Checks:
                     firing_seeds.add(seed)
                     break
 
-        assert len(firing_seeds) == 4, (
-            f"Expected exactly 4 seeds to fire, got {len(firing_seeds)}: {firing_seeds}"
-        )
-        assert firing_seeds == FIRING_SEEDS, (
-            f"Expected firing seeds {FIRING_SEEDS}, got {firing_seeds}"
-        )
+        assert (
+            len(firing_seeds) == 4
+        ), f"Expected exactly 4 seeds to fire, got {len(firing_seeds)}: {firing_seeds}"
+        assert (
+            firing_seeds == FIRING_SEEDS
+        ), f"Expected firing seeds {FIRING_SEEDS}, got {firing_seeds}"
 
     def test_all_720_checks_non_positive_checks_dont_fire(self):
         """Verify all C3 (360) + non-firing T (288) = 648 checks never fire.
-        
+
         For any check where ΔH ≤ 0, G = N·ΔH − threshold < 0 because threshold > 0
         for all valid (k, N). This covers all 648 non-positive-ΔH checks.
         """

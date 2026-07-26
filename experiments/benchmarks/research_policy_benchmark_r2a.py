@@ -74,8 +74,8 @@ NUM_TICKS = 5000
 PROBE_TICKS = 200
 DATASET = "environment"
 
-METRIC_KEY = HELD_OUT_RMSE_KEY            # "held_out_predictive_rmse"
-METRIC_NAME = "HeldOutPredictiveRMSE"     # registry name (primary, lower-is-better)
+METRIC_KEY = HELD_OUT_RMSE_KEY  # "held_out_predictive_rmse"
+METRIC_NAME = "HeldOutPredictiveRMSE"  # registry name (primary, lower-is-better)
 
 
 def run_matrix(*, verbose: bool = True) -> List[Dict[str, Any]]:
@@ -91,11 +91,15 @@ def run_matrix(*, verbose: bool = True) -> List[Dict[str, Any]]:
     total = len(combos)
 
     if verbose:
-        print(f"[r2a.1] running {total} experiments "
-              f"({len(POLICIES)} policies x {len(ENVIRONMENTS)} envs x {len(SEEDS)} seeds)")
-        print(f"[r2a.1] fixed: horizon={REPLAY_HORIZON} ticks={NUM_TICKS} "
-              f"proximity={PROXIMITY_THRESHOLD} max_clusters={MAX_CLUSTERS} "
-              f"probe_ticks={PROBE_TICKS}")
+        print(
+            f"[r2a.1] running {total} experiments "
+            f"({len(POLICIES)} policies x {len(ENVIRONMENTS)} envs x {len(SEEDS)} seeds)"
+        )
+        print(
+            f"[r2a.1] fixed: horizon={REPLAY_HORIZON} ticks={NUM_TICKS} "
+            f"proximity={PROXIMITY_THRESHOLD} max_clusters={MAX_CLUSTERS} "
+            f"probe_ticks={PROBE_TICKS}"
+        )
 
     for idx, (policy, env_name, seed) in enumerate(combos, start=1):
         noise = ENVIRONMENTS[env_name]
@@ -123,26 +127,31 @@ def run_matrix(*, verbose: bool = True) -> List[Dict[str, Any]]:
         dt = time.perf_counter() - t0
 
         held_out = extract(result.measurements)
-        records.append({
-            "policy": policy,
-            "environment": env_name,
-            "noise_sigma": noise,
-            "seed": seed,
-            "held_out_seed": protocol.held_out_seed(),
-            METRIC_KEY: held_out,
-            "in_sample_rmse": result.measurements.get("prediction_rmse"),
-            "runtime_seconds": dt,
-        })
+        records.append(
+            {
+                "policy": policy,
+                "environment": env_name,
+                "noise_sigma": noise,
+                "seed": seed,
+                "held_out_seed": protocol.held_out_seed(),
+                METRIC_KEY: held_out,
+                "in_sample_rmse": result.measurements.get("prediction_rmse"),
+                "runtime_seconds": dt,
+            }
+        )
         if verbose:
-            print(f"  [{idx:>2}/{total}] {policy:<11} {env_name:<6} seed={seed} "
-                  f"HeldOutRMSE={held_out:.6f}  ({dt:.1f}s)")
+            print(
+                f"  [{idx:>2}/{total}] {policy:<11} {env_name:<6} seed={seed} "
+                f"HeldOutRMSE={held_out:.6f}  ({dt:.1f}s)"
+            )
     return records
 
 
 def _samples(records, policy, env=None):
     """HeldOutPredictiveRMSE samples for a policy (optionally one environment)."""
     return [
-        r[METRIC_KEY] for r in records
+        r[METRIC_KEY]
+        for r in records
         if r["policy"] == policy
         and (env is None or r["environment"] == env)
         and r[METRIC_KEY] is not None
@@ -153,14 +162,10 @@ def aggregate(records) -> Dict[str, Any]:
     """Per-policy SummaryStatistics (overall + per environment) for the metric."""
     out: Dict[str, Any] = {"overall": {}, "by_environment": {}}
     for policy in POLICIES:
-        out["overall"][policy] = SummaryStatistics.from_samples(
-            _samples(records, policy)
-        ).as_dict()
+        out["overall"][policy] = SummaryStatistics.from_samples(_samples(records, policy)).as_dict()
     for env in ENVIRONMENTS:
         out["by_environment"][env] = {
-            policy: SummaryStatistics.from_samples(
-                _samples(records, policy, env)
-            ).as_dict()
+            policy: SummaryStatistics.from_samples(_samples(records, policy, env)).as_dict()
             for policy in POLICIES
         }
     return out
@@ -182,10 +187,12 @@ def inference(records) -> Dict[str, Any]:
             continue
         tr = test.compare(_samples(records, baseline), treat_overall)
         result["overall"][baseline] = {
-            "effect": tr.effect, "p_value": tr.p_value,
+            "effect": tr.effect,
+            "p_value": tr.p_value,
             "diff_ci95_low": tr.details.get("diff_ci95_low"),
             "diff_ci95_high": tr.details.get("diff_ci95_high"),
-            "n_baseline": tr.n_baseline, "n_treatment": tr.n_treatment,
+            "n_baseline": tr.n_baseline,
+            "n_treatment": tr.n_treatment,
         }
 
     for env in ENVIRONMENTS:
@@ -196,7 +203,8 @@ def inference(records) -> Dict[str, Any]:
                 continue
             tr = test.compare(_samples(records, baseline, env), treat_env)
             result["by_environment"][env][baseline] = {
-                "effect": tr.effect, "p_value": tr.p_value,
+                "effect": tr.effect,
+                "p_value": tr.p_value,
                 "diff_ci95_low": tr.details.get("diff_ci95_low"),
                 "diff_ci95_high": tr.details.get("diff_ci95_high"),
             }
@@ -218,8 +226,10 @@ def _stat_table(title, stats_by_policy) -> str:
     # rank by mean (lower is better); None means unmeasured -> sort last
     order = sorted(
         POLICIES,
-        key=lambda p: (stats_by_policy[p]["mean"] is None,
-                       stats_by_policy[p]["mean"] if stats_by_policy[p]["mean"] is not None else 0.0),
+        key=lambda p: (
+            stats_by_policy[p]["mean"] is None,
+            stats_by_policy[p]["mean"] if stats_by_policy[p]["mean"] is not None else 0.0,
+        ),
     )
     for p in order:
         s = stats_by_policy[p]
@@ -250,9 +260,7 @@ def _inference_table(title, infer_block) -> str:
         else:
             verdict = "no sig. difference"
         ci = f"[{_fmt(lo,5)}, {_fmt(hi,5)}]"
-        lines.append(
-            f"{baseline:<16}{_fmt(eff):>16}  {ci:>24}  {_fmt(p,4):>7}  {verdict}"
-        )
+        lines.append(f"{baseline:<16}{_fmt(eff):>16}  {ci:>24}  {_fmt(p,4):>7}  {verdict}")
     return "\n".join(lines)
 
 
@@ -263,23 +271,32 @@ def render_report(agg, infer) -> str:
         "(primary metric; lower is better; held-out, seed-disjoint probe stream)",
         "=" * 86,
         "",
-        _stat_table("[POOLED across both environments | 10 runs/policy = 2 envs x 5 seeds]",
-                    agg["overall"]),
+        _stat_table(
+            "[POOLED across both environments | 10 runs/policy = 2 envs x 5 seeds]", agg["overall"]
+        ),
         "",
     ]
     for env in ENVIRONMENTS:
-        blocks.append(_stat_table(
-            f"[ENVIRONMENT = {env} (noise_sigma={ENVIRONMENTS[env]}) | 5 seeds/policy]",
-            agg["by_environment"][env]))
+        blocks.append(
+            _stat_table(
+                f"[ENVIRONMENT = {env} (noise_sigma={ENVIRONMENTS[env]}) | 5 seeds/policy]",
+                agg["by_environment"][env],
+            )
+        )
         blocks.append("")
-    blocks.append(_inference_table(
-        "[INFERENCE | bootstrap mean-difference, 10k resamples | POOLED]",
-        infer["overall"]))
+    blocks.append(
+        _inference_table(
+            "[INFERENCE | bootstrap mean-difference, 10k resamples | POOLED]", infer["overall"]
+        )
+    )
     blocks.append("")
     for env in ENVIRONMENTS:
-        blocks.append(_inference_table(
-            f"[INFERENCE | bootstrap mean-difference | ENVIRONMENT = {env}]",
-            infer["by_environment"][env]))
+        blocks.append(
+            _inference_table(
+                f"[INFERENCE | bootstrap mean-difference | ENVIRONMENT = {env}]",
+                infer["by_environment"][env],
+            )
+        )
         blocks.append("")
     return "\n".join(blocks)
 
@@ -303,7 +320,7 @@ def main() -> int:
     payload = {
         "sprint": "R2A.1",
         "question": "Does FreeEnergyPolicy provide measurable predictive benefit "
-                    "over simpler heuristics (HeldOutPredictiveRMSE)?",
+        "over simpler heuristics (HeldOutPredictiveRMSE)?",
         "metric": METRIC_NAME,
         "metric_direction": "lower_is_better",
         "fixed_hyperparameters": {

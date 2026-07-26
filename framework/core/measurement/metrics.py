@@ -4,9 +4,9 @@ Single source of truth for all cognitive metrics.
 Consolidates from validation/metrics.py, validation/shared_metrics_v1.py,
 and research/metrics.py.
 """
+
 import math
 from typing import Dict, List, Mapping, Optional, Sequence, Tuple
-
 
 # --- Free Energy Coefficients ---
 LAMBDA = 1.0

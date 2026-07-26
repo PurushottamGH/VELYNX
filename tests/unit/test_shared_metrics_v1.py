@@ -39,7 +39,6 @@ from validation.shared_metrics_v1 import (
     compute_S_surprise,
 )
 
-
 # ---------------------------------------------------------------------------
 # Version contract
 # ---------------------------------------------------------------------------
@@ -142,17 +141,25 @@ def test_R_attention_weights_amplify_weighted_dim():
     centroids = [[0.0, 0.0], [3.0, 4.0]]
     weights = [1.0, 100.0]  # heavy weight on dim 1
     # Observation [3, 4] sits exactly on centroid [3,4] -> weighted distance 0.
-    assert compute_R_representation_error(centroids, [3.0, 4.0], dim_weights=weights) == pytest.approx(0.0)
+    assert compute_R_representation_error(
+        centroids, [3.0, 4.0], dim_weights=weights
+    ) == pytest.approx(0.0)
     # Observation [0, 0] sits on centroid [0,0] -> weighted distance 0 (nearest wins).
-    assert compute_R_representation_error(centroids, [0.0, 0.0], dim_weights=weights) == pytest.approx(0.0)
+    assert compute_R_representation_error(
+        centroids, [0.0, 0.0], dim_weights=weights
+    ) == pytest.approx(0.0)
     # Observation [6, 0]: to [0,0] weighted = sqrt(1*36 + 100*0) = 6;
     #                    to [3,4] weighted = sqrt(1*9 + 100*16) = 40.11.
     # Nearest is [0,0] at 6.
-    assert compute_R_representation_error(centroids, [6.0, 0.0], dim_weights=weights) == pytest.approx(6.0)
+    assert compute_R_representation_error(
+        centroids, [6.0, 0.0], dim_weights=weights
+    ) == pytest.approx(6.0)
     # Observation [0, 8]: to [0,0] weighted = sqrt(1*0 + 100*64) = 80;
     #                    to [3,4] weighted = sqrt(1*9 + 100*16) = 40.11.
     # Nearest is [3,4] at sqrt(1609).
-    assert compute_R_representation_error(centroids, [0.0, 8.0], dim_weights=weights) == pytest.approx(math.sqrt(1609.0))
+    assert compute_R_representation_error(
+        centroids, [0.0, 8.0], dim_weights=weights
+    ) == pytest.approx(math.sqrt(1609.0))
 
 
 # ---------------------------------------------------------------------------
@@ -302,7 +309,7 @@ def test_A_does_not_use_power_1_5():
     """
     cluster_count, anomaly_volume = 4, 9.0
     expected = cluster_count + anomaly_volume  # linear
-    not_expected = cluster_count + anomaly_volume ** 1.5  # orphan (forbidden)
+    not_expected = cluster_count + anomaly_volume**1.5  # orphan (forbidden)
     assert compute_A_active_load(cluster_count, anomaly_volume) == pytest.approx(expected)
     assert compute_A_active_load(cluster_count, anomaly_volume) != pytest.approx(not_expected)
 

@@ -1,4 +1,5 @@
 from nltk.stem import PorterStemmer, WordNetLemmatizer
+
 s = PorterStemmer()
 l = WordNetLemmatizer()
 
@@ -29,14 +30,18 @@ for q, concept in pairs:
     s_q = s.stem(q)
     s_c = s.stem(concept)
     # stem: exact or substring overlap
-    stem_match = (s_q == s_c) or (len(s_q) >= 4 and s_q[:4] == s_c[:4]) or (len(s_c) >= 4 and s_c[:4] == s_q[:4])
-    
+    stem_match = (
+        (s_q == s_c)
+        or (len(s_q) >= 4 and s_q[:4] == s_c[:4])
+        or (len(s_c) >= 4 and s_c[:4] == s_q[:4])
+    )
+
     # Lemmatization approach
     lemma_match = False
-    for pos in ['v', 'n', 'a']:
+    for pos in ["v", "n", "a"]:
         l_q = l.lemmatize(q, pos)
         l_c = l.lemmatize(concept, pos)
         if l_q == l_c:
             lemma_match = True
-    
+
     print(f"{q:15s} {concept:15s} {s_q:10s} {s_c:10s} {str(stem_match or lemma_match):8s}")

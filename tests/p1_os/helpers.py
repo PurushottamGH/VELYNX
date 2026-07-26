@@ -31,7 +31,9 @@ Text.
 """
 
 
-def make_raw(metadata_yaml: str = QUESTION_METADATA, body: str = QUESTION_BODY, newline: str = "\n") -> bytes:
+def make_raw(
+    metadata_yaml: str = QUESTION_METADATA, body: str = QUESTION_BODY, newline: str = "\n"
+) -> bytes:
     """Build raw bytes with the given line-ending style.
 
     `metadata_yaml` and `body` must use bare "\\n" internally; this

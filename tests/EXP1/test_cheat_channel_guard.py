@@ -15,6 +15,7 @@ the test. An adversarial counter-test proves the harness is not vacuous.
 Director-implemented due to specialist runtime failure (2026-07-07); subject
 to Reviewer + ScientificAuditor sign-off (roadmap T6 / CR-3 verification).
 """
+
 from __future__ import annotations
 
 import dataclasses
@@ -84,9 +85,9 @@ def _assert_answer_independent_of(
     mutated_out = _adapter(answer_fn).answer(mutated, 7)
     assert isinstance(base_out, AnswerRecord)
     assert isinstance(mutated_out, AnswerRecord)
-    assert base_out.to_dict() == mutated_out.to_dict(), (
-        f"emitted AnswerRecord depends on cheat-channel field {field!r}"
-    )
+    assert (
+        base_out.to_dict() == mutated_out.to_dict()
+    ), f"emitted AnswerRecord depends on cheat-channel field {field!r}"
 
 
 def test_answer_does_not_depend_on_gold_rubric() -> None:

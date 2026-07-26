@@ -2,13 +2,13 @@
 
 Manages experiment artifacts: versioning, storage, retrieval, and integrity.
 """
+
 import json
 import hashlib
 import shutil
 from pathlib import Path
 from typing import Any, Dict, Optional
 from datetime import datetime, timezone
-
 
 ARTIFACTS_BASE = Path(__file__).resolve().parent.parent / "artifacts"
 
@@ -116,10 +116,7 @@ class ArtifactStore:
         dir_path = self.base / "experiments" / experiment_id
         if not dir_path.exists():
             return []
-        return sorted(
-            [d.name for d in dir_path.iterdir() if d.is_dir()],
-            reverse=True
-        )
+        return sorted([d.name for d in dir_path.iterdir() if d.is_dir()], reverse=True)
 
     def list_artifacts(self, experiment_id: str, run_id: str) -> list:
         dir_path = self.base / "experiments" / experiment_id / run_id

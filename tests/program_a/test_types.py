@@ -7,6 +7,7 @@ validation on frozen dataclasses, no I/O. Categories: unit, integration
 
 Reference: PROGRAM_A_MODULE_SPEC.md Section 1.
 """
+
 from __future__ import annotations
 
 import pickle
@@ -39,7 +40,9 @@ def _evidence_item(doc_id: str = "d1", origin_domain: str = "example.com") -> Ev
     )
 
 
-def _candidate_claim(text: str = "claim text", doc_ids: tuple[str, ...] = ("d1",)) -> CandidateClaim:
+def _candidate_claim(
+    text: str = "claim text", doc_ids: tuple[str, ...] = ("d1",)
+) -> CandidateClaim:
     return CandidateClaim(claim_text=text, supporting_doc_ids=doc_ids)
 
 
@@ -279,9 +282,7 @@ def test_property_evidence_state_result_independent_origin_count_unconstrained(
 
 @given(st.dictionaries(st.text(max_size=10), st.text(max_size=10)))
 def test_property_emission_metadata_accepts_any_dict(metadata: dict) -> None:
-    emission = Emission(
-        answer="a", tier="PROBABLE", raw_numeric_confidence=None, metadata=metadata
-    )
+    emission = Emission(answer="a", tier="PROBABLE", raw_numeric_confidence=None, metadata=metadata)
     assert emission.metadata == metadata
 
 
@@ -383,7 +384,14 @@ def test_fuzz_emission_tier_rejects_anything_outside_canonical_set(tier: str) ->
             Emission(answer="a", tier=tier, raw_numeric_confidence=None, metadata={})
 
 
-@given(st.one_of(st.lists(st.integers()), st.sets(st.integers()), st.text(), st.dictionaries(st.text(), st.integers())))
+@given(
+    st.one_of(
+        st.lists(st.integers()),
+        st.sets(st.integers()),
+        st.text(),
+        st.dictionaries(st.text(), st.integers()),
+    )
+)
 def test_fuzz_evidence_set_rejects_any_non_tuple_container(container) -> None:
     with pytest.raises(TypeError, match="items must be a tuple"):
         EvidenceSet(items=container)  # type: ignore[arg-type]

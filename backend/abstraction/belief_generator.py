@@ -143,4 +143,4 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         generate_beliefs_for_batch(sys.argv[1])
     else:
-        print("Usage: python -m backend.abstraction.belief_generator <batch_id>")e: python -m backend.abstraction.belief_generator <batch_id>")
+        print("Usage: python -m backend.abstraction.belief_generator <batch_id>")

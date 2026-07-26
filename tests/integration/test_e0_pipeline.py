@@ -3,6 +3,7 @@
 Runs the complete E0 experiment (environment, conditions, analysis, decision)
 on a minimal configuration to verify the pipeline works end-to-end.
 """
+
 from __future__ import annotations
 
 import json
@@ -25,7 +26,11 @@ from experiments.E0.analysis import (
 )
 from experiments.E0.decision import E0Decider
 from framework.core.predictors.dirichlet_markov import DirichletMarkovPredictor
-from framework.core.mdl.mdl_growth import compute_lambda_model, compute_lambda_model_corrected, should_grow
+from framework.core.mdl.mdl_growth import (
+    compute_lambda_model,
+    compute_lambda_model_corrected,
+    should_grow,
+)
 from framework.core.measurement.proper_scoring import predictive_log_likelihood, scoring_loss
 
 
@@ -116,7 +121,9 @@ class TestE0EndToEnd:
         decision, gain, lam = should_grow(
             entropy_before=30.0,
             entropy_after=2.0,
-            k=2, n=2, N=50,
+            k=2,
+            n=2,
+            N=50,
         )
         assert decision is True, f"G={gain:.2f}, lam={lam:.2f}: Large gain should trigger growth"
         assert gain > 0
@@ -125,7 +132,9 @@ class TestE0EndToEnd:
         decision, gain, lam = should_grow(
             entropy_before=4.9,
             entropy_after=4.9,
-            k=5, n=5, N=100,
+            k=5,
+            n=5,
+            N=100,
         )
         assert decision is False, f"G={gain:.2f}: Zero ΔH should never trigger growth"
         assert gain < 0
@@ -134,7 +143,9 @@ class TestE0EndToEnd:
         decision, gain, lam = should_grow(
             entropy_before=4.9,
             entropy_after=5.0,
-            k=5, n=5, N=100,
+            k=5,
+            n=5,
+            N=100,
         )
         assert decision is False, f"G={gain:.2f}: Negative ΔH should never trigger growth"
         assert gain < 0
@@ -201,29 +212,31 @@ class TestE0EndToEnd:
         # Simulate multi-seed results
         per_seed = []
         for s in range(2):
-            per_seed.append({
-                "conditions": {
-                    "T": {"log_likelihoods": [-0.5 + s * 0.1] * 100},
-                    "C1": {"log_likelihoods": [-1.0] * 100},
-                    "C2": {"log_likelihoods": [-0.8] * 100},
-                },
-                "analysis": {
-                    "T": {
-                        "held_out_ll": {
-                            "mean_log_likelihood": -0.5 + s * 0.1,
-                            "mean_log_loss": 0.5,
-                            "n_held_out": 20,
-                        },
-                        "emergence_statistic": {
-                            "m_statistic": 0.2 + s * 0.05,
-                            "nmi_learned_true": 0.4,
-                            "nmi_learned_shuffled": 0.15,
-                        },
-                        "growth_events": 3,
-                        "final_capacity": 5,
+            per_seed.append(
+                {
+                    "conditions": {
+                        "T": {"log_likelihoods": [-0.5 + s * 0.1] * 100},
+                        "C1": {"log_likelihoods": [-1.0] * 100},
+                        "C2": {"log_likelihoods": [-0.8] * 100},
                     },
-                },
-            })
+                    "analysis": {
+                        "T": {
+                            "held_out_ll": {
+                                "mean_log_likelihood": -0.5 + s * 0.1,
+                                "mean_log_loss": 0.5,
+                                "n_held_out": 20,
+                            },
+                            "emergence_statistic": {
+                                "m_statistic": 0.2 + s * 0.05,
+                                "nmi_learned_true": 0.4,
+                                "nmi_learned_shuffled": 0.15,
+                            },
+                            "growth_events": 3,
+                            "final_capacity": 5,
+                        },
+                    },
+                }
+            )
 
         decision = decider.evaluate_multi_seed(per_seed)
         assert "verdict" in decision
@@ -251,19 +264,29 @@ class TestE0EndToEnd:
         for _ in range(2):
             per_seed = []
             for s in range(2):
-                per_seed.append({
-                    "conditions": {
-                        "T": {"log_likelihoods": [-1.0] * 100},
-                        "C1": {"log_likelihoods": [-0.5] * 100},
-                        "C2": {"log_likelihoods": [-0.3] * 100},
-                    },
-                    "analysis": {
-                        "T": {
-                            "held_out_ll": {"mean_log_likelihood": -1.0, "mean_log_loss": 1.0, "n_held_out": 20},
-                            "emergence_statistic": {"m_statistic": 0.01, "nmi_learned_true": 0.1, "nmi_learned_shuffled": 0.09},
+                per_seed.append(
+                    {
+                        "conditions": {
+                            "T": {"log_likelihoods": [-1.0] * 100},
+                            "C1": {"log_likelihoods": [-0.5] * 100},
+                            "C2": {"log_likelihoods": [-0.3] * 100},
                         },
-                    },
-                })
+                        "analysis": {
+                            "T": {
+                                "held_out_ll": {
+                                    "mean_log_likelihood": -1.0,
+                                    "mean_log_loss": 1.0,
+                                    "n_held_out": 20,
+                                },
+                                "emergence_statistic": {
+                                    "m_statistic": 0.01,
+                                    "nmi_learned_true": 0.1,
+                                    "nmi_learned_shuffled": 0.09,
+                                },
+                            },
+                        },
+                    }
+                )
 
             decision = decider.evaluate_multi_seed(per_seed)
             decider.record_attempt(decision)
@@ -285,9 +308,7 @@ class TestE0EndToEnd:
         for cond in ["T", "C1", "C2"]:
             ll1 = r1["conditions"][cond]["log_likelihoods"]
             ll2 = r2["conditions"][cond]["log_likelihoods"]
-            assert np.allclose(ll1, ll2), (
-                f"Condition {cond} not reproducible between runs"
-            )
+            assert np.allclose(ll1, ll2), f"Condition {cond} not reproducible between runs"
 
 
 class TestE0ArtifactGeneration:
@@ -308,19 +329,29 @@ class TestE0ArtifactGeneration:
         decider = E0Decider(p_threshold=0.05, min_seeds=2)
         per_seed = []
         for s in range(2):
-            per_seed.append({
-                "conditions": {
-                    "T": {"log_likelihoods": [-0.5] * 100},
-                    "C1": {"log_likelihoods": [-1.0] * 100},
-                    "C2": {"log_likelihoods": [-0.8] * 100},
-                },
-                "analysis": {
-                    "T": {
-                        "held_out_ll": {"mean_log_likelihood": -0.5, "mean_log_loss": 0.5, "n_held_out": 20},
-                        "emergence_statistic": {"m_statistic": 0.2, "nmi_learned_true": 0.4, "nmi_learned_shuffled": 0.2},
+            per_seed.append(
+                {
+                    "conditions": {
+                        "T": {"log_likelihoods": [-0.5] * 100},
+                        "C1": {"log_likelihoods": [-1.0] * 100},
+                        "C2": {"log_likelihoods": [-0.8] * 100},
                     },
-                },
-            })
+                    "analysis": {
+                        "T": {
+                            "held_out_ll": {
+                                "mean_log_likelihood": -0.5,
+                                "mean_log_loss": 0.5,
+                                "n_held_out": 20,
+                            },
+                            "emergence_statistic": {
+                                "m_statistic": 0.2,
+                                "nmi_learned_true": 0.4,
+                                "nmi_learned_shuffled": 0.2,
+                            },
+                        },
+                    },
+                }
+            )
         decision = decider.evaluate_multi_seed(per_seed)
         assert isinstance(decision["pass"], bool)
         assert isinstance(decision["verdict"], str)

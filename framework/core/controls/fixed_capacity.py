@@ -4,6 +4,7 @@ A control that maintains a fixed number of clusters/slots, replacing oldest
 entries when capacity is exceeded. This provides a null baseline where no
 genuine structure discovery can occur beyond the fixed capacity limit.
 """
+
 from typing import List, Optional, Tuple
 from collections import OrderedDict
 

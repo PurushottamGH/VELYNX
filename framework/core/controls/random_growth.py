@@ -5,6 +5,7 @@ condition, but with random content. This tests whether any observed
 improvement is due to capacity increase alone rather than structured
 representation learning.
 """
+
 import random
 import math
 from typing import List, Optional, Tuple

@@ -40,16 +40,10 @@ from backend.cognition.decision_policy import (
     PREDICTION_ERROR,
 )
 
-
 # A deterministic, repeatable observation stream. Two clusters at [0,0] and
 # [10,10] with transitions 0->1->0->1->... so the predictor's forecast
 # is always the *other* cluster's centroid -- a known strong signal.
-STREAM = (
-    [[0.0, 0.0]] * 4
-    + [[10.0, 10.0]] * 4
-    + [[0.0, 0.0]] * 4
-    + [[10.0, 10.0]] * 4
-)
+STREAM = [[0.0, 0.0]] * 4 + [[10.0, 10.0]] * 4 + [[0.0, 0.0]] * 4 + [[10.0, 10.0]] * 4
 
 
 def _ingest_stream(core: VectorPredictionCore, stream):
@@ -67,7 +61,7 @@ def test_identity_online_S_equals_replay_S():
     core = VectorPredictionCore(proximity_threshold=0.25, max_clusters=10)
     # Warm up the engine to establish stable clusters and transitions
     _ingest_stream(core, STREAM)
-    
+
     # Run the stream again to collect stable, warm-start metrics
     online_mean_S, _ = _ingest_stream(core, STREAM)
 
@@ -101,9 +95,9 @@ def test_identity_no_op_proposal_leaves_S_unchanged():
     s_before = replay.metrics_before[PREDICTION_ERROR]
     s_after = replay.metrics_after[PREDICTION_ERROR]
 
-    assert s_after == pytest.approx(s_before, abs=1e-10), (
-        f"No-op proposal should not change S: before={s_before}, after={s_after}"
-    )
+    assert s_after == pytest.approx(
+        s_before, abs=1e-10
+    ), f"No-op proposal should not change S: before={s_before}, after={s_after}"
 
 
 def test_identity_no_op_proposal_leaves_A_unchanged():
@@ -138,11 +132,12 @@ def test_identity_replay_does_not_mutate_live_engine():
     )
 
     # Cluster count, last_cluster_id, predictor transitions must be unchanged.
-    assert snapshot_core.cluster_engine.cluster_count == snapshot_before.cluster_engine.cluster_count
+    assert (
+        snapshot_core.cluster_engine.cluster_count == snapshot_before.cluster_engine.cluster_count
+    )
     assert snapshot_core.last_cluster_id == snapshot_before.last_cluster_id
     assert (
-        snapshot_core.predictor.transition_matrix()
-        == snapshot_before.predictor.transition_matrix()
+        snapshot_core.predictor.transition_matrix() == snapshot_before.predictor.transition_matrix()
     )
 
 
@@ -154,10 +149,14 @@ def test_identity_replay_returns_deterministic_S():
     snap_a = copy.deepcopy(core)
     snap_b = copy.deepcopy(core)
     r1 = ReplayEngine().simulate_proposal(
-        snap_a, {"target_a": 0, "target_b": 0}, [v[:] for v in STREAM],
+        snap_a,
+        {"target_a": 0, "target_b": 0},
+        [v[:] for v in STREAM],
     )
     r2 = ReplayEngine().simulate_proposal(
-        snap_b, {"target_a": 0, "target_b": 0}, [v[:] for v in STREAM],
+        snap_b,
+        {"target_a": 0, "target_b": 0},
+        [v[:] for v in STREAM],
     )
     assert r1.metrics_before[PREDICTION_ERROR] == r2.metrics_before[PREDICTION_ERROR]
     assert r1.metrics_after[PREDICTION_ERROR] == r2.metrics_after[PREDICTION_ERROR]

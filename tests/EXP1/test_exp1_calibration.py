@@ -47,12 +47,10 @@ def test_equal_width_bin_boundaries_are_locked() -> None:
 
 def test_compute_ece_uses_weighted_bin_accuracy_minus_confidence() -> None:
     records = [
-        _record("UNKNOWN", correctness, index)
-        for index, correctness in enumerate([0, 0, 0, 1])
+        _record("UNKNOWN", correctness, index) for index, correctness in enumerate([0, 0, 0, 1])
     ]
     records.extend(
-        _record("CERTAIN", correctness, index + 4)
-        for index, correctness in enumerate([1, 1, 1, 0])
+        _record("CERTAIN", correctness, index + 4) for index, correctness in enumerate([1, 1, 1, 0])
     )
 
     result = compute_ece(records)

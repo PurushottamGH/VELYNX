@@ -27,8 +27,7 @@ ID_PREFIXES: dict[str, str] = {
 _PREFIX_TO_OBJECT_TYPE: dict[str, str] = {v: k for k, v in ID_PREFIXES.items()}
 
 _ID_PATTERNS: dict[str, re.Pattern[str]] = {
-    prefix: re.compile(rf"^{re.escape(prefix)}(\d{{6}})$")
-    for prefix in ID_PREFIXES.values()
+    prefix: re.compile(rf"^{re.escape(prefix)}(\d{{6}})$") for prefix in ID_PREFIXES.values()
 }
 
 

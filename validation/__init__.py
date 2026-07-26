@@ -25,7 +25,23 @@ from validation.regression import (
     RegressionResult,
     assert_no_regression,
 )
-from validation.runner import BenchmarkRunner
+
+
+# `validation.runner` drives concrete `backend.cognition` components, which are not part
+# of the shipped `velynx` distribution (`pyproject.toml` excludes `backend*`). Importing
+# it eagerly here made the entire `validation` package — and therefore
+# `framework.core.cognitive_health`, which needs only `validation.metrics` and
+# `validation.report` — unimportable from an installed wheel. Resolving it on first
+# attribute access keeps the harness working wherever `backend/` is on the path, without
+# poisoning the package for consumers that never touch the runner.
+# The underlying boundary breach is CRITICAL_PATH.md Priority 2 (W-056).
+def __getattr__(name: str):
+    if name == "BenchmarkRunner":
+        from validation.runner import BenchmarkRunner
+
+        return BenchmarkRunner
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+
 
 __all__ = [
     "Dataset",

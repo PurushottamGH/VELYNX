@@ -26,7 +26,9 @@ TUPLE = re.compile(
 )
 
 CONSTITUTIONAL = {
-    "amend_constitution", "supersede_constitution", "withdraw_constitution",
+    "amend_constitution",
+    "supersede_constitution",
+    "withdraw_constitution",
     "activate_domain_standard",
 }
 
@@ -89,8 +91,9 @@ def test_no_grant_exceeds_rs1_jurisdiction():
 def test_constitutional_transitions_are_still_granted():
     grants, _ = _target_blocks()
     for name in CONSTITUTIONAL:
-        assert re.search(rf"^\s*-\s*{name}\s*$", grants, re.MULTILINE), \
-            f"{name} missing from permitted_transitions"
+        assert re.search(
+            rf"^\s*-\s*{name}\s*$", grants, re.MULTILINE
+        ), f"{name} missing from permitted_transitions"
 
 
 def test_decision_lifecycle_tuples_are_granted_not_omitted():

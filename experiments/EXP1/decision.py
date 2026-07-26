@@ -1,4 +1,5 @@
 """EXP-1 preregistered pass/kill decision rules."""
+
 from __future__ import annotations
 
 import math
@@ -12,7 +13,6 @@ from experiments.EXP1.dataset import (
     MINIMUM_SAMPLE_SIZE,
     EvaluatedRecord,
 )
-
 
 INDEPENDENCE_TEST_ALPHA = 0.05
 REQUIRED_SEED_COUNT = 22
@@ -91,9 +91,9 @@ class ExperimentDecision:
             "required_seed_count": self.required_seed_count,
             "completed_seed_count": self.completed_seed_count,
             "seed_decisions": [decision.to_dict() for decision in self.seed_decisions],
-            "pooled_calibration": self.pooled_calibration.to_dict()
-            if self.pooled_calibration is not None
-            else None,
+            "pooled_calibration": (
+                self.pooled_calibration.to_dict() if self.pooled_calibration is not None else None
+            ),
             "kill_reasons": list(self.kill_reasons),
         }
 

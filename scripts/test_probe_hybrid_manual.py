@@ -2,11 +2,7 @@ from backend.memory.memory_retriever import MemoryRetriever
 
 retriever = MemoryRetriever()
 
-active_query = {
-    "confusion": 0.3,
-    "focus": 0.3,
-    "hope": 0.3
-}
+active_query = {"confusion": 0.3, "focus": 0.3, "hope": 0.3}
 
 results = retriever.retrieve_by_context(active_query, top_k=3)
 

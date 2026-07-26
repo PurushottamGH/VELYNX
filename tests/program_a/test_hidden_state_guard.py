@@ -16,6 +16,7 @@ yet exercise real answer-construction behavior -- they instead pin the
 
 Scope: tests only, no production-code changes.
 """
+
 from __future__ import annotations
 
 import ast
@@ -44,7 +45,9 @@ def _global_statements(tree: ast.Module) -> list[ast.Global]:
 
 
 def test_emission_module_declares_exactly_one_global_name() -> None:
-    tree = ast.parse(EMISSION_MODULE_PATH.read_text(encoding="utf-8-sig"), filename=str(EMISSION_MODULE_PATH))
+    tree = ast.parse(
+        EMISSION_MODULE_PATH.read_text(encoding="utf-8-sig"), filename=str(EMISSION_MODULE_PATH)
+    )
     global_stmts = _global_statements(tree)
     all_names = {name for stmt in global_stmts for name in stmt.names}
     assert all_names == {"_DEFAULT_INSTANCE"}, (
@@ -56,7 +59,9 @@ def test_emission_module_declares_exactly_one_global_name() -> None:
 
 
 def test_only_one_function_in_the_module_declares_global() -> None:
-    tree = ast.parse(EMISSION_MODULE_PATH.read_text(encoding="utf-8-sig"), filename=str(EMISSION_MODULE_PATH))
+    tree = ast.parse(
+        EMISSION_MODULE_PATH.read_text(encoding="utf-8-sig"), filename=str(EMISSION_MODULE_PATH)
+    )
     mutating_functions = []
     for node in ast.walk(tree):
         if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
@@ -78,7 +83,9 @@ def test_no_other_module_level_mutable_containers_besides_the_sanctioned_global(
     # `__all__` (and other dunders) are excluded: a module export list is not
     # a hidden-state risk, it's the public-surface declaration every module
     # in this package uses.
-    tree = ast.parse(EMISSION_MODULE_PATH.read_text(encoding="utf-8-sig"), filename=str(EMISSION_MODULE_PATH))
+    tree = ast.parse(
+        EMISSION_MODULE_PATH.read_text(encoding="utf-8-sig"), filename=str(EMISSION_MODULE_PATH)
+    )
     suspicious: list[str] = []
     for stmt in tree.body:
         if isinstance(stmt, ast.AnnAssign) and isinstance(stmt.target, ast.Name):
@@ -153,7 +160,9 @@ def test_default_instance_mutation_does_not_leak_across_test_boundary() -> None:
 # --------------------------------------------------------------------------- #
 
 
-def test_module_level_wrappers_do_not_yet_read_default_instance(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_module_level_wrappers_do_not_yet_read_default_instance(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     # Once phase-9 lands, answer_query()/mechanism_id() are specced to
     # delegate to _DEFAULT_INSTANCE. Today they must raise regardless of
     # whether _DEFAULT_INSTANCE is configured -- proving the global is

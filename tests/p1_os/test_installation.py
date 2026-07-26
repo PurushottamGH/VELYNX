@@ -98,15 +98,13 @@ def test_importable_outside_pytest_with_no_sys_path_insertion(tmp_path: Path):
 
 
 def test_importing_installed_p1_os_does_not_load_forbidden_modules(tmp_path: Path):
-    script = textwrap.dedent(
-        """
+    script = textwrap.dedent("""
         import sys
         import p1_os
         import p1_os.frontmatter
         import p1_os.schemas
         print("\\n".join(sorted(sys.modules.keys())))
-        """
-    )
+        """)
     result = subprocess.run(
         [sys.executable, "-c", script],
         cwd=tmp_path,

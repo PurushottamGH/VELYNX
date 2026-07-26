@@ -27,14 +27,12 @@ FORBIDDEN_MODULES = (
 
 
 def _run_isolated_import(tooling_dir: str, import_statement: str) -> set[str]:
-    script = textwrap.dedent(
-        f"""
+    script = textwrap.dedent(f"""
         import sys
         sys.path.insert(0, {tooling_dir!r})
         {import_statement}
         print("\\n".join(sorted(sys.modules.keys())))
-        """
-    )
+        """)
     result = subprocess.run(
         [sys.executable, "-c", script],
         capture_output=True,

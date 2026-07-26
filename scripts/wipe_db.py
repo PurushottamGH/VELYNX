@@ -15,6 +15,7 @@ Usage
     python scripts/wipe_db.py          # wipe everything
     python scripts/wipe_db.py --dry    # preview without wiping
 """
+
 from __future__ import annotations
 
 import argparse
@@ -120,10 +121,7 @@ def _wipe_file(db_path: Path, *, dry: bool) -> dict:
     try:
         conn.execute("PRAGMA busy_timeout=20000")
         present = {
-            row[0]
-            for row in conn.execute(
-                "SELECT name FROM sqlite_master WHERE type='table'"
-            )
+            row[0] for row in conn.execute("SELECT name FROM sqlite_master WHERE type='table'")
         }
 
         if not present:
@@ -133,8 +131,11 @@ def _wipe_file(db_path: Path, *, dry: bool) -> dict:
         has_episodic = any(t in present for t in EPISODIC_TABLES)
         if has_episodic:
             if dry:
-                return {**result, "status": "dry_run",
-                        "details": f"would DELETE {', '.join(EPISODIC_TABLES)} + VACUUM"}
+                return {
+                    **result,
+                    "status": "dry_run",
+                    "details": f"would DELETE {', '.join(EPISODIC_TABLES)} + VACUUM",
+                }
 
             cleared: list[str] = []
             deleted = 0
@@ -153,19 +154,23 @@ def _wipe_file(db_path: Path, *, dry: bool) -> dict:
             # VACUUM is auto-committing, but call commit() again defensively so
             # no implicit transaction is left dangling to lock the file.
             conn.commit()
-            return {**result, "status": "wiped",
-                    "details": f"{deleted} row(s) deleted from {', '.join(cleared)}; VACUUM complete"}
+            return {
+                **result,
+                "status": "wiped",
+                "details": f"{deleted} row(s) deleted from {', '.join(cleared)}; VACUUM complete",
+            }
 
         # ── Generic wipe ─────────────────────────────────────────────────
-        non_system = [
-            name for name in present if name != "sqlite_sequence"
-        ]
+        non_system = [name for name in present if name != "sqlite_sequence"]
         if not non_system:
             return result
 
         if dry:
-            return {**result, "status": "dry_run",
-                    "details": f"would DELETE rows from {', '.join(non_system)}"}
+            return {
+                **result,
+                "status": "dry_run",
+                "details": f"would DELETE rows from {', '.join(non_system)}",
+            }
 
         for name in non_system:
             conn.execute(f"DELETE FROM {name}")
@@ -173,8 +178,11 @@ def _wipe_file(db_path: Path, *, dry: bool) -> dict:
         conn.commit()
         conn.execute("VACUUM")
         conn.commit()
-        return {**result, "status": "generic",
-                "details": f"Tables: {', '.join(non_system)}; VACUUM complete"}
+        return {
+            **result,
+            "status": "generic",
+            "details": f"Tables: {', '.join(non_system)}; VACUUM complete",
+        }
 
     finally:
         conn.close()
@@ -195,9 +203,9 @@ def _db_contains_term(db_path: Path, term: str) -> list[str]:
         return hits
     try:
         tables = [
-            r[0] for r in conn.execute(
-                "SELECT name FROM sqlite_master WHERE type='table' "
-                "AND name != 'sqlite_sequence'"
+            r[0]
+            for r in conn.execute(
+                "SELECT name FROM sqlite_master WHERE type='table' " "AND name != 'sqlite_sequence'"
             ).fetchall()
         ]
         for table in tables:
@@ -260,8 +268,9 @@ def post_wipe_verification(term: str = "Avatar", *, verbose: bool = True) -> Non
 
 
 # ── Orchestration ─────────────────────────────────────────────────────────────
-def run_wipe(*, dry: bool = False, verbose: bool = True, verify_term: str = "Avatar",
-             strict: bool = False) -> dict:
+def run_wipe(
+    *, dry: bool = False, verbose: bool = True, verify_term: str = "Avatar", strict: bool = False
+) -> dict:
     """Discover and wipe every live .db file, then verify nothing was missed.
 
     Returns a summary dict with keys ``databases_wiped``, ``dry_run``,
@@ -373,11 +382,13 @@ def run_wipe(*, dry: bool = False, verbose: bool = True, verify_term: str = "Ava
 # ── CLI ───────────────────────────────────────────────────────────────────────
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--dry", action="store_true",
-                        help="Preview without wiping")
-    parser.add_argument("--verify-term", default="Avatar",
-                        help="Probe string for the post-wipe content ghost scan "
-                             "(default: Avatar). Raises GhostMemoryError if found.")
+    parser.add_argument("--dry", action="store_true", help="Preview without wiping")
+    parser.add_argument(
+        "--verify-term",
+        default="Avatar",
+        help="Probe string for the post-wipe content ghost scan "
+        "(default: Avatar). Raises GhostMemoryError if found.",
+    )
     args = parser.parse_args()
     run_wipe(dry=args.dry, verify_term=args.verify_term)
 

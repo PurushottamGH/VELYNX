@@ -172,9 +172,7 @@ class BenchmarkRunner:
     experiencing rather than its entire history.
     """
 
-    consolidation_tracker: ConsolidationTracker = field(
-        default_factory=ConsolidationTracker
-    )
+    consolidation_tracker: ConsolidationTracker = field(default_factory=ConsolidationTracker)
     """Pure-observability counters + traces for the C8 consolidation pipeline.
 
     Reset at the start of every :meth:`run_experiment` so each run's counts are
@@ -296,9 +294,7 @@ class BenchmarkRunner:
                 # If the dataset itself fails, there is nothing to log.
                 # Re-raise immediately -- a broken dataset cannot produce
                 # meaningful results.
-                raise RuntimeError(
-                    f"Dataset.get_next_tick() failed at tick {tick_num}"
-                ) from None
+                raise RuntimeError(f"Dataset.get_next_tick() failed at tick {tick_num}") from None
 
             # 1a. Record the vector in the short-term memory buffer. This
             #     rolling window is what the ReplayEngine rehearses a proposed
@@ -341,16 +337,12 @@ class BenchmarkRunner:
             if scheduler is not None and scheduler.tick():
                 # OBSERVE: the scheduler signalled a sleep cycle.
                 self.consolidation_tracker.record_scheduler_trigger()
-                logger.info(
-                    "SLEEP CYCLE TRIGGERED: Memory consolidation required"
-                )
+                logger.info("SLEEP CYCLE TRIGGERED: Memory consolidation required")
                 live_cluster_engine = self.monitor.cluster_engine
 
                 committed_this_cycle = 0
                 while committed_this_cycle < _MAX_MERGES_PER_CYCLE:
-                    proposal = candidate_generator.generate_merge_proposal(
-                        live_cluster_engine
-                    )
+                    proposal = candidate_generator.generate_merge_proposal(live_cluster_engine)
                     if proposal is None:
                         # Fewer than two clusters remain: nothing left to fuse.
                         break
@@ -358,8 +350,7 @@ class BenchmarkRunner:
                     # OBSERVE: a concrete merge proposal was produced.
                     self.consolidation_tracker.record_proposal()
                     logger.info(
-                        "PROPOSAL GENERATED: Strategy=%s targets=(%s, %s) "
-                        "distance=%.4f",
+                        "PROPOSAL GENERATED: Strategy=%s targets=(%s, %s) " "distance=%.4f",
                         proposal.strategy,
                         proposal.target_a,
                         proposal.target_b,
@@ -567,10 +558,7 @@ class BenchmarkRunner:
         # Snapshot the active record ids first: re-ingesting one vector can,
         # via attention absorption, resolve sibling records as a side effect,
         # and we must not mutate the list we are iterating.
-        active_ids = [
-            r.id for r in list(records)
-            if getattr(r, "status", None) == "active"
-        ]
+        active_ids = [r.id for r in list(records) if getattr(r, "status", None) == "active"]
         for record_id in active_ids:
             # OBSERVE: one quarantine re-check against the reorganized clusters.
             self.consolidation_tracker.record_quarantine_replay()

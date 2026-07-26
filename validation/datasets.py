@@ -118,9 +118,7 @@ def build_dataset(
         builder = DATASETS[name]
     except KeyError:
         valid = ", ".join(sorted(DATASETS)) or "(none registered)"
-        raise KeyError(
-            f"Unknown dataset_name {name!r}. Registered datasets: {valid}."
-        ) from None
+        raise KeyError(f"Unknown dataset_name {name!r}. Registered datasets: {valid}.") from None
     return builder(seed=seed, noise_sigma=noise_sigma)
 
 

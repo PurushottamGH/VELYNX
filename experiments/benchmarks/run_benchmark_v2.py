@@ -2,6 +2,7 @@
 VELYNX Capability Benchmark -- V2 Pipeline
 Runs all 10 benchmark queries against the actual V2 system.
 """
+
 import json, sys, traceback
 from pathlib import Path
 
@@ -184,7 +185,7 @@ def run_benchmark():
         print()
         print("=" * 60)
         disp = query[:80] + ("..." if len(query) > 80 else "")
-        print(f"{qid}: \"{disp}\"")
+        print(f'{qid}: "{disp}"')
         print("=" * 60)
 
         result = None
@@ -211,7 +212,9 @@ def run_benchmark():
         notes = note_fn(result) if result else "NO RESULT"
 
         print(f"  Concepts: {result.get('concepts', []) if result else 'N/A'}")
-        print(f"  Scores:  {json.dumps(result.get('scores', {}), default=str) if result else 'N/A'}")
+        print(
+            f"  Scores:  {json.dumps(result.get('scores', {}), default=str) if result else 'N/A'}"
+        )
         print(f"  Type:    {result.get('query_type', 'N/A') if result else 'N/A'}")
         print(f"  Arc:     {result.get('arc', 'N/A')[:120] if result else 'N/A'}")
         if result and result.get("_synth"):
@@ -222,17 +225,19 @@ def run_benchmark():
             print(f"  TRACEBACK:")
             print(error)
 
-        RESULTS.append({
-            "id": qid,
-            "pass": pass_,
-            "score": score,
-            "concepts": result.get("concepts", []) if result else [],
-            "scores": result.get("scores", {}),
-            "query_type": result.get("query_type", "") if result else "",
-            "arc": result.get("arc", "") if result else "",
-            "synth": result.get("_synth", "") if result else "",
-            "error": error,
-        })
+        RESULTS.append(
+            {
+                "id": qid,
+                "pass": pass_,
+                "score": score,
+                "concepts": result.get("concepts", []) if result else [],
+                "scores": result.get("scores", {}),
+                "query_type": result.get("query_type", "") if result else "",
+                "arc": result.get("arc", "") if result else "",
+                "synth": result.get("_synth", "") if result else "",
+                "error": error,
+            }
+        )
 
     print()
     print("=" * 60)
@@ -244,7 +249,7 @@ def run_benchmark():
         print(f"\nGAPS IDENTIFIED ({len(gaps)} FAILS):")
         for g in gaps:
             print(f"  - {g['id']}: concepts={g['concepts']}, type={g['query_type']}")
-            if g.get('error'):
+            if g.get("error"):
                 print(f"    ERROR: {g['error'][:200]}")
     else:
         print("\nGAPS IDENTIFIED: None")

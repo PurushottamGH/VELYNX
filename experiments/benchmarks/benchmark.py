@@ -52,10 +52,10 @@ from validation.regression import DEFAULT_TOLERANCE, RegressionGate, RegressionR
 from validation.report import HealthReport
 from validation.runner import BenchmarkRunner
 
-
 # ---------------------------------------------------------------------------
 # Data structure
 # ---------------------------------------------------------------------------
+
 
 @dataclass
 class BenchmarkConfig:
@@ -79,6 +79,7 @@ class BenchmarkConfig:
 # ---------------------------------------------------------------------------
 # Execution flow (each step delegates; no domain logic lives here)
 # ---------------------------------------------------------------------------
+
 
 def load_config(argv: Optional[List[str]] = None) -> BenchmarkConfig:
     """Build a :class:`BenchmarkConfig` from CLI args and/or a JSON file."""
@@ -116,17 +117,13 @@ def run_experiment(cfg: BenchmarkConfig) -> Tuple[BenchmarkRunner, VectorMonitor
     # DecisionPolicy (via the runner), so a sweep tunes a single knob.
     policy_weights = resolve_coefficients(cfg.decision_policy)
 
-    dataset = build_dataset(
-        cfg.dataset_name, seed=cfg.seed, noise_sigma=cfg.noise_sigma
-    )
+    dataset = build_dataset(cfg.dataset_name, seed=cfg.seed, noise_sigma=cfg.noise_sigma)
     monitor = VectorMonitor(
         proximity_threshold=cfg.proximity_threshold,
         max_clusters=cfg.max_clusters,
         decision_policy_weights=policy_weights,
     )
-    runner = BenchmarkRunner(
-        dataset=dataset, monitor=monitor, policy_weights=policy_weights
-    )
+    runner = BenchmarkRunner(dataset=dataset, monitor=monitor, policy_weights=policy_weights)
     runner.run_experiment({"num_ticks": cfg.num_ticks})
     return runner, monitor
 
@@ -144,9 +141,7 @@ def evaluate(
     scores = monitor.score(metrics)
 
     baseline = _load_baseline_metrics(cfg) or scores  # first run is its own base
-    gate = RegressionGate(
-        tolerance=cfg.tolerance, critical_metrics=cfg.critical_metrics
-    )
+    gate = RegressionGate(tolerance=cfg.tolerance, critical_metrics=cfg.critical_metrics)
     return scores, gate.evaluate(scores, baseline)
 
 
@@ -271,6 +266,7 @@ def _load_baseline_metrics(cfg: BenchmarkConfig) -> Optional[Dict[str, float]]:
 # ---------------------------------------------------------------------------
 # Entry point
 # ---------------------------------------------------------------------------
+
 
 def main(argv: Optional[List[str]] = None) -> int:
     """Run the full pipeline and return ``0`` (PASS) or ``1`` (FAIL)."""

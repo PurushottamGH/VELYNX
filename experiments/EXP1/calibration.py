@@ -3,13 +3,13 @@
 All probabilities and bins are locked by EXP1_PREREGISTRATION.md before
 execution. Numeric confidence emitted by Program A is ignored for primary ECE.
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Any, Sequence
 
 from experiments.EXP1.dataset import CONFIDENCE_TIERS, EvaluatedRecord
-
 
 TIER_TO_CONFIDENCE: dict[str, float] = {
     "UNKNOWN": 0.125,
@@ -151,7 +151,9 @@ def compute_ece(records: Sequence[EvaluatedRecord]) -> CalibrationResult:
                 accuracy=accuracy,
                 confidence=confidence,
                 ece_contribution=contribution,
-                tiers=tuple(sorted({record.tier for record, _ in rows}, key=CONFIDENCE_TIERS.index)),
+                tiers=tuple(
+                    sorted({record.tier for record, _ in rows}, key=CONFIDENCE_TIERS.index)
+                ),
             )
         )
 

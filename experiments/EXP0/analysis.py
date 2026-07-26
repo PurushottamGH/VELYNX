@@ -14,6 +14,7 @@ Standard-library only (matches research/stats.py's no-scipy convention).
 Deterministic given a seed: uses random.Random(seed), never the global
 random module or time-based seeding.
 """
+
 from __future__ import annotations
 
 import math
@@ -23,8 +24,8 @@ from dataclasses import dataclass
 
 @dataclass(frozen=True)
 class McNemarResult:
-    n01: int          # original hit, paraphrase miss  (the "collapse" direction)
-    n10: int          # original miss, paraphrase hit
+    n01: int  # original hit, paraphrase miss  (the "collapse" direction)
+    n10: int  # original miss, paraphrase hit
     n_concordant: int
     n_discordant: int
     p_value: float
@@ -55,15 +56,21 @@ def mcnemar_exact(hits_original: list[bool], hits_paraphrase: list[bool]) -> McN
     else:
         k = min(n01, n10)
         tail = sum(math.comb(n_discordant, i) for i in range(0, k + 1))
-        p_value = min(1.0, 2 * tail * (0.5 ** n_discordant))
+        p_value = min(1.0, 2 * tail * (0.5**n_discordant))
 
-    return McNemarResult(n01=n01, n10=n10, n_concordant=n_concordant,
-                          n_discordant=n_discordant, p_value=p_value)
+    return McNemarResult(
+        n01=n01, n10=n10, n_concordant=n_concordant, n_discordant=n_discordant, p_value=p_value
+    )
 
 
-def paired_bootstrap_ci(hits_original: list[bool], hits_paraphrase: list[bool],
-                         *, iterations: int = 10_000, seed: int = 0,
-                         ci: float = 0.95) -> dict:
+def paired_bootstrap_ci(
+    hits_original: list[bool],
+    hits_paraphrase: list[bool],
+    *,
+    iterations: int = 10_000,
+    seed: int = 0,
+    ci: float = 0.95,
+) -> dict:
     """Bootstrap CI for (rate_original - rate_paraphrase), resampling PAIRS
     (item indices) with replacement -- correct for paired/within-subject
     data, unlike resampling the two groups independently."""
@@ -83,8 +90,13 @@ def paired_bootstrap_ci(hits_original: list[bool], hits_paraphrase: list[bool],
     lo = diffs[int(lo_pct * iterations)]
     hi = diffs[min(iterations - 1, int(hi_pct * iterations))]
     point = sum(hits_original) / n - sum(hits_paraphrase) / n
-    return {"point_estimate": point, "ci_low": lo, "ci_high": hi,
-            "iterations": iterations, "seed": seed}
+    return {
+        "point_estimate": point,
+        "ci_low": lo,
+        "ci_high": hi,
+        "iterations": iterations,
+        "seed": seed,
+    }
 
 
 def holm_bonferroni(named_p_values: dict[str, float], alpha: float = 0.05) -> dict[str, dict]:
@@ -99,8 +111,12 @@ def holm_bonferroni(named_p_values: dict[str, float], alpha: float = 0.05) -> di
         significant = still_significant and (p <= threshold)
         if not significant:
             still_significant = False  # step-down: once one fails, all remaining fail
-        results[name] = {"p_value": p, "threshold": threshold,
-                          "rank": rank + 1, "significant_after_correction": significant}
+        results[name] = {
+            "p_value": p,
+            "threshold": threshold,
+            "rank": rank + 1,
+            "significant_after_correction": significant,
+        }
     return results
 
 
@@ -108,10 +124,16 @@ def hit_rate(hits: list[bool]) -> float:
     return sum(hits) / len(hits) if hits else float("nan")
 
 
-def render_report(*, tier_name: str, concepts: list[str],
-                   hits_original: list[bool], hits_paraphrase: list[bool],
-                   mcnemar: McNemarResult, bootstrap: dict,
-                   alpha_used: float) -> str:
+def render_report(
+    *,
+    tier_name: str,
+    concepts: list[str],
+    hits_original: list[bool],
+    hits_paraphrase: list[bool],
+    mcnemar: McNemarResult,
+    bootstrap: dict,
+    alpha_used: float,
+) -> str:
     lines = [
         f"### {tier_name}",
         "",
@@ -132,7 +154,9 @@ def render_report(*, tier_name: str, concepts: list[str],
     ]
     misses = [c for c, o, p in zip(concepts, hits_original, hits_paraphrase) if o and not p]
     if misses:
-        lines.append(f"- Concepts that collapsed (hit on original, miss on paraphrase): "
-                      f"{', '.join(sorted(misses))}")
+        lines.append(
+            f"- Concepts that collapsed (hit on original, miss on paraphrase): "
+            f"{', '.join(sorted(misses))}"
+        )
         lines.append("")
     return "\n".join(lines)

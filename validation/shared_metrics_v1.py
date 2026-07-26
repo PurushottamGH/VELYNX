@@ -24,6 +24,7 @@ and the ``dataclasses`` stdlib only. No imports from ``validation.metrics``,
 ``backend.cognition.*`` or any other VELYNX module, so it can be used in
 isolation (regression tests, audit scripts, future deployments).
 """
+
 import math
 import numpy as np
 from collections import defaultdict
@@ -32,15 +33,18 @@ from typing import List, Dict, Optional, Tuple
 
 METRICS_VERSION = "v1"
 
+
 @dataclass(frozen=True)
 class MetricDefinition:
     """Frozen contract for the canonical cognitive metric set."""
+
     version: str = METRICS_VERSION
     description: str = (
         "Canonical separation of Markov Prediction Error (S) and "
         "Representation Error (R), plus the local/global entropy split "
         "and the reconciled active-load A."
     )
+
 
 def compute_S_surprise(predicted_vector: List[float], observed_vector: List[float]) -> float:
     """
@@ -51,22 +55,28 @@ def compute_S_surprise(predicted_vector: List[float], observed_vector: List[floa
         return 0.0
     return float(np.linalg.norm(np.array(predicted_vector) - np.array(observed_vector)))
 
-def compute_R_representation_error(centroids: List[List[float]], observed_vector: List[float], dim_weights: Optional[List[float]] = None) -> float:
+
+def compute_R_representation_error(
+    centroids: List[List[float]],
+    observed_vector: List[float],
+    dim_weights: Optional[List[float]] = None,
+) -> float:
     """
     Canonical R: Representation/Novelty Error.
     Nearest-centroid distance. If attention is active, the distance IS precision-weighted.
     """
     if not centroids:
         return 0.0
-    
+
     obs = np.array(observed_vector)
     if dim_weights:
         weights = np.array(dim_weights)
-        distances = [np.sqrt(np.sum(weights * (np.array(c) - obs)**2)) for c in centroids]
+        distances = [np.sqrt(np.sum(weights * (np.array(c) - obs) ** 2)) for c in centroids]
     else:
         distances = [float(np.linalg.norm(np.array(c) - obs)) for c in centroids]
-        
+
     return min(distances)
+
 
 def _shannon_entropy(counts: Dict[int, int]) -> float:
     """Helper for entropy calculation."""
@@ -80,6 +90,7 @@ def _shannon_entropy(counts: Dict[int, int]) -> float:
             entropy -= p * math.log2(p)
     return entropy
 
+
 def compute_H_global(transition_matrix: Dict[int, Dict[int, int]]) -> float:
     """
     Canonical H_global: Accumulated Markov chain entropy.
@@ -87,11 +98,11 @@ def compute_H_global(transition_matrix: Dict[int, Dict[int, int]]) -> float:
     """
     if not transition_matrix:
         return 0.0
-    
+
     total_transitions = sum(sum(targets.values()) for targets in transition_matrix.values())
     if total_transitions == 0:
         return 0.0
-        
+
     total_entropy = 0.0
     for src, targets in transition_matrix.items():
         src_total = sum(targets.values())
@@ -99,8 +110,9 @@ def compute_H_global(transition_matrix: Dict[int, Dict[int, int]]) -> float:
             state_probability = src_total / total_transitions
             state_entropy = _shannon_entropy(targets)
             total_entropy += state_probability * state_entropy
-            
+
     return total_entropy
+
 
 def compute_H_local(cluster_sequence: List[int]) -> float:
     """
@@ -109,14 +121,15 @@ def compute_H_local(cluster_sequence: List[int]) -> float:
     """
     if len(cluster_sequence) < 2:
         return 0.0
-        
+
     window_transitions = defaultdict(lambda: defaultdict(int))
     for i in range(len(cluster_sequence) - 1):
         src = cluster_sequence[i]
-        dst = cluster_sequence[i+1]
+        dst = cluster_sequence[i + 1]
         window_transitions[src][dst] += 1
-        
+
     return compute_H_global(window_transitions)
+
 
 def compute_A_active_load(cluster_count: int, anomaly_volume: float) -> float:
     """

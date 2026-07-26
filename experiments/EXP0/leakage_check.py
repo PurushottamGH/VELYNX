@@ -23,6 +23,7 @@ Usage:
 Exit code 0 = every item is clean. Exit code 1 = at least one leak found
 (printed to stdout with concept, matched keyword, and match type).
 """
+
 from __future__ import annotations
 
 import json
@@ -92,12 +93,14 @@ def find_leaks(query: str, concept_names: list[str]) -> list[dict]:
         concept_stem = _stem(concept_lower)
         for qw in query_words:
             if _stem_match(qw, concept_stem):
-                leaks.append({
-                    "concept": concept,
-                    "match_type": "stem",
-                    "query_word": qw,
-                    "concept_stem": concept_stem,
-                })
+                leaks.append(
+                    {
+                        "concept": concept,
+                        "match_type": "stem",
+                        "query_word": qw,
+                        "concept_stem": concept_stem,
+                    }
+                )
                 break
 
     return leaks
@@ -111,12 +114,13 @@ def main() -> int:
     items = data["items"]
 
     if len(items) != len(concept_names):
-        print(f"FATAL: paraphrases.json has {len(items)} items but "
-              f"concepts.json has {len(concept_names)} concepts.")
+        print(
+            f"FATAL: paraphrases.json has {len(items)} items but "
+            f"concepts.json has {len(concept_names)} concepts."
+        )
         return 1
     if {i["concept"] for i in items} != set(concept_names):
-        print("FATAL: paraphrases.json concept set does not match "
-              "concepts.json concept set.")
+        print("FATAL: paraphrases.json concept set does not match " "concepts.json concept set.")
         return 1
 
     total_leaks = 0
@@ -128,11 +132,16 @@ def main() -> int:
             total_leaks += len(leaks)
             print(f"LEAK in item '{concept}':")
             for leak in leaks:
-                print(f"    -> matches seeded concept {leak['concept']!r} "
-                      f"via {leak['match_type']}"
-                      + (f" (query word {leak.get('query_word')!r} vs "
-                         f"concept stem {leak.get('concept_word_stem')!r})"
-                         if leak["match_type"] == "stem" else ""))
+                print(
+                    f"    -> matches seeded concept {leak['concept']!r} "
+                    f"via {leak['match_type']}"
+                    + (
+                        f" (query word {leak.get('query_word')!r} vs "
+                        f"concept stem {leak.get('concept_word_stem')!r})"
+                        if leak["match_type"] == "stem"
+                        else ""
+                    )
+                )
 
         # The ORIGINAL query is EXPECTED and REQUIRED to leak its own
         # concept (that is the control condition) -- verify that instead
@@ -140,17 +149,23 @@ def main() -> int:
         own_leak = find_leaks(item["original_query"], [concept])
         if not own_leak:
             total_leaks += 1
-            print(f"FATAL: original_query for '{concept}' does NOT contain "
-                  f"its own seeded keyword: {item['original_query']!r}")
+            print(
+                f"FATAL: original_query for '{concept}' does NOT contain "
+                f"its own seeded keyword: {item['original_query']!r}"
+            )
 
     if total_leaks:
-        print(f"\nRESULT: FAILED — {total_leaks} leak(s) found. "
-              "Fix paraphrases.json before freezing.")
+        print(
+            f"\nRESULT: FAILED — {total_leaks} leak(s) found. "
+            "Fix paraphrases.json before freezing."
+        )
         return 1
 
-    print(f"RESULT: PASSED — {len(items)} paraphrase items checked against "
-          f"{len(concept_names)} seeded concepts. No leaks. Every "
-          "original_query confirmed to contain its own seeded keyword.")
+    print(
+        f"RESULT: PASSED — {len(items)} paraphrase items checked against "
+        f"{len(concept_names)} seeded concepts. No leaks. Every "
+        "original_query confirmed to contain its own seeded keyword."
+    )
     return 0
 
 

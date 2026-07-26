@@ -11,6 +11,7 @@ plumbing fidelity.
 
 Scope: tests only. No production-code changes. No canonical-document edits.
 """
+
 from __future__ import annotations
 
 import json

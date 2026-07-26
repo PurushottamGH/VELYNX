@@ -126,8 +126,11 @@ def run_sweep(matrix: Dict[str, Any], out_root: str, *, verbose: bool = True) ->
         exp_dir = allocate_experiment_dir(group_dir)
         experiment_id = os.path.basename(exp_dir)
         writer.write(
-            result, exp_dir,
-            experiment_id=experiment_id, name="velynx_research_r1", group=group,
+            result,
+            exp_dir,
+            experiment_id=experiment_id,
+            name="velynx_research_r1",
+            group=group,
         )
 
         records.append(
@@ -199,7 +202,9 @@ def _parse_args(argv: Optional[List[str]]) -> argparse.Namespace:
     p.add_argument("--max-clusters", dest="max_clusters", type=int, default=50)
     p.add_argument("--out", default=DEFAULT_ARTIFACTS_ROOT, help="Artifacts root dir.")
     p.add_argument(
-        "--report-out", dest="report_out", default="ablation_report.md",
+        "--report-out",
+        dest="report_out",
+        default="ablation_report.md",
         help="Where to copy the rendered report (repo root by default; '' to skip).",
     )
     p.add_argument("--quick", action="store_true", help="Fast smoke sweep.")

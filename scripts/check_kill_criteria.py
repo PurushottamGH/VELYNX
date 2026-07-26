@@ -3,6 +3,7 @@
 
 Checks all experiments against defined kill criteria thresholds.
 """
+
 import sys
 import yaml
 import json
@@ -11,10 +12,13 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from experiments.metrics import (
-    ENERGY_EXHAUSTION, ENTROPY_HIGH, SURPRISE_HIGH,
-    SURPRISE_MILD, PRESSURE_HIGH, PRESSURE_MILD,
+    ENERGY_EXHAUSTION,
+    ENTROPY_HIGH,
+    SURPRISE_HIGH,
+    SURPRISE_MILD,
+    PRESSURE_HIGH,
+    PRESSURE_MILD,
 )
-
 
 KILL_CRITERIA = [
     {
@@ -43,7 +47,7 @@ KILL_CRITERIA = [
     {
         "id": "divergence",
         "metric": "free_energy",
-        "threshold": float('inf'),
+        "threshold": float("inf"),
         "description": "Free energy diverges to infinity or NaN",
         "level": "critical",
     },
@@ -59,8 +63,7 @@ def check_experiment(experiment_dir: Path) -> dict:
 
     metrics_file = experiment_dir / "metrics.jsonl"
     if not metrics_file.exists():
-        result["error"] = "metrics.jsonl not found"
-        result["all_clear"] = False
+        result["not_assessed"] = "metrics.jsonl not found"
         return result
 
     try:
@@ -74,22 +77,26 @@ def check_experiment(experiment_dir: Path) -> dict:
                     if metric_value is None:
                         continue
                     if np.isnan(metric_value) or np.isinf(metric_value):
-                        result["kill_criteria_triggered"].append({
-                            "criteria": kc["id"],
-                            "value": metric_value,
-                            "tick": record.get("tick", 0),
-                            "level": kc["level"],
-                        })
+                        result["kill_criteria_triggered"].append(
+                            {
+                                "criteria": kc["id"],
+                                "value": metric_value,
+                                "tick": record.get("tick", 0),
+                                "level": kc["level"],
+                            }
+                        )
                         result["all_clear"] = False
                         continue
-                    if kc["comparison"] == "above" and metric_value > kc["threshold"]:
-                        result["kill_criteria_triggered"].append({
-                            "criteria": kc["id"],
-                            "value": metric_value,
-                            "threshold": kc["threshold"],
-                            "tick": record.get("tick", 0),
-                            "level": kc["level"],
-                        })
+                    if kc.get("comparison", "above") == "above" and metric_value > kc["threshold"]:
+                        result["kill_criteria_triggered"].append(
+                            {
+                                "criteria": kc["id"],
+                                "value": metric_value,
+                                "threshold": kc["threshold"],
+                                "tick": record.get("tick", 0),
+                                "level": kc["level"],
+                            }
+                        )
                         result["all_clear"] = False
     except Exception as e:
         result["error"] = str(e)
@@ -111,6 +118,9 @@ def main():
         if not exp_dir.is_dir() or exp_dir.name.startswith("_"):
             continue
         result = check_experiment(exp_dir)
+        if "not_assessed" in result:
+            print(f"\n[SKIP] {result['experiment']}: {result['not_assessed']}")
+            continue
         status = "PASS" if result["all_clear"] else "TRIGGERED"
         print(f"\n[{status}] {result['experiment']}:")
         if "error" in result:

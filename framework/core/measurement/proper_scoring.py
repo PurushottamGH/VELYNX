@@ -2,6 +2,7 @@
 
 Extracted from backend/cognition/decision_policy.py (log-loss component).
 """
+
 import math
 from typing import List, Optional, Sequence
 
@@ -58,8 +59,7 @@ def expected_calibration_error(
 
     for i in range(n_bins):
         in_bin = [
-            j for j, p in enumerate(probabilities)
-            if bin_boundaries[i] <= p < bin_boundaries[i + 1]
+            j for j, p in enumerate(probabilities) if bin_boundaries[i] <= p < bin_boundaries[i + 1]
         ]
         if not in_bin:
             continue

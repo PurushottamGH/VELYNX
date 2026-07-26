@@ -13,9 +13,7 @@ def test_valid_claim():
     assert record.maturity.value == "L0"
 
 
-@pytest.mark.parametrize(
-    "role", ["candidate", "competing", "constraint", "scope_limit"]
-)
+@pytest.mark.parametrize("role", ["candidate", "competing", "constraint", "scope_limit"])
 def test_all_claim_roles_valid(role):
     payload = valid_payload("claim")
     payload["claim_role"] = role

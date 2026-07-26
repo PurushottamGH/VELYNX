@@ -2,6 +2,7 @@
 
 Every predictor in the VELYNX cognitive architecture implements this ABC.
 """
+
 from abc import ABC, abstractmethod
 from typing import List, Tuple
 

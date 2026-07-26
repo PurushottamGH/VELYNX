@@ -129,4 +129,4 @@ class BeliefStore:
                 WHERE concept = ?
                 ORDER BY confidence DESC
             """, (concept,))
-            return [CoreBelief(*row) for row in cursor.fetchall()]        return [CoreBelief(*row) for row in cursor.fetchall()]
+            return [CoreBelief(*row) for row in cursor.fetchall()]

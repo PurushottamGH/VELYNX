@@ -16,6 +16,7 @@ Contract sources:
 All corpora are synthetic and disjoint from the frozen EXP-1 dataset
 (dataset-spec Section 12.3). No test observes frozen rows.
 """
+
 from __future__ import annotations
 
 from typing import Any
@@ -30,7 +31,6 @@ from program_a.types import (
     EvidenceItem,
     EvidenceSet,
 )
-
 
 # --------------------------------------------------------------------------- #
 # helpers
@@ -141,7 +141,9 @@ def test_entity_level_positive_multi_supporting_docs() -> None:
     )
     out = extract_claims("Aspirin", evidence)
     # the Aspirin claim should be supported by all three docs that mention it
-    aspirin_claims = [c for c in out if "aspirin" in c.claim_text.lower() or "Aspirin" in c.claim_text]
+    aspirin_claims = [
+        c for c in out if "aspirin" in c.claim_text.lower() or "Aspirin" in c.claim_text
+    ]
     assert len(aspirin_claims) >= 1
     a = aspirin_claims[0]
     assert set(a.supporting_doc_ids) >= {"d1", "d2"}
@@ -203,9 +205,9 @@ def test_supporting_doc_ids_are_subset_of_evidence(query: str, doc_texts: tuple[
     out = extract_claims(query, evidence)
     valid_ids = {item.doc_id for item in evidence}
     for c in out:
-        assert set(c.supporting_doc_ids) <= valid_ids, (
-            f"claim {c!r} supporting_doc_ids not subset of evidence doc_ids {valid_ids}"
-        )
+        assert (
+            set(c.supporting_doc_ids) <= valid_ids
+        ), f"claim {c!r} supporting_doc_ids not subset of evidence doc_ids {valid_ids}"
 
 
 # --------------------------------------------------------------------------- #
@@ -258,13 +260,16 @@ def test_no_wall_clock_or_env_imports() -> None:
                 forbidden_modules.add(alias.name)
         elif isinstance(node, ast.ImportFrom):
             forbidden_modules.add(node.module or "")
-    bad = [m for m in forbidden_modules if m == "time" or m.startswith("time.")
-           or m == "datetime" or m.startswith("datetime.")]
+    bad = [
+        m
+        for m in forbidden_modules
+        if m == "time" or m.startswith("time.") or m == "datetime" or m.startswith("datetime.")
+    ]
     assert bad == [], f"claim_extraction imports wall-clock module(s): {bad}"
     # os.environ reads forbidden too
-    assert "os" not in forbidden_modules and not any(m == "os" for m in forbidden_modules), (
-        "claim_extraction imports os (env-var determinism leak)"
-    )
+    assert "os" not in forbidden_modules and not any(
+        m == "os" for m in forbidden_modules
+    ), "claim_extraction imports os (env-var determinism leak)"
 
 
 def test_no_random_import() -> None:
@@ -278,9 +283,9 @@ def test_no_random_import() -> None:
             mods.extend(a.name for a in node.names)
         elif isinstance(node, ast.ImportFrom):
             mods.append(node.module or "")
-    assert not any(m == "random" or m.startswith("random.") for m in mods), (
-        "claim_extraction imports random"
-    )
+    assert not any(
+        m == "random" or m.startswith("random.") for m in mods
+    ), "claim_extraction imports random"
 
 
 # --------------------------------------------------------------------------- #

@@ -5,6 +5,7 @@ implemented CandidateClaim contract. PA-2 closure sprint action C2 per
 PA2_ACCEPTANCE_DECISION.md. Non-ES-1: tests the PA-2 leaf type and its docs
 only; no frozen constants, no emission/binding/EXP-1.
 """
+
 from __future__ import annotations
 
 from pathlib import Path

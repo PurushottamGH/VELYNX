@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Validate parameter registry consistency against actual code."""
+
 import sys
 import yaml
 import ast
@@ -18,7 +19,9 @@ def check_value_in_file(filepath: Path, name: str, expected_value) -> bool:
                     if isinstance(target, ast.Name) and target.id == name:
                         if isinstance(node.value, ast.Constant):
                             return node.value.value == expected_value
-                        if isinstance(node.value, ast.UnaryOp) and isinstance(node.value.op, ast.USub):
+                        if isinstance(node.value, ast.UnaryOp) and isinstance(
+                            node.value.op, ast.USub
+                        ):
                             return -node.value.operand.value == expected_value
         return False
     except Exception:

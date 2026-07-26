@@ -3,6 +3,7 @@
 Normalized Mutual Information (NMI) estimator and related functions
 for detecting emergent structure in predictive processing systems.
 """
+
 import math
 from typing import Dict, List
 from collections import Counter

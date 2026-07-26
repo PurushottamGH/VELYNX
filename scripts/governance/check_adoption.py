@@ -31,9 +31,22 @@ ROOT = Path(__file__).resolve().parents[2]
 
 # Paths excluded from the "live" surface: archived, generated, tooling state.
 EXCLUDED = (
-    "archive/", "node_modules/", ".venv", ".git/", "P1.worktrees/", "dist/",
-    ".kilo/", ".opencode/", ".agents/", ".commandcode/", ".claude/", ".codex/",
-    ".hypothesis/", ".pytest_cache/", "__pycache__/", "governance/design/",
+    "archive/",
+    "node_modules/",
+    ".venv",
+    ".git/",
+    "P1.worktrees/",
+    "dist/",
+    ".kilo/",
+    ".opencode/",
+    ".agents/",
+    ".commandcode/",
+    ".claude/",
+    ".codex/",
+    ".hypothesis/",
+    ".pytest_cache/",
+    "__pycache__/",
+    "governance/design/",
     "governance/activation/",
 )
 
@@ -84,9 +97,7 @@ def read(p: Path) -> str | None:
 
 def git(*args: str) -> tuple[bool, str]:
     try:
-        out = subprocess.run(
-            ["git", *args], cwd=ROOT, capture_output=True, text=True, timeout=120
-        )
+        out = subprocess.run(["git", *args], cwd=ROOT, capture_output=True, text=True, timeout=120)
     except (OSError, subprocess.SubprocessError) as exc:
         return False, str(exc)
     if out.returncode != 0:
@@ -119,10 +130,14 @@ def check_headers() -> Result:
     if not checked:
         return Result("A-01", "S4p1", "NOT_VERIFIED", "no target artifacts found")
     status = "FAIL" if missing else "PASS"
-    return Result("A-01", "S4p1", status,
-                  f"{checked} artifacts checked for status/scope/responsibility/authority source",
-                  missing,
-                  "Presence of a field is checked, not its correctness.")
+    return Result(
+        "A-01",
+        "S4p1",
+        status,
+        f"{checked} artifacts checked for status/scope/responsibility/authority source",
+        missing,
+        "Presence of a field is checked, not its correctness.",
+    )
 
 
 # --------------------------------------------------------------------------
@@ -132,26 +147,41 @@ def check_registry_consistency() -> Result:
     reg = read(ROOT / "GOVERNANCE_REGISTRY.yaml")
     con = read(ROOT / "REPOSITORY_CONSTITUTION.md")
     if reg is None or con is None:
-        return Result("A-02", "S4p1", "NOT_VERIFIED",
-                      "GOVERNANCE_REGISTRY.yaml or REPOSITORY_CONSTITUTION.md not readable")
+        return Result(
+            "A-02",
+            "S4p1",
+            "NOT_VERIFIED",
+            "GOVERNANCE_REGISTRY.yaml or REPOSITORY_CONSTITUTION.md not readable",
+        )
     problems = []
-    m_con = re.search(r"^\-?\s*\*?\*?Version:?\*?\*?:?\s*([0-9]+\.[0-9]+\.[0-9]+)",
-                      con, re.MULTILINE | re.IGNORECASE)
+    m_con = re.search(
+        r"^\-?\s*\*?\*?Version:?\*?\*?:?\s*([0-9]+\.[0-9]+\.[0-9]+)",
+        con,
+        re.MULTILINE | re.IGNORECASE,
+    )
     m_reg = re.search(r'version:\s*"?([0-9]+\.[0-9]+\.[0-9]+)"?', reg)
     if not m_con or not m_reg:
         problems.append("version not parseable in one or both artifacts")
     elif m_con.group(1) != m_reg.group(1):
         problems.append(f"version mismatch: artifact {m_con.group(1)} vs registry {m_reg.group(1)}")
 
-    con_active = bool(re.search(r"^\-?\s*\*?\*?Status:?\*?\*?:?\s*Active", con,
-                                re.MULTILINE | re.IGNORECASE))
+    con_active = bool(
+        re.search(r"^\-?\s*\*?\*?Status:?\*?\*?:?\s*Active", con, re.MULTILINE | re.IGNORECASE)
+    )
     reg_con_active = bool(re.search(r"constitution:(?:.|\n)*?status:\s*Active", reg))
     if con_active != reg_con_active:
         problems.append(
-            f"status disagreement: artifact Active={con_active}, registry Active={reg_con_active}")
+            f"status disagreement: artifact Active={con_active}, registry Active={reg_con_active}"
+        )
     status = "FAIL" if problems else "PASS"
-    return Result("A-02", "S4p1", status, "version and status compared", problems,
-                  "Textual comparison only; scope and responsibility wording is not diffed.")
+    return Result(
+        "A-02",
+        "S4p1",
+        status,
+        "version and status compared",
+        problems,
+        "Textual comparison only; scope and responsibility wording is not diffed.",
+    )
 
 
 # --------------------------------------------------------------------------
@@ -163,8 +193,9 @@ def check_adoption_elements() -> Result:
     if reg is None or con is None:
         return Result("A-03", "S13p3", "NOT_VERIFIED", "inputs not readable")
 
-    con_active = bool(re.search(r"^\-?\s*\*?\*?Status:?\*?\*?:?\s*Active", con,
-                                re.MULTILINE | re.IGNORECASE))
+    con_active = bool(
+        re.search(r"^\-?\s*\*?\*?Status:?\*?\*?:?\s*Active", con, re.MULTILINE | re.IGNORECASE)
+    )
     steward_empty = bool(re.search(r"constitutional_steward:\s*\[\s*\]", reg))
     adopter_null = bool(re.search(r"adopter_attestation:\s*null", reg))
     reviewer_null = bool(re.search(r"independent_reviewer_attestation:\s*null", reg))
@@ -178,10 +209,14 @@ def check_adoption_elements() -> Result:
         if not (adopter_null and reviewer_null):
             drift.append("attestation field populated while Constitution is Draft")
         status = "FAIL" if drift else "PASS"
-        return Result("A-03", "S13p3", status,
-                      "pre-adoption state: Constitution is Draft, adoption not attempted",
-                      drift,
-                      "Cannot detect intent; only that no partial adoption is committed.")
+        return Result(
+            "A-03",
+            "S13p3",
+            status,
+            "pre-adoption state: Constitution is Draft, adoption not attempted",
+            drift,
+            "Cannot detect intent; only that no partial adoption is committed.",
+        )
 
     missing = []
     if steward_empty:
@@ -200,11 +235,17 @@ def check_adoption_elements() -> Result:
     if not tr_dir.is_dir() or not any(tr_dir.glob("*.md")):
         missing.append("governance/transitions/ contains no transition record (S2, S9p3)")
     status = "FAIL" if missing else "PASS"
-    return Result("A-03", "S13p3", status, "adoption elements checked", missing,
-                  "Presence only. Whether an attestation names an identified human "
-                  "who is not an author is not mechanically decidable (see P-A1). "
-                  "Presence of a transition record is checked; its eight section 9 "
-                  "paragraph 3 elements are assessed by manual procedure P-A2.")
+    return Result(
+        "A-03",
+        "S13p3",
+        status,
+        "adoption elements checked",
+        missing,
+        "Presence only. Whether an attestation names an identified human "
+        "who is not an author is not mechanically decidable (see P-A1). "
+        "Presence of a transition record is checked; its eight section 9 "
+        "paragraph 3 elements are assessed by manual procedure P-A2.",
+    )
 
 
 # --------------------------------------------------------------------------
@@ -216,15 +257,24 @@ def check_no_records() -> Result:
         return Result("A-04", "S9p1", "NOT_VERIFIED", "p1/records/ not found")
     files = [rel(p) for p in rec.rglob("*") if p.is_file() and p.name != ".gitkeep"]
     if files:
-        return Result("A-04", "S9p1", "FINDINGS",
-                      f"{len(files)} record files exist under p1/records/",
-                      files[:20],
-                      "Each existing record voids the corresponding dossier N/A row "
-                      "and must be traced individually.")
-    return Result("A-04", "S9p1", "PASS",
-                  "p1/records/ contains no record files; sections 5, 6, 7 discharge as "
-                  "not applicable with a testable reason", [],
-                  "Only this path is checked. Records stored elsewhere are not detected.")
+        return Result(
+            "A-04",
+            "S9p1",
+            "FINDINGS",
+            f"{len(files)} record files exist under p1/records/",
+            files[:20],
+            "Each existing record voids the corresponding dossier N/A row "
+            "and must be traced individually.",
+        )
+    return Result(
+        "A-04",
+        "S9p1",
+        "PASS",
+        "p1/records/ contains no record files; sections 5, 6, 7 discharge as "
+        "not applicable with a testable reason",
+        [],
+        "Only this path is checked. Records stored elsewhere are not detected.",
+    )
 
 
 # --------------------------------------------------------------------------
@@ -244,12 +294,16 @@ def check_authority_lexemes() -> Result:
     hits.sort(reverse=True)
     if not hits:
         return Result("A-05", "S1p2", "PASS", "no authority or certainty lexemes in live paths")
-    return Result("A-05", "S1p2", "FINDINGS",
-                  f"{sum(n for n, _ in hits)} matches in {len(hits)} live-path files",
-                  [f"{n:>4}  {path}" for n, path in hits[:25]],
-                  "Lexical only. It cannot tell whether a document reads as authoritative; "
-                  "that is manual procedure P-L1. False positives are expected where the "
-                  "word appears in a quotation or a prohibition.")
+    return Result(
+        "A-05",
+        "S1p2",
+        "FINDINGS",
+        f"{sum(n for n, _ in hits)} matches in {len(hits)} live-path files",
+        [f"{n:>4}  {path}" for n, path in hits[:25]],
+        "Lexical only. It cannot tell whether a document reads as authoritative; "
+        "that is manual procedure P-L1. False positives are expected where the "
+        "word appears in a quotation or a prohibition.",
+    )
 
 
 # --------------------------------------------------------------------------
@@ -259,31 +313,43 @@ def check_legacy_index() -> Result:
     idx = ROOT / "governance" / "LEGACY_INDEX.md"
     text = read(idx)
     if text is None:
-        return Result("A-06", "S4p5", "NOT_VERIFIED",
-                      "governance/LEGACY_INDEX.md absent; required in the adoption revision. "
-                      "Generate with scripts/governance/generate_legacy_index.py")
-    t2 = re.search(r"<!-- BANNER_REQUIRED_BEGIN -->(.*?)<!-- BANNER_REQUIRED_END -->",
-                   text, re.DOTALL)
+        return Result(
+            "A-06",
+            "S4p5",
+            "NOT_VERIFIED",
+            "governance/LEGACY_INDEX.md absent; required in the adoption revision. "
+            "Generate with scripts/governance/generate_legacy_index.py",
+        )
+    t2 = re.search(
+        r"<!-- BANNER_REQUIRED_BEGIN -->(.*?)<!-- BANNER_REQUIRED_END -->", text, re.DOTALL
+    )
     t1 = re.search(r"<!-- TIER1_BEGIN -->(.*?)<!-- TIER1_END -->", text, re.DOTALL)
     if not t2:
-        return Result("A-06", "S4p5", "NOT_VERIFIED",
-                      "LEGACY_INDEX.md has no BANNER_REQUIRED block to assess")
+        return Result(
+            "A-06", "S4p5", "NOT_VERIFIED", "LEGACY_INDEX.md has no BANNER_REQUIRED block to assess"
+        )
     if not t1:
         # Without the resolved-path block a moved Tier-1 file cannot be located,
         # and skipping it would make the criterion true by construction.
-        return Result("A-06", "S4p5", "NOT_VERIFIED",
-                      "LEGACY_INDEX.md has no TIER1 block carrying resolved post-move "
-                      "paths; Tier-1 banner coverage cannot be assessed. Regenerate with "
-                      "scripts/governance/generate_legacy_index.py")
+        return Result(
+            "A-06",
+            "S4p5",
+            "NOT_VERIFIED",
+            "LEGACY_INDEX.md has no TIER1 block carrying resolved post-move "
+            "paths; Tier-1 banner coverage cannot be assessed. Regenerate with "
+            "scripts/governance/generate_legacy_index.py",
+        )
 
     # Tier 1: `original` -> `current`. Tier 2 stays in place, so current == original.
-    entries = [(o, c) for o, c in
-               re.findall(r"^\s*-\s*`([^`]+\.md)`\s*->\s*`([^`]+\.md)`", t1.group(1),
-                          re.MULTILINE)]
+    entries = [
+        (o, c)
+        for o, c in re.findall(
+            r"^\s*-\s*`([^`]+\.md)`\s*->\s*`([^`]+\.md)`", t1.group(1), re.MULTILINE
+        )
+    ]
     entries += [(p, p) for p in re.findall(r"`([^`]+\.md)`", t2.group(1))]
     # The Constitution and the README are never Legacy and must never carry a banner.
-    entries = [(o, c) for o, c in entries
-               if o not in ("REPOSITORY_CONSTITUTION.md", "README.md")]
+    entries = [(o, c) for o, c in entries if o not in ("REPOSITORY_CONSTITUTION.md", "README.md")]
 
     missing_banner, unresolvable, moved = [], [], 0
     for original, current in sorted(set(entries)):
@@ -310,41 +376,67 @@ def check_legacy_index() -> Result:
         "revision, so findings here are expected before then."
     )
     if unresolvable:
-        return Result("A-06", "S4p5", "NOT_VERIFIED",
-                      f"{len(unresolvable)} index entr(y/ies) resolve to no file in the "
-                      f"tree; banner coverage for them is NOT assessed",
-                      unresolvable[:15],
-                      limitation + " An unresolvable entry means the index is stale "
-                      "against the tree: regenerate it before relying on this check.")
+        return Result(
+            "A-06",
+            "S4p5",
+            "NOT_VERIFIED",
+            f"{len(unresolvable)} index entr(y/ies) resolve to no file in the "
+            f"tree; banner coverage for them is NOT assessed",
+            unresolvable[:15],
+            limitation + " An unresolvable entry means the index is stale "
+            "against the tree: regenerate it before relying on this check.",
+        )
     status = "FINDINGS" if missing_banner else "PASS"
-    return Result("A-06", "S4p5", status,
-                  f"{len(set(entries))} banner-required paths listed by the index "
-                  f"({moved} resolved at a post-move path); "
-                  f"{len(missing_banner)} lack the banner",
-                  missing_banner[:15],
-                  limitation)
+    return Result(
+        "A-06",
+        "S4p5",
+        status,
+        f"{len(set(entries))} banner-required paths listed by the index "
+        f"({moved} resolved at a post-move path); "
+        f"{len(missing_banner)} lack the banner",
+        missing_banner[:15],
+        limitation,
+    )
 
 
 # --------------------------------------------------------------------------
 # A-07  Credentials in history  (section 10 paragraph 5)
 # --------------------------------------------------------------------------
 def check_secret_history() -> Result:
-    patterns = ["*gcp-key*", "*.pem", "*.p12", "*id_rsa*", "*credentials*.json",
-                "*service-account*.json", ".env"]
-    ok, out = git("log", "--all", "--diff-filter=A", "--name-only",
-                  "--pretty=format:", "--", *patterns)
+    patterns = [
+        "*gcp-key*",
+        "*.pem",
+        "*.p12",
+        "*id_rsa*",
+        "*credentials*.json",
+        "*service-account*.json",
+        ".env",
+    ]
+    ok, out = git(
+        "log", "--all", "--diff-filter=A", "--name-only", "--pretty=format:", "--", *patterns
+    )
     if not ok:
         return Result("A-07", "S10p5", "NOT_VERIFIED", f"git unavailable or failed: {out}")
     found = sorted({line.strip() for line in out.splitlines() if line.strip()})
     if found:
-        return Result("A-07", "S10p5", "FAIL",
-                      f"{len(found)} credential-shaped path(s) added in history",
-                      found,
-                      "Presence is proven; absence is not. A secret committed under an "
-                      "unrecognised name is not detected. Deletion does not remediate: "
-                      "rotate at the provider.")
-    return Result("A-07", "S10p5", "PASS", "no credential-shaped path added in history", [],
-                  "Absence is not proven; only these name patterns were searched.")
+        return Result(
+            "A-07",
+            "S10p5",
+            "FAIL",
+            f"{len(found)} credential-shaped path(s) added in history",
+            found,
+            "Presence is proven; absence is not. A secret committed under an "
+            "unrecognised name is not detected. Deletion does not remediate: "
+            "rotate at the provider.",
+        )
+    return Result(
+        "A-07",
+        "S10p5",
+        "PASS",
+        "no credential-shaped path added in history",
+        [],
+        "Absence is not proven; only these name patterns were searched.",
+    )
 
 
 # --------------------------------------------------------------------------
@@ -365,11 +457,15 @@ def check_ci_honesty() -> Result:
         if "runs-on: ubuntu" in text and "Test-Path" in text:
             problems.append(f"{rel(p)}: PowerShell `Test-Path` in a step running on ubuntu")
     status = "FAIL" if problems else "PASS"
-    return Result("A-08", "S12p1", status,
-                  "workflow files scanned for suppressed failures and shell mismatch",
-                  problems,
-                  "A step that cannot fail reports an unavailable check as passed, which "
-                  "section 12 paragraph 1 prohibits.")
+    return Result(
+        "A-08",
+        "S12p1",
+        status,
+        "workflow files scanned for suppressed failures and shell mismatch",
+        problems,
+        "A step that cannot fail reports an unavailable check as passed, which "
+        "section 12 paragraph 1 prohibits.",
+    )
 
 
 # --------------------------------------------------------------------------
@@ -384,14 +480,26 @@ def check_identified_humans() -> Result:
     detail = f"{len(authors)} distinct git author identit(y/ies) in history"
     items = sorted(authors)
     if len(authors) < 2:
-        return Result("A-09", "S13p3", "FINDINGS", detail + " — section 13 paragraph 3 "
-                      "requires two identified humans at adoption", items,
-                      "Git identity is not identity. A second git author would not by "
-                      "itself satisfy section 2's 'identified human', and this check "
-                      "cannot establish that any author is human (section 4 paragraph 4).")
-    return Result("A-09", "S13p3", "FINDINGS", detail, items,
-                  "Non-routable identities present: " + (", ".join(nonroutable) or "none") +
-                  ". Whether a reviewer is independent is not mechanically decidable.")
+        return Result(
+            "A-09",
+            "S13p3",
+            "FINDINGS",
+            detail + " — section 13 paragraph 3 " "requires two identified humans at adoption",
+            items,
+            "Git identity is not identity. A second git author would not by "
+            "itself satisfy section 2's 'identified human', and this check "
+            "cannot establish that any author is human (section 4 paragraph 4).",
+        )
+    return Result(
+        "A-09",
+        "S13p3",
+        "FINDINGS",
+        detail,
+        items,
+        "Non-routable identities present: "
+        + (", ".join(nonroutable) or "none")
+        + ". Whether a reviewer is independent is not mechanically decidable.",
+    )
 
 
 # --------------------------------------------------------------------------
@@ -431,8 +539,9 @@ REVIEWER_ELEMENTS = {
     "review procedure": re.compile(r"review procedure|procedure actually used", re.I),
     "conclusion": _CONCLUSION,
     "competence": re.compile(r"competence", re.I),
-    "records examined": re.compile(r"records,? (artifacts,? )?(and )?checks examined|"
-                                   r"artifacts? examined", re.I),
+    "records examined": re.compile(
+        r"records,? (artifacts,? )?(and )?checks examined|" r"artifacts? examined", re.I
+    ),
 }
 
 ADOPTER_ELEMENTS = {
@@ -453,8 +562,7 @@ ATTESTATION_SCHEMAS = {
 # The kind is declared in the document, so dispatch does not depend on a
 # filename convention. The filename is a fallback only; a file matching neither
 # is reported NOT_VERIFIED, never passed (section 12 paragraph 1).
-KIND_MARKER = re.compile(r"<!--\s*attestation-kind:\s*(adopter|independent_reviewer)\s*-->",
-                         re.I)
+KIND_MARKER = re.compile(r"<!--\s*attestation-kind:\s*(adopter|independent_reviewer)\s*-->", re.I)
 
 PLACEHOLDER = re.compile(r"\[COMPLETE[^\]]*\]")
 # A declaration left unticked is not a declaration. Matches markdown task-list
@@ -480,12 +588,16 @@ def check_attestations() -> Result:
     if not files:
         # Not "passed": the criterion was not assessed, because its subject does
         # not exist yet. Section 12 paragraph 1 requires NOT_VERIFIED here.
-        return Result("A-10", "S13p2", "NOT_VERIFIED",
-                      "no attestation exists at this revision; section 13 paragraph 2 "
-                      "completeness cannot be assessed before the adoption revision",
-                      [],
-                      "Expected before change D. This check reports PASS only against a "
-                      "non-empty set of attestation files.")
+        return Result(
+            "A-10",
+            "S13p2",
+            "NOT_VERIFIED",
+            "no attestation exists at this revision; section 13 paragraph 2 "
+            "completeness cannot be assessed before the adoption revision",
+            [],
+            "Expected before change D. This check reports PASS only against a "
+            "non-empty set of attestation files.",
+        )
     problems = []
     unclassified = []
     kinds = []
@@ -501,11 +613,11 @@ def check_attestations() -> Result:
             unclassified.append(
                 f"{rel(f)}: document kind not declared and not inferable from the "
                 f"filename; expected an `<!-- attestation-kind: adopter | "
-                f"independent_reviewer -->` marker")
+                f"independent_reviewer -->` marker"
+            )
             continue
         kinds.append(f"{rel(f)}={kind}")
-        absent = [name for name, pat in ATTESTATION_SCHEMAS[kind].items()
-                  if not pat.search(text)]
+        absent = [name for name, pat in ATTESTATION_SCHEMAS[kind].items() if not pat.search(text)]
         if absent:
             problems.append(f"{rel(f)} [{kind}]: missing {', '.join(absent)}")
         left = len(PLACEHOLDER.findall(text))
@@ -513,31 +625,48 @@ def check_attestations() -> Result:
             problems.append(f"{rel(f)} [{kind}]: {left} unfilled [COMPLETE] placeholder(s)")
         unticked = len(UNTICKED.findall(text))
         if unticked:
-            problems.append(f"{rel(f)} [{kind}]: {unticked} unticked declaration "
-                            f"checkbox(es); an unticked box is not a declaration")
+            problems.append(
+                f"{rel(f)} [{kind}]: {unticked} unticked declaration "
+                f"checkbox(es); an unticked box is not a declaration"
+            )
 
-    detail = (f"{len(files)} attestation file(s) checked against the element set for "
-              f"their declared kind ({'; '.join(kinds) if kinds else 'none classified'}), "
-              f"and for unfilled placeholders and unticked declarations")
-    limitation = ("Lexical presence only. That an element appears does not make its "
-                  "content true, and whether the named party is an identified human who "
-                  "is not an author is not mechanically decidable (section 4 paragraph "
-                  "4) — that is procedure P-A1. The adopter element set is derived from "
-                  "section 13 paragraph 3, which does not enumerate content the way "
-                  "paragraph 2 does for the reviewer; it is a floor, not a closed list.")
+    detail = (
+        f"{len(files)} attestation file(s) checked against the element set for "
+        f"their declared kind ({'; '.join(kinds) if kinds else 'none classified'}), "
+        f"and for unfilled placeholders and unticked declarations"
+    )
+    limitation = (
+        "Lexical presence only. That an element appears does not make its "
+        "content true, and whether the named party is an identified human who "
+        "is not an author is not mechanically decidable (section 4 paragraph "
+        "4) — that is procedure P-A1. The adopter element set is derived from "
+        "section 13 paragraph 3, which does not enumerate content the way "
+        "paragraph 2 does for the reviewer; it is a floor, not a closed list."
+    )
     if unclassified:
-        return Result("A-10", "S13p2", "NOT_VERIFIED",
-                      "one or more attestation files could not be matched to an element "
-                      "set, so their completeness was NOT assessed",
-                      unclassified + problems, limitation)
+        return Result(
+            "A-10",
+            "S13p2",
+            "NOT_VERIFIED",
+            "one or more attestation files could not be matched to an element "
+            "set, so their completeness was NOT assessed",
+            unclassified + problems,
+            limitation,
+        )
     status = "FAIL" if problems else "PASS"
     return Result("A-10", "S13p2", status, detail, problems, limitation)
 
 
 CHECKS = [
-    check_headers, check_registry_consistency, check_adoption_elements,
-    check_no_records, check_authority_lexemes, check_legacy_index,
-    check_secret_history, check_ci_honesty, check_identified_humans,
+    check_headers,
+    check_registry_consistency,
+    check_adoption_elements,
+    check_no_records,
+    check_authority_lexemes,
+    check_legacy_index,
+    check_secret_history,
+    check_ci_honesty,
+    check_identified_humans,
     check_attestations,
 ]
 
@@ -570,9 +699,11 @@ def main() -> int:
             results.append(Result(fn.__name__, "-", "NOT_VERIFIED", f"check raised: {exc!r}"))
 
     for r in results:
-        print(f"\n[{r.status:<12}] {r.check}  {NAMES.get(r.check, r.check)}  (S{r.clause[1:]})"
-              if r.clause.startswith("S") else
-              f"\n[{r.status:<12}] {r.check}")
+        print(
+            f"\n[{r.status:<12}] {r.check}  {NAMES.get(r.check, r.check)}  (S{r.clause[1:]})"
+            if r.clause.startswith("S")
+            else f"\n[{r.status:<12}] {r.check}"
+        )
         print(f"    {r.detail}")
         for item in r.items:
             print(f"      - {item}")

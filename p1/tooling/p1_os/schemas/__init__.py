@@ -40,7 +40,9 @@ def schema_for_object_type(object_type: str) -> type:
     try:
         return SCHEMA_BY_OBJECT_TYPE[object_type]
     except KeyError as exc:
-        raise UnknownObjectTypeError(f"No schema registered for object_type: {object_type!r}") from exc
+        raise UnknownObjectTypeError(
+            f"No schema registered for object_type: {object_type!r}"
+        ) from exc
 
 
 __all__ = [

@@ -13,6 +13,7 @@ evidence/experiment_logs/run_20260704_n20/aggregated_results.json:
 
 Reference: M_STATISTIC_SPECIFICATION.md (Sections 1-3).
 """
+
 from __future__ import annotations
 
 import json
@@ -26,8 +27,8 @@ import numpy as np
 from scipy.optimize import linear_sum_assignment
 from sklearn.metrics import adjusted_rand_score
 
-
 # -------- entropy / NMI primitives (same formulas as core.emergence.emergence_statistic) --------
+
 
 def _entropy(counts: Counter) -> float:
     n = sum(counts.values())
@@ -62,6 +63,7 @@ def _nmi_arithmetic(labels_a: List[int], labels_b: List[int]) -> float:
 
 
 # -------- Hungarian alignment (M_STATISTIC_SPECIFICATION.md §2) --------
+
 
 def _contingency_table(z: List[int], z_hat: List[int]) -> Tuple[np.ndarray, int, int]:
     """Build K' x K contingency table from true vs learned sequences.
@@ -131,6 +133,7 @@ def _nmi_aligned(z: List[int], z_hat: List[int]) -> Tuple[float, float, int, int
 
 # -------- Block-shuffled self-null (M_STATISTIC_SPECIFICATION.md §3) --------
 
+
 def _block_shuffled(z_hat: List[int], rng: np.random.RandomState) -> List[int]:
     """Block-shuffle z_hat within the median run-length to destroy long-range
     temporal order while preserving marginals and short-range runs."""
@@ -171,8 +174,10 @@ def _block_shuffled(z_hat: List[int], rng: np.random.RandomState) -> List[int]:
 
 # -------- Per-seed recomputation --------
 
-def _per_seed_m(z_true: List[int], z_learned: List[int], z_c3: List[int],
-                rng: np.random.RandomState) -> dict:
+
+def _per_seed_m(
+    z_true: List[int], z_learned: List[int], z_c3: List[int], rng: np.random.RandomState
+) -> dict:
     """Compute all M variants for a single seed."""
     # Legacy M (unaligned, C3 reference) -- for direct comparison
     nmi_lt_legacy = _nmi_arithmetic(z_true, z_learned)
@@ -216,6 +221,7 @@ def _per_seed_m(z_true: List[int], z_learned: List[int], z_c3: List[int],
 
 
 # -------- main --------
+
 
 def main(path: str) -> None:
     with open(path, "r") as f:
@@ -265,13 +271,17 @@ def main(path: str) -> None:
 
     # Print per-seed table (compact)
     kp_label = "K'"
-    print(f"{'seed':>4} {'K':>3} {kp_label:>3}  {'legacy':>7} {'alg-C3':>7} {'alg-SN':>7} "
-          f"{'ARI-C3':>7} {'ARI-SN':>7}")
+    print(
+        f"{'seed':>4} {'K':>3} {kp_label:>3}  {'legacy':>7} {'alg-C3':>7} {'alg-SN':>7} "
+        f"{'ARI-C3':>7} {'ARI-SN':>7}"
+    )
     for r in rows:
-        print(f"{r['seed']:>4} {r['K_true']:>3} {r['K_learned']:>3}  "
-              f"{r['m_legacy_C3']:>7.4f} {r['m_aligned_C3']:>7.4f} "
-              f"{r['m_aligned_selfnull']:>7.4f} "
-              f"{r['ari_diff_C3']:>7.4f} {r['ari_diff_selfnull']:>7.4f}")
+        print(
+            f"{r['seed']:>4} {r['K_true']:>3} {r['K_learned']:>3}  "
+            f"{r['m_legacy_C3']:>7.4f} {r['m_aligned_C3']:>7.4f} "
+            f"{r['m_aligned_selfnull']:>7.4f} "
+            f"{r['ari_diff_C3']:>7.4f} {r['ari_diff_selfnull']:>7.4f}"
+        )
 
     print()
     print(f"{'method':<45} {'mean':>7} {'std':>7} {'SE':>7} {'margin':>7}  pass@{0.044}?")
@@ -279,8 +289,10 @@ def main(path: str) -> None:
     for label, s in summary.items():
         passed = s["mean"] > REPORTED_MARGIN
         flag = "YES" if passed else "NO"
-        print(f"{label:<45} {s['mean']:>7.4f} {s['std']:>7.4f} {s['se']:>7.4f} "
-              f"{s['margin']:>7.4f}  {flag}")
+        print(
+            f"{label:<45} {s['mean']:>7.4f} {s['std']:>7.4f} {s['se']:>7.4f} "
+            f"{s['margin']:>7.4f}  {flag}"
+        )
 
     # Critical comparison: does the recomputed M (stricter) still exceed 0.044?
     print()
@@ -299,8 +311,12 @@ def main(path: str) -> None:
 
 
 if __name__ == "__main__":
-    path = sys.argv[1] if len(sys.argv) > 1 else (
-        r"C:\Users\Purushottam\Documents\VELYNX\evidence\experiment_logs"
-        r"\run_20260704_n20\aggregated_results.json"
+    path = (
+        sys.argv[1]
+        if len(sys.argv) > 1
+        else (
+            r"C:\Users\Purushottam\Documents\VELYNX\evidence\experiment_logs"
+            r"\run_20260704_n20\aggregated_results.json"
+        )
     )
     main(path)

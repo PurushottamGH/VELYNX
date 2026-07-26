@@ -3,6 +3,7 @@
 
 Produces statistical reports for all experiment runs.
 """
+
 import sys
 import json
 import numpy as np
@@ -11,8 +12,11 @@ from typing import List, Dict, Optional
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from experiments.metrics import (
-    MetricsRecord, MetricsReport,
-    bootstrap_ci, effect_size_cohens_d, permutation_test,
+    MetricsRecord,
+    MetricsReport,
+    bootstrap_ci,
+    effect_size_cohens_d,
+    permutation_test,
     compute_nmi,
 )
 
@@ -81,7 +85,11 @@ def _compute_trend(data: np.ndarray) -> str:
     half = len(data) // 2
     first_half = np.mean(data[:half])
     second_half = np.mean(data[half:])
-    threshold = 0.05 * max(abs(first_half), abs(second_half)) if max(abs(first_half), abs(second_half)) > 0 else 0.001
+    threshold = (
+        0.05 * max(abs(first_half), abs(second_half))
+        if max(abs(first_half), abs(second_half)) > 0
+        else 0.001
+    )
     if second_half - first_half > threshold:
         return "increasing"
     elif first_half - second_half > threshold:
@@ -90,9 +98,12 @@ def _compute_trend(data: np.ndarray) -> str:
         return "stable"
 
 
-def compare_experiments(control_id: str, treatment_id: str,
-                        control_records: List[MetricsRecord],
-                        treatment_records: List[MetricsRecord]) -> Dict:
+def compare_experiments(
+    control_id: str,
+    treatment_id: str,
+    control_records: List[MetricsRecord],
+    treatment_records: List[MetricsRecord],
+) -> Dict:
     c_energies = np.array([r.free_energy for r in control_records])
     t_energies = np.array([r.free_energy for r in treatment_records])
 
@@ -129,7 +140,11 @@ def generate_publication_report(analysis: Dict, output_path: Path):
             lines.append(f"  Mean ± SD:    {m['mean']:.4f} ± {m['std']:.4f}")
             lines.append(f"  Median:       {m['median'] if 'median' in m else 'N/A'}")
             lines.append(f"  Range:        [{m['min']:.4f}, {m['max']:.4f}]")
-            lines.append(f"  95% CI:       [{m['ci_95'][0]:.4f}, {m['ci_95'][1]:.4f}]" if 'ci_95' in m else "")
+            lines.append(
+                f"  95% CI:       [{m['ci_95'][0]:.4f}, {m['ci_95'][1]:.4f}]"
+                if "ci_95" in m
+                else ""
+            )
             lines.append(f"  Trend:        {m.get('trend', 'N/A')}")
 
     lines.append("\n" + "=" * 72)
