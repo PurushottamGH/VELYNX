@@ -75,3 +75,9 @@ evidence/experiment_logs/**/aggregated_results.json
 # P1 Research OS — generated/transient state (see REPOSITORY_CONSTITUTION.md)
 /p1/derived/
 /p1/.transactions/active/
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+!.env.example
