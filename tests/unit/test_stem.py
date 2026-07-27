@@ -1,4 +1,24 @@
-from nltk.stem import PorterStemmer, WordNetLemmatizer
+"""Exploratory NLTK stemming/lemmatization comparison.
+
+Not a unit test: this module defines no test functions and asserts nothing.
+It prints a comparison table and is collected only because its filename
+matches pytest's `test_*.py` pattern.
+
+`nltk` is not a declared dependency of this project. It is absent from
+`requirements.txt` (the source for `pyproject.toml`'s dynamic dependencies)
+and from `backend/requirements.txt`; EXP0_PREREGISTRATION.md section 5
+records that omission as a known, deliberately unfixed gap, with
+`pip install nltk` documented as a manual runbook prerequisite. The guard
+below therefore skips rather than fails when nltk is unavailable, so an
+optional dependency's absence is reported as unassessed, never as passed
+(Constitution S12p1).
+"""
+
+import pytest
+
+pytest.importorskip("nltk")
+
+from nltk.stem import PorterStemmer, WordNetLemmatizer  # noqa: E402
 
 s = PorterStemmer()
 l = WordNetLemmatizer()
