@@ -1,0 +1,37 @@
+# V0-1 — assay sensitivity and specificity (pilot scaffold).
+#
+# Question: does the rig detect forgetting when forgetting is induced, and stay
+# quiet when it is not?
+#
+# Conditions: decay 0.99 (forgetting injected) vs decay 1.0 (no-decay positive
+# control), each with replay disabled so the measurement is not confounded by the
+# mechanism under test. Baselines: the frozen/no-learning check lives in the unit
+# tests; the oracle floor is reported automatically by excess_loss.
+#
+# Primary DV: excess_loss.degradation_prior_mean (paired, per environment seed).
+# Analysis: science/stats.paired_bootstrap at the environment-seed level, then
+# decide_superiority for the decay arm and decide_equivalence for the no-decay arm.
+#
+# PILOT ONLY. This sweep exists to estimate variance so that a power/precision
+# calculation can set the confirmatory seed count. The M0 review rejected picking
+# n by convention. SESOI (delta_forget) and equivalence margin (epsilon) are not
+# encoded here because they are preregistration decisions, not engineering ones.
+
+config_version: 1
+name: v0_1_assay_validity
+description: "Pilot: forgetting sensitivity under decay vs no-decay specificity control"
+base: baseline.yaml
+
+seeds:
+  start: 0
+  count: 5
+
+grid:
+  model.params.decay: [0.99, 1.0]
+
+conditions:
+  - gate.name: never
+    gate.params: {}
+    replay.name: none
+    replay.params: {}
+    memory.name: reservoir

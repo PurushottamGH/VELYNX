@@ -1,0 +1,80 @@
+# M0 replication — the frozen rig, reproduced through the M1 platform.
+#
+# Purpose: prove the platform did not change the science. Every component here is
+# an adapter over `p1v0`, and `seeds.mode: legacy_v0` gives each substream the
+# master seed, which is what the frozen rig used. Online losses, probe losses and
+# the retention scalar must match `p1v0.runner.execute` exactly; that equivalence
+# is asserted by tests/m1/test_frozen_v0_equivalence.py.
+#
+# Do not change any value in this file. It is a reference point, not a template.
+# Start new work from baseline.yaml.
+
+config_version: 1
+name: m0_replication
+description: "Frozen p1v0 replay_surprise variant, reproduced via the M1 engine"
+
+benchmark:
+  name: markov_retention
+  params:
+    probe_pairs: 500
+
+environment:
+  name: markov_blocks_v0
+  params:
+    n_tasks: 4
+    alphabet: 8
+    steps_per_task: 2000
+    cycles: 1
+    fanout: 2
+
+model:
+  name: count_model
+  params:
+    alpha: 0.5
+    decay: 0.99
+
+memory:
+  name: reservoir
+  params:
+    capacity: 1000
+
+gate:
+  name: surprise
+  params:
+    threshold: 1.5
+    k: 4
+
+replay:
+  name: buffer_sample
+  params:
+    weight: 1.0
+
+metrics:
+  - name: online_loss
+    params:
+      tail: 500
+  - name: retention
+  - name: excess_loss
+  - name: plasticity
+    params:
+      window: 200
+  - name: compute
+  - name: gate_activity
+    params:
+      boundary_window: 50
+
+seeds:
+  master: 0
+  mode: legacy_v0
+  overrides: {}
+
+compute:
+  max_steps: null
+  max_updates: null
+  max_wall_seconds: null
+
+logging:
+  level: info
+  console: true
+  step_format: csv
+  plots: true

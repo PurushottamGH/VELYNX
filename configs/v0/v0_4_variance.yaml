@@ -1,0 +1,43 @@
+# V0-4 — measurement reliability and seed design (pilot scaffold).
+#
+# Question: which randomness source drives the variance in a contrast, and is the
+# probe estimate precise enough to support the intended conclusion?
+#
+# Method: hold the master seed set fixed and vary one substream at a time by
+# pinning it through `seeds.overrides`. Because `seeds.mode: independent` derives
+# each substream separately, pinning one leaves the others untouched — which is
+# exactly what a variance decomposition needs and what M0's single composite seed
+# made impossible.
+#
+#   seeds.overrides.probe   re-draws only the held-out probe data. The spread
+#                           across these runs *is* the probe Monte-Carlo error, at
+#                           an identical trained model state. This replaces an
+#                           in-run replication parameter: same information, no
+#                           extra code path.
+#   environment.params.order  task presentation order. If a conclusion reverses
+#                           between `sequential` and `reversed`, the effect was a
+#                           serial-position artefact.
+#
+# Run the same design with `seeds.overrides.trajectory` and
+# `seeds.overrides.replay` to complete the decomposition; they are omitted from
+# this grid to keep the pilot small (this file already expands to 5 x 3 x 3 = 45
+# runs).
+#
+# Analysis: variance components across substreams, CI width against the declared
+# precision target, and direction stability across orders.
+#
+# PILOT ONLY: the precision target and the sample size that achieves it come from
+# a prospective power/precision simulation using this pilot's variance estimates.
+
+config_version: 1
+name: v0_4_variance
+description: "Pilot: probe Monte-Carlo error and task-order sensitivity"
+base: baseline.yaml
+
+seeds:
+  start: 0
+  count: 5
+
+grid:
+  seeds.overrides.probe: [11, 22, 33]
+  environment.params.order: [sequential, shuffled, reversed]
