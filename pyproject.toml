@@ -24,6 +24,7 @@ include = [
     "experiments*",
     "tests*",
     "scripts*",
+    "ros*",
     "v2*",
 ]
 exclude = ["archive*", "backend*", "data*", "docs*"]
