@@ -1,0 +1,153 @@
+{
+  "$defs": {
+    "record_version_at": {
+      "additionalProperties": false,
+      "properties": {
+        "source": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "target": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "source",
+        "target"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "https://p1.local/schemas/lske/relation.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "else": {
+        "properties": {
+          "direction": {
+            "type": "null"
+          }
+        }
+      },
+      "if": {
+        "properties": {
+          "type": {
+            "enum": [
+              "supports",
+              "refutes",
+              "contradicts",
+              "validated_by"
+            ]
+          }
+        },
+        "required": [
+          "type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "direction": {
+            "not": {
+              "type": "null"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "properties": {
+    "confidence_basis": {
+      "enum": [
+        "evidence",
+        "human_assertion",
+        "structural"
+      ],
+      "type": "string"
+    },
+    "direction": {
+      "oneOf": [
+        {
+          "enum": [
+            "depends-on",
+            "indeterminate",
+            "invalid",
+            "null",
+            "opposes",
+            "requires-assumption",
+            "supports"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "established_at": {
+      "$ref": "record.schema.json#/$defs/timestamp"
+    },
+    "established_by": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "from": {
+      "$ref": "record.schema.json#/$defs/record_id"
+    },
+    "record_version_at": {
+      "$ref": "#/$defs/record_version_at"
+    },
+    "retracted_by": {
+      "oneOf": [
+        {
+          "$ref": "record.schema.json#/$defs/record_id"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "semantic_note": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "to": {
+      "$ref": "record.schema.json#/$defs/record_id"
+    },
+    "type": {
+      "enum": [
+        "supports",
+        "refutes",
+        "contradicts",
+        "validated_by",
+        "generated",
+        "observed",
+        "measured",
+        "derived_from",
+        "depends_on",
+        "belongs_to",
+        "extends",
+        "predicts",
+        "supersedes",
+        "explains",
+        "causes"
+      ],
+      "type": "string"
+    }
+  },
+  "required": [
+    "from",
+    "to",
+    "type",
+    "direction",
+    "semantic_note",
+    "established_by",
+    "established_at",
+    "record_version_at",
+    "retracted_by",
+    "confidence_basis"
+  ],
+  "title": "LSKE relation",
+  "type": "object"
+}

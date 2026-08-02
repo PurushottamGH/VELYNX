@@ -24,6 +24,7 @@ include = [
     "experiments*",
     "tests*",
     "scripts*",
+    "v2*",
 ]
 exclude = ["archive*", "backend*", "data*", "docs*"]
 
@@ -59,7 +60,7 @@ markers = [
 ]
 
 [tool.coverage.run]
-source = ["framework", "experiments", "tests", "scripts"]
+source = ["framework", "experiments", "tests", "scripts", "v2"]
 omit = ["*/tests/*", "*/__pycache__/*"]
 
 [tool.black]

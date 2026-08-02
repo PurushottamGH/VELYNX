@@ -1,0 +1,114 @@
+{
+  "$defs": {
+    "collection": {
+      "properties": {
+        "confidence": {
+          "type": "object"
+        },
+        "failure_consequence": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "id": {
+          "pattern": "^ASM-[0-9]{4}-[0-9]{4}$",
+          "type": "string"
+        },
+        "immutability": {
+          "properties": {
+            "append_only": {
+              "const": false
+            }
+          },
+          "type": "object"
+        },
+        "legacy_ids": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "lifecycle": {
+          "properties": {
+            "status": {
+              "enum": [
+                "Candidate",
+                "Active",
+                "Dormant",
+                "Tombstoned",
+                "Deleted"
+              ],
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "load_bearing_for": {
+          "items": {
+            "$ref": "record.schema.json#/$defs/record_id"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "opposing_evidence_ids": {
+          "items": {
+            "$ref": "record.schema.json#/$defs/record_id"
+          },
+          "type": "array"
+        },
+        "primitive": {
+          "const": "Claim"
+        },
+        "provenance": {
+          "properties": {
+            "kind": {
+              "enum": [
+                "human_assertion",
+                "run_derived",
+                "document_derived",
+                "external_literature"
+              ]
+            }
+          },
+          "type": "object"
+        },
+        "statement": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "test_status": {
+          "enum": [
+            "untested",
+            "supported",
+            "opposed",
+            "refuted"
+          ],
+          "type": "string"
+        },
+        "type": {
+          "const": "assumption"
+        }
+      },
+      "required": [
+        "statement",
+        "load_bearing_for",
+        "test_status",
+        "opposing_evidence_ids",
+        "failure_consequence"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "https://p1.local/schemas/lske/assumptions.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "allOf": [
+    {
+      "$ref": "record.schema.json"
+    },
+    {
+      "$ref": "#/$defs/collection"
+    }
+  ],
+  "title": "assumptions",
+  "type": "object",
+  "unevaluatedProperties": false
+}

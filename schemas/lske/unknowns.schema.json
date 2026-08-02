@@ -1,0 +1,113 @@
+{
+  "$defs": {
+    "collection": {
+      "properties": {
+        "blocks_ids": {
+          "items": {
+            "$ref": "record.schema.json#/$defs/record_id"
+          },
+          "type": "array"
+        },
+        "cheapest_resolving_experiment": {
+          "oneOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "confidence": {
+          "type": "object"
+        },
+        "expected_decision_value": {
+          "enum": [
+            "changes_roadmap",
+            "changes_design",
+            "changes_measurement",
+            "none"
+          ],
+          "type": "string"
+        },
+        "id": {
+          "pattern": "^UNK-[0-9]{4}-[0-9]{4}$",
+          "type": "string"
+        },
+        "immutability": {
+          "properties": {
+            "append_only": {
+              "const": false
+            }
+          },
+          "type": "object"
+        },
+        "legacy_ids": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "lifecycle": {
+          "properties": {
+            "status": {
+              "enum": [
+                "Candidate",
+                "Active",
+                "Dormant",
+                "Tombstoned",
+                "Deleted"
+              ],
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "primitive": {
+          "const": "Claim"
+        },
+        "provenance": {
+          "properties": {
+            "kind": {
+              "enum": [
+                "human_assertion",
+                "run_derived",
+                "document_derived",
+                "external_literature"
+              ]
+            }
+          },
+          "type": "object"
+        },
+        "statement": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "type": {
+          "const": "unknown"
+        }
+      },
+      "required": [
+        "statement",
+        "expected_decision_value",
+        "blocks_ids",
+        "cheapest_resolving_experiment"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "https://p1.local/schemas/lske/unknowns.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "allOf": [
+    {
+      "$ref": "record.schema.json"
+    },
+    {
+      "$ref": "#/$defs/collection"
+    }
+  ],
+  "title": "unknowns",
+  "type": "object",
+  "unevaluatedProperties": false
+}

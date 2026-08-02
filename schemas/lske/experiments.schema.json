@@ -1,0 +1,229 @@
+{
+  "$defs": {
+    "collection": {
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "lifecycle": {
+                "properties": {
+                  "status": {
+                    "not": {
+                      "const": "Designed"
+                    }
+                  }
+                },
+                "required": [
+                  "status"
+                ]
+              }
+            },
+            "required": [
+              "lifecycle"
+            ]
+          },
+          "then": {
+            "required": [
+              "protocol_id"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "lifecycle": {
+                "properties": {
+                  "status": {
+                    "enum": [
+                      "Executed",
+                      "Invalidated"
+                    ]
+                  }
+                },
+                "required": [
+                  "status"
+                ]
+              }
+            },
+            "required": [
+              "lifecycle"
+            ]
+          },
+          "then": {
+            "required": [
+              "validity",
+              "observation_ids",
+              "evidence_ids",
+              "treatment_activated"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "validity": {
+                "enum": [
+                  "invalid",
+                  "partially_valid"
+                ]
+              }
+            },
+            "required": [
+              "validity"
+            ]
+          },
+          "then": {
+            "required": [
+              "invalidity_reason"
+            ]
+          }
+        }
+      ],
+      "properties": {
+        "confidence": {
+          "type": "null"
+        },
+        "evidence_ids": {
+          "items": {
+            "$ref": "record.schema.json#/$defs/record_id"
+          },
+          "type": "array"
+        },
+        "execution_gate": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "executions": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "hypothesis_ids": {
+          "items": {
+            "$ref": "record.schema.json#/$defs/record_id"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "id": {
+          "pattern": "^EXP-[0-9]{4}-[0-9]{4}$",
+          "type": "string"
+        },
+        "immutability": {
+          "properties": {
+            "append_only": {
+              "const": true
+            }
+          },
+          "type": "object"
+        },
+        "invalidity_reason": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "legacy_ids": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "lifecycle": {
+          "properties": {
+            "status": {
+              "enum": [
+                "Designed",
+                "Blocked",
+                "Blocked Confirmatory",
+                "Planned",
+                "Executed",
+                "Invalidated",
+                "Retired"
+              ],
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "limitations": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "observation_ids": {
+          "items": {
+            "$ref": "record.schema.json#/$defs/record_id"
+          },
+          "type": "array"
+        },
+        "primitive": {
+          "const": "Run"
+        },
+        "protocol_id": {
+          "$ref": "record.schema.json#/$defs/record_id"
+        },
+        "provenance": {
+          "properties": {
+            "kind": {
+              "enum": [
+                "human_assertion",
+                "run_derived",
+                "document_derived",
+                "external_literature"
+              ]
+            }
+          },
+          "type": "object"
+        },
+        "run_ids": {
+          "items": {
+            "$ref": "record.schema.json#/$defs/record_id"
+          },
+          "type": "array"
+        },
+        "treatment_activated": {
+          "type": "boolean"
+        },
+        "type": {
+          "const": "experiment"
+        },
+        "unavailable_primary_metrics": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "validity": {
+          "enum": [
+            "valid",
+            "invalid",
+            "partially_valid"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "run_ids",
+        "hypothesis_ids"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "https://p1.local/schemas/lske/experiments.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "allOf": [
+    {
+      "$ref": "record.schema.json"
+    },
+    {
+      "$ref": "#/$defs/collection"
+    }
+  ],
+  "title": "experiments",
+  "type": "object",
+  "unevaluatedProperties": false
+}

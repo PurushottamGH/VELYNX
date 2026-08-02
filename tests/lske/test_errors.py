@@ -90,6 +90,22 @@ def test_payload_is_never_none_and_accepts_any_iterable():
     assert generated.failures == (("/a", "s", "type", False),)
 
 
+def test_payload_iterable_is_materialized_exactly_once():
+    class OneShot:
+        def __init__(self):
+            self.iterations = 0
+
+        def __iter__(self):
+            self.iterations += 1
+            if self.iterations > 1:
+                raise AssertionError("iterable consumed more than once")
+            yield ("/a", "s", "type", False)
+
+    source = OneShot()
+    assert SchemaViolation("m", source).failures == (("/a", "s", "type", False),)
+    assert source.iterations == 1
+
+
 def test_payload_is_hashable_and_comparable():
     first = SchemaViolation("m", [("/a", "s", "type", False)])
     second = SchemaViolation("other message", [("/a", "s", "type", False)])
@@ -103,6 +119,16 @@ def test_payload_is_hashable_and_comparable():
 def test_duplicate_items_are_removed():
     item = ("/a", "s", "type", False)
     assert SchemaViolation("m", [item, item, item]).failures == (item,)
+
+
+def test_equal_duplicate_keeps_the_first_object():
+    class EqualTuple(tuple):
+        pass
+
+    first = EqualTuple(("/a", "s", "type", False))
+    second = EqualTuple(("/a", "s", "type", False))
+    kept = SchemaViolation("m", [first, second]).failures[0]
+    assert kept is first
 
 
 def test_ordering_is_by_derived_then_instance_then_schema_then_keyword():

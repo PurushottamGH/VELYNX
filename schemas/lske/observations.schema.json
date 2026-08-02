@@ -1,0 +1,310 @@
+{
+  "$defs": {
+    "collection": {
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "value": {
+                "type": "null"
+              }
+            },
+            "required": [
+              "value"
+            ]
+          },
+          "then": {
+            "properties": {
+              "coverage": {
+                "properties": {
+                  "missing_reason": {
+                    "not": {
+                      "type": "null"
+                    }
+                  }
+                }
+              },
+              "validity": {
+                "const": "unavailable"
+              }
+            }
+          }
+        }
+      ],
+      "properties": {
+        "blinded": {
+          "type": "boolean"
+        },
+        "confidence": {
+          "type": "null"
+        },
+        "coverage": {
+          "$ref": "#/$defs/coverage"
+        },
+        "declared_null_comparison": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/declared_null_comparison"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "id": {
+          "pattern": "^OBS-[0-9]{4}-[0-9]{4}$",
+          "type": "string"
+        },
+        "immutability": {
+          "properties": {
+            "append_only": {
+              "const": true
+            }
+          },
+          "type": "object"
+        },
+        "legacy_ids": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "lifecycle": {
+          "properties": {
+            "status": {
+              "enum": [
+                "Candidate",
+                "Active",
+                "Dormant",
+                "Tombstoned",
+                "Deleted"
+              ],
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "metric_id": {
+          "$ref": "record.schema.json#/$defs/record_id"
+        },
+        "primitive": {
+          "const": "Measurement"
+        },
+        "provenance": {
+          "properties": {
+            "kind": {
+              "enum": [
+                "human_assertion",
+                "run_derived",
+                "document_derived",
+                "external_literature"
+              ]
+            }
+          },
+          "type": "object"
+        },
+        "run_ids": {
+          "items": {
+            "$ref": "record.schema.json#/$defs/record_id"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "type": {
+          "const": "observation"
+        },
+        "uncertainty": {
+          "$ref": "#/$defs/uncertainty"
+        },
+        "validity": {
+          "enum": [
+            "valid",
+            "invalid",
+            "unavailable"
+          ],
+          "type": "string"
+        },
+        "value": {
+          "type": [
+            "number",
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "run_ids",
+        "metric_id",
+        "value",
+        "uncertainty",
+        "coverage",
+        "validity",
+        "declared_null_comparison",
+        "blinded"
+      ],
+      "type": "object"
+    },
+    "coverage": {
+      "additionalProperties": false,
+      "properties": {
+        "expected": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "measured": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "missing_reason": {
+          "oneOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "measured",
+        "expected",
+        "missing_reason"
+      ],
+      "type": "object"
+    },
+    "declared_null_comparison": {
+      "additionalProperties": false,
+      "properties": {
+        "basis": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "declared_null": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "outcome": {
+          "enum": [
+            "consistent_with_null",
+            "inconsistent_with_null",
+            "indeterminate",
+            "not_evaluated"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "declared_null",
+        "outcome",
+        "basis"
+      ],
+      "type": "object"
+    },
+    "uncertainty": {
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "else": {
+            "properties": {
+              "interval": {
+                "type": "null"
+              }
+            }
+          },
+          "if": {
+            "properties": {
+              "kind": {
+                "enum": [
+                  "ci95",
+                  "iqr"
+                ]
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "interval": {
+                "not": {
+                  "type": "null"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "properties": {
+        "interval": {
+          "oneOf": [
+            {
+              "items": false,
+              "maxItems": 2,
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "kind": {
+          "enum": [
+            "none",
+            "sd",
+            "se",
+            "ci95",
+            "iqr"
+          ],
+          "type": "string"
+        },
+        "method": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "n": {
+          "oneOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "interval",
+        "n",
+        "method"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "https://p1.local/schemas/lske/observations.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "allOf": [
+    {
+      "$ref": "record.schema.json"
+    },
+    {
+      "$ref": "#/$defs/collection"
+    }
+  ],
+  "title": "observations",
+  "type": "object",
+  "unevaluatedProperties": false
+}
