@@ -6,7 +6,8 @@
 - **Candidate branch:** `p1-v2-stage1-candidate-rebuild2-20260802`
 - **Recovered baseline:** `0ab225176b10f98fa763b3914b27a2162b550205`
 - **Implementation checkpoint:** `3ac369910e66fda72edc67a6ae7de21c3e71c5b8`
-- **Final candidate commit:** `<TO BE FILLED AFTER THIS RECORD IS COMMITTED>`
+- **Evidence-record commit:** `7ed5d40feca227018a7e2abb44a0c5ba4f368430`
+- **Final verification commit:** `<TO BE FILLED AFTER CLEAN-CLONE RESULTS ARE RECORDED>`
 - **Governing specification:** `P1_V2_LSKE_SPECIFICATION_v1.1.2.md`
 - **Standing:** Engineering verification record only. It does not register the specification, activate governance, raise Scientific Readiness, or create admissible scientific evidence.
 

@@ -6,7 +6,7 @@
 
 **Scope.** This ledger reconciles available PCA remediation state with the P1-v2 Stage-1 engineering candidate on 2026-08-02. It is not a replacement for the missing immutable PCA register. It does not invent a finding title, definition, closure condition, human decision, provider action, or governance act.
 
-**Engineering candidate.** Recovered baseline `0ab225176b10f98fa763b3914b27a2162b550205`; implementation checkpoint `3ac369910e66fda72edc67a6ae7de21c3e71c5b8`; final documentation commit to be recorded after creation.
+**Engineering candidate.** Recovered baseline `0ab225176b10f98fa763b3914b27a2162b550205`; implementation checkpoint `3ac369910e66fda72edc67a6ae7de21c3e71c5b8`; evidence-record commit `7ed5d40feca227018a7e2abb44a0c5ba4f368430`; final verification commit to be recorded after clean-clone evidence is added.
 
 ## Root causes
 
