@@ -8,7 +8,7 @@
 - **Implementation checkpoint:** `3ac369910e66fda72edc67a6ae7de21c3e71c5b8`
 - **Evidence-record commit:** `7ed5d40feca227018a7e2abb44a0c5ba4f368430`
 - **Clean-clone implementation commit:** `78d3f4ff2c0dc4f0eab504b317398a535ef3a9a0`
-- **Evidence-closure commit:** `<TO BE RECORDED AFTER THIS UPDATE IS COMMITTED AND REPRODUCED>`
+- **Verified evidence-closure commit:** `b38c32c189c1d9f7e5fa5a053947af51b83edf68`
 - **Governing specification:** `P1_V2_LSKE_SPECIFICATION_v1.1.2.md`
 - **Standing:** Engineering verification record only. It does not register the specification, activate governance, raise Scientific Readiness, or create admissible scientific evidence.
 

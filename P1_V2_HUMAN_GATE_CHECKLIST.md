@@ -23,7 +23,7 @@ These items are evidence inputs to human review, not substitutes for it.
 - [x] Exact clean-clone installed-wheel behavioral subset passed under isolated Python with repository `pythonpath` disabled: `101 passed, 1 skipped`.
 - [x] Full dependency installation was attempted and failed on Windows `WinError 206` in the unrelated Torch tree; bounded LSKE verification used `--no-deps` plus exact LSKE dependencies and makes no full-distribution dependency claim.
 - [x] `ros/model.py` remains at 11 collection entries and no `ros/*` source file changed.
-- [ ] Evidence-closure documentation commit reproduced in a fresh clean clone. To be checked after this update is committed.
+- [x] Evidence-closure documentation commit `b38c32c189c1d9f7e5fa5a053947af51b83edf68` reproduced in a fresh clean clone: implementation-source diff from `78d3f4f...` was clean, focused suite passed `109 passed, 1 skipped`, exact pin and 23-schema gate passed, and Git status was clean.
 
 ## B. Independent human code review
 
