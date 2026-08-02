@@ -7,7 +7,8 @@
 - **Recovered baseline:** `0ab225176b10f98fa763b3914b27a2162b550205`
 - **Implementation checkpoint:** `3ac369910e66fda72edc67a6ae7de21c3e71c5b8`
 - **Evidence-record commit:** `7ed5d40feca227018a7e2abb44a0c5ba4f368430`
-- **Final verification commit:** `<TO BE FILLED AFTER CLEAN-CLONE RESULTS ARE RECORDED>`
+- **Clean-clone implementation commit:** `78d3f4ff2c0dc4f0eab504b317398a535ef3a9a0`
+- **Evidence-closure commit:** `<TO BE RECORDED AFTER THIS UPDATE IS COMMITTED AND REPRODUCED>`
 - **Governing specification:** `P1_V2_LSKE_SPECIFICATION_v1.1.2.md`
 - **Standing:** Engineering verification record only. It does not register the specification, activate governance, raise Scientific Readiness, or create admissible scientific evidence.
 
@@ -89,13 +90,16 @@ All criteria below are exercised by the focused Stage-1 suite. Evidence referenc
 | Draft compilation | 23/23 with `Draft202012Validator.check_schema` |
 | Offline references | PASS through complete in-memory `referencing.Registry` |
 | Deterministic generation | Two consecutive 23-schema generations; Git diff clean after each; schema-generation suite `8 passed` |
-| Formatting | Black reported `9 files would be left unchanged` before documentation completion |
-| Installed checkpoint wheel after packaging repair | Module resolved from external `site-packages`; exact evaluator, 23 schemas, offline references, deterministic accessors, public surface, and append-only writer passed |
-| Installed-wheel behavioral subset | `101 passed, 1 skipped` from outside the repository; schema-file byte test excluded because generated JSON files are repository artifacts, not wheel package data |
+| Formatting | Black reported `8 files would be left unchanged` in the final implementation verification surface |
+| Fresh clean clone at `78d3f4ff2c0dc4f0eab504b317398a535ef3a9a0` | `109 passed, 1 skipped`; exact `jsonschema==4.25.1`; 23/23 schemas compiled; offline references passed |
+| Clean-clone deterministic generation | Two consecutive 23-schema generations; `GIT_SCHEMA_DIFF=CLEAN` after repository LF normalization through `.gitattributes` |
+| Clean-clone wheel build | PASS; `velynx-0.1.0-py3-none-any.whl` built from the exact clean clone |
+| Exact clean-clone wheel external probe | Module resolved from the fresh environment's `site-packages`; exact evaluator, 23 schemas, Draft compilation, offline references, deterministic accessors, public surface, and append-only writer passed |
+| Exact clean-clone installed-wheel behavioral subset | `101 passed, 1 skipped` from outside the repository with isolated Python and repository `pythonpath` disabled; schema-file byte test excluded because generated JSON files are repository artifacts, not wheel package data |
 | Research CI scope | `168 passed` |
 | Unit CI scope | `194 passed, 1 skipped, 1 failed`; the sole failure is a pre-existing non-Stage-1 missing document, `docs/architecture/OBSERVATORY_ARCHITECTURE.md`, absent from the candidate commit |
 | Broad whole-tree pytest | Not an acceptance command: it collected archived/manual/environment-dependent scripts and failed during collection for unrelated legacy conditions |
-| Current-candidate wheel build | PASS after adding inherited `ros*` package discovery |
+| Candidate and clean-clone Git status | Clean after verification; transient `build/` and `*.egg-info/` paths remained ignored |
 
 ## 6. Packaging finding and bounded repair
 
@@ -114,21 +118,15 @@ include = [
 
 No `ros/*.py` file was edited. The rebuilt wheel imported from `site-packages` and passed the external probe and behavioral suite.
 
+A complete dependency-resolving wheel installation was also attempted. It reached the distribution's unrelated heavy dependency chain through `sentence-transformers` and `torch`, then failed on Windows with `WinError 206` for a deeply nested Torch license path. The bounded LSKE installation therefore used `--no-deps`, followed by exact installation of `jsonschema==4.25.1`, `PyYAML==6.0.3`, and `pytest==8.4.1`. This proves the installed LSKE surface and its inherited runtime imports; it does **not** claim successful installation or verification of every unrelated dependency declared by the broader `velynx` distribution.
+
 ## 7. Known non-Stage-1 condition
 
 The repository's configured unit scope has one failure because `tests/unit/test_observatory.py` requires `docs/architecture/OBSERVATORY_ARCHITECTURE.md`, which is absent from this candidate commit. A copy exists only in another working directory. It was not imported into the candidate because Stage-1 recovery must not mix unrelated, uncommitted corpus without repository authority. This condition must be handled by the repository owner independently of LSKE Stage 1; it is not evidence against the 27 LSKE acceptance criteria.
 
-## 8. Evidence still pending at record creation
+## 8. Exact-commit reproduction disposition
 
-The following fields are intentionally prospective until performed against the final documentation commit:
-
-- Final candidate commit SHA.
-- Fresh clean-clone focused Stage-1 result.
-- Fresh clean-clone exact-pin verification.
-- Fresh clean-clone wheel build and external installed-wheel result.
-- Final clean status of both candidate and verification clone.
-
-These fields must be updated with command output before a terminal engineering verdict is issued.
+Commit `78d3f4ff2c0dc4f0eab504b317398a535ef3a9a0` independently reproduced the complete Stage-1 implementation surface in a fresh clean clone. The focused suite, exact evaluator, 23-schema Draft compilation, offline registry, two-pass byte-deterministic generation, wheel build, external installed-wheel probe, behavioral subset, and clean Git status all passed. The only changes after that commit are these documentation evidence updates; their exact evidence-closure commit must receive a final minimal clean-clone focused-suite and clean-status check before the terminal engineering verdict.
 
 ## 9. Human and governance boundary
 

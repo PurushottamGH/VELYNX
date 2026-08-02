@@ -6,7 +6,7 @@
 
 **Scope.** This ledger reconciles available PCA remediation state with the P1-v2 Stage-1 engineering candidate on 2026-08-02. It is not a replacement for the missing immutable PCA register. It does not invent a finding title, definition, closure condition, human decision, provider action, or governance act.
 
-**Engineering candidate.** Recovered baseline `0ab225176b10f98fa763b3914b27a2162b550205`; implementation checkpoint `3ac369910e66fda72edc67a6ae7de21c3e71c5b8`; evidence-record commit `7ed5d40feca227018a7e2abb44a0c5ba4f368430`; final verification commit to be recorded after clean-clone evidence is added.
+**Engineering candidate.** Recovered baseline `0ab225176b10f98fa763b3914b27a2162b550205`; implementation checkpoint `3ac369910e66fda72edc67a6ae7de21c3e71c5b8`; evidence-record commit `7ed5d40feca227018a7e2abb44a0c5ba4f368430`; independently reproduced implementation commit `78d3f4ff2c0dc4f0eab504b317398a535ef3a9a0`; evidence-closure commit to be recorded after this update is committed and minimally reproduced.
 
 ## Root causes
 
@@ -36,7 +36,7 @@
 | `PCA-13` | `R1` / `R4` | Planning-material status and withdrawal/scope decisions remain human governance matters. | Constitutional steward | Stage-1 engineering records claim no authority for that corpus. | `HUMAN_ACTION_REQUIRED` |
 | `PCA-14` | `R4` | Prior bounded erratum work is not expanded by this Stage-1 transaction; full retirement remains unissued. | Engineering; constitutional steward for retirement | No retirement claim was made. | `HUMAN_ACTION_REQUIRED` |
 | `PCA-15` | — | Immutable finding definition and closure condition are unavailable. | Audit owner | No status was inferred beyond preserving it open. | `OPEN` |
-| `PCA-16` | `R2` | Earlier committed baseline `0ab2251...` could not represent the uncommitted Stage-1 implementation. The bounded candidate is now checkpointed and its final exact commit must still pass fresh clean-clone reproduction. | Engineering for proof; repository owner for corpus authority | Development and installed-wheel checks passed; final exact-commit clean-clone evidence is pending. | `BLOCKED` |
+| `PCA-16` | `R2` | Earlier committed baseline `0ab2251...` could not represent the uncommitted Stage-1 implementation. The bounded implementation at `78d3f4f...` now independently reproduces from a fresh clean clone. | Engineering for proof; repository owner for corpus authority | Exact-commit focused suite, exact pin, 23-schema compile, offline references, deterministic regeneration, wheel build, external installed-wheel probe, behavioral subset, and clean status passed. This verifies only the narrow engineering-proof condition and does not establish broader authority-corpus completeness. | `VERIFIED` |
 | `PCA-17` | `R4` | Dated baseline documents remain historical records; current Stage-1 state is reported additively in the acceptance record. | Engineering | `outputs/P1_V2_PHASE1_STAGE1_ACCEPTANCE_RECORD.md` distinguishes baseline, checkpoint, and pending final proof. | `FIXED` |
 | `PCA-18` | `R4` | Package version `1.1.0` and ontology version `1.1.2` are distinct; the exact evaluator pin and all 23 schemas now exist in the candidate. | Engineering | Exact-pin suite, 23-schema compilation, external wheel probe, and ownership tests passed. | `VERIFIED` |
 
@@ -50,7 +50,11 @@
 - Behaviour catalogue: all N-01…N-32 positive payloads pass; every LSKE-owned object rejects one undeclared key; N-31 is explicitly exempt because its interior is Observatory-owned.
 - Determinism: two consecutive generations produced 23 schemas with clean schema diffs; generation suite `8 passed`.
 - Packaging defect found and repaired: the first wheel omitted inherited `ros` imports. `pyproject.toml` now packages `ros*` without changing any `ros/*.py` file.
-- External installed-wheel result: import resolved from `site-packages`; exact evaluator, 23 schemas, offline references, deterministic access, public surface, and append-only writer passed; behavioral subset `101 passed, 1 skipped`.
+- Exact clean-clone implementation commit: `78d3f4ff2c0dc4f0eab504b317398a535ef3a9a0`.
+- Fresh clean-clone result: `109 passed, 1 skipped`; exact `jsonschema==4.25.1`; 23/23 Draft schemas compiled; offline references passed.
+- Cross-platform determinism: `.gitattributes` fixes generated schemas to LF; two consecutive 23-schema generations ended with `GIT_SCHEMA_DIFF=CLEAN`.
+- Exact clean-clone wheel result: wheel built successfully; import resolved from the fresh environment's `site-packages`; exact evaluator, 23 schemas, Draft compilation, offline references, deterministic access, public surface, and append-only writer passed; behavioral subset `101 passed, 1 skipped` under isolated Python with repository `pythonpath` disabled.
+- Installation scope: a full dependency-resolving installation was attempted and failed on Windows `WinError 206` in the unrelated Torch dependency tree. Bounded LSKE verification used `--no-deps` plus exact `jsonschema==4.25.1`, `PyYAML==6.0.3`, and `pytest==8.4.1`; no claim is made for complete installation of unrelated distribution dependencies.
 - Stage boundary: no `ros/*` source diff; `len(ros.model.COLLECTIONS) == 11`; the 11-to-20 expansion remains Stage 2.
 - Research CI scope: `168 passed`.
 - Unit CI scope: `194 passed, 1 skipped, 1 failed`; sole failure is the unrelated absent candidate document `docs/architecture/OBSERVATORY_ARCHITECTURE.md`.
@@ -59,14 +63,14 @@
 
 1. **No re-certification is authorized by this ledger.** `PCA-03` and governance findings remain `HUMAN_ACTION_REQUIRED`.
 2. **PCA-02, PCA-11, PCA-12, and PCA-15 remain `OPEN`.** Their immutable definitions and closure conditions are unavailable.
-3. **PCA-16 remains `BLOCKED` until the final exact documentation commit passes a fresh clean clone, exact declared dependency verification, wheel build, external installation, and clean-status checks.**
+3. **PCA-16 is `VERIFIED` only for its narrow Stage-1 engineering-proof condition.** This does not close `R2` broadly, certify authority-corpus completeness, or authorize merge/release. The evidence-closure documentation commit still receives a final minimal reproduction before the candidate verdict.
 4. **The unrelated Observatory document failure is not silently repaired.** The file exists only outside the candidate and is not imported without repository authority.
 5. **No Git history was rewritten, no credential contents were inspected, and no human identity, decision, signature, provider action, or attestation was invented.**
 
 ## Next admissible actions
 
-1. Commit this bounded documentation/evidence update and record the exact final candidate SHA.
-2. Reproduce that exact SHA in a fresh clean clone; run focused and CI-equivalent Stage-1 checks; build and externally install its wheel.
-3. Update this ledger and the acceptance record with exact clean-clone evidence; change `PCA-16` only if its stated engineering proof condition is met, without claiming broader authority-corpus closure.
+1. Commit this bounded evidence-closure update and record its exact SHA.
+2. Reproduce that exact documentation commit in a fresh clean clone; rerun the focused Stage-1 suite and confirm clean status and implementation-source equivalence with `78d3f4f...`.
+3. Obtain independent human review, dependency approval, and repository-owner merge/release decisions without treating engineering verification as those acts.
 4. Obtain non-secret proof of provider-side credential revocation and explicit human authorization before any history remediation.
 5. Recover the immutable PCA register before changing PCA-02, PCA-11, PCA-12, or PCA-15.

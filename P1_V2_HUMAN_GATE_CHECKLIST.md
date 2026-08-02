@@ -18,10 +18,12 @@ These items are evidence inputs to human review, not substitutes for it.
 - [x] Exactly 23 schemas compile under Draft 2020-12 and resolve references offline.
 - [x] N-01…N-32 positive behavioral coverage exists; LSKE-owned interiors reject an undeclared key; N-31 remains intentionally unconstrained.
 - [x] Two consecutive generations produced 23 schemas with a clean schema diff after each.
-- [x] External installed-wheel probe resolves from `site-packages` and passes exact evaluator, schema count, offline-reference, deterministic-accessor, public-surface, and event-writer checks.
-- [x] External installed-wheel behavioral subset passed: `101 passed, 1 skipped`.
+- [x] Exact clean-clone implementation commit `78d3f4ff2c0dc4f0eab504b317398a535ef3a9a0` passed the focused suite: `109 passed, 1 skipped`.
+- [x] Exact clean-clone wheel resolves from the fresh environment's `site-packages` and passes exact evaluator, schema count, Draft compilation, offline-reference, deterministic-accessor, public-surface, and event-writer checks.
+- [x] Exact clean-clone installed-wheel behavioral subset passed under isolated Python with repository `pythonpath` disabled: `101 passed, 1 skipped`.
+- [x] Full dependency installation was attempted and failed on Windows `WinError 206` in the unrelated Torch tree; bounded LSKE verification used `--no-deps` plus exact LSKE dependencies and makes no full-distribution dependency claim.
 - [x] `ros/model.py` remains at 11 collection entries and no `ros/*` source file changed.
-- [ ] Final exact commit reproduced in a fresh clean clone. To be completed after documentation commit.
+- [ ] Evidence-closure documentation commit reproduced in a fresh clean clone. To be checked after this update is committed.
 
 ## B. Independent human code review
 
