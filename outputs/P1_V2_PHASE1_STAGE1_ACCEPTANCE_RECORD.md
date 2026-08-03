@@ -131,3 +131,220 @@ Commit `78d3f4ff2c0dc4f0eab504b317398a535ef3a9a0` independently reproduced the c
 ## 9. Human and governance boundary
 
 This record does not constitute independent human code review, dependency approval, merge approval, release approval, governance adoption, credential revocation proof, history-rewrite authorization, or scientific validation. Those acts remain in `P1_V2_HUMAN_GATE_CHECKLIST.md`; identity and approval fields remain blank.
+
+---
+
+# Part II — Stage-1 Red-Team Remediation Correction
+
+**GOVERNANCE: DRAFT — NO ADMISSIBLE EVIDENCE**
+
+- **Correction date:** 2026-08-03
+- **Remediation branch:** `p1-v2-stage1-remediation-20260802`
+- **Remediation commit:** `647fe7739a205a081d91acfb98f87aa4c088bf2c`
+- **Pre-remediation tip corrected by this part:** `2f1c7b397573315923f87fb80eadd07517a3ba9f`
+- **Clean-clone verification commit:** `647fe7739a205a081d91acfb98f87aa4c088bf2c`
+- **Standing:** Engineering verification record only. Unchanged from Part I: it does not register the specification, activate governance, raise Scientific Readiness, or create admissible scientific evidence.
+
+## 12. Why this correction exists
+
+An adversarial red team found six defects (D-01…D-06) in the Stage-1 surface that
+Part I certified. Part I's claims were accurate reports of the commands actually
+run; they were nonetheless **insufficient**, because the suite they cite could not
+fail on the defect vectors. This part corrects the record. It does not delete
+Part I: Part I remains a true account of the artifact as it stood at `2f1c7b3`,
+and the gap between "the tests passed" and "the contract holds" is precisely what
+D-01 exposed.
+
+Two Part I statements are **superseded** rather than merely extended:
+
+| Part I statement | Status | Correction |
+|---|---|---|
+| §5 `Focused Stage-1 suite in development environment` — `109 passed, 1 skipped` | SUPERSEDED | `1138 passed, 7 skipped`. The prior suite could not fail on D-01…D-04, so the counts are not comparable. |
+| §5 `Exact clean-clone installed-wheel behavioral subset` — `101 passed, 1 skipped … schema-file byte test excluded` | SUPERSEDED | `1137 passed, 8 skipped`. The exclusion is now an in-band `pytest.mark.skipif` with a printed reason rather than an off-record omission, and the delta from the source-tree run is accounted for by collection-set differencing in §12.4 instead of left to inference. |
+
+Part I §4's AC-P1-01…27 dispositions are **not** restated as PASS by this part.
+They were derived from the superseded suite. AC-P1-04, AC-P1-12, AC-P1-14, and
+AC-P1-27 were each directly implicated by a defect below and are re-evidenced here
+against the corrected surface; the remaining criteria are unchanged in mechanism
+but were never exercised against the defect vectors, so their standing is
+engineering-verified, not independently certified.
+
+## 12.1 D-01…D-06 closure
+
+| ID | Defect | Fix | New observable | Regression evidence |
+|---|---|---|---|---|
+| D-01 | `_leaf_assertion_errors` returned `[]` for an applicator error with empty `context`, so the failure vanished and `validate` returned success. A null `direction` on any of the four evidential relation types was silently accepted, violating RB-02 cl. 2. | Every `{"not": {"type": "null"}}` presence-encoding reachable inside a `then` replaced with a positive assertion via `_present(...)`; `_leaf_assertion_errors` now raises `OntologyError` rather than returning `[]`. | `direction: null` on `supports`/`refutes`/`contradicts`/`validated_by` is REJECTED with `/direction` `enum` and `type`, both `derived=False`. | `test_null_direction_on_every_evidential_relation_type_is_reported`, `test_applicator_with_no_reportable_leaf_fails_closed`, `test_oneof_with_two_matches_also_fails_closed`, `test_raw_and_public_validators_agree_on_every_mutation`; self-attack A-01, A-05 |
+| D-02 | `absolute_schema_path` omits `$ref`/`$defs` splice points, so emitted schema pointers did not resolve against the schema graph, violating RF-01 cl. 3 item 2. | `_schema_pointer_for` walks the registered graph tracking resource boundaries, emitting the clause-3 form `{$id}#{RFC6901 from resource root}`; `_follow_ref` handles the splice. | Every emitted pointer resolves to the exact keyword it names. | `test_every_emitted_pointer_resolves_and_names_its_keyword` over the full mutation corpus; self-attack A-03 |
+| D-03 | `_cross_value_failures` emitted `ascending`, `creation`, `transitionState` — names outside the RF-01 cl. 3 item 3 value space — and over-rejected a coverage-undercount payload that raw jsonschema accepts. | Function and its call site deleted in full. | No emitted keyword lies outside the frozen vocabulary; no applicator is ever reported. | `test_no_emitted_keyword_is_outside_the_frozen_vocabulary`; self-attack A-02, A-06 |
+| D-04 | `type(value) in {str, bool, int, float}` rejected the scalar subclasses the schemas admit, so `from_payload` could build a payload that the `LskeRecord` constructor then rejected as unfrozen. | `isinstance(value, (str, bool, int, float))`, per RF-05 cl. 2.1. | `str`/`int`/`float` subclasses survive the freeze audit and the full round trip. | `test_frozen_leaf_predicate_admits_every_scalar_instance`, `test_frozen_leaf_predicate_still_rejects_non_scalars`, `test_subclass_leaves_survive_the_full_from_payload_roundtrip`; self-attack A-07 |
+| D-05 | PyYAML undeclared in `requirements.txt` — the authoritative site given `dynamic = ["dependencies"]` — while `ros.governance`, `ros.protocol`, and `ros.store` import it. | `PyYAML==6.0.3` declared. | Wheel `Requires-Dist` carries PyYAML; `import ros.store` succeeds in an environment built only from wheel metadata. | Installed-surface probe (§12.3); self-attack A-09 |
+| D-06 | `tests*` shipped in the wheel, putting a second copy of `tests.lske` on the installed surface, so an installed run could import repository-shaped modules and pass for the wrong reason; separately, the schema byte-match test was excluded from the installed run without an in-band record. | `tests*` moved from `include` to `exclude` with the reason recorded in `pyproject.toml`; the byte-match test guarded by `skipif` with an explicit printed reason. | Wheel contains 0 `tests/` entries; the skip is reported by `pytest -rs` rather than silently dropped. | `test_exactly_23_generated_schema_files_are_byte_identical_to_canonical_state` (guarded); self-attack A-08 |
+
+**Closure is differential, not merely assertional.** A passing suite on the fixed
+code does not by itself prove a defect existed. Each defect was therefore
+demonstrated *present* on the pre-remediation tip `2f1c7b3` (checked out into a
+separate worktree, nothing stashed) and *absent* on `647fe77`:
+
+| Probe on `2f1c7b3` | Observed |
+|---|---|
+| D-01 | `direction: null` SILENTLY ACCEPTED on all four evidential types (`supports`, `refutes`, `contradicts`, `validated_by`) |
+| D-02 | The remediation harness cannot even import against the defective source — `_SCHEMA_BY_ID` does not exist, because resource-aware pointer emission was absent |
+| D-03 | `ascending`, `creation`, `transitionState` present in `schema.py`; `_cross_value_failures` still defined |
+| D-04 | Frozen-leaf predicate uses `type(value) in {...}`, not `isinstance` |
+| D-05 | PyYAML absent from `requirements.txt` |
+| D-06 | `tests*` present in the wheel `include` list |
+
+On `647fe77` the same probe reports zero defects present, and the D-04 closure was
+additionally confirmed *behaviourally* rather than by source pattern: `str`, `int`,
+and `float` subclasses pass the leaf predicate and survive the full
+`from_payload` → `LskeRecord` round trip, while a raw `dict` leaf is still rejected
+at pointer `/k`. (A source-text probe initially flagged D-04 as still present on
+the remediated file; that was a false positive matching the explanatory comment at
+`v2/lske/schema.py:1467`, not the predicate at line 1470.)
+
+**SPEC-CONFLICT-01** (raised, not resolved): §9.2.4 N-18 requires
+`uncertainty.interval` to be ascending. Draft 2020-12 has no keyword comparing
+`interval[0]` to `interval[1]`, and RF-01 cl. 3 item 3 admits no keyword that
+could name such a comparison. The rule is therefore **unrepresentable at the
+schema layer**. D-03's fix removes the invented encoding; it does not implement
+the rule, and no ascending check is enforced anywhere in Stage 1 today.
+Enforcement belongs to the store-level layer owning MEM-01…MEM-06 (§9.4.2). This
+is a specification-versus-mechanism conflict for the specification owner, recorded
+here rather than silently amended.
+
+## 12.2 Corrected engineering evidence
+
+| Check | Result |
+|---|---|
+| Focused Stage-1 suite, development environment | `1138 passed, 7 skipped` |
+| Focused Stage-1 suite, exact evaluator `jsonschema==4.25.1` | `1138 passed, 7 skipped` |
+| Adversarial mutation corpus | 238 mutation cases across all 23 entry surfaces, 12 mutation families; `test_differential.py` collects 1035 tests in total (each case is asserted through several independent invariants) |
+| Differential invariant `RAW == PUBLIC` | Holds on every case; the only two accepted mutations are pinned by `_EXPECTED_ACCEPTED` and explained in §12.5 |
+| Independent self-attack | 10 probes A-01…A-10, including an exhaustive `not`-under-`then` sweep, a nested-interior mutation sweep, and a null-injection sweep over every property of every surface; **all held** in both the worktree and the clean clone |
+| Schema count | 23/23 |
+| Two-pass deterministic regeneration | `regenerated 0 of 23` on both passes; `GIT_SCHEMA_DIFF=CLEAN` after each |
+| Clean clone at `647fe77` | `1138 passed, 7 skipped` under exact `jsonschema==4.25.1` |
+| Cross-version check | Identical counts under `jsonschema==4.26.0`; the result is not pin-fragile |
+| Wheel build | `velynx-0.1.0-py3-none-any.whl`, 131 entries, **0** `tests/` entries, **0** `schemas/` entries |
+| Wheel `Requires-Dist` | includes `jsonschema==4.25.1` and `PyYAML==6.0.3` |
+| Installed-surface probe | `v2.lske` and `ros` resolve from `site-packages` with the repository off `sys.path`; 23 schemas compiled; D-01 vector rejected with resolvable pointers |
+| Installed-wheel bounded subset | `1137 passed, 8 skipped` from outside the repository |
+| Whole-repository suite | `29 failed, 2634 passed, 10 skipped` — see §12.6 |
+| Worktree Git status | Clean at the evidence-closure commit recorded in §12.8 (`git status --porcelain` empty) |
+| Diff `2f1c7b3..647fe77` | 12 files changed, 1193 insertions(+), 155 deletions(-) — code, tests, schemas, packaging. This Part II text lands in the separate evidence-closure commit of §12.8. |
+
+## 12.3 Installed-surface probe
+
+Run with the repository absent from `sys.path` (`python -P`, `PYTHONPATH=`) and
+CWD outside the repository:
+
+- `v2.lske.schema` resolves to `wheel_env\Lib\site-packages\v2\lske\schema.py`; `inside repo? False`
+- `import yaml` succeeds at 6.0.3 from wheel metadata alone; `import ros.store` succeeds (D-05)
+- 23 schemas compile without the repository `schemas/` directory
+- The D-01 vector is REJECTED with 2 failures, `/direction` `enum` and `type`, both `derived=False`
+
+## 12.4 The installed-wheel delta, stated rather than inferred
+
+Source tree `1138 passed, 7 skipped`; installed wheel `1137 passed, 8 skipped`.
+Both runs **collect the identical 1145 test IDs** — verified by differencing the
+two `--collect-only` sets, which is empty in both directions. The delta is
+therefore exactly one test changing outcome from passed to skipped, and nothing
+else: `test_exactly_23_generated_schema_files_are_byte_identical_to_canonical_state`,
+under the D-06 guard.
+
+`schemas/lske/` is a repository artifact and deliberately not wheel package data,
+so that assertion is *source-tree build evidence*; under an installed run there is
+nothing to compare against and it would be vacuous rather than true. It is now
+skipped with a printed reason instead of dropped without one.
+
+**Recorded honestly:** an earlier draft of this section attributed the delta to
+three companion cases "not collected against an installed distribution." That was
+wrong. The external test directory held a stale copy of `test_differential.py`
+predating this remediation's last three tests, so those three were genuinely
+uncollected — an artifact of the harness, not a property of the wheel. The copy
+was refreshed to byte-identity with the committed clean clone and the run repeated;
+the numbers above are from that run. The original 4-test claim is withdrawn.
+
+This is a **bounded** claim. It proves the installed LSKE surface and its declared
+runtime imports. It does **not** claim that every unrelated dependency of the
+broader `velynx` distribution installs or verifies; the Part I §6
+`sentence-transformers`/`torch` `WinError 206` condition is unchanged and remains
+outside Stage 1.
+
+## 12.5 Two accepted mutations, and why they are correct
+
+The corpus accepts exactly two mutations, both on the `record` fragment — the
+shared envelope, not an entry surface any caller writes to:
+
+- `record::add-unknown` — `record` carries neither `additionalProperties` nor
+  `unevaluatedProperties`; closure is the composing collection's obligation
+  (§9.13.1). All 22 collection surfaces reject the same undeclared key, asserted
+  by `test_the_record_fragment_delegates_closure_to_its_collections`.
+- `record::break-allof-branch:id-prefix` — `#/$defs/record_id` is the generic
+  `^[A-Z]{3,5}-[0-9]{4}-[0-9]{4}$`, which `ZZZ-9999-9999` satisfies. Every
+  collection narrows it (e.g. `^HYP-…`), asserted by
+  `test_the_generic_record_id_pattern_is_narrowed_by_every_collection`.
+
+Both are frozen by `_EXPECTED_ACCEPTED`, so any *new* silent accept fails the
+suite rather than passing unnoticed.
+
+## 12.6 Whole-repository failures are pre-existing and non-Stage-1
+
+The whole-repository suite reports `29 failed`. All 29 are outside `tests/lske/`:
+24 in `tests/p1_os/test_templates.py` (`LineEndingError: Mixed line endings are
+not allowed` — 12 `test_round_trips_deterministically` and 12 `test_uses_lf_only`),
+4 in `tests/p1_os/test_installation.py`, and 1 in `tests/unit/test_observatory.py`
+(the missing `docs/architecture/OBSERVATORY_ARCHITECTURE.md` already recorded in
+Part I §7).
+
+**Verified pre-existing by set identity, not by count.** The pre-remediation tip
+`2f1c7b3` was checked out into a separate worktree and the same three files run
+with the same interpreter: `29 failed, 82 passed`. Differencing the two sorted
+`FAILED` node-ID lists is **empty in both directions** — the failure sets are
+identical, not merely the same size. The remediation neither introduced nor
+repaired any of them. Part I §7 disclosed only
+the single observatory failure; the other 28 were not disclosed, and this section
+corrects that omission. They remain the repository owner's to handle and are not
+evidence for or against the LSKE criteria.
+
+## 12.7 Boundaries held
+
+- **Stage 2 not entered.** `git diff 2f1c7b3 647fe77 -- ros/` is empty;
+  `len(ros.model.COLLECTIONS) == 11`; `v2/lske/` still contains exactly
+  `__init__.py`, `errors.py`, `events.py`, `schema.py`. No reader, transaction
+  layer, CLI, server, or network client was introduced.
+- **No governance change.** No status was raised, no gate opened, no
+  specification amended. SPEC-CONFLICT-01 is raised for the owner, not resolved.
+- **No scientific claim.** Nothing in this part creates, promotes, or admits
+  evidence, and no hypothesis, result, or interpretation is asserted.
+- **No test weakened to obtain green.** The D-03 test correction removes an
+  assertion on an *invented* keyword and replaces it with the positive assertion
+  that no such keyword is emitted. No expected result was edited to match
+  defective behavior; every count in §12.2 rose.
+- **Security posture unchanged.** No credential was exposed, rotated, or acted
+  on; no provider action was taken; no human identity or approval was fabricated.
+  The unrotated GCP key in Git history remains HUMAN_ACTION_REQUIRED and A-07 of
+  the original PCA audit still FAILs by design.
+
+## 12.8 Commit topology of this remediation
+
+| Commit | Contents | Standing |
+|---|---|---|
+| `2f1c7b397573315923f87fb80eadd07517a3ba9f` | Pre-remediation tip. The artifact Part I certified, with D-01…D-06 present. | Superseded |
+| `647fe7739a205a081d91acfb98f87aa4c088bf2c` | The remediation: `v2/lske/schema.py`, 4 regenerated schema JSON files, 4 test files, `pyproject.toml`, `requirements.txt`, `regen_schemas.py`. All engineering evidence in §12.2 was measured at this tree. | Verification subject |
+| Evidence-closure commit (this Part II text) | Documentation only. Touches exactly `outputs/P1_V2_PHASE1_STAGE1_ACCEPTANCE_RECORD.md`. No code, test, schema, or packaging file. | Record of the above |
+
+The separation is deliberate: every executable claim in §12.2 is reproducible from
+`647fe77` alone, without depending on the commit that describes it. An independent
+certifier should verify against `647fe77` and read this text as commentary, not as
+input.
+
+## 12.9 Standing of this correction
+
+This part is engineering verification only. It does not constitute independent
+human code review, dependency approval, merge approval, release approval,
+governance adoption, credential revocation proof, history-rewrite authorization,
+or scientific validation. Those remain in `P1_V2_HUMAN_GATE_CHECKLIST.md` with
+identity and approval fields blank.
+
+
