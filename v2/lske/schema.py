@@ -175,6 +175,16 @@ def _nullable(schema: dict[str, Any]) -> dict[str, Any]:
     return {"oneOf": [schema, {"type": "null"}]}
 
 
+def _present(schema: dict[str, Any]) -> dict[str, Any]:
+    # The non-null half of a _nullable() property, for the `then` branch of a
+    # conditional that RB-02 cl. 2 / §9.2.4 states as "non-null with a value
+    # from <set>". Expressed as the positive assertion the specification names
+    # rather than {"not": {"type": "null"}}: a failing `not` is an applicator
+    # with no child context, which R9-15 forbids reporting and which therefore
+    # cannot be reported at all (D-01).
+    return copy.deepcopy(schema)
+
+
 def _fixed(
     properties: Mapping[str, dict[str, Any]],
     required: Sequence[str] | None = None,
@@ -275,11 +285,11 @@ def _record_schema() -> dict[str, Any]:
                     "properties": {"kind": {"const": "external_literature"}},
                     "required": ["kind"],
                 },
-                "then": {"properties": {"citation": {"not": {"type": "null"}}}},
+                "then": {"properties": {"citation": _present(_ref("#/$defs/citation"))}},
             },
             {
                 "if": {"properties": {"kind": {"const": "projection"}}, "required": ["kind"]},
-                "then": {"properties": {"derivation": {"not": {"type": "null"}}}},
+                "then": {"properties": {"derivation": _present(_NONEMPTY)}},
             },
         ],
     )
@@ -299,7 +309,7 @@ def _record_schema() -> dict[str, Any]:
                     "properties": {"frozen_at": {"not": {"type": "null"}}},
                     "required": ["frozen_at"],
                 },
-                "then": {"properties": {"seal": {"not": {"type": "null"}}}},
+                "then": {"properties": {"seal": _present(_ref("#/$defs/hex64"))}},
             },
         ],
     )
@@ -855,7 +865,7 @@ def _collection_fields(
                 "then": {
                     "properties": {
                         "validity": {"const": "unavailable"},
-                        "coverage": {"properties": {"missing_reason": {"not": {"type": "null"}}}},
+                        "coverage": {"properties": {"missing_reason": _present(_NONEMPTY)}},
                     }
                 },
             }
@@ -905,22 +915,21 @@ def _collection_fields(
             "environment": _fixed({"python": _NONEMPTY, "platform": _NONEMPTY, "ci": _string()}),
         }
     elif key == "observations":
+        _interval_schema = {
+            "type": "array",
+            "prefixItems": [
+                {"type": "number"},
+                {"type": "number"},
+            ],
+            "items": False,
+            "minItems": 2,
+            "maxItems": 2,
+        }
         defs = {
             "uncertainty": _fixed(
                 {
                     "kind": _string(enum=("none", "sd", "se", "ci95", "iqr")),
-                    "interval": _nullable(
-                        {
-                            "type": "array",
-                            "prefixItems": [
-                                {"type": "number"},
-                                {"type": "number"},
-                            ],
-                            "items": False,
-                            "minItems": 2,
-                            "maxItems": 2,
-                        }
-                    ),
+                    "interval": _nullable(_interval_schema),
                     "n": _nullable({"type": "integer", "minimum": 1}),
                     "method": _NONEMPTY,
                 },
@@ -930,7 +939,7 @@ def _collection_fields(
                             "properties": {"kind": {"enum": ["ci95", "iqr"]}},
                             "required": ["kind"],
                         },
-                        "then": {"properties": {"interval": {"not": {"type": "null"}}}},
+                        "then": {"properties": {"interval": _present(_interval_schema)}},
                         "else": {"properties": {"interval": {"type": "null"}}},
                     }
                 ],
@@ -983,8 +992,8 @@ def _collection_fields(
                         },
                         "then": {
                             "properties": {
-                                "at": {"not": {"type": "null"}},
-                                "by": {"not": {"type": "null"}},
+                                "at": _present(_NONEMPTY),
+                                "by": _present(_NONEMPTY),
                             }
                         },
                     }
@@ -1099,7 +1108,7 @@ def _relation_schema() -> dict[str, Any]:
         all_of=[
             {
                 "if": {"properties": {"type": {"enum": list(evidential)}}, "required": ["type"]},
-                "then": {"properties": {"direction": {"not": {"type": "null"}}}},
+                "then": {"properties": {"direction": _present(_string(enum=sorted(EVIDENCE_DIRECTIONS)))}},
                 "else": {"properties": {"direction": {"type": "null"}}},
             }
         ],
@@ -1229,113 +1238,91 @@ def _pointer(parts: Iterable[Any]) -> str:
     return "" if not encoded else "/" + "/".join(encoded)
 
 
-def _absolute_schema_pointer(error: Any) -> str:
-    base = getattr(error, "absolute_schema_path", error.schema_path)
-    return (
-        f"{error._schema.get('$id', '')}#{_pointer(base)}"
-        if hasattr(error, "_schema")
-        else _pointer(base)
-    )
+_SCHEMA_BY_ID = MappingProxyType(
+    {schema["$id"]: schema for schema in _CANONICAL_SCHEMAS.values()}
+)
+
+
+def _unescape(token: str) -> str:
+    return token.replace("~1", "/").replace("~0", "~")
+
+
+def _follow_ref(ref: str, resource_id: str) -> tuple[str, list[str], dict[str, Any]]:
+    """Resolve one `$ref` against the registered schema graph.
+
+    Returns the `$id` of the resource that now contains the keyword, the RFC 6901
+    pointer *from that resource's root*, and the subschema itself. Only the
+    canonical dicts are consulted: no private ``jsonschema`` attribute is read.
+    """
+    uri, _, fragment = ref.partition("#")
+    target_id = resource_id if not uri else SCHEMA_BASE_URI + uri
+    try:
+        node: Any = _SCHEMA_BY_ID[target_id]
+    except KeyError as exc:  # pragma: no cover - guarded by test_schema_pointers
+        raise OntologyError(f"unregistered schema resource in $ref: {ref}") from exc
+    parts = [_unescape(token) for token in fragment.split("/") if token]
+    for part in parts:
+        try:
+            node = node[part]
+        except (KeyError, TypeError) as exc:  # pragma: no cover - guarded by tests
+            raise OntologyError(f"unresolvable $ref fragment: {ref}") from exc
+    return target_id, parts, node
+
+
+def _schema_pointer_for(error: Any, entry_schema: Mapping[str, Any]) -> str:
+    """Build the RF-01 cl. 3 item 2 schema pointer for a leaf assertion error.
+
+    jsonschema 4.25.1 reports ``absolute_schema_path`` in the *entry* schema's
+    coordinate space with every ``$ref``/``$defs`` splice point omitted, so the
+    raw path dead-ends when walked against the resource that actually contains
+    the failing keyword. This walks the registered graph along that path,
+    re-basing onto the crossed resource's ``$id`` at each ``$ref``, which is what
+    the clause requires and what makes the pointer resolvable.
+    """
+    resource_id = entry_schema["$id"]
+    node: Any = entry_schema
+    parts: list[str] = []
+    path = [str(token) for token in getattr(error, "absolute_schema_path", error.schema_path)]
+    for index, token in enumerate(path):
+        # A `$ref` splice point is omitted from the reported path, so cross it
+        # whenever the current node cannot itself consume the next token.
+        while isinstance(node, Mapping) and "$ref" in node and token not in node:
+            resource_id, parts, node = _follow_ref(node["$ref"], resource_id)
+        try:
+            node = node[int(token)] if isinstance(node, (list, tuple)) else node[token]
+        except (KeyError, IndexError, TypeError, ValueError) as exc:
+            raise OntologyError(
+                "unresolvable schema path for "
+                f"{error.validator!r} at {'/'.join(path)!r} (stalled on {token!r} "
+                f"after {index} steps in {resource_id})"
+            ) from exc
+        parts = [*parts, token]
+    return f"{resource_id}#{_pointer(parts)}"
 
 
 def _leaf_assertion_errors(error: Any) -> list[Any]:
-    if error.validator in _APPLICATORS and error.context:
-        leaves: list[Any] = []
-        for child in error.context:
-            leaves.extend(_leaf_assertion_errors(child))
-        return leaves
-    return [] if error.validator in _APPLICATORS else [error]
+    """Descend an error tree to the assertion keywords that actually failed.
 
-
-def _cross_value_failures(
-    payload: Mapping[str, Any], schema_name: str
-) -> list[tuple[str, str, str]]:
-    schema_id = _CANONICAL_SCHEMAS[schema_name]["$id"]
-    failures: list[tuple[str, str, str]] = []
-    if schema_name == "observations":
-        uncertainty = payload.get("uncertainty")
-        if isinstance(uncertainty, Mapping):
-            interval = uncertainty.get("interval")
-            if (
-                uncertainty.get("kind") in {"ci95", "iqr"}
-                and isinstance(interval, Sequence)
-                and not isinstance(interval, (str, bytes))
-                and len(interval) == 2
-                and all(
-                    isinstance(value, (int, float)) and not isinstance(value, bool)
-                    for value in interval
-                )
-                and interval[0] > interval[1]
-            ):
-                failures.append(
-                    (
-                        "/uncertainty/interval",
-                        f"{schema_id}#/$defs/uncertainty/properties/interval",
-                        "ascending",
-                    )
-                )
-        coverage = payload.get("coverage")
-        if isinstance(coverage, Mapping):
-            measured = coverage.get("measured")
-            expected = coverage.get("expected")
-            missing_reason = coverage.get("missing_reason")
-            if (
-                isinstance(measured, int)
-                and not isinstance(measured, bool)
-                and isinstance(expected, int)
-                and not isinstance(expected, bool)
-                and measured < expected
-                and missing_reason is None
-            ):
-                failures.append(
-                    (
-                        "/coverage/missing_reason",
-                        f"{schema_id}#/$defs/coverage/properties/missing_reason",
-                        "required",
-                    )
-                )
-    if schema_name in COLLECTION_SPEC_BY_KEY:
-        lifecycle = payload.get("lifecycle")
-        if isinstance(lifecycle, Mapping):
-            transitions = lifecycle.get("transitions")
-            state = lifecycle.get("state")
-            if isinstance(transitions, Sequence) and not isinstance(transitions, (str, bytes)):
-                for index, item in enumerate(transitions):
-                    if index > 0 and isinstance(item, Mapping) and item.get("from") is None:
-                        failures.append(
-                            (
-                                f"/lifecycle/transitions/{index}/from",
-                                f"{SCHEMA_BASE_URI}record.schema.json#/$defs/transition/properties/from",
-                                "creation",
-                            )
-                        )
-                if (
-                    transitions
-                    and isinstance(transitions[-1], Mapping)
-                    and state != transitions[-1].get("to")
-                ):
-                    failures.append(
-                        (
-                            "/lifecycle/state",
-                            f"{SCHEMA_BASE_URI}record.schema.json#/$defs/lifecycle/properties/state",
-                            "transitionState",
-                        )
-                    )
-        if COLLECTION_SPEC_BY_KEY[schema_name].primitive == "Claim":
-            provenance = payload.get("provenance")
-            if (
-                isinstance(provenance, Mapping)
-                and provenance.get("kind") == "run_derived"
-                and provenance.get("protocol_id") is None
-            ):
-                failures.append(
-                    (
-                        "/provenance/protocol_id",
-                        f"{SCHEMA_BASE_URI}record.schema.json#/$defs/provenance/properties/protocol_id",
-                        "required",
-                    )
-                )
-    return failures
+    R9-15 (§9.13.3): an applicator is never reported; the subschema assertions
+    that failed are reported instead. An applicator error that carries no child
+    context therefore has no legal representation — and must never be silently
+    discarded, because discarding it converts schema-invalid into valid (D-01).
+    Such an error is a defect in the schema, so this fails closed and names the
+    site rather than dropping the failure.
+    """
+    if error.validator not in _APPLICATORS:
+        return [error]
+    leaves: list[Any] = []
+    for child in error.context or ():
+        leaves.extend(_leaf_assertion_errors(child))
+    if not leaves:
+        raise OntologyError(
+            f"unrepresentable failure: applicator {error.validator!r} at instance "
+            f"{_pointer(error.absolute_path)!r} / schema "
+            f"{_pointer(getattr(error, 'absolute_schema_path', error.schema_path))!r} "
+            "failed with no reportable child assertion"
+        )
+    return leaves
 
 
 def validate(payload: Mapping[str, Any], schema_name: str) -> None:
@@ -1348,9 +1335,12 @@ def validate(payload: Mapping[str, Any], schema_name: str) -> None:
     for error in validator.iter_errors(payload):
         for leaf in _leaf_assertion_errors(error):
             raw.append(
-                (_pointer(leaf.absolute_path), _absolute_schema_pointer(leaf), str(leaf.validator))
+                (
+                    _pointer(leaf.absolute_path),
+                    _schema_pointer_for(leaf, schema),
+                    str(leaf.validator),
+                )
             )
-    raw.extend(_cross_value_failures(payload, schema_name))
     raw = list(dict.fromkeys(raw))
     failures = []
     for instance_pointer, schema_pointer, keyword in raw:
@@ -1473,7 +1463,11 @@ def _frozen_failure(value: Any, pointer: str = "", *, root: bool = False) -> str
             if child is not None:
                 return child
         return None
-    if value is None or type(value) in {str, bool, int, float}:
+    # RF-05 (§9.13.4 cl. 2.1): a leaf is None or *an instance of* str/bool/int/float.
+    # `type(value) in {...}` is an exact-type test and rejects subclasses, which
+    # `_deep_freeze` passes through unchanged, so a round-tripped payload could be
+    # rejected as unfrozen (D-04).
+    if value is None or isinstance(value, (str, bool, int, float)):
         return None
     return pointer
 

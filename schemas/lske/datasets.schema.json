@@ -145,14 +145,12 @@
           "then": {
             "properties": {
               "at": {
-                "not": {
-                  "type": "null"
-                }
+                "minLength": 1,
+                "type": "string"
               },
               "by": {
-                "not": {
-                  "type": "null"
-                }
+                "minLength": 1,
+                "type": "string"
               }
             }
           }

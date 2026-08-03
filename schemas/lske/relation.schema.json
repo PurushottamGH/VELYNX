@@ -49,9 +49,16 @@
       "then": {
         "properties": {
           "direction": {
-            "not": {
-              "type": "null"
-            }
+            "enum": [
+              "depends-on",
+              "indeterminate",
+              "invalid",
+              "null",
+              "opposes",
+              "requires-assumption",
+              "supports"
+            ],
+            "type": "string"
           }
         }
       }

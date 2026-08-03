@@ -18,9 +18,8 @@
               "coverage": {
                 "properties": {
                   "missing_reason": {
-                    "not": {
-                      "type": "null"
-                    }
+                    "minLength": 1,
+                    "type": "string"
                   }
                 }
               },
@@ -229,9 +228,18 @@
           "then": {
             "properties": {
               "interval": {
-                "not": {
-                  "type": "null"
-                }
+                "items": false,
+                "maxItems": 2,
+                "minItems": 2,
+                "prefixItems": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "number"
+                  }
+                ],
+                "type": "array"
               }
             }
           }

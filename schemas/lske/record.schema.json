@@ -319,9 +319,7 @@
           "then": {
             "properties": {
               "seal": {
-                "not": {
-                  "type": "null"
-                }
+                "$ref": "#/$defs/hex64"
               }
             }
           }
@@ -446,9 +444,7 @@
           "then": {
             "properties": {
               "citation": {
-                "not": {
-                  "type": "null"
-                }
+                "$ref": "#/$defs/citation"
               }
             }
           }
@@ -467,9 +463,8 @@
           "then": {
             "properties": {
               "derivation": {
-                "not": {
-                  "type": "null"
-                }
+                "minLength": 1,
+                "type": "string"
               }
             }
           }

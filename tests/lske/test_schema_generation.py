@@ -14,11 +14,29 @@ from v2.lske.schema import COLLECTION_SPECS, all_schemas, collection_schema, rec
 ROOT = Path(__file__).parents[2]
 SCHEMA_DIR = ROOT / "schemas" / "lske"
 
+# D-06, interpretation B: the byte-match assertion is *repository build
+# evidence* — it proves the checked-in JSON is the exact serialization of the
+# canonical dicts. `schemas/lske/` is not wheel package data, so under an
+# installed-wheel run there is nothing to compare against and the assertion
+# would be vacuous rather than true. Skipping when the directory is absent
+# keeps the claim honest in both contexts instead of silently excluding the
+# test from the installed run and reporting a smaller count without saying why.
+_SCHEMA_DIR_PRESENT = SCHEMA_DIR.is_dir()
+requires_source_tree = pytest.mark.skipif(
+    not _SCHEMA_DIR_PRESENT,
+    reason=(
+        "generated schema JSON is a repository artifact, not wheel package data; "
+        "byte-match is source-tree build evidence and cannot be asserted from an "
+        "installed distribution"
+    ),
+)
+
 
 def _serialized(schema):
     return (json.dumps(schema, ensure_ascii=False, indent=2, sort_keys=True) + "\n").encode()
 
 
+@requires_source_tree
 def test_exactly_23_generated_schema_files_are_byte_identical_to_canonical_state():
     schemas = all_schemas()
     assert len(schemas) == 23

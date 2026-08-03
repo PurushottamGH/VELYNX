@@ -18,16 +18,19 @@ dynamic = ["dependencies"]
 dependencies = {file = ["requirements.txt"]}
 
 [tool.setuptools.packages.find]
+# `tests*` is deliberately absent: shipping the test tree in the wheel puts a
+# second copy of `tests.lske` on the installed surface, so an installed-wheel
+# run can import repository-shaped modules and appear to pass for the wrong
+# reason. Tests are run from the source tree, never from site-packages.
 include = [
     "framework*",
     "validation*",
     "experiments*",
-    "tests*",
     "scripts*",
     "ros*",
     "v2*",
 ]
-exclude = ["archive*", "backend*", "data*", "docs*"]
+exclude = ["archive*", "backend*", "data*", "docs*", "tests*"]
 
 [tool.pytest.ini_options]
 # `p1/tooling` is the package root of the editable-installed `p1-os`

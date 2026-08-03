@@ -487,7 +487,14 @@ def test_cross_value_and_collection_specific_normative_conditions():
     with pytest.raises(SchemaViolation) as caught:
         validate(observation, "observations")
     pointers = {item[0] for item in caught.value.failures}
-    assert {"/validity", "/coverage/missing_reason", "/uncertainty/interval"} <= pointers
+    assert {"/validity", "/coverage/missing_reason"} <= pointers
+    # The `value: null` conditional (RB-05 cl. 3) owns both of the above. The
+    # ascending-interval rule (§9.2.4 N-18) is NOT reported here: Draft 2020-12 has
+    # no keyword comparing interval[0] to interval[1], and RF-01 cl. 3 item 3 admits
+    # no keyword naming that comparison, so `validate` must not invent one.
+    # Recorded as SPEC-CONFLICT-01; enforcement belongs to the store-level layer
+    # that owns MEM-01..MEM-06 (§9.4.2).
+    assert "/uncertainty/interval" not in pointers
 
     decision = base_record("decisions")
     decision.update(
