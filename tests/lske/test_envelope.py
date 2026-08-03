@@ -10,7 +10,7 @@ from referencing import Registry, Resource
 import v2.lske
 from ros.admissibility import Tier, Verdict
 from v2.lske import events
-from v2.lske.errors import OntologyError, SchemaViolation
+from v2.lske.errors import LskeError, OntologyError, SchemaViolation
 from v2.lske.schema import (
     ONTOLOGY_VERSION,
     LskeRecord,
@@ -489,11 +489,13 @@ def test_cross_value_and_collection_specific_normative_conditions():
     pointers = {item[0] for item in caught.value.failures}
     assert {"/validity", "/coverage/missing_reason"} <= pointers
     # The `value: null` conditional (RB-05 cl. 3) owns both of the above. The
-    # ascending-interval rule (§9.2.4 N-18) is NOT reported here: Draft 2020-12 has
-    # no keyword comparing interval[0] to interval[1], and RF-01 cl. 3 item 3 admits
-    # no keyword naming that comparison, so `validate` must not invent one.
-    # Recorded as SPEC-CONFLICT-01; enforcement belongs to the store-level layer
-    # that owns MEM-01..MEM-06 (§9.4.2).
+    # ascending-interval rule of N-18 is NOT reported here, and that is the ruled
+    # Stage-1 boundary rather than a gap: LSKE v1.1.3 RG-02 splits N-18 into a
+    # structural half owned by this schema layer and a semantic half owned by
+    # MEM-11 in ros.store._check_memory at Stage 4 (RG-01 cl. 2, RG-03).
+    # Reporting an ordering failure here would require a `keyword` outside the
+    # RF-01 cl. 3 item 3 value space and would reopen D-03, so `validate` must
+    # not invent one. Stage-4 obligation: AC-P1-28.
     assert "/uncertainty/interval" not in pointers
 
     decision = base_record("decisions")
@@ -529,6 +531,113 @@ def test_cross_value_and_collection_specific_normative_conditions():
     }
     with pytest.raises(SchemaViolation):
         validate(projected, "hypotheses")
+
+
+def _observation_with(uncertainty):
+    # A structurally valid `observations` record whose only variable is
+    # `uncertainty`, so that a reported failure at /uncertainty/... is
+    # attributable to N-18 and to nothing else. `value` is non-null and
+    # `coverage` is complete, which keeps the RB-05 cl. 3 conditionals silent.
+    observation = base_record("observations")
+    observation.update(
+        {
+            "run_ids": ["RUN-2026-0001"],
+            "metric_id": "MET-2026-0001",
+            "value": 1.0,
+            "uncertainty": uncertainty,
+            "coverage": {"measured": 2, "expected": 2, "missing_reason": None},
+            "validity": "valid",
+            "declared_null_comparison": None,
+            "blinded": False,
+        }
+    )
+    return observation
+
+
+def _n18_failure_pointers(uncertainty):
+    try:
+        validate(_observation_with(uncertainty), "observations")
+    except SchemaViolation as exc:
+        return {item[0] for item in exc.failures}
+    return set()
+
+
+# LSKE v1.1.3 RG-02: N-18's structural half is Stage 1's, its ascending half is
+# MEM-11's at Stage 4. Every ordering of two numbers is therefore structurally
+# valid here, including the descending one -- ordering is not this layer's
+# subject. The Stage-4 counterpart is AC-P1-28.
+@pytest.mark.parametrize("kind", ["ci95", "iqr"])
+@pytest.mark.parametrize("interval", [[1.0, 2.0], [1.0, 1.0], [2.0, 1.0]])
+def test_n18_stage1_accepts_every_ordering_of_two_numbers(kind, interval):
+    assert _n18_failure_pointers(
+        {"kind": kind, "interval": interval, "n": 2, "method": "bootstrap"}
+    ) == set()
+
+
+@pytest.mark.parametrize("kind", ["ci95", "iqr"])
+@pytest.mark.parametrize(
+    "interval",
+    [
+        [1.0],
+        ["1.0", 2.0],
+        [1.0, "2.0"],
+        [],
+        None,
+    ],
+)
+def test_n18_stage1_rejects_malformed_interval_structure(kind, interval):
+    # Structure IS Stage 1's: item count, item type, and the kind-conditional
+    # non-nullability of RG-02 cl. 1. Each vector must be reported at or below
+    # /uncertainty/interval.
+    pointers = _n18_failure_pointers(
+        {"kind": kind, "interval": interval, "n": 2, "method": "bootstrap"}
+    )
+    assert any(
+        p == "/uncertainty/interval" or p.startswith("/uncertainty/interval/") for p in pointers
+    ), (kind, interval, pointers)
+
+
+@pytest.mark.parametrize("kind", ["ci95", "iqr"])
+def test_n18_stage1_rejects_an_over_long_interval(kind):
+    # Held out of the parametrization above, and the reason is recorded rather
+    # than disposed of (v1.1.3 RG-05 cl. 1). A three-item interval IS rejected --
+    # the record never validates, so D-01's no-silent-acceptance property holds --
+    # but it is rejected with `OntologyError`, not the `SchemaViolation` that
+    # RF-01 contracts for a reportable structural failure. Cause: the childless
+    # `items: false` applicator reaches the `_leaf_assertion_errors` raise in
+    # v2/lske/schema.py before the co-located, perfectly reportable `maxItems: 2`
+    # can be collected. That is a pre-existing defect of the candidate at
+    # aa7f751, is not caused by RG-02, and its repair requires editing
+    # schema.py, which this transaction is forbidden to do. The assertion below
+    # is therefore the invariant that must hold both now and after the repair.
+    with pytest.raises(LskeError):
+        validate(
+            _observation_with(
+                {"kind": kind, "interval": [1.0, 2.0, 3.0], "n": 2, "method": "bootstrap"}
+            ),
+            "observations",
+        )
+
+
+@pytest.mark.parametrize("kind", ["none", "sd", "se"])
+def test_n18_stage1_requires_null_interval_when_kind_is_not_ci95_or_iqr(kind):
+    # RG-02 cl. 1, the `else` branch: null is required, a two-item array is not
+    # admissible however it is ordered.
+    assert (
+        _n18_failure_pointers({"kind": kind, "interval": None, "n": None, "method": "not quantified"})
+        == set()
+    )
+    for interval in ([1.0, 2.0], [2.0, 1.0]):
+        assert "/uncertainty/interval" in _n18_failure_pointers(
+            {"kind": kind, "interval": interval, "n": 2, "method": "bootstrap"}
+        ), (kind, interval)
+
+
+@pytest.mark.parametrize("kind", ["ci95", "iqr"])
+def test_n18_stage1_rejects_null_interval_when_kind_is_ci95_or_iqr(kind):
+    assert "/uncertainty/interval" in _n18_failure_pointers(
+        {"kind": kind, "interval": None, "n": 2, "method": "bootstrap"}
+    )
 
 
 def event_body(kind="lifecycle"):

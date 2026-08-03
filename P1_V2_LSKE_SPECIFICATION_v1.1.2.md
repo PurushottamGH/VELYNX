@@ -14,6 +14,13 @@
   requiring two, one for the payload representation and one for the ordering and derived rule — and the
   Phase-1 test matrix and Appendix D mapping are updated to match.
 - **Supersedes:** `P1_V2_LSKE_SPECIFICATION_v1.1.1.md` v1.1.1 — retained, readable, non-current
+- **Superseded by:** `P1_V2_LSKE_SPECIFICATION_v1.1.3.md` v1.1.3, the current live specification.
+  **This document is non-current: do not implement against it.** v1.1.3 amends exactly nine sections of
+  the chain — §9.2.4's `N-18` `interval` row, §3.6, §9.4.2, §9.6 test 9, §0R.4's count sentence, Part 8's
+  register-extent sentence, §9.8's Stage 4 row, Appendix D.1's `AC-P1-08`, and §9.14 (rule R9-20
+  appended) — and closes `SPEC-CONFLICT-01`. `RF-01`…`RF-06` and R9-19 are unchanged. This line restates
+  the supersession its successor already declares (`v1.1.3` header, `Supersedes:`) so that the chain is
+  readable backward as well as forward; it asserts no new authority and changes no clause.
 - **Carries forward unchanged:** the whole of v1.1.1, and through it the whole of v1.1.0, except the
   sections this document names. Part 0R (`RC-0`…`RC-12`) and Part 0X (`RB-0`…`RB-06`) stand in force in
   their entirety.

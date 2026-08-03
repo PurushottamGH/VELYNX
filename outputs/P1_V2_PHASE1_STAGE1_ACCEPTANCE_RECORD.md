@@ -348,3 +348,105 @@ or scientific validation. Those remain in `P1_V2_HUMAN_GATE_CHECKLIST.md` with
 identity and approval fields blank.
 
 
+---
+
+# Part III — N-18 Amendment Closure (SPEC-CONFLICT-01)
+
+**GOVERNANCE: DRAFT — NO ADMISSIBLE EVIDENCE. THE GOVERNING AMENDMENT IS PROPOSED AND UNREGISTERED.**
+
+- **Closure date:** 2026-08-03
+- **Branch:** `p1-v2-stage1-remediation-20260802`
+- **Parent commit:** `aa7f751475525c25153c5db362f19350cb10e252`
+- **Governing amendment:** `P1_V2_LSKE_SPECIFICATION_v1.1.3.md` — **Proposed / Unregistered**
+- **Standing:** Engineering closure only. This part does **not** certify Stage 1, does not register v1.1.3, and does not open any gate.
+
+## 13. What this part does and does not overturn
+
+Parts I and II stand. Nothing below rewrites them.
+
+- The independent Stage-1 certification of `aa7f751`
+  (`outputs/P1_V2_STAGE1_INDEPENDENT_CERTIFICATION_AA7F751.md`) **FAILED**, and it
+  was **correct to fail**. Measured against the then-governing contract
+  `v1.1.2`, `N-18` was enforced only in part — `interval` type, arity and
+  conditional nullability were schema-enforced, the ascending requirement was
+  not — and `AC-P1-08` forbids a partial catalogue entry. `N-18: FAIL —
+  PARTIAL` and `AC-P1-08: FAIL` were true statements about that artifact under
+  that contract.
+- That verdict is **not** reversed by this part and is **not** reversed by
+  `v1.1.3`. It remains the terminal disposition of `aa7f751` against `v1.1.2`.
+- What changed is the **contract**, not the artifact's conformance to the old
+  one. `v1.1.3` `RG-02` splits `N-18` into a structural half owned by the Stage-1
+  schema layer and a semantic half owned by `MEM-11` in
+  `ros.store._check_memory` at Stage 4. Under `v1.1.3` the Stage-1 schema layer
+  is no longer the owner of the ascending sentence, so its absence there ceases
+  to be partiality (`RG-04`).
+- Recertification against `v1.1.3` has **not** been performed and cannot be
+  performed while `v1.1.3` is unregistered. No `AC-P1-08` PASS is claimed here.
+
+## 13.1 Two stale references in the prior record, corrected
+
+The following appear in earlier engineering commentary and are wrong on the
+normative facts. They are corrected here rather than edited out of Part II.
+
+| Stale statement | Correct statement | Authority |
+|---|---|---|
+| The ascending check is deferred to **Stage 2**. | It is owned at **Stage 4**. Stage 2 is `ros.model` 11 → 20 collections and nothing else. | `v1.1.2` §9.8 build order; `v1.1.3` `RG-01` cl. 2, `RG-03` |
+| The relevant store-integrity register is **`MEM-01`…`MEM-06`**. | The canonical register is **`MEM-01`…`MEM-10`**, and `v1.1.3` `RG-03` appends **`MEM-11`** as the eleventh. | `v1.1.0` §3.6 as ruled by `RC-03`; `v1.1.3` `RG-03` |
+
+## 13.2 The authorized test correction
+
+Exactly one code path changed: `tests/lske/test_envelope.py`. No production
+module, generated schema, packaging file, or `ros/` module was touched.
+
+- The stale commentary in
+  `test_cross_value_and_collection_specific_normative_conditions` — which cited
+  `SPEC-CONFLICT-01` as an open conflict and `MEM-01`…`MEM-06` as the register —
+  was replaced with the authoritative citation chain `RG-01` cl. 2 / `RG-02` /
+  `RG-03` / Stage 4 / `AC-P1-28`. The assertion itself
+  (`"/uncertainty/interval" not in pointers`) is unchanged; only its
+  justification is now correct.
+- Four parametrized tests were added, pinning the ruled Stage-1 boundary:
+  every ordering of two numbers — `[1.0, 2.0]`, `[1.0, 1.0]`, `[2.0, 1.0]` — is
+  a structural **PASS** for both `ci95` and `iqr`; malformed structure is
+  **REJECTED**; a non-`ci95`/`iqr` `kind` requires `null`; a `ci95`/`iqr` `kind`
+  forbids it. `[1.0, 1.0]` is admissible on `RG-02` cl. 3 grounds: the ascending
+  relation is non-strict, and a zero-width `ci95`/`iqr` is a real empirical
+  outcome.
+- **No other test was weakened.** The suite count rose from `1138 passed, 7
+  skipped` at `aa7f751` to `1161 passed, 7 skipped`; the delta is exactly the 23
+  new N-18 node IDs. No expected result was edited to match observed behavior.
+
+## 13.3 A pre-existing defect raised, not disposed of
+
+`RG-05` cl. 1 makes raising mandatory and disposing the defect. Accordingly:
+
+**Finding N18-E1.** An `uncertainty.interval` of three or more numbers, with
+`kind ∈ {ci95, iqr}`, is rejected — but with `OntologyError`, not the
+`SchemaViolation` that `RF-01` contracts for a reportable structural failure.
+The childless `items: false` applicator reaches the `_leaf_assertion_errors`
+raise in `v2/lske/schema.py` before the co-located and perfectly reportable
+`maxItems: 2` can be collected.
+
+- **Pre-existing.** `git diff --stat v2/lske/schema.py` against `aa7f751` is
+  empty. Not caused by `RG-02` and not caused by this transaction.
+- **Fails closed.** The record never validates either way, so D-01's
+  no-silent-acceptance property is intact. The defect is in the failure
+  *class*, not in the accept/reject decision.
+- **Blast radius.** `"items": false` occurs in exactly one generated schema,
+  `schemas/lske/observations.schema.json`, twice.
+- **Not repaired here.** Repair requires editing `v2/lske/schema.py`, which this
+  transaction is forbidden to do. The three-item vector is therefore held out of
+  the ordinary `SchemaViolation` parametrization and pinned by
+  `test_n18_stage1_rejects_an_over_long_interval`, which asserts the invariant
+  that must hold both now and after repair.
+- **Disposition.** Open. Requires a separate authorized transaction. It is not
+  an `N-18` defect and does not affect `RG-01`…`RG-05`.
+
+## 13.4 Boundaries held
+
+- `git diff aa7f751 -- v2/ ros/ schemas/` is **empty**. All 23 LSKE schemas are
+  byte-identical to the parent commit.
+- `len(ros.model.COLLECTIONS) == 11`. **Stage 2 not entered.**
+- `grep -rn "MEM-11" ros/ v2/` returns **0**. **Stage 4 not entered.** `MEM-11`
+  exists as a normative sentence and a recorded obligation only.
+- No governance status was raised, no gate opened, no human approval recorded.
