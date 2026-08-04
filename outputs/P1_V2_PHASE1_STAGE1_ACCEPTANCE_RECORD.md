@@ -614,3 +614,63 @@ This is an engineering closure only. It is **not** an independent certification
 of the Stage-1 candidate, and none is claimed. The candidate is ready to be
 offered for independent hostile certification by a party that did not implement
 it.
+
+### 14.9 Clean-clone reproduction (section 13) and an erratum to 14.6
+
+**GOVERNANCE: DRAFT — NO ADMISSIBLE EVIDENCE**
+
+Reproduced from an **independent clone** of the repository, checked out at the
+exact candidate SHA `59c0f14c244c5a14575c9259f0c71d8bcd0702a7`, in a fresh
+virtual environment with `jsonschema==4.25.1`, `PyYAML==6.0.3`, `pytest 9.1.1`.
+The clone was never the candidate worktree and shares no environment with it.
+
+| Gate, re-run in the clean clone | Result |
+|---|---|
+| Complete Stage-1 suite | **1163 passed, 7 skipped, 0 failed** — identical to the candidate worktree |
+| `N18-E1` reproduction and `N-18` vectors (`-k n18`) | **24 passed** |
+| `D-01` … `D-06` differential corpus | **1030 passed, 6 skipped** |
+| 23 canonical schemas compile offline | **23/23** |
+| Deterministic regeneration, two passes | byte-identical |
+| Committed `schemas/lske/*.schema.json` vs generated | **23** files, **0** unexplained diff |
+| `len(ros.model.COLLECTIONS)` | **11** — Stage 2 not entered |
+| `MEM-11` references in `ros/` `v2/` | **0** — Stage 4 not entered |
+| `git diff 4f0d4d5 59c0f14 -- ros/` | **empty** |
+| Clone working tree at end | **clean** |
+| Candidate worktree at end | **clean** |
+
+**Installed-wheel verification (section 12).** A wheel was built from the
+candidate, inspected, and installed into a separate fresh environment outside
+the repository. **43 checks, 0 failures.** Import origin resolved to
+`site-packages`, with no repository path on `sys.path`; the shipped
+`v2/lske/` carries the corrected `_leaf_assertion_errors` / `_discharge`; the
+test tree is absent from the installed surface (`import tests` fails), and no
+`schemas/` JSON artifact is needed at import — the 23 schemas are generated from
+the installed module. Declared dependencies were sufficient: installing the
+wheel alone pulled `PyYAML 6.0.3` and `jsonschema 4.25.1` with no manual step.
+
+**Erratum to 14.6.** The line "digest `658993e014c3b075706bf1aafb29e256`" was
+produced by a scratch script whose hashing recipe was not recorded alongside it,
+and it is **not reproducible** from the stated inputs. A fingerprint that cannot
+be recomputed is not evidence, so it is withdrawn and replaced with one whose
+recipe is stated in full:
+
+```
+sha256 over sorted(schemas/lske/*.schema.json by file name), feeding
+    filename_utf8 || 0x00 || file_bytes || 0x00
+for each file in order.
+```
+
+- **Committed-corpus fingerprint:** `c4e941f10773b454d44a88d3f5c5dddfd34c3cf7fd84a8e308f43af4f6d53ef7`
+- Identical in the candidate worktree and in the independent clone, and stable
+  across repeated computation.
+
+The withdrawn digest was a reporting defect in this record, not a behavioral
+finding: the underlying property it was meant to attest — that two generation
+passes are byte-identical and that the 23 committed files match what the module
+generates — was re-verified directly in the clean clone and holds. The 14.6 row
+is superseded by this section; per section 14 it is corrected here rather than
+edited in place.
+
+**Standing is unchanged.** These are engineering gates only. This section
+records no certification, and the implementer's verification of the
+implementer's own repair is not one.
