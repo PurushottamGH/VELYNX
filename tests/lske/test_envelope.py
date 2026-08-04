@@ -13,6 +13,8 @@ from v2.lske import events
 from v2.lske.errors import LskeError, OntologyError, SchemaViolation
 from v2.lske.schema import (
     ONTOLOGY_VERSION,
+    _APPLICATORS,
+    _SCHEMA_BY_ID,
     LskeRecord,
     admissibility_payload,
     all_schemas,
@@ -599,24 +601,45 @@ def test_n18_stage1_rejects_malformed_interval_structure(kind, interval):
 
 @pytest.mark.parametrize("kind", ["ci95", "iqr"])
 def test_n18_stage1_rejects_an_over_long_interval(kind):
-    # Held out of the parametrization above, and the reason is recorded rather
-    # than disposed of (v1.1.3 RG-05 cl. 1). A three-item interval IS rejected --
-    # the record never validates, so D-01's no-silent-acceptance property holds --
-    # but it is rejected with `OntologyError`, not the `SchemaViolation` that
-    # RF-01 contracts for a reportable structural failure. Cause: the childless
-    # `items: false` applicator reaches the `_leaf_assertion_errors` raise in
-    # v2/lske/schema.py before the co-located, perfectly reportable `maxItems: 2`
-    # can be collected. That is a pre-existing defect of the candidate at
-    # aa7f751, is not caused by RG-02, and its repair requires editing
-    # schema.py, which this transaction is forbidden to do. The assertion below
-    # is therefore the invariant that must hold both now and after the repair.
-    with pytest.raises(LskeError):
+    # N18-E1, closed. A three-item interval is a structural failure and RF-01
+    # cl. 3 contracts a `SchemaViolation` carrying it. The co-located
+    # `maxItems: 2` is the reportable assertion; the childless `items: false`
+    # applicator alongside it is discharged against that assertion under
+    # §9.5.1 cl. 4 rather than escaping as an unrelated `OntologyError`.
+    with pytest.raises(SchemaViolation) as raised:
         validate(
             _observation_with(
                 {"kind": kind, "interval": [1.0, 2.0, 3.0], "n": 2, "method": "bootstrap"}
             ),
             "observations",
         )
+    failures = raised.value.failures
+    assert any(
+        pointer == "/uncertainty/interval" and keyword == "maxItems"
+        for pointer, _, keyword, _ in failures
+    ), failures
+    # R9-15 / RF-01 cl. 3: no item may name an applicator keyword.
+    assert not [item for item in failures if item[2] in _APPLICATORS], failures
+
+
+def test_n18e1_over_long_interval_reports_a_resolvable_schema_pointer():
+    # RF-01 cl. 3 item 2: every reported schema pointer resolves in the
+    # registered graph. The N18-E1 repair must not report a pointer it cannot
+    # resolve, which is what D-02 closed for the leaf case.
+    with pytest.raises(SchemaViolation) as raised:
+        validate(
+            _observation_with(
+                {"kind": "ci95", "interval": [1.0, 2.0, 3.0], "n": 2, "method": "bootstrap"}
+            ),
+            "observations",
+        )
+    for _, schema_pointer, _, _ in raised.value.failures:
+        assert schema_pointer, raised.value.failures
+        resource_id, _, fragment = schema_pointer.partition("#")
+        node = _SCHEMA_BY_ID[resource_id]
+        for token in [t for t in fragment.split("/") if t]:
+            token = token.replace("~1", "/").replace("~0", "~")
+            node = node[int(token)] if isinstance(node, list) else node[token]
 
 
 @pytest.mark.parametrize("kind", ["none", "sd", "se"])

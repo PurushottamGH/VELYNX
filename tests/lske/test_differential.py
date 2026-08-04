@@ -28,6 +28,7 @@ from v2.lske.schema import (
     _SCHEMA_BY_ID,
     EVIDENCE_DIRECTIONS,
     LskeRecord,
+    _discharge,
     _leaf_assertion_errors,
     all_schemas,
     validate,
@@ -151,7 +152,12 @@ def test_applicator_with_no_reportable_leaf_fails_closed():
     This is the durable half of the D-01 fix. `{"not": {...}}` is the canonical
     producer of an applicator error whose `context` is empty: there is no child
     assertion to report, because the child *succeeded*. Before the fix this
-    returned `[]` and the failure disappeared; now it must raise.
+    returned `[]` and the failure disappeared.
+
+    N18-E1 moved the point of enforcement without weakening it: the descent
+    collects the childless site instead of raising at it, and the site is
+    discharged against the co-located failures once they are all known. Here
+    there are none, so it is uncovered and must still fail closed.
     """
     probe = {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -162,8 +168,11 @@ def test_applicator_with_no_reportable_leaf_fails_closed():
     assert len(errors) == 1 and errors[0].validator == "not", errors
     assert not errors[0].context, "probe did not produce an empty-context applicator"
 
+    childless: list = []
+    assert _leaf_assertion_errors(errors[0], childless) == []
+    assert [error.validator for error in childless] == ["not"]
     with pytest.raises(OntologyError, match="unrepresentable failure"):
-        _leaf_assertion_errors(errors[0])
+        _discharge(childless, raw=[])
 
 
 def test_leaf_assertion_errors_passes_through_plain_assertions():
@@ -173,7 +182,9 @@ def test_leaf_assertion_errors_passes_through_plain_assertions():
         "properties": {"x": {"type": "string"}},
     }
     errors = list(Draft202012Validator(probe).iter_errors({"x": 1}))
-    assert [error.validator for error in _leaf_assertion_errors(errors[0])] == ["type"]
+    childless: list = []
+    assert [error.validator for error in _leaf_assertion_errors(errors[0], childless)] == ["type"]
+    assert childless == []
 
 
 def test_oneof_with_two_matches_also_fails_closed():
@@ -185,8 +196,35 @@ def test_oneof_with_two_matches_also_fails_closed():
     errors = list(Draft202012Validator(probe).iter_errors(1))
     assert len(errors) == 1 and errors[0].validator == "oneOf", errors
     assert not errors[0].context
+    childless: list = []
+    assert _leaf_assertion_errors(errors[0], childless) == []
     with pytest.raises(OntologyError, match="unrepresentable failure"):
-        _leaf_assertion_errors(errors[0])
+        _discharge(childless, raw=[])
+
+
+def test_childless_site_is_discharged_by_a_co_located_reported_failure():
+    """N18-E1: a childless site co-located with a real assertion is represented.
+
+    `items: false` is the third empty-context producer and the one N18-E1 was
+    raised against. It never travels alone in the frozen schemas: a `maxItems`
+    bound sits beside it and is perfectly reportable. The caller is told the
+    instance is invalid and where, no applicator keyword is named (RF-01 cl. 3
+    item 3), and nothing is discarded.
+    """
+    probe = {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "array",
+        "prefixItems": [{"type": "number"}, {"type": "number"}],
+        "items": False,
+        "maxItems": 2,
+    }
+    errors = list(Draft202012Validator(probe).iter_errors([1.0, 2.0, 3.0]))
+    childless: list = []
+    leaves = [leaf for error in errors for leaf in _leaf_assertion_errors(error, childless)]
+    assert [error.validator for error in childless] == ["items"]
+    assert [leaf.validator for leaf in leaves] == ["maxItems"]
+    # The co-located `maxItems` covers the site, so the discharge is silent.
+    _discharge(childless, raw=[("", "", "maxItems")])
 
 
 # --------------------------------------------------------------------------

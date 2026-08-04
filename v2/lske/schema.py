@@ -1300,29 +1300,70 @@ def _schema_pointer_for(error: Any, entry_schema: Mapping[str, Any]) -> str:
     return f"{resource_id}#{_pointer(parts)}"
 
 
-def _leaf_assertion_errors(error: Any) -> list[Any]:
+def _leaf_assertion_errors(error: Any, childless: list[Any]) -> list[Any]:
     """Descend an error tree to the assertion keywords that actually failed.
 
     R9-15 (§9.13.3): an applicator is never reported; the subschema assertions
-    that failed are reported instead. An applicator error that carries no child
-    context therefore has no legal representation — and must never be silently
-    discarded, because discarding it converts schema-invalid into valid (D-01).
-    Such an error is a defect in the schema, so this fails closed and names the
-    site rather than dropping the failure.
+    that failed are reported instead. Under ``jsonschema`` 4.25.1 three of the
+    applicators of ``_APPLICATORS`` can fail while reporting no child context at
+    all -- ``items`` when its subschema is ``false``, ``not`` when its subschema
+    matches, and ``oneOf`` when more than one branch matches. Such an error has
+    no legal representation of its own, because RF-01 cl. 3 item 3 forbids
+    naming an applicator keyword, and it must never be silently discarded,
+    because discarding it can convert schema-invalid into valid (D-01).
+
+    So it is neither reported nor dropped here: it is appended to ``childless``
+    and discharged by :func:`validate` against the failure set as a whole, which
+    is the only place the co-located assertions are all known. A site that no
+    reported failure covers is a genuine defect in the schema and fails closed
+    there.
     """
     if error.validator not in _APPLICATORS:
         return [error]
     leaves: list[Any] = []
     for child in error.context or ():
-        leaves.extend(_leaf_assertion_errors(child))
+        leaves.extend(_leaf_assertion_errors(child, childless))
     if not leaves:
-        raise OntologyError(
-            f"unrepresentable failure: applicator {error.validator!r} at instance "
-            f"{_pointer(error.absolute_path)!r} / schema "
-            f"{_pointer(getattr(error, 'absolute_schema_path', error.schema_path))!r} "
-            "failed with no reportable child assertion"
-        )
+        childless.append(error)
     return leaves
+
+
+def _discharge(childless: Iterable[Any], raw: Iterable[tuple[str, str, str]]) -> None:
+    """Fail closed on any childless applicator site no reported failure covers.
+
+    A site is *represented* when some reported failure is at or below its
+    instance pointer, by the one containment test of §9.5.1 cl. 4: the caller is
+    then told which part of the instance is invalid, and the applicator keyword
+    RF-01 cl. 3 item 3 forbids naming never enters the payload. A site nothing
+    covers has no legal representation and no substitute, so it raises rather
+    than being dropped -- dropping it could convert schema-invalid into public
+    valid, which is exactly what D-01 closed.
+
+    Sites are sorted before the check so that the one named by the message is a
+    function of the failure set alone and not of iteration order (RF-0.2).
+    """
+    reported = list(raw)
+    sites = sorted(
+        {
+            (
+                _pointer(error.absolute_path),
+                _pointer(getattr(error, "absolute_schema_path", error.schema_path)),
+                str(error.validator),
+            )
+            for error in childless
+        }
+    )
+    for instance_pointer, schema_path, keyword in sites:
+        prefix = instance_pointer + "/"
+        if not any(
+            pointer == instance_pointer or pointer.startswith(prefix)
+            for pointer, _, _ in reported
+        ):
+            raise OntologyError(
+                f"unrepresentable failure: applicator {keyword!r} at instance "
+                f"{instance_pointer!r} / schema {schema_path!r} failed with no "
+                "reportable child assertion and no co-located reported failure"
+            )
 
 
 def validate(payload: Mapping[str, Any], schema_name: str) -> None:
@@ -1332,8 +1373,9 @@ def validate(payload: Mapping[str, Any], schema_name: str) -> None:
         raise OntologyError(f"unknown LSKE schema: {schema_name}") from exc
     validator = Draft202012Validator(schema, registry=_REGISTRY)
     raw: list[tuple[str, str, str]] = []
+    childless: list[Any] = []
     for error in validator.iter_errors(payload):
-        for leaf in _leaf_assertion_errors(error):
+        for leaf in _leaf_assertion_errors(error, childless):
             raw.append(
                 (
                     _pointer(leaf.absolute_path),
@@ -1342,6 +1384,7 @@ def validate(payload: Mapping[str, Any], schema_name: str) -> None:
                 )
             )
     raw = list(dict.fromkeys(raw))
+    _discharge(childless, raw)
     failures = []
     for instance_pointer, schema_pointer, keyword in raw:
         derived = False
