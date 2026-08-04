@@ -96,7 +96,9 @@ def _assert_agrees(payload: Any, name: str, label: str) -> list[tuple[str, str, 
 @pytest.mark.parametrize("name", _NAMES)
 def test_every_entry_surface_has_a_raw_valid_baseline(name):
     """The mutation corpus is only meaningful if the unmutated payload is valid."""
-    errors = list(Draft202012Validator(_SCHEMAS[name], registry=_REGISTRY).iter_errors(valid_payload(name)))
+    errors = list(
+        Draft202012Validator(_SCHEMAS[name], registry=_REGISTRY).iter_errors(valid_payload(name))
+    )
     assert errors == [], [f"/{'/'.join(map(str, e.absolute_path))}: {e.message}" for e in errors]
 
 
@@ -403,8 +405,7 @@ def _mutation_cases() -> list[tuple[str, str, dict[str, Any]]]:
 # is the parametrization view, where each tuple is wrapped in a `pytest.param`.
 _RAW_CASES = _mutation_cases()
 _CASES = [
-    pytest.param(name, label, payload, id=f"{name}::{label}")
-    for name, label, payload in _RAW_CASES
+    pytest.param(name, label, payload, id=f"{name}::{label}") for name, label, payload in _RAW_CASES
 ]
 
 
@@ -421,19 +422,19 @@ def test_every_emitted_pointer_resolves_and_names_its_keyword(name, label, paylo
     if failures is None:
         pytest.skip("mutation left the payload valid")
     for instance_pointer, schema_pointer, keyword, _ in failures:
-        assert re.fullmatch(r"https://p1\.local/schemas/lske/[a-z0-9_]+\.schema\.json#(/.*)?", schema_pointer), (
-            f"{name}::{label}: malformed schema pointer {schema_pointer!r}"
-        )
+        assert re.fullmatch(
+            r"https://p1\.local/schemas/lske/[a-z0-9_]+\.schema\.json#(/.*)?", schema_pointer
+        ), f"{name}::{label}: malformed schema pointer {schema_pointer!r}"
         node = _resolve_pointer(schema_pointer)
-        assert node is not _MISSING, (
-            f"{name}::{label}: {schema_pointer!r} does not resolve against the schema graph"
-        )
+        assert (
+            node is not _MISSING
+        ), f"{name}::{label}: {schema_pointer!r} does not resolve against the schema graph"
         # The final pointer segment must be the keyword that was reported, except
         # for the three non-keyword values RF-01 cl. 3 item 3 admits.
         if keyword not in _NON_KEYWORD_VALUES:
-            assert schema_pointer.split("/")[-1] == keyword, (
-                f"{name}::{label}: pointer {schema_pointer!r} does not end in {keyword!r}"
-            )
+            assert (
+                schema_pointer.split("/")[-1] == keyword
+            ), f"{name}::{label}: pointer {schema_pointer!r} does not end in {keyword!r}"
         assert instance_pointer == "" or instance_pointer.startswith("/"), instance_pointer
 
 
@@ -499,7 +500,9 @@ def test_at_least_one_mutation_per_surface_is_actually_rejected():
 #                          which `ZZZ-9999-9999` satisfies. The per-collection
 #                          narrowing to `^HYP-…` is what rejects it, and that is
 #                          exercised on all 22 collection surfaces.
-_EXPECTED_ACCEPTED = frozenset({("record", "add-unknown"), ("record", "break-allof-branch:id-prefix")})
+_EXPECTED_ACCEPTED = frozenset(
+    {("record", "add-unknown"), ("record", "break-allof-branch:id-prefix")}
+)
 
 
 def test_exactly_the_expected_mutations_are_accepted():

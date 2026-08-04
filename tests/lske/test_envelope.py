@@ -571,9 +571,10 @@ def _n18_failure_pointers(uncertainty):
 @pytest.mark.parametrize("kind", ["ci95", "iqr"])
 @pytest.mark.parametrize("interval", [[1.0, 2.0], [1.0, 1.0], [2.0, 1.0]])
 def test_n18_stage1_accepts_every_ordering_of_two_numbers(kind, interval):
-    assert _n18_failure_pointers(
-        {"kind": kind, "interval": interval, "n": 2, "method": "bootstrap"}
-    ) == set()
+    assert (
+        _n18_failure_pointers({"kind": kind, "interval": interval, "n": 2, "method": "bootstrap"})
+        == set()
+    )
 
 
 @pytest.mark.parametrize("kind", ["ci95", "iqr"])
@@ -647,7 +648,9 @@ def test_n18_stage1_requires_null_interval_when_kind_is_not_ci95_or_iqr(kind):
     # RG-02 cl. 1, the `else` branch: null is required, a two-item array is not
     # admissible however it is ordered.
     assert (
-        _n18_failure_pointers({"kind": kind, "interval": None, "n": None, "method": "not quantified"})
+        _n18_failure_pointers(
+            {"kind": kind, "interval": None, "n": None, "method": "not quantified"}
+        )
         == set()
     )
     for interval in ([1.0, 2.0], [2.0, 1.0]):

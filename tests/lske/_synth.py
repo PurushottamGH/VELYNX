@@ -30,9 +30,7 @@ def _confidence() -> dict[str, Any]:
     return {
         "level": None,
         "scope": None,
-        "dimensions": {
-            key: {"state": "unassessed", "evidence_ids": []} for key in _DIMENSION_KEYS
-        },
+        "dimensions": {key: {"state": "unassessed", "evidence_ids": []} for key in _DIMENSION_KEYS},
     }
 
 
