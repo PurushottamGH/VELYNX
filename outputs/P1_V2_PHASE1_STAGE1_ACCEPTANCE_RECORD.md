@@ -450,3 +450,167 @@ raise in `v2/lske/schema.py` before the co-located and perfectly reportable
 - `grep -rn "MEM-11" ros/ v2/` returns **0**. **Stage 4 not entered.** `MEM-11`
   exists as a normative sentence and a recorded obligation only.
 - No governance status was raised, no gate opened, no human approval recorded.
+
+## 14. N18-E1 remediation (Operation N18-E1 Surgical Closure)
+
+**GOVERNANCE: DRAFT — NO ADMISSIBLE EVIDENCE**
+
+This section is **additive**. Sections 1–13.4 above are unchanged and remain the
+record of what was true at their own commits: the `aa7f751` certification
+failure, the `4f0d4d5` `N-18` engineering closure, and the §13.3 discovery of
+`N18-E1`. Nothing there is rewritten. This section closes only the §13.3
+**Disposition: Open** line, and it does so as the "separate authorized
+transaction" that line called for.
+
+- **Record date:** 2026-08-04
+- **Remediation branch:** `p1-v2-stage1-remediation-20260802`
+- **Parent (engineering baseline):** `4f0d4d521318a8a8c069b4761cc325f8e57412e3`
+- **Implementation commit:** `e6422163bda43a8c1480ef494366947904d3ba87`
+- **Governing specification:** `P1_V2_LSKE_SPECIFICATION_v1.1.3.md` — **Proposed
+  / Unregistered.** See §14.1.
+- **Standing:** Engineering verification record only. It is **not** an
+  independent certification, and it is not claimed as one. The implementer of a
+  repair may not certify it; certification of this candidate remains outstanding
+  and must be performed by an independent party.
+
+### 14.1 Governance standing of this transaction
+
+`P1_V2_LSKE_SPECIFICATION_v1.1.3.md` carries **Status: Proposed /
+Unregistered**. `GOVERNANCE_REGISTRY.yaml` reports `status: Draft`,
+`active_domain_standards: []`, `constitutional_steward: []`, and both
+attestation fields `null`. `audits/PROPOSED_AUTHORITY_RULINGS.md` is
+`HUMAN_ACTION_REQUIRED` with every ruling `UNISSUED`, blocked behind `PCA-01`:
+no constitutional steward exists to issue them.
+
+The Project Engineering Standard v1.0 §0.4 (`PES-0.2`) contemplates exactly this
+state: engineering work may proceed against a Proposed specification provided it
+produces **no admissible evidence**, carries the DRAFT banner, and does not
+register, adopt, or activate anything. Registration, adoption, and admissibility
+are reserved to the Human role. This transaction therefore **implements** and
+**does not certify**.
+
+No approval field was filled. No attestation was authored. No human identity was
+asserted. No registry status was changed. `v1.1.3` remains Proposed /
+Unregistered after this transaction exactly as before it.
+
+### 14.2 Reproduction, before any repair
+
+Reproduced at the unmodified baseline `4f0d4d5` under `jsonschema==4.25.1` in an
+isolated environment. For both `kind: ci95` and `kind: iqr`, an
+`uncertainty.interval` of `[1.0, 2.0, 3.0]`:
+
+- **Observed:** `OntologyError("unrepresentable failure: applicator 'items' …")`
+- **Contracted by `RF-01` cl. 3:** `SchemaViolation` carrying the §9.5.1 failure
+  payload.
+
+A failing regression test was written and observed to fail **before** any
+production line was edited.
+
+### 14.3 Root cause
+
+`_interval_schema` in `v2/lske/schema.py` carries `"items": False` alongside
+`"maxItems": 2`. In `jsonschema` 4.25.1, the `items` keyword with a `false`
+subschema yields a bare `ValidationError` with **empty `.context`**;
+`iter_errors` then stamps `validator="items"`. Because `"items"` is in
+`_APPLICATORS` and its context is empty, the recursive descent in
+`_leaf_assertion_errors` reached its fail-closed `raise OntologyError` **during**
+the descent — before the co-located, perfectly reportable `maxItems: 2` failure,
+which arrives on a *different* top-level error branch, could be collected.
+
+The record was always correctly rejected. The defect was in the exception
+*class* and in the loss of a representable failure, never in the accept/reject
+decision.
+
+**The cause is generic, not specific to `maxItems`.** A probe of every
+applicator shape across the 23 Stage-1 schemas under 4.25.1 found exactly three
+members of `_APPLICATORS` that can fail childless: `items` (with a `false`
+subschema), `not` (subschema matches), and `oneOf` (more than one branch
+matches). `anyOf` always carries context. `additionalProperties` and
+`unevaluatedProperties` also produce childless errors but are outside
+`_APPLICATORS` and were already reported as leaves. The repair therefore fixes
+the mechanism rather than special-casing one keyword.
+
+### 14.4 The correction
+
+One production file changed: `v2/lske/schema.py`. **Collect, then discharge.**
+
+- `_leaf_assertion_errors(error, childless)` no longer raises inside the
+  descent. A childless applicator site is appended to `childless` — neither
+  reported nor silently dropped.
+- New `_discharge(childless, raw)` runs in `validate()` **after** every leaf
+  assertion across every top-level error branch is known. A childless site is
+  discharged when some reported failure lies **at or below** its instance
+  pointer — the single containment test already specified by §9.5.1 cl. 4. A
+  site that no reported failure covers still raises `OntologyError` and still
+  fails closed.
+- Sites are sorted before the check, so the site named in any message is a
+  function of the failure set alone and not of iteration order (`RF-0.2`).
+
+The applicator keyword itself never enters the failure payload: `RF-01` cl. 3
+item 3 forbids reporting applicator keywords, and `v1.1.3` does not amend cl. 3.
+For the `[1.0, 2.0, 3.0]` vector the reported failure is `maxItems` at
+`/uncertainty/interval`; the childless `items` site is discharged against it.
+
+No new exception class, keyword, schema vocabulary, validation phase, or
+cross-value validator was introduced. No generated schema changed. `N-18`
+ownership was not reopened: this is error representation and totality only.
+
+### 14.5 Regression tests
+
+`tests/lske/test_envelope.py`
+
+- `test_n18_stage1_rejects_an_over_long_interval` — parametrized over `ci95` and
+  `iqr`; asserts `SchemaViolation`, asserts `maxItems` at
+  `/uncertainty/interval` is present in the payload, and asserts **no** reported
+  keyword is a member of `_APPLICATORS` (`R9-15` / `RF-01` cl. 3).
+- `test_n18e1_over_long_interval_reports_a_resolvable_schema_pointer` — resolves
+  every reported `schema_pointer` against `_SCHEMA_BY_ID` by RFC 6901 traversal
+  (`RF-01` cl. 3 item 2).
+
+`tests/lske/test_differential.py` — the three tests that called
+`_leaf_assertion_errors` were **retargeted, not weakened**. Each asserts the
+same `D-01` fail-closed invariant at its new locus: the descent now collects the
+childless site and `_discharge` raises on it. A fourth test was added,
+`test_childless_site_is_discharged_by_a_co_located_reported_failure`, covering
+the case the repair newly admits. No expected result was edited to obtain green.
+
+`RG-02` boundary unchanged: `[1.0, 2.0]`, `[1.0, 1.0]` and `[2.0, 1.0]` all
+remain Stage-1 structural **PASS** for both kinds. Descending order is Stage 4's
+`MEM-11` and was not implemented here.
+
+### 14.6 Verification results at `e642216`
+
+| Gate | Result |
+|---|---|
+| `N18-E1` reproduction test | **PASS** (`SchemaViolation`, `maxItems` reported, no applicator keyword) |
+| `N-18` structural vectors, both kinds | **PASS** — 2-item accept across all 3 orderings; 1-item / 3-item / empty / string-typed reject |
+| Differential `RAW_INVALID ⇒ PUBLIC_INVALID`, 23 entry surfaces | 666 mutations, **0** divergences, **0** valid payloads rejected |
+| `D-01` … `D-06` | **CLOSED**, individually re-verified |
+| 23 canonical schemas compile offline | **23/23** |
+| Deterministic regeneration, two passes | byte-identical, digest `658993e014c3b075706bf1aafb29e256` |
+| Complete Stage-1 suite, `jsonschema==4.25.1` | **1163 passed, 7 skipped, 0 failed** |
+| Self-attack, 6777 deep mutants | 0 public-valid, 0 `OntologyError`, 0 empty payloads, 0 applicator leaks, 0 unresolvable pointers, 0 ordering violations |
+| Uncovered-childless attack, 5 shapes | still fails closed; message deterministic over 30 runs |
+| Banned invented keywords `ascending` / `creation` / `transitionState` | **0** occurrences |
+
+### 14.7 Boundaries held
+
+- `git diff 4f0d4d5 e642216 -- ros/` is **empty**. `len(ros.model.COLLECTIONS)
+  == 11`. **Stage 2 not entered.**
+- **0** references to `MEM-11` in `ros/` or `v2/`. `ros.store._check_memory`
+  unchanged. **Stage 4 not entered.**
+- Exactly **3** production/test files changed, +134 / −30. No generated schema,
+  packaging file, runtime, CLI, server, or network path was touched.
+- No governance status raised, no gate opened, no human approval recorded, no
+  history rewritten.
+
+### 14.8 Disposition
+
+**`N18-E1`: CLOSED (engineering).** The §13.3 disposition of *Open* is
+superseded by this section and by commit
+`e6422163bda43a8c1480ef494366947904d3ba87`.
+
+This is an engineering closure only. It is **not** an independent certification
+of the Stage-1 candidate, and none is claimed. The candidate is ready to be
+offered for independent hostile certification by a party that did not implement
+it.
