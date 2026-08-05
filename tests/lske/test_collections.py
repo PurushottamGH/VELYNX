@@ -88,3 +88,18 @@ def test_event_identifier_is_content_addressed_and_disjoint():
     assert first == allocate_event_id(dict(reversed(list(body.items()))))
     assert re.fullmatch(r"LEV-[0-9a-f]{32}", first)
     assert not ID_PATTERN.fullmatch(first)
+
+
+def test_model_collection_register_agrees_with_lske_specs():
+    """Stage-2: ros.model.COLLECTIONS ↔ v2.lske.schema.COLLECTION_SPECS agreement (RB-05 cl. 6)."""
+    from ros.model import COLLECTIONS
+
+    assert len(COLLECTIONS) == 20
+    assert len(COLLECTION_SPECS) == 20
+    for spec in COLLECTION_SPECS:
+        matching = [c for c in COLLECTIONS if c.key == spec.key]
+        assert len(matching) == 1, f"collection {spec.key} not in ros.model.COLLECTIONS"
+        collection = matching[0]
+        assert collection.prefix == spec.prefix, f"{spec.key}: prefix mismatch"
+        assert collection.object_type == spec.object_type, f"{spec.key}: object_type mismatch"
+        assert collection.append_only == spec.append_only, f"{spec.key}: append_only mismatch"
