@@ -70,6 +70,20 @@ jobs:
       - name: Run research tests
         run: |
           python -m pytest research/tests/ -v --cov=research --cov-report=term --cov-report=xml -m "not slow"
+      - name: Verify LSKE Stage-1 surface
+        run: |
+          python -m pytest tests/lske/ -v --cov=v2 --cov-report=term
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from jsonschema import Draft202012Validator
+          paths = sorted(Path("schemas/lske").glob("*.schema.json"))
+          if len(paths) != 23:
+              raise SystemExit(f"expected exactly 23 LSKE schemas, found {len(paths)}")
+          for path in paths:
+              Draft202012Validator.check_schema(json.loads(path.read_text(encoding="utf-8")))
+          print("LSKE schemas compiled: 23")
+          PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:

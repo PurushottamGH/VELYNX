@@ -37,7 +37,8 @@ artifacts/publication/
 # ChromaDB vector store
 **/chroma_db/
 
-# Python egg info
+# Python build and egg metadata
+/build/
 *.egg-info/
 *.egg
 

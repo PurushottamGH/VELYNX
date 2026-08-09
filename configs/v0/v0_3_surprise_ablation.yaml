@@ -1,0 +1,56 @@
+# V0-3 — surprise-information ablation (pilot scaffold).
+#
+# Question: at an identical replay budget, is loss-triggered timing better than
+# timing chosen independently of loss?
+#
+# Conditions:
+#   surprise        the mechanism under test (threshold 1.5 nats)
+#   matched_random  control 1: same k, times drawn independently of loss
+#   boundary        control 15: same k, times just after task switches. Diagnoses
+#                   surprise acting only as an implicit change detector.
+#   never           no-replay reference
+#
+# TWO-PASS BUDGET MATCHING — required before this becomes confirmatory.
+# `matched_random` below uses `rate`, which matches the budget only in
+# expectation. That is adequate for a pilot and NOT adequate for the equal-budget
+# claim V0-3 makes. The exact procedure:
+#
+#   1. run this pilot;
+#   2. read gate_activity.fired_steps from each surprise run;
+#   3. in the confirmatory sweep, replace `rate` with `n_fires: <that count>`,
+#      per seed if the counts differ materially between seeds;
+#   4. confirm compute.replay_updates now agrees between the two arms.
+#
+# The horizon for the exact schedule is injected from the environment, so it
+# cannot be mis-specified. Only the count is a human input, and it is visible in
+# the config rather than computed silently at runtime.
+#
+# Also check gate_activity.boundary_fire_fraction on the surprise arm before
+# interpreting anything: if most fires land just after switches, the boundary
+# control is the comparison that matters.
+#
+# Primary DV: paired difference in excess_loss.final_prior_excess_mean.
+# Guardrails: plasticity.adaptation_auc, plasticity.current_task_tail.
+#
+# PILOT ONLY: delta_gate, multiplicity handling and the confirmation seed split
+# (tuning seeds separate from untouched confirmation seeds) are preregistration
+# decisions. The threshold must be frozen before confirmation data are accessed.
+
+config_version: 1
+name: v0_3_surprise_ablation
+description: "Pilot: surprise timing vs loss-independent timing vs boundary timing"
+base: baseline.yaml
+
+seeds:
+  start: 0
+  count: 5
+
+conditions:
+  - gate.name: surprise
+    gate.params: {threshold: 1.5, k: 4}
+  - gate.name: matched_random
+    gate.params: {rate: 0.05, k: 4}   # PLACEHOLDER: replace with n_fires (see above)
+  - gate.name: boundary
+    gate.params: {window: 50, k: 4}
+  - gate.name: never
+    gate.params: {}

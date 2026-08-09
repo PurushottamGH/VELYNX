@@ -1,0 +1,9 @@
+schemas/lske/*.schema.json text eol=lf
+
+# The 12 canonical templates carry a byte contract, not merely a text one:
+# `tests/p1_os/test_templates.py` asserts LF-only bytes, and
+# `p1_os.frontmatter._detect_line_ending` rejects mixed endings outright. The
+# committed blobs are already LF; without this pin a checkout under
+# `core.autocrlf=true` rewrites them to CRLF and 24 tests fail on Windows while
+# staying green on the Linux runner.
+p1/templates/*.md text eol=lf

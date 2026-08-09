@@ -1,0 +1,129 @@
+{
+  "$defs": {
+    "collection": {
+      "properties": {
+        "aggregation_rule": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "confidence": {
+          "type": "null"
+        },
+        "declared_null": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "direction": {
+          "enum": [
+            "higher_is_better",
+            "lower_is_better",
+            "none"
+          ],
+          "type": "string"
+        },
+        "estimator_version": {
+          "$ref": "record.schema.json#/$defs/semver"
+        },
+        "formula": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "id": {
+          "pattern": "^MET-[0-9]{4}-[0-9]{4}$",
+          "type": "string"
+        },
+        "immutability": {
+          "properties": {
+            "append_only": {
+              "const": false
+            }
+          },
+          "type": "object"
+        },
+        "known_defects": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "legacy_ids": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "lifecycle": {
+          "properties": {
+            "status": {
+              "enum": [
+                "Active",
+                "Provisional",
+                "Defective",
+                "Retired",
+                "Superseded"
+              ],
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "primitive": {
+          "const": "Measurement"
+        },
+        "provenance": {
+          "properties": {
+            "kind": {
+              "enum": [
+                "human_assertion",
+                "run_derived",
+                "document_derived",
+                "external_literature"
+              ]
+            }
+          },
+          "type": "object"
+        },
+        "type": {
+          "const": "metric"
+        },
+        "units": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "validity_status": {
+          "enum": [
+            "validated",
+            "provisional",
+            "defective"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "formula",
+        "units",
+        "direction",
+        "estimator_version",
+        "aggregation_rule",
+        "declared_null",
+        "validity_status",
+        "known_defects"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "https://p1.local/schemas/lske/metrics.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "allOf": [
+    {
+      "$ref": "record.schema.json"
+    },
+    {
+      "$ref": "#/$defs/collection"
+    }
+  ],
+  "title": "metrics",
+  "type": "object",
+  "unevaluatedProperties": false
+}

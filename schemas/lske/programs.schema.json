@@ -1,0 +1,112 @@
+{
+  "$defs": {
+    "collection": {
+      "properties": {
+        "confidence": {
+          "type": "object"
+        },
+        "entry_condition": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "exit_condition": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "gate": {
+          "enum": [
+            "G1",
+            "G2",
+            "G3",
+            "G4",
+            "G5"
+          ],
+          "type": "string"
+        },
+        "id": {
+          "pattern": "^PROG-[0-9]{4}-[0-9]{4}$",
+          "type": "string"
+        },
+        "immutability": {
+          "properties": {
+            "append_only": {
+              "const": false
+            }
+          },
+          "type": "object"
+        },
+        "legacy_ids": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "lifecycle": {
+          "properties": {
+            "status": {
+              "enum": [
+                "Candidate",
+                "Active",
+                "Dormant",
+                "Tombstoned",
+                "Deleted"
+              ],
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "primitive": {
+          "const": "Claim"
+        },
+        "provenance": {
+          "properties": {
+            "kind": {
+              "enum": [
+                "human_assertion",
+                "run_derived",
+                "document_derived",
+                "external_literature"
+              ]
+            }
+          },
+          "type": "object"
+        },
+        "question_ids": {
+          "items": {
+            "$ref": "record.schema.json#/$defs/record_id"
+          },
+          "type": "array"
+        },
+        "statement": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "type": {
+          "const": "research_program"
+        }
+      },
+      "required": [
+        "statement",
+        "gate",
+        "question_ids",
+        "entry_condition",
+        "exit_condition"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "https://p1.local/schemas/lske/programs.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "allOf": [
+    {
+      "$ref": "record.schema.json"
+    },
+    {
+      "$ref": "#/$defs/collection"
+    }
+  ],
+  "title": "programs",
+  "type": "object",
+  "unevaluatedProperties": false
+}

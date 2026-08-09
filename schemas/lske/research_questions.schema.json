@@ -1,0 +1,116 @@
+{
+  "$defs": {
+    "collection": {
+      "properties": {
+        "confidence": {
+          "type": "object"
+        },
+        "decision_value": {
+          "enum": [
+            "changes_roadmap",
+            "changes_design",
+            "changes_measurement",
+            "none"
+          ],
+          "type": "string"
+        },
+        "hypothesis_ids": {
+          "items": {
+            "$ref": "record.schema.json#/$defs/record_id"
+          },
+          "type": "array"
+        },
+        "id": {
+          "pattern": "^RQS-[0-9]{4}-[0-9]{4}$",
+          "type": "string"
+        },
+        "immutability": {
+          "properties": {
+            "append_only": {
+              "const": false
+            }
+          },
+          "type": "object"
+        },
+        "legacy_ids": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "lifecycle": {
+          "properties": {
+            "status": {
+              "enum": [
+                "Open",
+                "Partially Answered",
+                "Answered",
+                "Retired",
+                "Superseded"
+              ],
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "primitive": {
+          "const": "Claim"
+        },
+        "program_id": {
+          "$ref": "record.schema.json#/$defs/record_id"
+        },
+        "provenance": {
+          "properties": {
+            "kind": {
+              "enum": [
+                "human_assertion",
+                "run_derived",
+                "document_derived",
+                "external_literature"
+              ]
+            }
+          },
+          "type": "object"
+        },
+        "question": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "resolved_by": {
+          "oneOf": [
+            {
+              "$ref": "record.schema.json#/$defs/record_id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "type": {
+          "const": "research_question"
+        }
+      },
+      "required": [
+        "question",
+        "decision_value",
+        "program_id",
+        "hypothesis_ids",
+        "resolved_by"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "https://p1.local/schemas/lske/research_questions.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "allOf": [
+    {
+      "$ref": "record.schema.json"
+    },
+    {
+      "$ref": "#/$defs/collection"
+    }
+  ],
+  "title": "research_questions",
+  "type": "object",
+  "unevaluatedProperties": false
+}

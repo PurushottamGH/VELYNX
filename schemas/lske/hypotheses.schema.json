@@ -1,0 +1,113 @@
+{
+  "$defs": {
+    "collection": {
+      "properties": {
+        "confidence": {
+          "type": "object"
+        },
+        "discriminates_from": {
+          "items": {
+            "$ref": "record.schema.json#/$defs/record_id"
+          },
+          "type": "array"
+        },
+        "falsifier": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "id": {
+          "pattern": "^HYP-[0-9]{4}-[0-9]{4}$",
+          "type": "string"
+        },
+        "immutability": {
+          "properties": {
+            "append_only": {
+              "const": true
+            }
+          },
+          "type": "object"
+        },
+        "legacy_ids": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "lifecycle": {
+          "properties": {
+            "status": {
+              "enum": [
+                "Archived",
+                "Exploratory",
+                "Proposed",
+                "Rejected",
+                "Superseded",
+                "Under Validation",
+                "Validated"
+              ],
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "mechanism_ids": {
+          "items": {
+            "$ref": "record.schema.json#/$defs/record_id"
+          },
+          "type": "array"
+        },
+        "primitive": {
+          "const": "Claim"
+        },
+        "provenance": {
+          "properties": {
+            "kind": {
+              "enum": [
+                "human_assertion",
+                "run_derived",
+                "document_derived",
+                "external_literature"
+              ]
+            }
+          },
+          "type": "object"
+        },
+        "question_id": {
+          "$ref": "record.schema.json#/$defs/record_id"
+        },
+        "scope": {
+          "$ref": "record.schema.json#/$defs/scope"
+        },
+        "statement": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "type": {
+          "const": "hypothesis"
+        }
+      },
+      "required": [
+        "statement",
+        "falsifier",
+        "question_id",
+        "mechanism_ids",
+        "discriminates_from",
+        "scope"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "https://p1.local/schemas/lske/hypotheses.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "allOf": [
+    {
+      "$ref": "record.schema.json"
+    },
+    {
+      "$ref": "#/$defs/collection"
+    }
+  ],
+  "title": "hypotheses",
+  "type": "object",
+  "unevaluatedProperties": false
+}
