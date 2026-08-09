@@ -1,5 +1,5 @@
 {
-  "HEAD": "d5ae8f29d7fc010abfa88a37a76824c159d848c2",
+  "HEAD": "8c4186c8659f726a15f51151567c4cef787840fb",
   "SESOI": {
     "derivation": "max(structural floor, empirical null p95) over a pre-decisive null calibration",
     "empirical_null": {
@@ -182,23 +182,23 @@
   },
   "implementation_hashes": {
     "experiments/DEC/__init__.py": "a7194c8adfa1e84f9a81cda85ea4142ee4969f8d1c49e8409f86bf5b469176d3",
-    "p1/live/neural/experiments/ln_dec/adapter.py": "3d54026406e29a9a88fb1bd90924c354324348ac4f93f735e9a9da0ea6dfda5a",
-    "p1/live/neural/experiments/ln_dec/baselines.py": "2f7f808b5407e46c0935ac85e99927d7d8e7c6b2d95074a44cefe819ad42079d",
-    "p1/live/neural/experiments/ln_dec/baselines2.py": "d2f31331297a48cfdb2b547e8f44e9e4a9f504ce81049c1e0751e24d49d0c6d4",
-    "p1/live/neural/experiments/ln_dec/benchmark.py": "17e7d3d677333cb4ce8314a6dccfda1a8e88236bb677149953662f4d32e0ec81",
-    "p1/live/neural/experiments/ln_dec/benchmark2.py": "df17327634fb2d87df05bd7fadc9cd0377bab83395665ec765c6f05a0a31d8fe",
-    "p1/live/neural/experiments/ln_dec/claims.py": "a053448a68067445bb469c5f3a0f31f1d478cf7babc60493e292e3059794a287",
-    "p1/live/neural/experiments/ln_dec/oracle.py": "1992fa45b604a450c6f17d0b6f21955758ddb3a4aee3dcddec5d10cb8eaf2144",
-    "p1/live/neural/experiments/ln_dec/protocol.py": "de40576c546ed4d5918ec61397adf08bf5bb7f29c6fcf70669c14e694f96f14d",
-    "p1/live/neural/experiments/ln_dec/provenance.py": "6b651df3ddc4a8f4293730443413e59149327650953b06867909d7d5f30361b2",
-    "p1/live/neural/experiments/ln_dec/rng.py": "3a5cf1d57e9cfb4b02be346eb210f83f0085e009a77f245cd21f2739091ec3ff",
-    "p1/live/neural/experiments/ln_dec/runner.py": "505c5c56fbf3541e6df543d7c20d5b84202808712cbf1926a357ec62a19d3165",
-    "p1/live/neural/experiments/ln_dec/stats.py": "e303d0c935e9322f4c67a93757f6ab7e3efacf2713a76791746a7d4534436521",
-    "p1/live/neural/experiments/ln_dec/types.py": "afdfe9c853364c5fed12ddba7943122997b95d53318f522d5f773a6c306bc7af",
-    "p1/live/neural/nn0/nucleus.py": "2cc55e554a4a2d66ec473014c53900b82a209c486b0dd619f2206ad8a9cae2dd",
-    "p1/live/neural/playgarden/probes.py": "354fbadb27a07716e0b1e6a0cb4fd08d1bb4d31e1378c6a6b968f8032f1028f6",
-    "p1/live/neural/playgarden/verification.py": "1bb51153e4c1bd3d0996550681fe798a89862d23c3de2851e9230fc620e5c88f",
-    "p1/live/neural/playgarden/worlds.py": "af8c4b351b1a7f0e2d37f7ae7f940ba951520577a9240fa094fd8b3d99fbba91"
+    "p1/live/neural/experiments/ln_dec/adapter.py": "c2c05bed2a4029278a95b50094cc4967a4443656d305f161c6ff55bf04295e4f",
+    "p1/live/neural/experiments/ln_dec/baselines.py": "f1a1ddce36a973997bc577617627655ff98ccd8f0b3ad787d48c8310c264229d",
+    "p1/live/neural/experiments/ln_dec/baselines2.py": "9ea800a500278e53d6ec923207d8ac0cacaaaebfa450b0f9bb77bd9132d2ead4",
+    "p1/live/neural/experiments/ln_dec/benchmark.py": "6a5fb08a49975fb2236a65fc4c902dfa7c7e90b04cd8a8683bef4e9717487eef",
+    "p1/live/neural/experiments/ln_dec/benchmark2.py": "c254ce64a1cca601def5be17420515cbf8a09928b1595f439ac459126f0f4466",
+    "p1/live/neural/experiments/ln_dec/claims.py": "766e46c615311d6c76820cbe669e698191dce3a807fe3fcc691497bc3981e861",
+    "p1/live/neural/experiments/ln_dec/oracle.py": "a251653872fb33ed7ab0d8151b09dbdea08b3760a1c3cc0514e84c71bc2a921e",
+    "p1/live/neural/experiments/ln_dec/protocol.py": "80ed1edc6713c6e3e3f32c63dfbec97628493b293d2b0be216e2b838d0320ca5",
+    "p1/live/neural/experiments/ln_dec/provenance.py": "f966bbdf1932d8759b94b8caba99b308a85d646e7da4f4272494eed404713d0f",
+    "p1/live/neural/experiments/ln_dec/rng.py": "504baf87ad62b1a1122f6d6e0c9eec9d89f610401b77245925c4500bc84c0f9b",
+    "p1/live/neural/experiments/ln_dec/runner.py": "7a7d27f308eb523aac53becfb889c6c749028eafda93e633adeb32c73da5266f",
+    "p1/live/neural/experiments/ln_dec/stats.py": "ba08c0e0743bfd9c86f4df9a8088af87499c9f7d9f63d71c391729d19a7b0094",
+    "p1/live/neural/experiments/ln_dec/types.py": "107101494779cf43c11e57b88388a41e95a39e8d9ca12a9d40b621ec62025211",
+    "p1/live/neural/nn0/nucleus.py": "44f1ae674c240c2c179173c98aa6ecc842a7ccac7a6514bf415ddf884ddf48f4",
+    "p1/live/neural/playgarden/probes.py": "585a22ce2674a8258bebcbc3209810c4ef5a6813cc546e96963922d97c33653f",
+    "p1/live/neural/playgarden/verification.py": "acdb96b01df4bef0c79ffc7ab5cdc773fc2ac99b434c36dff72f0ddbd347f011",
+    "p1/live/neural/playgarden/worlds.py": "4e5b11f403a10539cfbda9fb93a06f2e83c5309515dfe68714bf61496361b4af"
   },
   "master_seeds": [
     1,
@@ -265,24 +265,12 @@
     "identifiability": "one target per decisive context; stochastic distributions are not used"
   },
   "protected_surface": {
-    "aggregate_sha256": "cab70ac61611285a447c6d7afa9a507a0f2a32043858f202980df761b37c1a9c",
-    "count": 207,
+    "aggregate_sha256": "e235a9ad945c8aa0a055d1c41fd070a12cffde9890dd71d8a589ec3dc60c0adb",
+    "count": 132,
     "entries": [
       {
         "path": "GOVERNANCE_REGISTRY.yaml",
         "sha256": "9967605550b80b4cc916145d0d37485f96b52bd6a7448f7e8056f4422d4e062a"
-      },
-      {
-        "path": "P1_V2_CONSTITUTION_LOCK_v1.0.md",
-        "sha256": "83f5694ad079681c5a63cabd2359a883db86bfeeeccfb9a1ea051c5dad369f5e"
-      },
-      {
-        "path": "P1_V2_PROJECT_ENGINEERING_STANDARD_v1.0.md",
-        "sha256": "feef2d14a8061e899f400762ef3e752fadf27f0543aa89e7991748ae1d5184a1"
-      },
-      {
-        "path": "P1_V2_SCIENTIFIC_CONSTITUTION.md",
-        "sha256": "14e5c3a1a57831dc43576edac09a6898e5f3c4d35fb8057148680552df718441"
       },
       {
         "path": "PROGRAM_D_CANONICAL.md",
@@ -295,10 +283,6 @@
       {
         "path": "RESEARCH_PROTOCOL.md",
         "sha256": "52d5699d310aa1daa15658eb6b16dc1d4071bb64a22c543f2c60642742db0306"
-      },
-      {
-        "path": "SCIENTIFIC_OPERATING_SYSTEM.md",
-        "sha256": "3baeb665470523f4af6f6de2616ead87892c288ddb726c8db3130a49d72a4326"
       },
       {
         "path": "experiment_registry.yaml",
@@ -497,14 +481,6 @@
         "sha256": "882bdf1ec6a9f4c9b3f135dc5ac4095e39db2c107eecce2ac9e013ca4aa2906b"
       },
       {
-        "path": "outputs/P1_V2_LSKE_DEFERRED_OBLIGATIONS.md",
-        "sha256": "228591277a3f0d5483a799602f67f623f063914998967fc1660c7c68b6495415"
-      },
-      {
-        "path": "outputs/P1_V2_PHASE1_STAGE1_ACCEPTANCE_RECORD.md",
-        "sha256": "9b30997e443fa883c529a61a439a956dbaea827043725d5093adc4074827277e"
-      },
-      {
         "path": "outputs/P1_V2_STAGE3_CANONICAL_DISPUTE_RECONCILIATION.md",
         "sha256": "592a1dc3b2e68e1febfaa17accdbd81deb74381115b338d2083d84287863dc8d"
       },
@@ -618,7 +594,7 @@
       },
       {
         "path": "ros/__pycache__/__init__.cpython-311.pyc",
-        "sha256": "4770cc2f34b753446abd7d5c64df330cb12d37ccd3fa88eed391e9bdfe351489"
+        "sha256": "aab6096968c2e691dc9d807f74fe0bcd7b6dabfcb4c9cc152b34fe7910c46c65"
       },
       {
         "path": "ros/__pycache__/__init__.cpython-313.pyc",
@@ -658,7 +634,7 @@
       },
       {
         "path": "ros/__pycache__/model.cpython-311.pyc",
-        "sha256": "fafd19eba2c152537dea7ad5216ec965f8af1b35680d413c2d1173aab02419cd"
+        "sha256": "815ff450763751a1fa37d74dd169b6097d551e870a6d3076e652b47133d488fd"
       },
       {
         "path": "ros/__pycache__/projections.cpython-311.pyc",
@@ -674,7 +650,7 @@
       },
       {
         "path": "ros/__pycache__/store.cpython-311.pyc",
-        "sha256": "b5607530a4d5810aebc88af1a31f4a0bd3dc1bc82909023d4395aa7e42f865d2"
+        "sha256": "b1d6d0d0ae90f176745353c195431fc1499fe9caf43fb7963b1ab9837c61682d"
       },
       {
         "path": "ros/__pycache__/store.cpython-313.pyc",
@@ -710,7 +686,7 @@
       },
       {
         "path": "ros/model.py",
-        "sha256": "30e9cffabe5cc98d4430811cac9f0be3b2d04b9acf97700e78c3f8c07babd0d3"
+        "sha256": "0d03bf2fcf3b8059839f4c7b110b395af059b73f9c7d46252f38d0a962584b97"
       },
       {
         "path": "ros/projections.py",
@@ -729,156 +705,8 @@
         "sha256": "a6932d4cf0f8d1d12c6c81b0d91aa9d355fddfdc1fca6fa28e0c2ca88d27f62b"
       },
       {
-        "path": "schemas/lske/artifacts.schema.json",
-        "sha256": "aac1a4d694e2fe270d31b16d3a21a35fd19ab5a556486048bba3fc5e3eb36ef8"
-      },
-      {
-        "path": "schemas/lske/assumptions.schema.json",
-        "sha256": "8a4630119177bf78c35649f31981e31271c4c4f359ce041a2201447e790fabf0"
-      },
-      {
-        "path": "schemas/lske/datasets.schema.json",
-        "sha256": "3b90eff3303c2f59665cb3645d5d7296ba2fb6d3b0c234e48be219820e90c5e2"
-      },
-      {
-        "path": "schemas/lske/decisions.schema.json",
-        "sha256": "7a7ea1cf99d21ea67d3e2050725e2324a3da33d8ddfcdd7ae08be2d67250ac81"
-      },
-      {
-        "path": "schemas/lske/evidence.schema.json",
-        "sha256": "bfa6937368598b0a5b64d9910189ea5b4ef4b6d88a9e488fed6c84ad761c39f2"
-      },
-      {
-        "path": "schemas/lske/experiments.schema.json",
-        "sha256": "2bdf54276fe5479e413be4e9d6e01ca67f5b4ef1e9a6b3be543a22def623d880"
-      },
-      {
-        "path": "schemas/lske/hypotheses.schema.json",
-        "sha256": "74cade9901767f88f1a05a7cd9e8e934e27403176ddcb668f780069b7c07c79c"
-      },
-      {
-        "path": "schemas/lske/mechanisms.schema.json",
-        "sha256": "8fbf02b6f1ac64a75b0511e0885d99637dd2b666995fed6de46a0222411d6761"
-      },
-      {
-        "path": "schemas/lske/metrics.schema.json",
-        "sha256": "a1f943f23aaa6c28a787ac0d113315a84abd1cda9a6ae6ff5b45394ba2af89e9"
-      },
-      {
-        "path": "schemas/lske/negative_results.schema.json",
-        "sha256": "7c822858d572f11ff95da2bbf7fd6264652fae1adf174b0bb79e31dfe18147a2"
-      },
-      {
-        "path": "schemas/lske/obs2.schema.json",
-        "sha256": "0e6dcc86792b7103d95cddc3322ceaf5d3b115d4993542024fa41b5b7da78bcc"
-      },
-      {
-        "path": "schemas/lske/observations.schema.json",
-        "sha256": "679abb72775450f321572a9ad4e82993b6855190bfa42ab17d15b21462e80ced"
-      },
-      {
-        "path": "schemas/lske/programs.schema.json",
-        "sha256": "5b5995e405bc5122ee921aae33dd79f991ef4ad89cde10ad0e92ef283ad6d982"
-      },
-      {
-        "path": "schemas/lske/protocols.schema.json",
-        "sha256": "0a9f6be862a3f0846bae2d363020ff010c424e9ab66333e43f97ce846926944a"
-      },
-      {
-        "path": "schemas/lske/record.schema.json",
-        "sha256": "ef1b150502697fb88b4c80033bdcb7fc6d281dbd4d5e39c76aacc864b4f35727"
-      },
-      {
-        "path": "schemas/lske/relation.schema.json",
-        "sha256": "84435a546938bfb00c32faad84c308c1d1aa0ba057de2ee5339764ab56bd5a6e"
-      },
-      {
-        "path": "schemas/lske/research_questions.schema.json",
-        "sha256": "e0e479f0027ba122422e3f4d6b1cef810131e39564fc35ac0a7ce11b912a1887"
-      },
-      {
-        "path": "schemas/lske/runs.schema.json",
-        "sha256": "21c608a49853d9fc7723dad21a980a014eeae52bf724ce64fd5082fa02916412"
-      },
-      {
-        "path": "schemas/lske/scientific_debt.schema.json",
-        "sha256": "0bf3c86cd4e344a896306b12f320ae6354b0d4ce2611a8970c452de391feb9d1"
-      },
-      {
-        "path": "schemas/lske/sessions.schema.json",
-        "sha256": "c64db6be16b1f2badb68fca138d6eeab37f1f95a62a3984ba283eb1bbc3ac6fb"
-      },
-      {
-        "path": "schemas/lske/snapshots.schema.json",
-        "sha256": "3ef01d71652ffab817effec92e67dcab983c33e076f0b93b410d8fda17f9affc"
-      },
-      {
-        "path": "schemas/lske/theories.schema.json",
-        "sha256": "fe2e350a0018fbb0edae06a7880315a2debd81f71c6a7e8367df0c37c88d04ec"
-      },
-      {
-        "path": "schemas/lske/unknowns.schema.json",
-        "sha256": "e679849ccb6f000e1f2f21fc9f65c6adc74107fa4265122e4c8bf550f7a140ff"
-      },
-      {
-        "path": "science/01_SCIENTIFIC_CONSTITUTION.md",
-        "sha256": "c12114688869a216feab2697bed84d0d8f0455729a3a0d165e0ea7e863305773"
-      },
-      {
-        "path": "science/02_HYPOTHESIS_REGISTRY.md",
-        "sha256": "fd34bdbec7e068dae5b64d0727f2a005a06ed31f43187bf165bc6a8e9dbe1b07"
-      },
-      {
-        "path": "science/03_EXPERIMENT_REGISTRY.md",
-        "sha256": "98b074e3cd40a74a7acc39ce42ccc491f8e0bd3390a56a1d64bc2bdf6f76995c"
-      },
-      {
-        "path": "science/04_SCIENTIFIC_KNOWLEDGE_BASE.md",
-        "sha256": "fbb0ad5e5ee159b2ea43facaf7096e55eb5e988d17eb78635c083fad8161f4fb"
-      },
-      {
-        "path": "science/05_ASSUMPTION_AND_UNCERTAINTY_REGISTRIES.md",
-        "sha256": "c2eec2e98974020a43e7d8c5ebe2cb666e20eb0869638c2dae94da94b509757f"
-      },
-      {
-        "path": "science/06_THEORY_REGISTRY.md",
-        "sha256": "812eb9ac2521220af54a1df86d45ba8b8055e42623087ccd80495149480fa0e6"
-      },
-      {
-        "path": "science/07_SCIENTIFIC_DECISION_SYSTEM.md",
-        "sha256": "35f09989bcc1bc5b71507cac59ac5dcbde36bf202242d2257cfa7fd16c4c1808"
-      },
-      {
-        "path": "science/08_SCIENTIFIC_DEBT_FRAMEWORK.md",
-        "sha256": "009a09a892725ebb5a323484d92e36d3ce83e0f8b8b4a967568265ae3b0533c9"
-      },
-      {
-        "path": "science/09_RESEARCH_ROADMAP_24_MONTHS.md",
-        "sha256": "5f054dbf7e5f7c9330ade2046d7866d5a71c659eb4fd7de662eb317b489059dc"
-      },
-      {
-        "path": "science/10_KNOWLEDGE_EVOLUTION_ENGINE.md",
-        "sha256": "088024e26f5b3a983571c3773aaa057533a6213f50980dae9f878b0b6ffd7dbb"
-      },
-      {
-        "path": "science/11_LIVING_SCIENTIFIC_MODEL.md",
-        "sha256": "17611115533590c1b3e51720664dfa62f604f9f725f5460cc2ea817f7a9954b6"
-      },
-      {
-        "path": "science/README.md",
-        "sha256": "f317bfdcf1eaa3c57815badaba2ee9026eb067e3c48e5c942ed53027461b8b7b"
-      },
-      {
-        "path": "science/REGISTRY_TEMPLATES.yaml",
-        "sha256": "a2453742db876f10309f34a16a65f8cff89f327a2fe579be392da500ace2afb1"
-      },
-      {
         "path": "science/SKB_RECORDS_v1.0.yaml",
         "sha256": "706172a6b303bbbee4dc1addbe90b6298266f28126978550aaca7536d5e96594"
-      },
-      {
-        "path": "science/__init__.py",
-        "sha256": "cd1b3b96465f90b88668208dc243c63208ad9022488254e22158daecc349fdc3"
       },
       {
         "path": "science/__pycache__/__init__.cpython-311.pyc",
@@ -897,10 +725,6 @@
         "sha256": "49fb23d16cb766c0884f7e4546f56ecbc69b29e53de0a2a4a521dcf9b2d23b0d"
       },
       {
-        "path": "science/mechanisms/__init__.py",
-        "sha256": "43bd57d5108ab53dbe5217959d70952442f729cf422d7c5bd58d39cd61c47c18"
-      },
-      {
         "path": "science/mechanisms/__pycache__/__init__.cpython-311.pyc",
         "sha256": "8eb7292420720a5a52bcb39c280f4921fce0ebf8f9d568f32606d09cf91a707b"
       },
@@ -915,22 +739,6 @@
       {
         "path": "science/mechanisms/__pycache__/v0.cpython-311.pyc",
         "sha256": "a3491889d0736bd8843f5c22bb1e0231b234fea070ad03b1b99b3ffb47be8155"
-      },
-      {
-        "path": "science/mechanisms/controls.py",
-        "sha256": "68e93e66a819bb18ded107c3335e09a66b5e56b12220750549476a6e9cc1c807"
-      },
-      {
-        "path": "science/mechanisms/environments.py",
-        "sha256": "bc3d6b9063d185a4506c216e6a44bb17916a12a78b68d11e9878ad85d247b4c0"
-      },
-      {
-        "path": "science/mechanisms/v0.py",
-        "sha256": "ac01b79940d561562b351f6d4a3f60fdc870592e9c0e339d6276f572fe8184ea"
-      },
-      {
-        "path": "science/metrics/__init__.py",
-        "sha256": "8c95cff12edf99887ed983da677f0d93e96b78ef2d2ab1eb2656631174db0b3e"
       },
       {
         "path": "science/metrics/__pycache__/__init__.cpython-311.pyc",
@@ -965,102 +773,6 @@
         "sha256": "4d4ec25a9c989dba0a37b1dd3410f5020a44b2a711795362c2e2cbdfdcbdd37f"
       },
       {
-        "path": "science/metrics/base.py",
-        "sha256": "186854a4bced7af509d88543d5d0fe5939ba03324ebd2412fe03ef1434bf806e"
-      },
-      {
-        "path": "science/metrics/compute.py",
-        "sha256": "790238fd2e0775102195dcbf2fd8824289cbb7207ce42dd201c75a93d939e49c"
-      },
-      {
-        "path": "science/metrics/excess_loss.py",
-        "sha256": "a98e84ae75dbd39406139ccd60a49cf2b1398c33ae5edb4fd93138c36eba4f6d"
-      },
-      {
-        "path": "science/metrics/gate_activity.py",
-        "sha256": "0aa3a8c3923c1bb8270eec6e31cec00d6ffd2ba8ce083a4a5507a6bb87c0c300"
-      },
-      {
-        "path": "science/metrics/online_loss.py",
-        "sha256": "4843136833dc928a40d4f9b4dca852ec13fa252823ba74336fc8fc6e789ab7e2"
-      },
-      {
-        "path": "science/metrics/plasticity.py",
-        "sha256": "8dffbc15b685391893b4fc7ba2ad602a81aa155c786ff72851c8ae05fc7533b6"
-      },
-      {
-        "path": "science/metrics/retention.py",
-        "sha256": "bf7cef76ec014702154971bec0d72ea80d7abed7ca9142a9096a0731d23a3d0b"
-      },
-      {
-        "path": "science/oracle.py",
-        "sha256": "2c13e9ce537e5af44db1916adf7c478d46f0b0fd68decb6e8a67055eb8a4542f"
-      },
-      {
-        "path": "science/registries.py",
-        "sha256": "54d49247659fe3cf4574fa720ed12864c6a5eb5a58a0eb9cdbd878a99f210320"
-      },
-      {
-        "path": "science/skb/01_HYPOTHESIS_REGISTRY.md",
-        "sha256": "dbf4e9741b30999f646636f42197bf761268af2a12cb0e98d0e72de58a9fcf20"
-      },
-      {
-        "path": "science/skb/02_EXPERIMENT_REGISTRY.md",
-        "sha256": "c7b06a52ba7b83bb6703d8bce3f6e276c8a8a18d068be4275f78c014e329c73a"
-      },
-      {
-        "path": "science/skb/03_MECHANISM_REGISTRY.md",
-        "sha256": "b0d27422da720237f5ac206cb823869e4d53fe0f9c467caccf8f2f8a3a7d5eea"
-      },
-      {
-        "path": "science/skb/04_ASSUMPTION_REGISTRY.md",
-        "sha256": "2f94b9d89b93ca7e8b8dfb15aaa07287d650af18f8a6f1dc8b2052f154ff1afc"
-      },
-      {
-        "path": "science/skb/05_UNKNOWN_REGISTRY.md",
-        "sha256": "36ede45ec6d79312d1645bdb3b4e0344b1be34d0ff3c2842f4c4d4184d8f1737"
-      },
-      {
-        "path": "science/skb/06_SCIENTIFIC_DEBT_REGISTRY.md",
-        "sha256": "b7874a4237b094f7358f6d0b9a1c494286781bbcb2281140f9b38871bfdfe6dc"
-      },
-      {
-        "path": "science/skb/07_NEGATIVE_RESULTS_REGISTRY.md",
-        "sha256": "fccceedb547a5d537101d9859f12a1b3fa29c0358ea203c1e7d34aba02f1313c"
-      },
-      {
-        "path": "science/skb/08_OBSERVATION_REGISTRY.md",
-        "sha256": "9d4731224792820f4bae0ce3175d2cd1b8e2e84976cda5833dbf37909be8b7e3"
-      },
-      {
-        "path": "science/skb/09_EVIDENCE_GRAPH.md",
-        "sha256": "e7133e481e21116e73080688e788e1a60918335e01df9acfa6c41a8249db96d5"
-      },
-      {
-        "path": "science/skb/10_SCIENTIFIC_DECISION_HISTORY.md",
-        "sha256": "3269bfbfe45b3c919c2c3788f24df2db2a6a9c619dae8b3851824435ccb94c12"
-      },
-      {
-        "path": "science/skb/11_P1_KNOWLEDGE_MAP.md",
-        "sha256": "95024897b65c3b694c648afc2147fcf4a61a08d6dbf7012ce219fabcb6d72c69"
-      },
-      {
-        "path": "science/skb/12_SCIENTIFIC_CONSISTENCY_AUDIT.md",
-        "sha256": "091e8497493690c30b9a5de5db14fc572edbd0a82b191a048eba385332807ed9"
-      },
-      {
-        "path": "science/skb/validate_skb.py",
-        "sha256": "42e03bc37aa1c6c653144c8aa00dea4a0c5aecf466463a6f60ab3e97f32184a8"
-      },
-      {
-        "path": "science/stats.py",
-        "sha256": "51c56d489794c30fce6d7008be22c5e3e9a8ddb0e3b84b0cdc4984990c6526ac"
-      },
-      {
-        "path": "v2/lske/__init__.py",
-        "sha256": "4316dc94cfa8f633f139b29815ddc17d2cdbfc5d9c8e29b4da8cc2def8d22596"
-      },
-      {
         "path": "v2/lske/__pycache__/__init__.cpython-311.pyc",
         "sha256": "b57fa95b996d926d11a8caaaf27290c59113a72628d099363fe35df0846dc373"
       },
@@ -1083,18 +795,6 @@
       {
         "path": "v2/lske/__pycache__/schema.cpython-311.pyc",
         "sha256": "8d7eac2fe2ce1448610f62738cc246cddb0d7a88144a56b3e9eb1c996bcd977b"
-      },
-      {
-        "path": "v2/lske/errors.py",
-        "sha256": "daf5b465458d16d59435af641865a5e4cad4e0671f02d2f576a64476a660a28b"
-      },
-      {
-        "path": "v2/lske/events.py",
-        "sha256": "5b4e0c88b4ed84c3ee3fa67a16e6cc76ada53afac4ed71589de048e109afa791"
-      },
-      {
-        "path": "v2/lske/schema.py",
-        "sha256": "7e9d48932547bf130fe6cedb564a3a181e5861876cb07d1d830d76096b31b723"
       }
     ]
   },
@@ -1113,24 +813,7 @@
   "source_state": {
     "clean": false,
     "divergent_files": [
-      "experiments/DEC/__init__.py",
-      "p1/live/neural/experiments/ln_dec/adapter.py",
-      "p1/live/neural/experiments/ln_dec/baselines.py",
-      "p1/live/neural/experiments/ln_dec/baselines2.py",
-      "p1/live/neural/experiments/ln_dec/benchmark.py",
-      "p1/live/neural/experiments/ln_dec/benchmark2.py",
-      "p1/live/neural/experiments/ln_dec/claims.py",
-      "p1/live/neural/experiments/ln_dec/oracle.py",
-      "p1/live/neural/experiments/ln_dec/protocol.py",
-      "p1/live/neural/experiments/ln_dec/provenance.py",
-      "p1/live/neural/experiments/ln_dec/rng.py",
-      "p1/live/neural/experiments/ln_dec/runner.py",
-      "p1/live/neural/experiments/ln_dec/stats.py",
-      "p1/live/neural/experiments/ln_dec/types.py",
-      "p1/live/neural/nn0/nucleus.py",
-      "p1/live/neural/playgarden/probes.py",
-      "p1/live/neural/playgarden/verification.py",
-      "p1/live/neural/playgarden/worlds.py"
+      "experiments/DEC/__init__.py"
     ],
     "files": {
       "experiments/DEC/__init__.py": {
@@ -1139,92 +822,92 @@
         "worktree_blob": "1adc9b2460dc052b41c624cedaa79093e20a27d2"
       },
       "p1/live/neural/experiments/ln_dec/adapter.py": {
-        "head_blob": null,
-        "status": "untracked_at_head",
+        "head_blob": "d985682cc0477e11e69e0dc508ef9a2791efbbae",
+        "status": "clean",
         "worktree_blob": "d985682cc0477e11e69e0dc508ef9a2791efbbae"
       },
       "p1/live/neural/experiments/ln_dec/baselines.py": {
-        "head_blob": null,
-        "status": "untracked_at_head",
+        "head_blob": "a99db56ef76647ad19558685e82838b236748ef2",
+        "status": "clean",
         "worktree_blob": "a99db56ef76647ad19558685e82838b236748ef2"
       },
       "p1/live/neural/experiments/ln_dec/baselines2.py": {
-        "head_blob": null,
-        "status": "untracked_at_head",
+        "head_blob": "5d4eaccf1cbc7c29aa109d25acc9f769d957cda9",
+        "status": "clean",
         "worktree_blob": "5d4eaccf1cbc7c29aa109d25acc9f769d957cda9"
       },
       "p1/live/neural/experiments/ln_dec/benchmark.py": {
-        "head_blob": null,
-        "status": "untracked_at_head",
+        "head_blob": "befb6140656a7291d9bb3330abe3ad84db29936d",
+        "status": "clean",
         "worktree_blob": "befb6140656a7291d9bb3330abe3ad84db29936d"
       },
       "p1/live/neural/experiments/ln_dec/benchmark2.py": {
-        "head_blob": null,
-        "status": "untracked_at_head",
+        "head_blob": "85daea3cdc6c3918d4039a7d450c862fd52264d6",
+        "status": "clean",
         "worktree_blob": "85daea3cdc6c3918d4039a7d450c862fd52264d6"
       },
       "p1/live/neural/experiments/ln_dec/claims.py": {
-        "head_blob": null,
-        "status": "untracked_at_head",
+        "head_blob": "79c1a8162318ee5ecf9ea1e9916c5cefe5dbd899",
+        "status": "clean",
         "worktree_blob": "79c1a8162318ee5ecf9ea1e9916c5cefe5dbd899"
       },
       "p1/live/neural/experiments/ln_dec/oracle.py": {
-        "head_blob": null,
-        "status": "untracked_at_head",
+        "head_blob": "6699d1e86fb24ce944bf79a772c0f053a027a959",
+        "status": "clean",
         "worktree_blob": "6699d1e86fb24ce944bf79a772c0f053a027a959"
       },
       "p1/live/neural/experiments/ln_dec/protocol.py": {
-        "head_blob": null,
-        "status": "untracked_at_head",
+        "head_blob": "3509da6fd810aceff507c6daf24b831d4c8a8f14",
+        "status": "clean",
         "worktree_blob": "3509da6fd810aceff507c6daf24b831d4c8a8f14"
       },
       "p1/live/neural/experiments/ln_dec/provenance.py": {
-        "head_blob": null,
-        "status": "untracked_at_head",
+        "head_blob": "bfdf39327df60de9de2a306cd790b34cb41664e5",
+        "status": "clean",
         "worktree_blob": "bfdf39327df60de9de2a306cd790b34cb41664e5"
       },
       "p1/live/neural/experiments/ln_dec/rng.py": {
-        "head_blob": null,
-        "status": "untracked_at_head",
+        "head_blob": "00be5d6cdbd6468b681c570af9b9582d55268407",
+        "status": "clean",
         "worktree_blob": "00be5d6cdbd6468b681c570af9b9582d55268407"
       },
       "p1/live/neural/experiments/ln_dec/runner.py": {
-        "head_blob": null,
-        "status": "untracked_at_head",
+        "head_blob": "e72f916e596fa37ec3c9b60191264040e1a63c69",
+        "status": "clean",
         "worktree_blob": "e72f916e596fa37ec3c9b60191264040e1a63c69"
       },
       "p1/live/neural/experiments/ln_dec/stats.py": {
-        "head_blob": null,
-        "status": "untracked_at_head",
+        "head_blob": "8f7614ae085e36a7215fbaec8dc5fcefaf6baeb1",
+        "status": "clean",
         "worktree_blob": "8f7614ae085e36a7215fbaec8dc5fcefaf6baeb1"
       },
       "p1/live/neural/experiments/ln_dec/types.py": {
-        "head_blob": null,
-        "status": "untracked_at_head",
+        "head_blob": "8aa8099715f85dd9732efde9e3c780a68281a742",
+        "status": "clean",
         "worktree_blob": "8aa8099715f85dd9732efde9e3c780a68281a742"
       },
       "p1/live/neural/nn0/nucleus.py": {
-        "head_blob": null,
-        "status": "untracked_at_head",
+        "head_blob": "17e6db5df7216969ae455f35708cf303a11700a4",
+        "status": "clean",
         "worktree_blob": "17e6db5df7216969ae455f35708cf303a11700a4"
       },
       "p1/live/neural/playgarden/probes.py": {
-        "head_blob": null,
-        "status": "untracked_at_head",
+        "head_blob": "46bb76acb6d35e3cda810ed6617d57ef041d0687",
+        "status": "clean",
         "worktree_blob": "46bb76acb6d35e3cda810ed6617d57ef041d0687"
       },
       "p1/live/neural/playgarden/verification.py": {
-        "head_blob": null,
-        "status": "untracked_at_head",
+        "head_blob": "37ca4b8f6fa5bc1838f693d60cccbd0eb05b3ef7",
+        "status": "clean",
         "worktree_blob": "37ca4b8f6fa5bc1838f693d60cccbd0eb05b3ef7"
       },
       "p1/live/neural/playgarden/worlds.py": {
-        "head_blob": null,
-        "status": "untracked_at_head",
+        "head_blob": "7a1e376bb06535c6a192f3bceb96307c95b81ee6",
+        "status": "clean",
         "worktree_blob": "7a1e376bb06535c6a192f3bceb96307c95b81ee6"
       }
     },
-    "head": "d5ae8f29d7fc010abfa88a37a76824c159d848c2",
+    "head": "8c4186c8659f726a15f51151567c4cef787840fb",
     "head_describes_implementation": false
   },
   "statistics": {

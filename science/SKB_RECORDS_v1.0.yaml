@@ -1,0 +1,1041 @@
+skb:
+  name: Project P1 Scientific Knowledge Base
+  version: "1.1.0"
+  state_date: "2026-07-28"
+  phase: Discovery
+  authority: P1_SOS_Chief_Scientist
+  correction_policy: "Decision-bearing records are append-only and corrected by linked supersession."
+  migration_note: "Legacy labels are preserved as provenance, not inherited as present scientific status."
+
+hypotheses:
+  - id: HYP-2026-0001
+    legacy_ids: ["H*"]
+    title: Error-gated structure acquisition
+    statement: "Within a specified nonlinear-latent stream, a learner using prediction error to gate capacity growth acquires structure absent at initialization, improves held-out prediction over fixed-capacity and capacity-matched error-decoupled controls, and exceeds a shuffled-input emergence reference."
+    scope: "The E0 environment and closely matched descendants; no general intelligence claim."
+    phase: Discovery
+    status: Exploratory
+    evidence_for: []
+    evidence_against: []
+    unresolved_evidence: [EVD-2026-0005]
+    experiments: [EXP-2026-0004]
+    assumptions: [ASM-2026-0004, ASM-2026-0005, ASM-2026-0006]
+    unknowns: [UNK-2026-0005]
+    confidence: {effect: very_low, mechanism: very_low, generalization: very_low}
+    rationale: "E0 executed but its growth intervention never activated; H* was therefore not tested."
+
+  - id: HYP-2026-0002
+    legacy_ids: ["H1"]
+    title: Retrieval uncertainty calibration
+    statement: "Within a defined query distribution, a retrieval agent can emit confidence tiers whose empirical correctness is calibrated, with preregistered ECE and hallucination-honesty criteria."
+    scope: "Program A retrieval outputs on a frozen, adjudicated query set."
+    phase: Discovery
+    status: Exploratory
+    evidence_for: []
+    evidence_against: [EVD-2026-0004]
+    unresolved_evidence: []
+    experiments: [EXP-2026-0005, EXP-2026-0008]
+    assumptions: [ASM-2026-0007]
+    unknowns: [UNK-2026-0006]
+    confidence: {effect: low, mechanism: very_low, generalization: very_low}
+    rationale: "One historical CERTAIN-on-fabrication observation directly opposes the calibration claim for the tested legacy system; the broader achievable-system hypothesis remains testable."
+
+  - id: HYP-2026-0003
+    legacy_ids: ["H2"]
+    title: Affective indexing
+    statement: "A learned affective-framing-to-problem-solving-schema mapping improves objective task outcomes over an otherwise identical neutral framing on third-party tasks not authored around the affect categories."
+    scope: "Prompt-level framing and objective task outcomes under a preregistered external task set."
+    phase: Discovery
+    status: Proposed
+    evidence_for: []
+    evidence_against: []
+    unresolved_evidence: []
+    experiments: [EXP-2026-0006]
+    assumptions: [ASM-2026-0008]
+    unknowns: [UNK-2026-0007]
+    confidence: {effect: very_low, mechanism: very_low, generalization: very_low}
+
+  - id: HYP-2026-0004
+    legacy_ids: ["H3"]
+    title: Emergent development without injection clause
+    statement: "Persistent prediction error plus capacity growth produces reusable structure absent at initialization."
+    scope: "Historical weaker formulation."
+    phase: Discovery
+    status: Superseded
+    superseded_by: HYP-2026-0001
+    evidence_for: []
+    evidence_against: []
+    rationale: "The weaker claim omits the decisive injected-versus-learned discrimination and is subsumed by HYP-2026-0001."
+
+  - id: HYP-2026-0005
+    legacy_ids: ["C8 free-energy benefit claim"]
+    title: Free-energy consolidation advantage
+    statement: "The tested legacy FreeEnergyPolicy improves PredictionRMSE over the null consolidation policy in the R1 environment family."
+    scope: "R1 C7 Sensorium environment, horizons 50/200, noise 0.01/0.15, seeds 1-3, 700 ticks."
+    phase: Discovery
+    status: Rejected
+    evidence_for: []
+    evidence_against: [EVD-2026-0001]
+    experiments: [EXP-2026-0001]
+    confidence: {effect: high, mechanism: low, generalization: very_low}
+    rationale: "R1 found a treatment-minus-null PredictionRMSE difference of +0.0040 with p=0.8660 and a 95% CI spanning substantial benefit and harm. Rejection is scoped to the tested policy and environment, not all free-energy formulations."
+
+  - id: HYP-2026-0006
+    legacy_ids: ["old semantic-understanding headline"]
+    title: Keyword benchmark demonstrates semantic understanding
+    statement: "High performance on the legacy exact-keyword concept benchmark persists under keyword-free paraphrase and therefore exceeds exact lexical lookup."
+    scope: "The 32-concept legacy Tier-2 detector tested by EXP-0."
+    phase: Discovery
+    status: Rejected
+    evidence_for: []
+    evidence_against: [EVD-2026-0002]
+    experiments: [EXP-2026-0002]
+    confidence: {effect: very_high, mechanism: high, generalization: low}
+    rationale: "Tier-2 hit rate fell from 32/32 on originals to 0/32 on keyword-free paraphrases. This rejects the benchmark inference, not every possible semantic capability."
+
+  - id: HYP-2026-0007
+    legacy_ids: ["P1 v0 replay effect"]
+    title: Resource-matched historical replay benefit
+    statement: "Historical replay reduces final prior-task excess predictive loss compared with no historical replay when total learning updates and decay applications are matched, without exceeding a preregistered plasticity cost."
+    scope: "P1 v0 sparse first-order Markov task family until extended by validation."
+    phase: Discovery
+    status: Exploratory
+    evidence_for: [EVD-2026-0006]
+    evidence_against: []
+    unresolved_evidence: [EVD-2026-0007]
+    experiments: [EXP-2026-0007]
+    assumptions: [ASM-2026-0001, ASM-2026-0002, ASM-2026-0003]
+    unknowns: [UNK-2026-0001, UNK-2026-0003]
+    confidence: {effect: low, mechanism: very_low, generalization: very_low}
+
+  - id: HYP-2026-0008
+    legacy_ids: ["P1 v0 surprise allocation"]
+    title: Surprise-triggered replay allocation advantage
+    statement: "At an identical realized replay budget and batch-size profile, loss-triggered replay improves a preregistered joint retention-plasticity outcome over replay times sampled independently of loss."
+    scope: "P1 v0 sparse first-order Markov task family until extended by validation."
+    phase: Discovery
+    status: Exploratory
+    evidence_for: []
+    evidence_against: []
+    unresolved_evidence: [EVD-2026-0007]
+    experiments: [EXP-2026-0007]
+    assumptions: [ASM-2026-0001, ASM-2026-0002, ASM-2026-0003]
+    unknowns: [UNK-2026-0002, UNK-2026-0003]
+    confidence: {effect: very_low, mechanism: very_low, generalization: very_low}
+
+  - id: HYP-2026-0009
+    legacy_ids: ["T-01 memory-carrying reading"]
+    title: Historical-carrier dependence in temporally aliased decisions
+    statement: "Competent behavior on temporally aliased decisions requires retaining a task-relevant distinction across time; erasing the historical carrier removes the advantage over a compute-matched memoryless policy."
+    scope: "The preregistered PH-1 temporal-aliasing instrument."
+    phase: Discovery
+    status: Proposed
+    evidence_for: []
+    evidence_against: []
+    experiments: [EXP-2026-0009]
+    assumptions: [ASM-2026-0009]
+    unknowns: [UNK-2026-0008]
+    confidence: {effect: very_low, mechanism: very_low, generalization: very_low}
+
+  - id: HYP-2026-0010
+    legacy_ids: ["T-02"]
+    title: Stateful conditional transduction schema
+    statement: "Interactive competence should be represented as a non-anticipating causal policy kernel evaluated jointly with an environment process."
+    scope: "Measurement and specification ontology."
+    phase: Discovery
+    status: Archived
+    evidence_for: []
+    evidence_against: []
+    rationale: "The proposition makes no risky prediction distinct from HYP-2026-0009 and is retained as a design constraint, not as a scientific hypothesis."
+
+experiments:
+  - id: EXP-2026-0001
+    legacy_ids: [R1]
+    title: Free-energy consolidation policy ablation
+    phase: Discovery
+    status: Closed
+    question: "Does the tested FreeEnergyPolicy improve measurable outcomes over simpler consolidation policies?"
+    hypotheses: [HYP-2026-0005]
+    conditions: [null, random, fifo, similarity, utility, free_energy]
+    design: "72 runs: 6 policies x 2 replay horizons x 2 noise levels x 3 seeds; 700 ticks."
+    primary_metrics: [PredictionRMSE]
+    unavailable_primary_metrics: [HeldOutPredictiveLogLikelihood, RareEventRecall, KnowledgeRetentionScore, GeneralizationScore, TransferScore]
+    executions: [EXP-2026-0001-R0001]
+    observations: [OBS-2026-0001, OBS-2026-0002]
+    evidence: [EVD-2026-0001]
+    validity: valid_negative
+    limitations: ["Only one of six declared primary metrics was measurable", "single environment family", "three seeds per cell", "commit-frequency differences between policies"]
+
+  - id: EXP-2026-0002
+    legacy_ids: [EXP-0]
+    title: Exact-keyword versus keyword-free paraphrase test
+    phase: Discovery
+    status: Closed
+    question: "Does legacy concept detection persist when exact seeded keywords are removed by paraphrase?"
+    hypotheses: [HYP-2026-0006]
+    design: "32 paired original/paraphrase items; Tier-2 legacy and Tier-1 v2; McNemar exact test; 10,000-iteration paired bootstrap."
+    executions: [EXP-2026-0002-R0001, EXP-2026-0002-R0002]
+    observations: [OBS-2026-0003, OBS-2026-0004]
+    evidence: [EVD-2026-0002, EVD-2026-0003]
+    validity: valid_negative
+    limitations: ["One 32-item concept set", "tests detector behavior rather than broad semantic competence", "both artifact directories contain the same reported summary"]
+
+  - id: EXP-2026-0003
+    legacy_ids: [M0]
+    title: P1 v0 seed-0 replay demonstration
+    phase: Discovery
+    status: Interpreted
+    question: "Can the v0 rig deterministically produce measurable prior-task degradation and replay-associated contrasts?"
+    hypotheses: [HYP-2026-0007, HYP-2026-0008]
+    design: "One default seed-0 run for online, replay_always, and replay_surprise; nine implementation tests."
+    executions: [EXP-2026-0003-R0001]
+    observations: [OBS-2026-0008, OBS-2026-0009, OBS-2026-0010]
+    evidence: [EVD-2026-0006, EVD-2026-0007]
+    validity: valid_indeterminate
+    limitations: ["one environment seed", "unmatched replay budgets", "unmatched update and decay counts", "current observation stored before replay", "metric construct weakness", "uncommitted reviewed code and nonmatching stored artifact", "the successor M1 apparatus remains uncommitted and therefore cannot yet close immutable-provenance debt"]
+
+  - id: EXP-2026-0004
+    legacy_ids: [E0]
+    title: Emergence-versus-injection discrimination
+    phase: Discovery
+    status: Interpreted
+    question: "Does error-gated capacity growth beat fixed, decoupled, and shuffled controls while producing null-referenced learned structure?"
+    hypotheses: [HYP-2026-0001]
+    conditions: [T, C1, C2, C3]
+    executions: [EXP-2026-0004-R0001]
+    observations: [OBS-2026-0005, OBS-2026-0006, OBS-2026-0007]
+    evidence: [EVD-2026-0005]
+    validity: invalid
+    invalidity_reason: "The growth trigger compared incompatible scales, produced zero growth events, and therefore failed to exercise the treatment."
+
+  - id: EXP-2026-0005
+    legacy_ids: [EXP-1]
+    title: Retrieval calibration curve
+    phase: Discovery
+    status: Designed
+    question: "Are emitted uncertainty tiers empirically calibrated on a frozen mixed-query distribution?"
+    hypotheses: [HYP-2026-0002]
+    controls: ["constant-confidence baseline", "BM25/TF-IDF retrieval with randomized confidence"]
+    primary_metrics: [ECE, Brier_score, hard_CERTAIN_fabrication_count]
+    observations: []
+    validity: null
+
+  - id: EXP-2026-0006
+    legacy_ids: [EXP-2]
+    title: Affective indexing objective-outcome test
+    phase: Discovery
+    status: Designed
+    question: "Does affective framing improve objective task outcomes over neutral framing on third-party tasks?"
+    hypotheses: [HYP-2026-0003]
+    controls: ["identical neutral prompt"]
+    primary_metrics: [objective_task_success]
+    observations: []
+    validity: null
+
+  - id: EXP-2026-0007
+    legacy_ids: ["V0-1", "V0-2", "V0-3", "V0-4"]
+    title: P1 v0 assay and replay validation family
+    phase: Validation
+    status: Blocked_Confirmatory
+    question: "Can assay validity, resource-matched replay benefit, surprise information, and randomness robustness be established?"
+    hypotheses: [HYP-2026-0007, HYP-2026-0008]
+    controls: ["no-decay", "frozen/no-learning", "oracle excess-loss", "update-and-decay matched", "storage without replay", "equal-budget random timing", "multiple task orders"]
+    observations: []
+    validity: null
+    execution_gate: "Confirmatory execution is prohibited until DEC-2026-0010 readiness conditions are evidenced. Exploratory pilot runs may proceed only after the minimum Discovery Cycle 001 engineering gates pass and must remain labeled non-confirmatory."
+
+  - id: EXP-2026-0008
+    legacy_ids: ["soul_test_report Q1-Q6"]
+    title: Legacy six-query behavior probe
+    phase: Discovery
+    status: Closed
+    question: "How does the legacy retrieval/soul path behave on direct, relational, and implicit queries?"
+    hypotheses: [HYP-2026-0002]
+    executions: [EXP-2026-0008-R0001]
+    observations: [OBS-2026-0011]
+    evidence: [EVD-2026-0004]
+    validity: valid_negative
+    limitations: ["six manually selected queries", "qualitative adjudication", "supports a failure case but not population ECE"]
+
+  - id: EXP-2026-0009
+    legacy_ids: [EXP-Z0, "Experiment Zero"]
+    title: Temporal-aliasing pipeline calibration instrument
+    phase: Discovery
+    status: Designed
+    question: "Can the scientific pipeline detect known historical-carrier use and reject memoryless, leakage, spurious-correlate, and capacity alternatives?"
+    hypotheses: [HYP-2026-0009]
+    controls: ["compute-matched memoryless", "carrier-ablated", "oracle", "temporally shuffled"]
+    primary_metrics: [aliased_set_loss_gap, ablation_collapse, localization]
+    observations: []
+    validity: null
+
+mechanisms:
+  - id: MEC-2026-0001
+    title: Legacy free-energy consolidation policy
+    status: Rejected_within_tested_scope
+    description: "Selects/commits consolidation proposals using the legacy proxy objective."
+    hypotheses: [HYP-2026-0005]
+    evidence: [EVD-2026-0001]
+    scientific_justification: "No measurable PredictionRMSE advantage over null in R1; retained only as historical mechanism evidence."
+
+  - id: MEC-2026-0002
+    title: Exact-substring concept detector
+    status: Rejected_as_semantic_mechanism
+    description: "Routes queries by exact concept substring matching."
+    hypotheses: [HYP-2026-0006]
+    evidence: [EVD-2026-0002]
+
+  - id: MEC-2026-0003
+    title: Error-gated MDL capacity growth
+    status: Exploratory_unexercised
+    description: "Adds representational capacity when a coded improvement criterion is positive."
+    hypotheses: [HYP-2026-0001]
+    evidence: [EVD-2026-0005]
+
+  - id: MEC-2026-0004
+    title: Program A uncertainty-tier emitter
+    status: Exploratory_contradicted_instance
+    description: "Maps retrieval/reflection signals to discrete confidence tiers."
+    hypotheses: [HYP-2026-0002]
+    evidence: [EVD-2026-0004]
+
+  - id: MEC-2026-0005
+    title: Affective-frame schema index
+    status: Proposed
+    description: "Uses an affective frame as a retrieval key into a problem-solving schema."
+    hypotheses: [HYP-2026-0003]
+    evidence: []
+
+  - id: MEC-2026-0006
+    title: Reservoir historical replay
+    status: Exploratory
+    description: "Stores stream transitions in a reservoir and performs sampled additional learning updates."
+    hypotheses: [HYP-2026-0007]
+    evidence: [EVD-2026-0006, EVD-2026-0007]
+
+  - id: MEC-2026-0007
+    title: Loss-threshold surprise replay gate
+    status: Exploratory_unidentified
+    description: "Triggers k replay updates when online loss exceeds a fixed threshold."
+    hypotheses: [HYP-2026-0008]
+    evidence: [EVD-2026-0007]
+
+  - id: MEC-2026-0008
+    title: Historical-carrier bounded memory
+    status: Proposed
+    description: "Retains a disambiguating observation across temporally aliased inputs."
+    hypotheses: [HYP-2026-0009]
+    evidence: []
+
+assumptions:
+  - id: ASM-2026-0001
+    statement: "Decay-induced degradation in P1 v0 is an informative proxy for continual-learning interference rather than only an artifact of the erasure rule."
+    category: model
+    status: Active_Unvalidated
+    needed_by: [HYP-2026-0007, HYP-2026-0008, EXP-2026-0007]
+    consequence_if_false: "Replay findings would be confined to correcting an artificial decay process."
+    smallest_test: "Paired decay=0.99 versus decay=1.0 assay validation with oracle excess loss."
+
+  - id: ASM-2026-0002
+    statement: "Final-minus-post-learning probe loss is a valid measure of forgetting when initial mastery and current-task plasticity are reported jointly."
+    category: measurement
+    status: Active_Unvalidated
+    needed_by: [HYP-2026-0007, HYP-2026-0008]
+    consequence_if_false: "A condition can appear to forget less because it learned less initially."
+    smallest_test: "Compare conclusions under final excess loss, backward transfer, initial mastery, and joint stability-plasticity metrics."
+
+  - id: ASM-2026-0003
+    statement: "Independent environment seeds are the appropriate primary experimental units for P1 v0 contrasts."
+    category: statistical
+    status: Active_Unvalidated
+    needed_by: [EXP-2026-0007]
+    consequence_if_false: "Inference may understate variance or target the wrong population."
+    smallest_test: "Variance decomposition over environment, trajectory, replay, probe, and order seeds."
+
+  - id: ASM-2026-0004
+    legacy_ids: [I1]
+    statement: "Prediction error is sufficient to drive representational structure in the E0 learner."
+    category: causal
+    status: Active_Unvalidated
+    needed_by: [HYP-2026-0001]
+    consequence_if_false: "The proposed growth signal cannot produce the target structure."
+    smallest_test: "An E0 execution in which the growth intervention demonstrably activates and is compared to decoupled growth."
+
+  - id: ASM-2026-0005
+    legacy_ids: [I2]
+    statement: "Learned structure can be operationally distinguished from injected or statistically trivial structure."
+    category: measurement
+    status: Contradicted
+    needed_by: [HYP-2026-0001]
+    consequence_if_false: "Emergence claims are non-identifiable."
+    evidence_against: [EVD-2026-0008]
+    smallest_test: "Null-referenced shuffled-input emergence statistic with injection-matched controls."
+
+  - id: ASM-2026-0006
+    legacy_ids: [I3]
+    statement: "A feasible environment can require nontrivial structure without being hand-seeded or linearly trivial."
+    category: world
+    status: Active_Unvalidated
+    needed_by: [HYP-2026-0001]
+    consequence_if_false: "E0 becomes vacuous or infeasible."
+    smallest_test: "Offline environment challenge showing fixed/linear controls cannot recover the latent while an oracle can."
+
+  - id: ASM-2026-0007
+    statement: "The adjudicated query distribution used for calibration represents the intended Program A use scope."
+    category: data
+    status: Active_Unvalidated
+    needed_by: [HYP-2026-0002, EXP-2026-0005]
+    consequence_if_false: "Calibration estimates will not transfer to deployment queries."
+    smallest_test: "Predefine deployment strata and test calibration stability across them."
+
+  - id: ASM-2026-0008
+    statement: "Affective categories and task schemas can be evaluated without circularly authoring the task set around those categories."
+    category: human_judgment
+    status: Active_Unvalidated
+    needed_by: [HYP-2026-0003, EXP-2026-0006]
+    consequence_if_false: "Any observed advantage may be designer alignment rather than reusable indexing."
+    smallest_test: "Use third-party tasks frozen independently of the affect mapping."
+
+  - id: ASM-2026-0009
+    statement: "The PH-1 environment contains no current-input leakage and the historical cue is feasible to retain within the declared memory budget."
+    category: world
+    status: Active_Unvalidated
+    needed_by: [HYP-2026-0009, EXP-2026-0009]
+    consequence_if_false: "The carrier-ablation experiment cannot distinguish memory from leakage or infeasibility."
+    smallest_test: "Analytic memoryless ceiling plus oracle, carrier-ablation, and shuffled controls."
+
+  - id: ASM-2026-0010
+    statement: "A run executed from a clean, committed revision can be reconstructed from the recorded code, configuration, runtime, seeds, and artifacts without unrecorded local state affecting the scientific outputs."
+    category: reproducibility
+    status: Active_Unvalidated
+    needed_by: [EXP-2026-0007]
+    consequence_if_false: "A nominally clean manifest would not establish reconstructable confirmatory evidence or stable variance estimates."
+    smallest_test: "Two isolated fresh-checkout executions of the same frozen config and seed must produce identical decision-relevant metrics and artifact hashes, with declared exceptions only for nondeterministic metadata."
+
+  - id: ASM-2026-0011
+    statement: "Repository and CI gates exercise the same platform, configs, execution path, and artifact layout used to generate scientific evidence, and fail when those surfaces are absent or invalid."
+    category: measurement
+    status: Contradicted
+    needed_by: [EXP-2026-0007]
+    consequence_if_false: "Green automation supplies no assurance about the apparatus that generated the evidence."
+    evidence_against: [EVD-2026-0009]
+    smallest_test: "Run all required platform, equivalence, config-to-artifact, provenance, and integrity gates in a fresh checkout and inject one known failure into each gate to demonstrate sensitivity."
+
+unknowns:
+  - id: UNK-2026-0001
+    title: Resource-matched replay effect
+    statement: "Whether historical replay improves prior-task excess loss after matching update count, decay applications, compute, and immediate-sample exposure."
+    type: nonidentifiability
+    status: Prioritized
+    affects: [HYP-2026-0007, MEC-2026-0006]
+    resolution_criterion: "A preregistered paired contrast meets the replay SESOI and plasticity guardrail on untouched confirmation seeds."
+    smallest_discriminating_experiment: "EXP-2026-0007 resource-matched replay contrast."
+    information_gain: {D: 4, U: 4, B: 4, R: 4, F: 3, C: 2, priority: 256, rationale: "Central causal replay claim; feasible with current rig after controls are exposed."}
+
+  - id: UNK-2026-0002
+    title: Information in surprise timing
+    statement: "Whether loss-triggered timing contains useful allocation information beyond replay budget and task-boundary correlation."
+    type: nonidentifiability
+    status: Prioritized
+    affects: [HYP-2026-0008, MEC-2026-0007]
+    resolution_criterion: "Surprise exceeds equal-budget random timing by a preregistered SESOI without violating plasticity guardrails on confirmation seeds."
+    smallest_discriminating_experiment: "Equal-budget random-timing replay paired to each surprise run."
+    information_gain: {D: 4, U: 4, B: 3, R: 4, F: 4, C: 1, priority: 384, rationale: "Cheapest direct mechanism discriminator and prevents premature surprise-mechanism expansion."}
+
+  - id: UNK-2026-0003
+    title: Forgetting metric construct validity
+    statement: "Whether the present forgetting scalar identifies retained capability rather than weak initial mastery."
+    type: measurement_gap
+    status: Prioritized
+    affects: [HYP-2026-0007, HYP-2026-0008, EXP-2026-0003, EXP-2026-0007]
+    resolution_criterion: "Metric conclusions agree with oracle-relative final loss and explicitly reported initial mastery/plasticity, or the scalar is retired."
+    smallest_discriminating_experiment: "Reanalyse multi-seed runs with final excess loss, initial mastery, BWT, and joint guardrails."
+    information_gain: {D: 4, U: 4, B: 4, R: 4, F: 4, C: 1, priority: 512, rationale: "A defective primary metric could invert every replay conclusion."}
+
+  - id: UNK-2026-0004
+    title: Legacy evidence provenance and authority conflicts
+    statement: "Which legacy claims, runs, and authority labels can be migrated as valid evidence rather than historical assertions."
+    type: missing_provenance
+    status: Under_Investigation
+    affects: [EXP-2026-0001, EXP-2026-0002, EXP-2026-0004, EXP-2026-0008]
+    resolution_criterion: "Each migrated claim has an immutable source, bounded scope, validity classification, and migration decision; unresolved conflicts remain explicit."
+    smallest_discriminating_experiment: "Artifact-to-claim provenance audit rather than a new experiment."
+    information_gain: {D: 3, U: 3, B: 4, R: 3, F: 4, C: 2, priority: 144, rationale: "Needed for cumulative reuse but less urgent than current causal-identification defects."}
+
+  - id: UNK-2026-0005
+    title: E0 growth-trigger operability
+    statement: "Whether a dimensionally coherent, preregistered growth criterion can activate nontrivially without reintroducing an arbitrary threshold."
+    type: anomaly
+    status: Prioritized
+    affects: [HYP-2026-0001, MEC-2026-0003, EXP-2026-0004]
+    resolution_criterion: "A frozen positive-control run produces growth where analytically expected and no growth in a matched negative control before H* is tested."
+    smallest_discriminating_experiment: "Growth-trigger unit calibration with known compressible and incompressible streams."
+    information_gain: {D: 4, U: 4, B: 3, R: 4, F: 3, C: 2, priority: 192, rationale: "H* cannot be tested until its treatment can activate validly."}
+
+  - id: UNK-2026-0006
+    title: Program A calibration distribution
+    statement: "Whether the current or future uncertainty-tier emitter is calibrated across factual, ambiguous, and unanswerable deployment strata."
+    type: open_question
+    status: Open
+    affects: [HYP-2026-0002, MEC-2026-0004, EXP-2026-0005]
+    resolution_criterion: "Predeclared ECE and honesty criteria pass against baselines on a frozen representative query set."
+    smallest_discriminating_experiment: "EXP-2026-0005."
+    information_gain: {D: 3, U: 4, B: 2, R: 4, F: 3, C: 2, priority: 96, rationale: "Important product honesty gate; scientifically narrower than core P1 mechanism claims."}
+
+  - id: UNK-2026-0007
+    title: Affective-indexing objective effect
+    statement: "Whether affective framing improves objective outcomes independently of task-authoring circularity."
+    type: open_question
+    status: Open
+    affects: [HYP-2026-0003, MEC-2026-0005, EXP-2026-0006]
+    resolution_criterion: "A preregistered third-party task comparison shows a meaningful framed-versus-neutral effect with no per-task schema reauthoring."
+    smallest_discriminating_experiment: "A small blinded third-party task pilot followed by untouched validation tasks if signal exists."
+    information_gain: {D: 3, U: 4, B: 2, R: 2, F: 2, C: 3, priority: 24, rationale: "Potentially novel but currently isolated and costlier to adjudicate objectively."}
+
+  - id: UNK-2026-0008
+    title: Historical-carrier dependence
+    statement: "Whether the preregistered PH-1 system advantage depends specifically on access to the historical cue rather than leakage, spurious correlates, or capacity."
+    type: open_question
+    status: Open
+    affects: [HYP-2026-0009, MEC-2026-0008, EXP-2026-0009]
+    resolution_criterion: "Treatment beats the memoryless ceiling and collapses under carrier ablation while oracle and shuffled controls behave as preregistered."
+    smallest_discriminating_experiment: "EXP-2026-0009."
+    information_gain: {D: 3, U: 4, B: 3, R: 3, F: 3, C: 2, priority: 108, rationale: "Calibrates the broader experimental pipeline but does not directly validate a general intelligence mechanism."}
+
+  - id: UNK-2026-0009
+    title: Scope beyond synthetic environments
+    statement: "Whether any P1 finding transfers beyond its constructed environment family."
+    type: scope_unknown
+    status: Deferred
+    affects: [HYP-2026-0001, HYP-2026-0007, HYP-2026-0008, HYP-2026-0009]
+    resolution_criterion: "A validated mechanism retains its preregistered effect over independently generated environment families and at least one structurally different benchmark."
+    smallest_discriminating_experiment: "Only after within-assay causal validation, run an independently generated transfer battery."
+    information_gain: {D: 3, U: 4, B: 4, R: 2, F: 1, C: 4, priority: 19.2, rationale: "Broadly important but premature before any mechanism is validated within scope."}
+
+  - id: UNK-2026-0010
+    title: M1 fresh-checkout reconstruction and repeatability
+    statement: "Whether the committed M1 apparatus, from an isolated clean checkout, reproduces identical decision-relevant outputs and complete verifiable artifacts for the same frozen configuration and seed."
+    type: failed_replication
+    status: Prioritized_Blocking
+    affects: [EXP-2026-0007, ASM-2026-0010, ASM-2026-0011]
+    resolution_criterion: "Required CI passes on a clean committed revision and two isolated repeated executions produce identical decision-relevant metrics and artifact hashes under a declared normalization policy."
+    smallest_discriminating_experiment: "Fresh-checkout smoke plus byte/semantic identity rerun gate on one minimal deterministic config before any Discovery pilot."
+    information_gain: {D: 4, U: 4, B: 4, R: 4, F: 4, C: 1, priority: 512, rationale: "This is a short-lived prerequisite: failure would invalidate downstream variance and confirmatory provenance, while success licenses pilot execution but not confirmatory inference."}
+
+scientific_debt:
+  - id: SDEBT-2026-0001
+    title: Bundled replay intervention
+    category: confounding
+    severity: Critical
+    blocking_impact: B2
+    status: Open
+    affects: [HYP-2026-0007, EXP-2026-0003]
+    evidence: [EVD-2026-0007]
+    prohibited_claims: ["causal historical replay benefit", "fundamental stability-plasticity trade-off"]
+    required_evidence: ["matched update count", "matched decay applications", "historical-only replay analysis", "plasticity guardrail"]
+    smallest_resolving_experiment: "EXP-2026-0007 resource-matched contrast."
+
+  - id: SDEBT-2026-0002
+    title: Missing equal-budget random replay gate
+    category: missing_control
+    severity: Critical
+    blocking_impact: B2
+    status: Open
+    affects: [HYP-2026-0008, MEC-2026-0007]
+    evidence: [EVD-2026-0007]
+    prohibited_claims: ["surprise timing is informative", "surprise replay is efficient"]
+    required_evidence: ["equal realized budget", "same content sampler", "random timing independent of loss"]
+    smallest_resolving_experiment: "Paired matched-random timing arm."
+
+  - id: SDEBT-2026-0003
+    title: Forgetting scalar can reward poor mastery
+    category: measurement_validity
+    severity: High
+    blocking_impact: B2
+    status: Open
+    affects: [HYP-2026-0007, HYP-2026-0008]
+    evidence: [EVD-2026-0007]
+    prohibited_claims: ["retention superiority from the current scalar alone"]
+    required_evidence: ["final oracle-relative loss", "initial mastery", "joint plasticity outcome", "per-task effects"]
+    smallest_resolving_experiment: "Metric reanalysis on multi-seed validation runs."
+
+  - id: SDEBT-2026-0004
+    title: Conflicting legacy authority and status labels
+    category: terminology_equivocation
+    severity: High
+    blocking_impact: B1
+    status: Reduced
+    affects: [UNK-2026-0004]
+    evidence: [OBS-2026-0013, OBS-2026-0014]
+    prohibited_claims: ["legacy ACCEPTED or canonical labels imply SOS validation"]
+    required_evidence: ["record-by-record migration decisions", "explicit conflict retention"]
+    smallest_resolving_experiment: "Complete legacy provenance audit."
+
+  - id: SDEBT-2026-0005
+    title: Mixed-quality legacy evidence
+    category: provenance_gap
+    severity: High
+    blocking_impact: B2
+    status: Reduced
+    affects: [EXP-2026-0001, EXP-2026-0002, EXP-2026-0004, EXP-2026-0008]
+    evidence: [OBS-2026-0013, OBS-2026-0014]
+    prohibited_claims: ["unqualified reuse of legacy conclusions"]
+    required_evidence: ["immutable artifacts", "scope and validity classification"]
+    smallest_resolving_experiment: "Artifact reconstruction and independent rerun where material."
+
+  - id: SDEBT-2026-0006
+    title: Unvalidated capability measurements
+    category: measurement_validity
+    severity: Critical
+    blocking_impact: B3
+    status: Open
+    affects: [HYP-2026-0001, HYP-2026-0002, HYP-2026-0003, HYP-2026-0007, HYP-2026-0008, HYP-2026-0009]
+    evidence: [OBS-2026-0002]
+    prohibited_claims: ["validated retention", "validated generalization", "validated transfer", "validated structure"]
+    required_evidence: ["positive controls", "negative controls", "construct-discriminating failures"]
+    smallest_resolving_experiment: "Validate one load-bearing metric with known positive and negative controls before each mechanism test."
+
+  - id: SDEBT-2026-0007
+    title: Designer-injected structure confounds emergence
+    category: unmeasured_bias
+    severity: Critical
+    blocking_impact: B3
+    status: Open
+    affects: [HYP-2026-0001, ASM-2026-0005]
+    evidence: [EVD-2026-0008]
+    prohibited_claims: ["autonomous emergence in the audited legacy system"]
+    required_evidence: ["injection inventory", "shuffled/input-matched controls", "procedurally generated environments", "sensitivity analyses"]
+    smallest_resolving_experiment: "Null-referenced emergence test after treatment operability is established."
+
+  - id: SDEBT-2026-0008
+    title: No supported integrative P1 theory
+    category: theory_patch
+    severity: Moderate
+    blocking_impact: B1
+    status: Open
+    affects: []
+    evidence: []
+    prohibited_claims: ["P1 has a validated general theory of intelligence"]
+    required_evidence: ["at least two independently validated constituent hypotheses", "novel risky prediction", "successful discrimination from alternatives"]
+    smallest_resolving_experiment: "Not currently eligible; first validate constituent mechanisms."
+
+  - id: SDEBT-2026-0009
+    title: E0 treatment non-operability
+    category: nonidentifiability
+    severity: Critical
+    blocking_impact: B4
+    status: Open
+    affects: [HYP-2026-0001, MEC-2026-0003, EXP-2026-0004]
+    evidence: [EVD-2026-0005]
+    prohibited_claims: ["E0 rejects H*", "E0 estimates growth effects"]
+    required_evidence: ["dimensionally coherent trigger", "positive-control activation", "negative-control nonactivation"]
+    smallest_resolving_experiment: "Growth-trigger unit calibration before another H* run."
+
+  - id: SDEBT-2026-0010
+    title: M0 and successor-platform immutable provenance gap
+    category: reproducibility
+    severity: Critical
+    blocking_impact: B3
+    status: Expanded
+    affects: [EXP-2026-0003, EXP-2026-0007]
+    evidence: [OBS-2026-0010, EVD-2026-0009]
+    prohibited_claims: ["artifact-complete reproduction of the exact reported M0 run", "confirmatory evidence from the current uncommitted M1 platform"]
+    required_evidence: ["committed code and config identity", "clean manifest from an isolated checkout", "runtime manifest", "required CI pass on the committed platform", "repeated-run output identity"]
+    smallest_resolving_experiment: "Freeze the platform revision, then execute the minimal config twice from isolated clean checkouts and verify decision-relevant metric and artifact identity."
+
+  - id: SDEBT-2026-0011
+    title: Non-enforcing confirmatory provenance rule
+    category: reproducibility
+    severity: Critical
+    blocking_impact: B3
+    status: Open
+    affects: [EXP-2026-0007]
+    evidence: [EVD-2026-0009]
+    prohibited_claims: ["automatic exclusion of dirty or untracked runs from confirmatory evidence", "confirmatory decision based on runs not proven clean"]
+    required_evidence: ["machine rejection of non-clean runs at the confirmatory execution or evidence-admission boundary", "negative test proving a dirty run cannot enter a confirmatory decision"]
+    smallest_resolving_experiment: "Attempt to admit a deliberately dirty-run manifest to the confirmatory path and require a hard failure."
+
+  - id: SDEBT-2026-0012
+    title: CI and verification gates do not measure the live scientific apparatus
+    category: measurement_validity
+    severity: Critical
+    blocking_impact: B3
+    status: Open
+    affects: [EXP-2026-0007, ASM-2026-0011]
+    evidence: [EVD-2026-0009]
+    prohibited_claims: ["current green CI validates M1", "current reproducibility and artifact-integrity jobs establish M1 readiness"]
+    required_evidence: ["M1 and frozen-equivalence suites run as required CI", "config-to-artifact smoke run in CI", "artifact verifier targets the live run layout and fails when evidence is absent or corrupted", "reproducibility verifier targets configs/v0 and requires substantive executable content", "fresh-checkout required-job pass"]
+    smallest_resolving_experiment: "Commit the corrected gates and obtain a required fresh-checkout CI pass plus one known-failure sensitivity test per gate."
+
+negative_results:
+  - id: NEG-2026-0001
+    title: No measurable R1 free-energy PredictionRMSE advantage
+    source: EXP-2026-0001
+    observation: OBS-2026-0001
+    evidence: EVD-2026-0001
+    scope: "Tested legacy policy and R1 environment only."
+    validity: valid_negative
+    preserved_interpretation: "The treatment did not outperform null; the wide interval does not establish equivalence."
+
+  - id: NEG-2026-0002
+    title: Legacy Tier-2 detector collapsed under keyword-free paraphrase
+    source: EXP-2026-0002
+    observation: OBS-2026-0003
+    evidence: EVD-2026-0002
+    scope: "32 tested legacy concepts and detector version."
+    validity: valid_negative
+
+  - id: NEG-2026-0003
+    title: Tier-1 v2 detected neither original nor paraphrased concepts
+    source: EXP-2026-0002
+    observation: OBS-2026-0004
+    evidence: EVD-2026-0003
+    scope: "The tested Tier-1 v2 path and 32-item dataset."
+    validity: valid_negative
+
+  - id: NEG-2026-0004
+    title: CERTAIN tier emitted on fabricated irrelevant response
+    source: EXP-2026-0008
+    observation: OBS-2026-0011
+    evidence: EVD-2026-0004
+    scope: "One legacy Q6 query; a decisive failure case, not a population calibration estimate."
+    validity: valid_negative
+
+  - id: NEG-2026-0005
+    title: E0 produced zero treatment growth events
+    source: EXP-2026-0004
+    observation: OBS-2026-0005
+    evidence: EVD-2026-0005
+    scope: "Three-seed execution with the recorded growth-trigger units mismatch."
+    validity: invalid_for_H_star_but_valid_methodological_failure
+
+observations:
+  - id: OBS-2026-0001
+    statement: "In R1, mean PredictionRMSE was 0.2991 +/- 0.0976 for free_energy and 0.2951 +/- 0.0975 for null; the paired treatment-minus-null effect was +0.0040, p=0.8660, 95% CI [-0.1163, 0.1251]."
+    source: "evidence/research_artifacts/research_artifacts/run_20260627T022109/ablation_report.md"
+    method: "72-run controlled policy sweep with bootstrap mean-difference test."
+    limitations: ["wide interval", "three seeds per cell", "one environment family"]
+
+  - id: OBS-2026-0002
+    statement: "R1 reported only PredictionRMSE as measurable among six declared primary metrics; five primary capability metrics were unavailable."
+    source: "evidence/research_artifacts/research_artifacts/run_20260627T022109/ablation_report.md"
+    method: "Metric-availability report."
+    limitations: ["availability is specific to the R1 substrate"]
+
+  - id: OBS-2026-0003
+    statement: "In EXP-0 Tier-2 legacy, hit rate was 32/32 on originals and 0/32 on keyword-free paraphrases; McNemar exact p=4.656612873077393e-10 and bootstrap difference CI [1.0, 1.0]."
+    source: "experiments/EXP0/artifacts/run_20260703T074034Z_seed1_tier12/exp0_summary.json"
+    method: "32 paired items; exact McNemar test and 10,000-iteration paired bootstrap."
+    limitations: ["single curated concept set", "detector-level outcome"]
+
+  - id: OBS-2026-0004
+    statement: "In EXP-0 Tier-1 v2, hit rate was 0/32 on originals and 0/32 on paraphrases; McNemar p=1.0 and bootstrap difference CI [0.0, 0.0]."
+    source: "experiments/EXP0/artifacts/run_20260703T074034Z_seed1_tier12/exp0_summary.json"
+    method: "32 paired items."
+    limitations: ["cannot estimate paraphrase robustness when the original condition has zero hits"]
+
+  - id: OBS-2026-0005
+    statement: "The inspected E0 aggregate recorded zero growth events in every T/C condition for all three listed seeds."
+    source: "artifacts/experiments/E0/run_20260726T095330Z_s42_n3/aggregated_results.json"
+    method: "Recorded execution diagnostics."
+    limitations: ["artifact is large and stores per-seed nested outputs"]
+
+  - id: OBS-2026-0006
+    statement: "Each per-seed E0 decision recorded that a per-symbol entropy delta was compared with a total-data-code penalty, making growth firing mathematically impossible in that execution."
+    source: "artifacts/experiments/E0/run_20260726T095330Z_s42_n3/aggregated_results.json"
+    method: "Execution decision diagnostic."
+    limitations: ["diagnosis belongs to this implementation/protocol instance"]
+
+  - id: OBS-2026-0007
+    statement: "The E0 aggregate decision recorded INCONCLUSIVE because three seeds were available while five were required."
+    source: "artifacts/experiments/E0/run_20260726T095330Z_s42_n3/aggregated_results.json"
+    method: "Aggregate decision field."
+    limitations: ["seed insufficiency is secondary to treatment non-operability"]
+
+  - id: OBS-2026-0008
+    statement: "The independently rerun P1 v0 default seed-0 outputs were: online tail loss 0.6849, mean forgetting +2.4516, replay count 0; replay_always 1.1819, +0.6405, 32000; replay_surprise 0.7593, +1.4761, 4292."
+    source: "P1_V0_M0_SCIENTIFIC_REVIEW.md"
+    method: "Independent local reproduction of the default runner command."
+    limitations: ["one seed", "descriptive point outcomes"]
+
+  - id: OBS-2026-0009
+    statement: "All nine reviewed P1 v0 rig tests passed in the reviewed environment."
+    source: "P1_V0_M0_SCIENTIFIC_REVIEW.md"
+    method: "Pytest execution."
+    limitations: ["implementation conformance, not mechanism evidence"]
+
+  - id: OBS-2026-0010
+    statement: "At M0 review time, the reviewed p1v0 code and tests were uncommitted, and the available stored replay_surprise summary used 300 rather than the reported 2000 steps per task."
+    source: "P1_V0_M0_SCIENTIFIC_REVIEW.md"
+    method: "Repository and artifact provenance inspection."
+    limitations: []
+
+  - id: OBS-2026-0011
+    statement: "In the legacy six-query probe, Q6 returned an irrelevant fabricated answer from retrieved pages and emitted confidence CERTAIN; the report also recorded unaddressed key terms and mixed claims."
+    source: "archive/data/soul_test_report.md"
+    method: "Qualitative behavior probe and report."
+    limitations: ["one query", "manual correctness characterization"]
+
+  - id: OBS-2026-0012
+    statement: "The designer-injection audit enumerated 48 injection classes, estimated roughly 150 governing constants, and reported zero as data-derived or systematically searched; several major behaviors were estimated as 95-100% designer-determined."
+    source: "research/designer_injection_report.md"
+    method: "Static analysis of Python, configuration, curriculum, and shell files."
+    limitations: ["behavioral percentages are audit estimates, not intervention-derived causal fractions", "repository state is historical"]
+
+  - id: OBS-2026-0013
+    statement: "Legacy certification documents reported EXP-0 as unavailable or unrun, while the current repository contains paraphrases and two timestamped EXP-0 artifact directories with manifests and summaries."
+    source: "Repository provenance audit during SKB migration."
+    method: "Cross-document and filesystem comparison."
+    limitations: ["the reason for the historical-to-current state transition is not fully documented"]
+
+  - id: OBS-2026-0014
+    statement: "Legacy Program D documents used labels such as FACT, ACCEPTED, KEEP, canonical, and rejected with meanings that do not map one-to-one onto SOS evidence validity or hypothesis lifecycle states."
+    source: "PROGRAM_D_CANONICAL.md; PROGRAM_D_RESEARCH_STATE_v0.1.md; experiment_registry.yaml"
+    method: "Terminology and authority audit."
+    limitations: []
+
+  - id: OBS-2026-0015
+    statement: "The 2026-07-28 smoke manifest recorded code_state=dirty, untracked_rig=true, and dirty_file_count=39; repository inspection independently found the M1 apparatus, v0 configs, tests, and scientific-state files absent from the committed revision."
+    source: "artifacts/runs/smoke/smoke__seed0__57055578123a/manifest.json; git status and git ls-files inspection on 2026-07-28."
+    method: "Manifest and repository provenance audit."
+    limitations: ["The working tree may later be committed; this observation describes the assessed revision state."]
+
+  - id: OBS-2026-0016
+    statement: "The committed CI revision did not invoke tests/m1 or tests/v0_rig and did not execute configs/v0/smoke.yaml; locally modified but uncommitted CI added those steps."
+    source: ".github/workflows/ci.yml working-tree versus HEAD comparison on 2026-07-28."
+    method: "Committed-versus-working-tree workflow inspection."
+    limitations: ["No remote CI run of the modified workflow was available because the changes were uncommitted."]
+
+  - id: OBS-2026-0017
+    statement: "The current artifact-integrity script targets artifacts/experiments and exits success when that directory is absent, while M1 writes to artifacts/runs; the current reproducibility script checks legacy configs and directory existence rather than configs/v0 and substantive M1 execution."
+    source: "scripts/verify_artifact_integrity.py; scripts/verify_reproducibility.py; .gitignore; local script executions on 2026-07-28."
+    method: "Static gate audit plus direct execution."
+    limitations: ["Legacy artifact failures are real for that legacy checker but are distinct from M1 run-layout integrity."]
+
+  - id: OBS-2026-0018
+    statement: "Independent local verification completed all 202 M1/v0-rig tests with 88.5% line coverage, Black left 246 scoped files unchanged, and the config-driven smoke run completed; the test process returned nonzero only after a host safe-delete policy blocked pytest temporary cleanup."
+    source: "Local verification commands and m1-coverage.xml on 2026-07-28."
+    method: "Pytest with coverage, Black check, and config-driven smoke execution."
+    limitations: ["Working-tree evidence only", "not a clean-checkout or remote-CI result", "coverage quantity does not establish scientific validity"]
+
+  - id: OBS-2026-0019
+    statement: "The manifest records code_state and warns that non-clean runs are ineligible for confirmation, but repository search found no enforcement beyond a test that accepts clean, dirty, or untracked values."
+    source: "experiments/engine/manifest.py; tests/m1/test_engine.py; repository code search on 2026-07-28."
+    method: "Static enforcement-path audit."
+    limitations: ["A future evidence-consumption path may add enforcement; none was present in the assessed tree."]
+
+evidence:
+  - id: EVD-2026-0001
+    source_observations: [OBS-2026-0001]
+    target: HYP-2026-0005
+    direction: opposes
+    strength: moderate
+    validity: valid_negative
+    scope: "Tested policy and R1 environment."
+    rationale: "No observed advantage, but the wide CI does not establish small-effect equivalence."
+
+  - id: EVD-2026-0002
+    source_observations: [OBS-2026-0003]
+    target: HYP-2026-0006
+    direction: opposes
+    strength: strong
+    validity: valid_negative
+    scope: "Legacy Tier-2 exact-keyword detector on 32 concepts."
+    rationale: "The paired collapse is complete and precisely measured for the tested set."
+
+  - id: EVD-2026-0003
+    source_observations: [OBS-2026-0004]
+    target: EXP-2026-0002
+    direction: limits
+    strength: moderate
+    validity: valid_negative
+    scope: "Tier-1 v2 path."
+    rationale: "Zero original hits make the path unusable as a paraphrase-robustness test and reveal a separate detection failure."
+
+  - id: EVD-2026-0004
+    source_observations: [OBS-2026-0011]
+    target: HYP-2026-0002
+    direction: opposes
+    strength: moderate
+    validity: valid_negative
+    scope: "The historical emitter instance and Q6 failure class."
+    rationale: "A hard honesty failure directly contradicts universal claims that the tested tiers were already calibrated, but it does not estimate population calibration."
+
+  - id: EVD-2026-0005
+    source_observations: [OBS-2026-0005, OBS-2026-0006, OBS-2026-0007]
+    target: HYP-2026-0001
+    direction: uninformative_about_hypothesis_but_opposes_protocol_validity
+    strength: strong_methodological
+    validity: invalid
+    scope: "E0 run_20260726T095330Z_s42_n3."
+    rationale: "The treatment never activated; the run cannot support or oppose H*, but strongly establishes a protocol/implementation invalidity."
+
+  - id: EVD-2026-0006
+    source_observations: [OBS-2026-0008]
+    target: HYP-2026-0007
+    direction: weakly_supports
+    strength: weak
+    validity: valid_indeterminate
+    scope: "Exact default configuration and seed 0."
+    rationale: "Replay_always was associated with less measured forgetting, but the intervention was bundled and unreplicated."
+
+  - id: EVD-2026-0007
+    source_observations: [OBS-2026-0008, OBS-2026-0010]
+    target: [HYP-2026-0007, HYP-2026-0008]
+    direction: limits
+    strength: strong_methodological
+    validity: valid_indeterminate
+    scope: "P1 v0 M0 demonstration."
+    rationale: "Resource, decay, metric, seed, and provenance confounds prohibit causal replay or surprise attribution."
+
+  - id: EVD-2026-0008
+    source_observations: [OBS-2026-0012]
+    target: ASM-2026-0005
+    direction: opposes
+    strength: moderate
+    validity: audit_evidence
+    scope: "Audited historical VELYNX repository state."
+    rationale: "The audit documents pervasive injected structure, so learned-versus-injected interpretation is not currently identified. Causal percentages remain estimates."
+
+  - id: EVD-2026-0009
+    source_observations: [OBS-2026-0015, OBS-2026-0016, OBS-2026-0017, OBS-2026-0018, OBS-2026-0019]
+    target: [EXP-2026-0007, ASM-2026-0010, ASM-2026-0011, SDEBT-2026-0010, SDEBT-2026-0011, SDEBT-2026-0012]
+    direction: blocks_confirmatory_readiness_but_supports_local_engineering_conformance
+    strength: strong_methodological
+    validity: audit_evidence
+    scope: "M1 working tree, committed revision, local CI-equivalent checks, and evidence-admission controls assessed on 2026-07-28."
+    rationale: "The local apparatus passes substantial conformance checks, but it is absent from the committed revision, current committed automation does not exercise it, two verification jobs target legacy surfaces, and non-clean evidence is not machine-excluded. These facts block confirmatory admissibility without changing any mechanism hypothesis."
+
+decisions:
+  - id: DEC-2026-0001
+    timestamp: "2026-07-02"
+    action: Revise
+    affected_objects: [HYP-2026-0001, HYP-2026-0002, HYP-2026-0003, HYP-2026-0004]
+    question: "Which legacy Program D hypotheses survive scientific reduction?"
+    evidence_considered: [EVD-2026-0001, EVD-2026-0004, EVD-2026-0008]
+    resulting_states: {HYP-2026-0001: Exploratory, HYP-2026-0002: Exploratory, HYP-2026-0003: Proposed, HYP-2026-0004: Superseded}
+    rationale: "Retain only falsifiable, bounded hypotheses; subsume the weaker H3 formulation into H*."
+    limitations_or_dissent: "This migrates a legacy decision and does not grant present validation."
+    reversal_trigger: "New provenance showing the migration misstates the historical decision."
+
+  - id: DEC-2026-0002
+    timestamp: "2026-07-03"
+    action: Reject
+    affected_objects: [HYP-2026-0006, MEC-2026-0002]
+    question: "Does the legacy exact-keyword benchmark support a semantic-understanding claim?"
+    evidence_considered: [EVD-2026-0002, EVD-2026-0003]
+    resulting_states: {HYP-2026-0006: Rejected, MEC-2026-0002: Rejected_as_semantic_mechanism}
+    rationale: "Complete Tier-2 paraphrase collapse rejects the benchmark inference; Tier-1 v2 also failed to detect originals."
+    reversal_trigger: "A frozen detector demonstrates preregistered paraphrase/generalization performance on independent items."
+
+  - id: DEC-2026-0003
+    timestamp: "2026-07-03"
+    action: Reject
+    affected_objects: [HYP-2026-0005, MEC-2026-0001]
+    question: "Does the tested legacy free-energy consolidation policy have a measurable R1 PredictionRMSE advantage?"
+    evidence_considered: [EVD-2026-0001]
+    resulting_states: {HYP-2026-0005: Rejected, MEC-2026-0001: Rejected_within_tested_scope}
+    rationale: "No advantage was detected; rejection is scoped to the tested instance and does not claim equivalence or universal falsification."
+    reversal_trigger: "A preregistered, adequately powered reconstruction shows a meaningful advantage within the same scope."
+
+  - id: DEC-2026-0004
+    timestamp: "2026-07-28"
+    action: No_Verdict
+    affected_objects: [HYP-2026-0001, EXP-2026-0004, SDEBT-2026-0009]
+    question: "Did the inspected E0 execution test H*?"
+    evidence_considered: [EVD-2026-0005]
+    resulting_states: {HYP-2026-0001: Exploratory, EXP-2026-0004: Interpreted, SDEBT-2026-0009: Open}
+    rationale: "The treatment did not activate because of a units mismatch. H* was untested, not rejected."
+    reversal_trigger: "Artifact evidence demonstrates valid treatment activation in the same execution."
+
+  - id: DEC-2026-0005
+    timestamp: "2026-07-28"
+    action: No_Verdict
+    affected_objects: [HYP-2026-0002]
+    question: "Is retrieval uncertainty calibration established?"
+    evidence_considered: [EVD-2026-0004]
+    resulting_states: {HYP-2026-0002: Exploratory}
+    rationale: "The legacy instance has a direct hard failure, but a representative calibration experiment has not been completed; the achievable-system hypothesis remains open."
+    reversal_trigger: "EXP-2026-0005 passes its frozen calibration and honesty criteria."
+
+  - id: DEC-2026-0006
+    timestamp: "2026-07-28"
+    action: Accept
+    affected_objects: [EXP-2026-0003]
+    question: "What status does P1 v0/M0 merit?"
+    evidence_considered: [EVD-2026-0006, EVD-2026-0007]
+    resulting_states: {EXP-2026-0003: Interpreted}
+    rationale: "Accept only as an engineering-complete, scientifically provisional Discovery assay; do not accept replay or surprise mechanism claims."
+    limitations_or_dissent: "Exact immutable artifact identity remains incomplete."
+    reversal_trigger: "Failure to reproduce after version pinning or evidence that the measurement path is defective."
+
+  - id: DEC-2026-0007
+    timestamp: "2026-07-28"
+    action: Revise
+    affected_objects: [HYP-2026-0007, HYP-2026-0008, EXP-2026-0007]
+    question: "What evidence is required before replay and surprise claims can advance?"
+    evidence_considered: [EVD-2026-0006, EVD-2026-0007]
+    resulting_states: {HYP-2026-0007: Exploratory, HYP-2026-0008: Exploratory, EXP-2026-0007: Designed}
+    rationale: "Require assay controls, resource matching, equal-budget random timing, paired seed-level inference, and untouched confirmation seeds."
+    reversal_trigger: "A better minimal design removes the same confounds with less scientific cost."
+
+  - id: DEC-2026-0008
+    timestamp: "2026-07-28"
+    action: Revise
+    affected_objects: [HYP-2026-0009, HYP-2026-0010, EXP-2026-0009]
+    question: "Are T-01 and T-02 distinct testable hypotheses?"
+    evidence_considered: []
+    resulting_states: {HYP-2026-0009: Proposed, HYP-2026-0010: Archived, EXP-2026-0009: Designed}
+    rationale: "T-02 with state subsumes T-01 and makes no distinct risky prediction. Retain T-02 only as a measurement constraint and test historical-carrier dependence against real alternatives."
+    reversal_trigger: "A formal version of T-02 yields an observable prediction not entailed by T-01."
+
+  - id: DEC-2026-0009
+    timestamp: "2026-07-28"
+    action: Revise
+    affected_objects: [SDEBT-2026-0004, SDEBT-2026-0005, UNK-2026-0004]
+    question: "How should conflicting legacy authority and evidence labels be treated?"
+    evidence_considered: []
+    resulting_states: {SDEBT-2026-0004: Reduced, SDEBT-2026-0005: Reduced, UNK-2026-0004: Under_Investigation}
+    rationale: "Treat all legacy labels as provenance and migrate only artifact-bounded statements through explicit SOS decisions."
+    reversal_trigger: "Repository-wide source reconstruction resolves every material conflict."
+
+  - id: DEC-2026-0010
+    timestamp: "2026-07-28"
+    action: Revise
+    affected_objects: [EXP-2026-0007, ASM-2026-0010, ASM-2026-0011, UNK-2026-0010, SDEBT-2026-0010, SDEBT-2026-0011, SDEBT-2026-0012]
+    question: "Is the current M1 platform scientifically ready to execute Discovery Cycle 001 or produce confirmatory evidence?"
+    evidence_considered: [EVD-2026-0009]
+    resulting_states: {EXP-2026-0007: Blocked_Confirmatory, ASM-2026-0010: Active_Unvalidated, ASM-2026-0011: Contradicted, UNK-2026-0010: Prioritized_Blocking, SDEBT-2026-0010: Expanded, SDEBT-2026-0011: Open, SDEBT-2026-0012: Open}
+    rationale: "The scientific questions and pilot designs remain approved, but execution is delayed until the apparatus is committed and reconstructable, required CI exercises the live scientific surfaces, dirty or untracked runs are machine-excluded from confirmation, legacy-misdirected gates are repaired, and repeated clean-checkout runs establish output identity. Local test success supports engineering conformance only."
+    limitations_or_dissent: "This ruling does not require publication-grade packaging before exploratory pilots and does not alter any mechanism hypothesis. Discovery pilots remain exploratory even after the minimum gates pass; confirmatory readiness additionally requires preregistration and all pre-existing causal, measurement, and statistical controls."
+    reversal_trigger: "A clean committed revision passes the required fresh-checkout platform/equivalence/config/integrity gates, rejects a deliberately non-clean confirmatory input, and reproduces decision-relevant outputs across isolated repeat runs."
+
+relations:
+  - {from: OBS-2026-0001, type: observation_from_source, to: EXP-2026-0001}
+  - {from: EVD-2026-0001, type: evidence_admits_observation, to: OBS-2026-0001}
+  - {from: EVD-2026-0001, type: evidence_supports_or_opposes_hypothesis, to: HYP-2026-0005, direction: opposes}
+  - {from: OBS-2026-0003, type: observation_from_source, to: EXP-2026-0002}
+  - {from: EVD-2026-0002, type: evidence_admits_observation, to: OBS-2026-0003}
+  - {from: EVD-2026-0002, type: evidence_supports_or_opposes_hypothesis, to: HYP-2026-0006, direction: opposes}
+  - {from: OBS-2026-0011, type: observation_from_source, to: EXP-2026-0008}
+  - {from: EVD-2026-0004, type: evidence_admits_observation, to: OBS-2026-0011}
+  - {from: EVD-2026-0004, type: evidence_supports_or_opposes_hypothesis, to: HYP-2026-0002, direction: opposes}
+  - {from: OBS-2026-0005, type: observation_from_source, to: EXP-2026-0004}
+  - {from: EVD-2026-0005, type: evidence_admits_observation, to: OBS-2026-0005}
+  - {from: UNK-2026-0005, type: unknown_limits_object, to: HYP-2026-0001}
+  - {from: OBS-2026-0008, type: observation_from_source, to: EXP-2026-0003}
+  - {from: EVD-2026-0006, type: evidence_admits_observation, to: OBS-2026-0008}
+  - {from: EVD-2026-0006, type: evidence_supports_or_opposes_hypothesis, to: HYP-2026-0007, direction: weakly_supports}
+  - {from: UNK-2026-0001, type: unknown_limits_object, to: HYP-2026-0007}
+  - {from: UNK-2026-0002, type: unknown_limits_object, to: HYP-2026-0008}
+  - {from: ASM-2026-0005, type: object_contradicts_object, to: OBS-2026-0012}
+  - {from: DEC-2026-0006, type: decision_changes_status, to: EXP-2026-0003}
+  - {from: HYP-2026-0004, type: object_supersedes_object, to: HYP-2026-0001, semantic_note: "HYP-2026-0001 supersedes the weaker legacy formulation HYP-2026-0004."}
+  - {from: OBS-2026-0015, type: observation_from_source, to: EXP-2026-0007}
+  - {from: EVD-2026-0009, type: evidence_admits_observation, to: OBS-2026-0015}
+  - {from: EVD-2026-0009, type: evidence_opposes_assumption, to: ASM-2026-0011}
+  - {from: EVD-2026-0009, type: evidence_blocks_experiment, to: EXP-2026-0007}
+  - {from: UNK-2026-0010, type: unknown_limits_object, to: EXP-2026-0007}
+  - {from: DEC-2026-0010, type: decision_changes_status, to: EXP-2026-0007}
+
+theories: []
