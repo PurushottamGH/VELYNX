@@ -1,0 +1,113 @@
+{
+  "$defs": {
+    "collection": {
+      "properties": {
+        "blocks_ids": {
+          "items": {
+            "$ref": "record.schema.json#/$defs/record_id"
+          },
+          "type": "array"
+        },
+        "confidence": {
+          "type": "object"
+        },
+        "discharge_condition": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "id": {
+          "pattern": "^SDEBT-[0-9]{4}-[0-9]{4}$",
+          "type": "string"
+        },
+        "immutability": {
+          "properties": {
+            "append_only": {
+              "const": false
+            }
+          },
+          "type": "object"
+        },
+        "incurred_by": {
+          "items": {
+            "$ref": "record.schema.json#/$defs/record_id"
+          },
+          "type": "array"
+        },
+        "legacy_ids": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "lifecycle": {
+          "properties": {
+            "status": {
+              "enum": [
+                "Candidate",
+                "Active",
+                "Dormant",
+                "Tombstoned",
+                "Deleted"
+              ],
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "primitive": {
+          "const": "Claim"
+        },
+        "provenance": {
+          "properties": {
+            "kind": {
+              "enum": [
+                "human_assertion",
+                "run_derived",
+                "document_derived",
+                "external_literature"
+              ]
+            }
+          },
+          "type": "object"
+        },
+        "severity": {
+          "enum": [
+            "blocks_validation",
+            "blocks_program_decision",
+            "scientific_stop",
+            "advisory"
+          ],
+          "type": "string"
+        },
+        "statement": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "type": {
+          "const": "scientific_debt"
+        }
+      },
+      "required": [
+        "statement",
+        "severity",
+        "blocks_ids",
+        "discharge_condition",
+        "incurred_by"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "https://p1.local/schemas/lske/scientific_debt.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "allOf": [
+    {
+      "$ref": "record.schema.json"
+    },
+    {
+      "$ref": "#/$defs/collection"
+    }
+  ],
+  "title": "scientific_debt",
+  "type": "object",
+  "unevaluatedProperties": false
+}

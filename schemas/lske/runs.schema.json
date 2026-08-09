@@ -1,0 +1,195 @@
+{
+  "$defs": {
+    "admissibility": {
+      "additionalProperties": false,
+      "properties": {
+        "admissible": {
+          "type": "boolean"
+        },
+        "ceiling": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "reasons": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "tier": {
+          "enum": [
+            "inadmissible",
+            "engineering-only",
+            "exploratory-admissible",
+            "confirmatory-admissible"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "admissible",
+        "tier",
+        "ceiling",
+        "reasons"
+      ],
+      "type": "object"
+    },
+    "collection": {
+      "properties": {
+        "admissibility": {
+          "$ref": "#/$defs/admissibility"
+        },
+        "artifact_ids": {
+          "items": {
+            "$ref": "record.schema.json#/$defs/record_id"
+          },
+          "type": "array"
+        },
+        "clean_checkout": {
+          "type": "boolean"
+        },
+        "confidence": {
+          "type": "null"
+        },
+        "determinism_tier": {
+          "enum": [
+            "D0",
+            "D1",
+            "D2"
+          ],
+          "type": "string"
+        },
+        "environment": {
+          "$ref": "#/$defs/environment"
+        },
+        "event_log_path": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "experiment_id": {
+          "$ref": "record.schema.json#/$defs/record_id"
+        },
+        "id": {
+          "pattern": "^RUN-[0-9]{4}-[0-9]{4}$",
+          "type": "string"
+        },
+        "immutability": {
+          "properties": {
+            "append_only": {
+              "const": true
+            }
+          },
+          "type": "object"
+        },
+        "legacy_ids": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "lifecycle": {
+          "properties": {
+            "status": {
+              "enum": [
+                "Candidate",
+                "Active",
+                "Dormant",
+                "Tombstoned",
+                "Deleted"
+              ],
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "manifest_digest": {
+          "$ref": "record.schema.json#/$defs/hex64"
+        },
+        "manifest_path": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "primitive": {
+          "const": "Run"
+        },
+        "protocol_id": {
+          "$ref": "record.schema.json#/$defs/record_id"
+        },
+        "provenance": {
+          "properties": {
+            "kind": {
+              "enum": [
+                "human_assertion",
+                "run_derived",
+                "document_derived",
+                "external_literature"
+              ]
+            }
+          },
+          "type": "object"
+        },
+        "runtime_run_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "type": {
+          "const": "run"
+        }
+      },
+      "required": [
+        "experiment_id",
+        "protocol_id",
+        "runtime_run_id",
+        "manifest_path",
+        "manifest_digest",
+        "admissibility",
+        "determinism_tier",
+        "event_log_path",
+        "artifact_ids",
+        "environment",
+        "clean_checkout"
+      ],
+      "type": "object"
+    },
+    "environment": {
+      "additionalProperties": false,
+      "properties": {
+        "ci": {
+          "type": "string"
+        },
+        "platform": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "python": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "python",
+        "platform",
+        "ci"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "https://p1.local/schemas/lske/runs.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "allOf": [
+    {
+      "$ref": "record.schema.json"
+    },
+    {
+      "$ref": "#/$defs/collection"
+    }
+  ],
+  "title": "runs",
+  "type": "object",
+  "unevaluatedProperties": false
+}

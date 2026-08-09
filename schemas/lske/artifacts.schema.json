@@ -1,0 +1,123 @@
+{
+  "$defs": {
+    "collection": {
+      "properties": {
+        "confidence": {
+          "type": "null"
+        },
+        "digest": {
+          "$ref": "record.schema.json#/$defs/hex64"
+        },
+        "id": {
+          "pattern": "^ART-[0-9]{4}-[0-9]{4}$",
+          "type": "string"
+        },
+        "immutability": {
+          "properties": {
+            "append_only": {
+              "const": true
+            }
+          },
+          "type": "object"
+        },
+        "integrity": {
+          "enum": [
+            "verified",
+            "failed",
+            "absent"
+          ],
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "manifest",
+            "metrics",
+            "events",
+            "checkpoint",
+            "log",
+            "figure",
+            "inventory"
+          ],
+          "type": "string"
+        },
+        "legacy_ids": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "lifecycle": {
+          "properties": {
+            "status": {
+              "enum": [
+                "Candidate",
+                "Active",
+                "Dormant",
+                "Tombstoned",
+                "Deleted"
+              ],
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "path": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "primitive": {
+          "const": "Snapshot"
+        },
+        "provenance": {
+          "properties": {
+            "kind": {
+              "enum": [
+                "human_assertion",
+                "run_derived",
+                "document_derived",
+                "external_literature"
+              ]
+            }
+          },
+          "type": "object"
+        },
+        "retention": {
+          "enum": [
+            "permanent",
+            "evidence_bearing",
+            "transient"
+          ],
+          "type": "string"
+        },
+        "run_id": {
+          "$ref": "record.schema.json#/$defs/record_id"
+        },
+        "type": {
+          "const": "artifact"
+        }
+      },
+      "required": [
+        "run_id",
+        "path",
+        "digest",
+        "kind",
+        "integrity",
+        "retention"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "https://p1.local/schemas/lske/artifacts.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "allOf": [
+    {
+      "$ref": "record.schema.json"
+    },
+    {
+      "$ref": "#/$defs/collection"
+    }
+  ],
+  "title": "artifacts",
+  "type": "object",
+  "unevaluatedProperties": false
+}

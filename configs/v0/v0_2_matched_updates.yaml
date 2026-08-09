@@ -1,0 +1,82 @@
+# V0-2 — replay causal effect under fair resource accounting (pilot scaffold).
+#
+# Question: does *historical* replay help, once the number of learning updates is
+# held constant?
+#
+# All replay arms use the same gate (`always`, k=4), so every arm performs the
+# same number of learning updates at the same times. Only the *content* of those
+# updates differs. That is the point: M0's contrast varied content, timing and
+# ~32,000 updates together, so nothing could be attributed.
+#
+#   buffer_sample    M0 content: uniform over the reservoir
+#   historical_only  control 6: prior-task items only
+#   current_sample   control 3: the just-observed item, repeated. Same updates,
+#                    same decay applications, no historical information.
+#   task_balanced    control 7: equal draws per prior task (oracle reference)
+#   none             control 5: storage without rehearsal
+#
+# Verify matching after the run: compute.updates_total must agree across the four
+# replaying arms, and compute.replay_shortfall must be ~0 for historical_only. If
+# it is not, that arm under-spent its budget and is not matched.
+#
+# KNOWN UNRESOLVED DESIGN ISSUE — flagged for scientific decision, not silently
+# patched. A pilot of this sweep produces:
+#
+#   buffer_sample    updates_total 40000   replay_shortfall 0
+#   current_sample   updates_total 40000   replay_shortfall 0
+#   historical_only  updates_total 32000   replay_shortfall 8000
+#   task_balanced    updates_total 32000   replay_shortfall 8000
+#
+# The historical arms cannot spend their budget during the first block, because no
+# prior-task item exists yet. They are therefore NOT update-matched with
+# buffer_sample, and the contrast as written confounds replay content with 8000
+# updates. Three defensible resolutions, all scientific choices:
+#
+#   (a) restrict the primary contrast to blocks 2..n, where every arm is matched;
+#   (b) top up the historical arms during block 1 with a declared filler operation
+#       and report it as part of the condition definition;
+#   (c) accept the imbalance and interpret the historical arms as a lower bound.
+#
+# Do not run this as confirmatory evidence until one is preregistered. The platform
+# reports the shortfall precisely so this cannot be overlooked.
+#
+# Primary DV: excess_loss.final_prior_excess_mean.
+# Co-primary guardrail: plasticity.adaptation_auc.
+#
+# PILOT ONLY: SESOI (delta_replay), the plasticity margin (epsilon_plasticity) and
+# the confirmatory seed count are preregistration decisions.
+
+config_version: 1
+name: v0_2_matched_updates
+description: "Pilot: replay content at matched update count and matched timing"
+base: baseline.yaml
+
+seeds:
+  start: 0
+  count: 5
+
+# Conditions, not a grid: swapping a replay policy also swaps its parameters, and
+# `none` takes no `weight`. A grid over names alone would leave the base config's
+# `weight` attached to a policy that does not accept it — which the pre-run
+# validation rejects rather than silently ignoring.
+conditions:
+  - gate.name: always
+    gate.params: {k: 4}
+    replay.name: buffer_sample
+    replay.params: {weight: 1.0}
+  - gate.name: always
+    gate.params: {k: 4}
+    replay.name: historical_only
+    replay.params: {weight: 1.0}
+  - gate.name: always
+    gate.params: {k: 4}
+    replay.name: current_sample
+    replay.params: {weight: 1.0}
+  - gate.name: always
+    gate.params: {k: 4}
+    replay.name: task_balanced
+    replay.params: {weight: 1.0}
+  - gate.name: always
+    gate.params: {k: 4}
+    replay.name: none
+    replay.params: {}

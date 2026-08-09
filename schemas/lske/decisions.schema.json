@@ -1,0 +1,238 @@
+{
+  "$defs": {
+    "collection": {
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "enum": [
+                  "accept_within_scope",
+                  "narrow"
+                ]
+              }
+            },
+            "required": [
+              "action"
+            ]
+          },
+          "then": {
+            "required": [
+              "scope_after"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "not": {
+                  "const": "no_change"
+                }
+              }
+            },
+            "required": [
+              "action"
+            ]
+          },
+          "then": {
+            "properties": {
+              "evidence_ids": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ],
+      "properties": {
+        "action": {
+          "enum": [
+            "accept_within_scope",
+            "archive",
+            "delete",
+            "merge",
+            "narrow",
+            "no_change",
+            "reject",
+            "revise",
+            "split"
+          ],
+          "type": "string"
+        },
+        "alternatives_considered": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "authority": {
+          "properties": {
+            "is_human": {
+              "const": true
+            },
+            "write_target": {
+              "const": "skb.decision"
+            }
+          },
+          "type": "object"
+        },
+        "confidence": {
+          "type": "null"
+        },
+        "dissent": {
+          "items": {
+            "$ref": "#/$defs/dissent"
+          },
+          "type": "array"
+        },
+        "evidence_ids": {
+          "items": {
+            "$ref": "record.schema.json#/$defs/record_id"
+          },
+          "type": "array"
+        },
+        "human_committer": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "id": {
+          "pattern": "^DEC-[0-9]{4}-[0-9]{4}$",
+          "type": "string"
+        },
+        "immutability": {
+          "properties": {
+            "append_only": {
+              "const": true
+            }
+          },
+          "type": "object"
+        },
+        "legacy_ids": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "level_after": {
+          "oneOf": [
+            {
+              "maximum": 5,
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "lifecycle": {
+          "properties": {
+            "status": {
+              "enum": [
+                "Candidate",
+                "Active",
+                "Dormant",
+                "Tombstoned",
+                "Deleted"
+              ],
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "primitive": {
+          "const": "Decision"
+        },
+        "propagation_receipt_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "provenance": {
+          "properties": {
+            "kind": {
+              "enum": [
+                "human_assertion",
+                "run_derived",
+                "document_derived",
+                "external_literature"
+              ]
+            }
+          },
+          "type": "object"
+        },
+        "rationale": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "scope_after": {
+          "oneOf": [
+            {
+              "$ref": "record.schema.json#/$defs/scope"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "subject_ids": {
+          "items": {
+            "$ref": "record.schema.json#/$defs/record_id"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "type": {
+          "const": "decision"
+        }
+      },
+      "required": [
+        "action",
+        "subject_ids",
+        "evidence_ids",
+        "rationale",
+        "alternatives_considered",
+        "dissent",
+        "human_committer",
+        "propagation_receipt_id"
+      ],
+      "type": "object"
+    },
+    "dissent": {
+      "additionalProperties": false,
+      "properties": {
+        "at": {
+          "$ref": "record.schema.json#/$defs/timestamp"
+        },
+        "by": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "statement": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "by",
+        "at",
+        "statement"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "https://p1.local/schemas/lske/decisions.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "allOf": [
+    {
+      "$ref": "record.schema.json"
+    },
+    {
+      "$ref": "#/$defs/collection"
+    }
+  ],
+  "title": "decisions",
+  "type": "object",
+  "unevaluatedProperties": false
+}

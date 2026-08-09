@@ -1,0 +1,158 @@
+{
+  "$defs": {
+    "collection": {
+      "properties": {
+        "confidence": {
+          "type": "object"
+        },
+        "constituent_hypothesis_ids": {
+          "items": {
+            "$ref": "record.schema.json#/$defs/record_id"
+          },
+          "type": "array"
+        },
+        "id": {
+          "pattern": "^THY-[0-9]{4}-[0-9]{4}$",
+          "type": "string"
+        },
+        "immutability": {
+          "properties": {
+            "append_only": {
+              "const": false
+            }
+          },
+          "type": "object"
+        },
+        "integrated_principle": {
+          "oneOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "legacy_ids": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "lifecycle": {
+          "properties": {
+            "status": {
+              "enum": [
+                "Candidate",
+                "Active",
+                "Dormant",
+                "Tombstoned",
+                "Deleted"
+              ],
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "outperforms": {
+          "items": {
+            "$ref": "record.schema.json#/$defs/record_id"
+          },
+          "type": "array"
+        },
+        "primitive": {
+          "const": "Claim"
+        },
+        "provenance": {
+          "properties": {
+            "kind": {
+              "enum": [
+                "human_assertion",
+                "run_derived",
+                "document_derived",
+                "external_literature"
+              ]
+            }
+          },
+          "type": "object"
+        },
+        "risky_prediction": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/risky_prediction"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "statement": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "type": {
+          "const": "theory"
+        }
+      },
+      "required": [
+        "statement",
+        "constituent_hypothesis_ids",
+        "integrated_principle",
+        "risky_prediction",
+        "outperforms"
+      ],
+      "type": "object"
+    },
+    "risky_prediction": {
+      "additionalProperties": false,
+      "properties": {
+        "declared_null": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "established_at": {
+          "$ref": "record.schema.json#/$defs/timestamp"
+        },
+        "observable": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "outcome": {
+          "enum": [
+            "unassessed",
+            "assessed_supported",
+            "assessed_contested",
+            "assessed_failed"
+          ],
+          "type": "string"
+        },
+        "statement": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "statement",
+        "observable",
+        "declared_null",
+        "established_at",
+        "outcome"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "https://p1.local/schemas/lske/theories.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "allOf": [
+    {
+      "$ref": "record.schema.json"
+    },
+    {
+      "$ref": "#/$defs/collection"
+    }
+  ],
+  "title": "theories",
+  "type": "object",
+  "unevaluatedProperties": false
+}

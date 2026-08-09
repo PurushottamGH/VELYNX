@@ -1,0 +1,202 @@
+{
+  "$defs": {
+    "collection": {
+      "properties": {
+        "confidence": {
+          "type": "null"
+        },
+        "declared_null": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "determinism_tier": {
+          "enum": [
+            "D0",
+            "D1",
+            "D2"
+          ],
+          "type": "string"
+        },
+        "digest": {
+          "$ref": "record.schema.json#/$defs/hex64"
+        },
+        "exclusion_rules": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "freeze": {
+          "$ref": "#/$defs/freeze"
+        },
+        "frozen_before_first_run": {
+          "type": "boolean"
+        },
+        "hypothesis_ids": {
+          "items": {
+            "$ref": "record.schema.json#/$defs/record_id"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "id": {
+          "pattern": "^PROT-[0-9]{4}-[0-9]{4}$",
+          "type": "string"
+        },
+        "immutability": {
+          "properties": {
+            "append_only": {
+              "const": true
+            }
+          },
+          "type": "object"
+        },
+        "intent": {
+          "enum": [
+            "exploratory",
+            "confirmatory"
+          ],
+          "type": "string"
+        },
+        "legacy_ids": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "lifecycle": {
+          "properties": {
+            "status": {
+              "enum": [
+                "Candidate",
+                "Active",
+                "Dormant",
+                "Tombstoned",
+                "Deleted"
+              ],
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "path": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "primitive": {
+          "const": "Protocol"
+        },
+        "provenance": {
+          "properties": {
+            "kind": {
+              "enum": [
+                "human_assertion",
+                "run_derived",
+                "document_derived",
+                "external_literature"
+              ]
+            }
+          },
+          "type": "object"
+        },
+        "sesoi": {
+          "$ref": "#/$defs/sesoi"
+        },
+        "stopping_rule": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "type": {
+          "const": "protocol"
+        }
+      },
+      "required": [
+        "path",
+        "digest",
+        "freeze",
+        "hypothesis_ids",
+        "intent",
+        "determinism_tier",
+        "stopping_rule",
+        "sesoi",
+        "exclusion_rules",
+        "declared_null",
+        "frozen_before_first_run"
+      ],
+      "type": "object"
+    },
+    "freeze": {
+      "additionalProperties": false,
+      "properties": {
+        "algorithm": {
+          "const": "blake2b-256-canonical-json"
+        },
+        "digest": {
+          "$ref": "record.schema.json#/$defs/hex64"
+        },
+        "frozen_at_commit": {
+          "oneOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "protocol_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "source": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "protocol_id",
+        "digest",
+        "source",
+        "frozen_at_commit",
+        "algorithm"
+      ],
+      "type": "object"
+    },
+    "sesoi": {
+      "additionalProperties": false,
+      "properties": {
+        "metric_id": {
+          "$ref": "record.schema.json#/$defs/record_id"
+        },
+        "units": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "value": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "value",
+        "units",
+        "metric_id"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "https://p1.local/schemas/lske/protocols.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "allOf": [
+    {
+      "$ref": "record.schema.json"
+    },
+    {
+      "$ref": "#/$defs/collection"
+    }
+  ],
+  "title": "protocols",
+  "type": "object",
+  "unevaluatedProperties": false
+}

@@ -1,0 +1,105 @@
+{
+  "$defs": {
+    "collection": {
+      "properties": {
+        "at": {
+          "$ref": "record.schema.json#/$defs/timestamp"
+        },
+        "cause": {
+          "enum": [
+            "decision",
+            "gate_run",
+            "scheduled",
+            "manual"
+          ],
+          "type": "string"
+        },
+        "caused_by": {
+          "oneOf": [
+            {
+              "$ref": "record.schema.json#/$defs/record_id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "commit": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "confidence": {
+          "type": "null"
+        },
+        "id": {
+          "pattern": "^SNAP-[0-9]{4}-[0-9]{4}$",
+          "type": "string"
+        },
+        "immutability": {
+          "properties": {
+            "append_only": {
+              "const": true
+            }
+          },
+          "type": "object"
+        },
+        "legacy_ids": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "lifecycle": {
+          "properties": {
+            "status": {
+              "enum": [
+                "Candidate",
+                "Active",
+                "Dormant",
+                "Tombstoned",
+                "Deleted"
+              ],
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "primitive": {
+          "const": "Snapshot"
+        },
+        "record_count": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "store_content_hash": {
+          "$ref": "record.schema.json#/$defs/hex64"
+        },
+        "type": {
+          "const": "knowledge_snapshot"
+        }
+      },
+      "required": [
+        "store_content_hash",
+        "commit",
+        "at",
+        "record_count",
+        "cause",
+        "caused_by"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "https://p1.local/schemas/lske/snapshots.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "allOf": [
+    {
+      "$ref": "record.schema.json"
+    },
+    {
+      "$ref": "#/$defs/collection"
+    }
+  ],
+  "title": "snapshots",
+  "type": "object",
+  "unevaluatedProperties": false
+}

@@ -1,0 +1,206 @@
+framework:
+  name: Project P1 Scientific Infrastructure
+  version: "1.0.0"
+  id_policy: "TYPE-YYYY-NNNN; permanent; never reused"
+  time_format: "ISO 8601 with timezone"
+  correction_policy: "append successor; never overwrite decision-bearing records"
+
+controlled_vocabularies:
+  phase: [Discovery, Validation, Publication]
+  hypothesis_status: [Proposed, Exploratory, Under_Validation, Validated, Rejected, Superseded, Archived]
+  experiment_status: [Proposed, Designed, Ready, Running, Completed, Interpreted, Closed, Withdrawn, Abandoned, Superseded]
+  result_validity: [valid_positive, valid_negative, valid_indeterminate, invalid, abandoned]
+  assumption_status: [Proposed, Active_Unvalidated, Under_Test, Supported, Contradicted, Retired, Replaced, Superseded]
+  uncertainty_status: [Open, Prioritized, Under_Investigation, Reduced, Resolved, Reopened, Deferred, Archived]
+  theory_status: [Candidate, Provisional, Under_Test, Supported, Challenged, Rejected, Revised, Superseded, Archived]
+  decision_action: [Accept, Reject, Revise, Split, Merge, Archive, Supersede, No_Verdict]
+  confidence_level: [very_low, low, moderate, high, very_high]
+  debt_severity: [Low, Moderate, High, Critical]
+  debt_block: [B0, B1, B2, B3, B4]
+
+hypothesis_template:
+  id: HYP-YYYY-NNNN
+  version: 1.0.0
+  title: ""
+  statement: ""
+  scope: {system: "", environment: "", conditions: "", versions: "", time: ""}
+  phase: Discovery
+  motivation: ""
+  expected_mechanism: ""
+  alternatives: {null: "", competing: []}
+  predictions: []
+  adverse_outcomes: []
+  variables: {independent: [], dependent: [], controlled: [], confounders: []}
+  dependencies: {assumptions: [], measurements: [], hypotheses: [], theories: [], environments: []}
+  experiments: []
+  evidence_for: []
+  evidence_against: []
+  unresolved_evidence: []
+  confidence:
+    effect: {level: very_low, basis: ""}
+    mechanism: {level: very_low, basis: ""}
+    generalization: {level: very_low, basis: ""}
+    last_decision: null
+  status: Proposed
+  decision_history: []
+  supersedes: null
+  superseded_by: null
+  created_at: ""
+  updated_at: ""
+
+experiment_template:
+  id: EXP-YYYY-NNNN
+  protocol_version: 1.0.0
+  title: ""
+  phase: Discovery
+  question: ""
+  decision_impact: ""
+  expected_information_gain: {rank: null, rationale: ""}
+  hypotheses: []
+  null_hypothesis: ""
+  alternatives: []
+  variables: {independent: [], dependent: [], controlled: [], nuisance: [], confounders: []}
+  treatment_conditions: []
+  controls: []
+  baselines: []
+  metrics: []
+  environment: {id: "", version: "", scope: ""}
+  acceptance_criteria: []
+  rejection_criteria: []
+  revision_criteria: []
+  invalidity_criteria: []
+  sampling_and_randomness: {independent_unit: "", seed_plan: {}, sample_size_or_stopping_rule: ""}
+  budget: {compute: "", data: "", time: ""}
+  executions: []
+  outcomes: []
+  evidence: []
+  interpretations: []
+  decisions: []
+  lessons_learned: []
+  future_work: []
+  status: Proposed
+
+execution_template:
+  id: EXP-YYYY-NNNN-RNNNN
+  experiment_id: EXP-YYYY-NNNN
+  protocol_version: 1.0.0
+  code_version: ""
+  environment_version: ""
+  dataset_or_world_version: ""
+  parameters: {}
+  random_generators_and_seeds: {}
+  compute_budget_actual: ""
+  started_at: ""
+  ended_at: ""
+  artifact_manifest: []
+  deviations: []
+  validity: valid_indeterminate
+  validity_rationale: ""
+  observed_outcome: ""
+
+assumption_template:
+  id: ASM-YYYY-NNNN
+  version: 1.0.0
+  statement: ""
+  category: model
+  scope: ""
+  needed_by: []
+  consequence_if_false: ""
+  evidence_for: []
+  evidence_against: []
+  confidence: {level: very_low, basis: "", last_decision: null}
+  validation_method: ""
+  smallest_test: ""
+  sensitivity: ""
+  status: Active_Unvalidated
+  decisions: []
+  replaces: null
+
+uncertainty_template:
+  id: UNK-YYYY-NNNN
+  title: ""
+  statement: ""
+  type: open_question
+  scope: ""
+  materiality: ""
+  origin: []
+  affects: []
+  candidate_answers: []
+  resolution_criterion: ""
+  smallest_discriminating_experiment: ""
+  information_gain:
+    decision_change_probability: null
+    current_uncertainty: null
+    dependency_breadth: null
+    risk_if_unresolved: null
+    feasibility: null
+    cost: null
+    priority: null
+    rationale: ""
+  status: Open
+  resolving_evidence: []
+  decisions: []
+
+theory_template:
+  id: THY-YYYY-NNNN
+  version: 1.0.0
+  title: ""
+  explanation: ""
+  scope: ""
+  phenomena: []
+  constituent_hypotheses: []
+  computational_relations: []
+  assumptions: []
+  alternatives: []
+  evidence_explained: []
+  counter_evidence: []
+  unexplained_evidence: []
+  novel_predictions: []
+  discriminating_experiments: []
+  boundary_conditions: []
+  confidence: {phenomena: very_low, relationships: very_low, overall: very_low, basis: ""}
+  debt: []
+  status: Candidate
+  decisions: []
+  supersedes: null
+
+decision_template:
+  id: DEC-YYYY-NNNN
+  timestamp: ""
+  action: No_Verdict
+  affected_objects: []
+  prior_states: {}
+  resulting_states: {}
+  question: ""
+  evidence_considered: []
+  validity_assessment: ""
+  scope: ""
+  assumptions: []
+  unknowns: []
+  strongest_alternative: ""
+  criteria_applied: []
+  rationale: ""
+  limitations_or_dissent: ""
+  confidence_before: {}
+  confidence_after: {}
+  propagation: {theories: [], roadmap: [], debt: [], living_model: []}
+  reversal_trigger: ""
+  authorized_by: P1_SOS_Chief_Scientist
+
+scientific_debt_template:
+  id: SDEBT-YYYY-NNNN
+  title: ""
+  category: confounding
+  description: ""
+  affects: []
+  evidence: []
+  severity: High
+  blocking_impact: B2
+  prohibited_claims: []
+  required_evidence: []
+  smallest_resolving_experiment: ""
+  feasibility_and_cost: ""
+  priority: null
+  rationale: ""
+  status: Open
+  decisions: []

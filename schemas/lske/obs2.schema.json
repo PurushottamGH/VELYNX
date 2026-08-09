@@ -1,0 +1,123 @@
+{
+  "$defs": {
+    "payload_object": {
+      "type": "object"
+    }
+  },
+  "$id": "https://p1.local/schemas/lske/obs2.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "cause": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "edges": {
+      "items": {
+        "$ref": "#/$defs/payload_object"
+      },
+      "type": "array"
+    },
+    "governance_banner": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "nodes": {
+      "items": {
+        "$ref": "#/$defs/payload_object"
+      },
+      "type": "array"
+    },
+    "overlays": {
+      "additionalProperties": {
+        "type": "object"
+      },
+      "maxProperties": 8,
+      "minProperties": 8,
+      "propertyNames": {
+        "pattern": "^[a-z][a-z0-9_]{0,31}$"
+      },
+      "type": "object"
+    },
+    "phase": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "plate": {
+      "pattern": "^V(0[1-9]|[12][0-9]|3[0-6])$",
+      "type": "string"
+    },
+    "primitive": {
+      "enum": [
+        "Run",
+        "Environment",
+        "Tick",
+        "Event",
+        "Snapshot",
+        "Neuron",
+        "Kind",
+        "Edge",
+        "Graph",
+        "DelayLine",
+        "EpisodicMemory",
+        "Ledger",
+        "Policy",
+        "Intervention",
+        "Protocol",
+        "Measurement",
+        "Claim",
+        "Evidence",
+        "Decision"
+      ],
+      "type": "string"
+    },
+    "schema": {
+      "const": "obs/2"
+    },
+    "snapshot_id": {
+      "oneOf": [
+        {
+          "$ref": "record.schema.json#/$defs/record_id"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "store_content_hash": {
+      "$ref": "record.schema.json#/$defs/hex64"
+    },
+    "subject": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "zoom_level": {
+      "maximum": 8,
+      "minimum": 1,
+      "type": "integer"
+    }
+  },
+  "required": [
+    "schema",
+    "plate",
+    "phase",
+    "subject",
+    "cause",
+    "zoom_level",
+    "primitive",
+    "nodes",
+    "edges",
+    "overlays",
+    "store_content_hash",
+    "snapshot_id",
+    "governance_banner"
+  ],
+  "title": "OBS/2 render payload",
+  "type": "object"
+}

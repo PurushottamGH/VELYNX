@@ -1,0 +1,75 @@
+# Smoke test — engine only, no science.
+#
+# Uses the deterministic test-double benchmark: fixed stream, exhaustive probes,
+# constant oracle, no randomness anywhere. Runs in well under a second.
+#
+# Purpose: verify that the engine, config system, artifact pipeline and CLI work
+# end to end. A failure here is an engineering fault, never a scientific one.
+#
+# No result from this config is evidence about any mechanism.
+
+config_version: 1
+name: smoke
+description: "Engine end-to-end check on the deterministic test double"
+
+benchmark:
+  name: deterministic
+  params: {}
+
+environment:
+  name: cyclic
+  params:
+    n_tasks: 2
+    alphabet: 4
+    steps_per_task: 25
+    cycles: 2
+
+model:
+  name: count_model
+  params:
+    alpha: 0.5
+    decay: 0.9
+
+memory:
+  name: reservoir
+  params:
+    capacity: 50
+
+gate:
+  name: always
+  params:
+    k: 2
+
+replay:
+  name: buffer_sample
+  params:
+    weight: 1.0
+
+metrics:
+  - name: online_loss
+    params:
+      tail: 10
+  - name: excess_loss
+  - name: plasticity
+    params:
+      window: 10
+  - name: compute
+  - name: gate_activity
+    params:
+      boundary_window: 5
+
+seeds:
+  master: 0
+  mode: independent
+  overrides: {}
+
+compute:
+  max_steps: null
+  max_updates: null
+  max_wall_seconds: null
+
+logging:
+  level: info
+  console: false
+  step_format: csv
+  plots: false
