@@ -1,0 +1,974 @@
+{
+  "HEAD": "8c4186c8659f726a15f51151567c4cef787840fb",
+  "SESOI": {
+    "derivation": "max(structural floor, empirical null p95) over a pre-decisive null calibration",
+    "empirical_null": {
+      "artifact": "artifacts/p1-ln-dec/sesoi-calibration/null.json",
+      "artifact_sha256": "309d277eceaca47e628f8557a01483f9227d9e7f9058eb3f0587d44a2c1d28e7",
+      "binding": false,
+      "bptt_window": 4,
+      "capacity_check": "train-fit accuracy 1.000 and single_rule accuracy 1.000 on all 20 seeds",
+      "comparator_winner": "B6 on all 20 seeds",
+      "effect_max": -1.629118655559633,
+      "effect_mean": -3.247331470493927,
+      "effect_p95": -1.9045631893497887,
+      "effect_sd": 0.7752280914356747,
+      "epochs": 100,
+      "n": 20,
+      "note": "Non-binding because the whole null distribution is negative, so it imposes no positive threshold and the structural floor governs.  LIMITATION: trained on a stream whose composition targets are permuted, the candidate is confidently wrong (4-6 nats against uniform log(10)=2.303), so the null is centred far below zero.  It therefore bounds the false-positive tail of the decision statistic but does NOT calibrate its variance in a near-competitive regime.",
+      "positive_seeds": 0,
+      "script": "outputs/dec_repair1_sesoi_calibration.py",
+      "seeds": "100-119"
+    },
+    "seed_partition": {
+      "0-4": "design and diagnostics - BURNED, never decisive",
+      "100-119": "SESOI calibration - consumed by the null run above",
+      "200-209": "decisive - untouched by every run to date"
+    },
+    "status": "CLOSED",
+    "structural_floor": {
+      "argument": "B6 has a provable floor of log(3) on pair_holdout: closure is vacuous on an unseen marker run, so at most three of six body symbols are excludable.  The smallest discrete competence step above that comparator is excluding one more symbol, i.e. moving from three live candidates to two.  Below this the claim would not correspond to any additional structure recovered.",
+      "expression": "log(3) - log(2)",
+      "value": 0.4054651081081645
+    },
+    "unit": "nats of mean NLL on the decisive family, comparator minus candidate, per seed",
+    "value": 0.4054651081081645
+  },
+  "ablation_semantics": {
+    "N1": "clear external KV only; do not reset weights, retrain, alter probes, or alter recurrent architecture",
+    "classification": [
+      "MEMORY-DEPENDENT",
+      "MEMORY-INDEPENDENT",
+      "INCONCLUSIVE"
+    ],
+    "primary_gate_independent": true
+  },
+  "baseline_definitions": [
+    "uniform",
+    "B0 exact lookup",
+    "B1 marginal",
+    "B2 order-1 n-gram",
+    "B3 order-2 n-gram",
+    "B4 order-3 n-gram",
+    "context_retrieval targeted final-window control"
+  ],
+  "benchmark": {
+    "manifest": {
+      "benchmark_version": "ln-dec-canonical-1",
+      "corpus_fingerprint": "bfa867b4250ca67ee1a9ea2c3dd59229cf69973dab53aab684e00fbea0f24738",
+      "master_seed": 0,
+      "name": "p1-ln-dec-canonical",
+      "oracle_semantics": "reference_ceiling_and_achievable_calibration_audit",
+      "probe_families": [
+        "composition",
+        "memorization",
+        "symbol_transfer",
+        "tail"
+      ],
+      "probe_ids": [
+        "probe:0:0000",
+        "probe:0:0001",
+        "probe:0:0002",
+        "probe:0:0003",
+        "probe:0:0004",
+        "probe:0:0005"
+      ],
+      "substreams": {
+        "evaluation": 1651985962,
+        "generator": 1755531565,
+        "model_init": 136446915,
+        "probe": 933602830,
+        "replay": 2063944533,
+        "trajectory": 1958373497
+      },
+      "target_identifiability": "one_target_per_context",
+      "training_ids": [
+        "train:0:0000",
+        "train:0:0001",
+        "train:0:0002",
+        "train:0:0003",
+        "train:0:0004",
+        "train:0:0005",
+        "train:0:0006",
+        "train:0:0007",
+        "train:0:0008",
+        "train:0:0009",
+        "train:0:0010"
+      ],
+      "vocabulary_id": "ln-dec-vocab-body6-abstract6-special5-v1"
+    },
+    "name": "p1-ln-dec-canonical",
+    "version": "ln-dec-canonical-1"
+  },
+  "claim_classes": [
+    "R0 NO LEARNING EVIDENCE",
+    "R1 MEMORIZATION / RETRIEVAL CONSISTENT",
+    "R2 STATISTICAL SEQUENCE LEARNING",
+    "R3 LIMITED OUT-OF-DISTRIBUTION GENERALIZATION",
+    "R4 REPLICATED COMPOSITIONAL GENERALIZATION",
+    "R5 INCONCLUSIVE"
+  ],
+  "dec2_preregistration": {
+    "anti_shortcut_gate": {
+      "provable_floor": "ln(3) ~ 1.0986 for B6 on pair_holdout; closure is vacuous on an unseen marker run",
+      "threshold_nll": 1.0
+    },
+    "benchmark": {
+      "grammar": {
+        "component": "(START, m_k, u) -> P_k(u)",
+        "composition": "(START, m_i, m_j, u) -> P_j(P_i(u))"
+      },
+      "name": "p1-ln-dec-chain",
+      "version": "ln-dec-chain-2",
+      "vocabulary": "six body values, three markers, one START; no mode, rule-id, separator, or metadata token"
+    },
+    "comparator": {
+      "members": [
+        "B_unif",
+        "B0",
+        "B1",
+        "B2",
+        "B3",
+        "B4",
+        "B6"
+      ],
+      "rationale": "the corpus makes local-suffix statistics confidently wrong, so 'beats the best baseline' would otherwise be satisfied by an agnostic model",
+      "rule": "per seed, the minimum mean NLL over DECISION_COMPARATORS",
+      "subsumes": "a separate must-beat-chance gate; B_unif and B1 are members"
+    },
+    "control_families": [
+      "memorization",
+      "single_rule"
+    ],
+    "decision_rule": {
+      "equivalent_threshold": "against B6's provable log(3) floor, a positive result requires candidate mean NLL at or below log(2) ~ 0.6931, i.e. confidently narrowing six body symbols to two",
+      "inconclusive": "the CI straddles SESOI",
+      "negative": "seed-clustered 95% CI upper bound < SESOI",
+      "positive": "seed-clustered 95% CI lower bound > SESOI, AND candidate mean NLL < SOLVED_NLL, AND B5b (last-marker shortcut) fails",
+      "seeds": "200-209, untouched to date",
+      "sesoi_nats": 0.4054651081081645,
+      "statistic": "per seed, min mean NLL over DECISION_COMPARATORS minus candidate mean NLL on the decisive family"
+    },
+    "decisive_families": [
+      "pair_holdout"
+    ],
+    "dependent_variable": "per-item next-token negative log-likelihood on frozen held-out probes",
+    "diagnostic_exclusion_reason": "value_holdout is reachable to ~0.35 nats by bijection closure on an already-seen marker run, which requires no composition; measured as baseline B6.",
+    "diagnostic_families": [
+      "value_holdout"
+    ],
+    "experimental_unit": "one master seed",
+    "independent_variable": "presence of the NN-0 candidate learner versus an exposure-matched non-composing model",
+    "learner": {
+      "bptt_window": 4,
+      "bptt_window_rationale": "the longest DEC-2 episode has four token transitions, so a window of four carries the gradient across the whole episode: binding a two-marker run at positions 1-2 to the value at position 3 spans three transitions and is unreachable at the legacy window of one",
+      "frozen": true,
+      "training_mode": "sequence",
+      "truncation_boundary": "window >= max episode length on this corpus, so truncation never fires inside an episode; the only detachment point is the episode boundary"
+    },
+    "primary_metric": "mean NLL over the decisive family, per master seed",
+    "reported_not_compared": {
+      "B5a": "achievable-learner ceiling: grammar prior plus table induction plus chaining",
+      "B5b": "shortcut adversary: last-marker parse only; must fail"
+    },
+    "status": "DRAFT"
+  },
+  "failure_policy": {
+    "checkpoint_corruption": "hard refusal",
+    "failed_seed": "record and block complete decisive classification",
+    "probe_contamination": "hard refusal",
+    "protected_surface_drift": "hard refusal",
+    "protocol_drift": "hard refusal"
+  },
+  "implementation_hashes": {
+    "experiments/DEC/__init__.py": "a7194c8adfa1e84f9a81cda85ea4142ee4969f8d1c49e8409f86bf5b469176d3",
+    "p1/live/neural/experiments/ln_dec/adapter.py": "c2c05bed2a4029278a95b50094cc4967a4443656d305f161c6ff55bf04295e4f",
+    "p1/live/neural/experiments/ln_dec/baselines.py": "f1a1ddce36a973997bc577617627655ff98ccd8f0b3ad787d48c8310c264229d",
+    "p1/live/neural/experiments/ln_dec/baselines2.py": "9ea800a500278e53d6ec923207d8ac0cacaaaebfa450b0f9bb77bd9132d2ead4",
+    "p1/live/neural/experiments/ln_dec/benchmark.py": "6a5fb08a49975fb2236a65fc4c902dfa7c7e90b04cd8a8683bef4e9717487eef",
+    "p1/live/neural/experiments/ln_dec/benchmark2.py": "c254ce64a1cca601def5be17420515cbf8a09928b1595f439ac459126f0f4466",
+    "p1/live/neural/experiments/ln_dec/claims.py": "766e46c615311d6c76820cbe669e698191dce3a807fe3fcc691497bc3981e861",
+    "p1/live/neural/experiments/ln_dec/oracle.py": "a251653872fb33ed7ab0d8151b09dbdea08b3760a1c3cc0514e84c71bc2a921e",
+    "p1/live/neural/experiments/ln_dec/protocol.py": "80ed1edc6713c6e3e3f32c63dfbec97628493b293d2b0be216e2b838d0320ca5",
+    "p1/live/neural/experiments/ln_dec/provenance.py": "f966bbdf1932d8759b94b8caba99b308a85d646e7da4f4272494eed404713d0f",
+    "p1/live/neural/experiments/ln_dec/rng.py": "504baf87ad62b1a1122f6d6e0c9eec9d89f610401b77245925c4500bc84c0f9b",
+    "p1/live/neural/experiments/ln_dec/runner.py": "7a7d27f308eb523aac53becfb889c6c749028eafda93e633adeb32c73da5266f",
+    "p1/live/neural/experiments/ln_dec/stats.py": "ba08c0e0743bfd9c86f4df9a8088af87499c9f7d9f63d71c391729d19a7b0094",
+    "p1/live/neural/experiments/ln_dec/types.py": "107101494779cf43c11e57b88388a41e95a39e8d9ca12a9d40b621ec62025211",
+    "p1/live/neural/nn0/nucleus.py": "44f1ae674c240c2c179173c98aa6ecc842a7ccac7a6514bf415ddf884ddf48f4",
+    "p1/live/neural/playgarden/probes.py": "585a22ce2674a8258bebcbc3209810c4ef5a6813cc546e96963922d97c33653f",
+    "p1/live/neural/playgarden/verification.py": "acdb96b01df4bef0c79ffc7ab5cdc773fc2ac99b434c36dff72f0ddbd347f011",
+    "p1/live/neural/playgarden/worlds.py": "4e5b11f403a10539cfbda9fb93a06f2e83c5309515dfe68714bf61496361b4af"
+  },
+  "master_seeds": [
+    1,
+    7,
+    42,
+    99,
+    1234,
+    2027,
+    31415,
+    65537,
+    100003,
+    424242
+  ],
+  "memory_settings": {
+    "external_kv": "detached host KV; clear_external_memory clears only KV",
+    "learned_weights": "TinyGRUCore parameters; never cleared by reset_episode or N1",
+    "recurrent_hidden": "last_h; reset_episode clears only this",
+    "replay": "error-prioritized reservoir; clear_replay clears only replay"
+  },
+  "metrics": {
+    "primary": "per-item NLL on identical frozen Probe objects",
+    "stored": "per-item NLL, family mean, seed-level paired contrast"
+  },
+  "nn_architecture": {
+    "config": {
+      "bptt_window": 1,
+      "d_embed": 32,
+      "d_hidden": 128,
+      "d_read": 32,
+      "kv_capacity": 65536,
+      "kv_top_k": 4,
+      "lr": 0.001,
+      "replay_alpha": 0.6,
+      "replay_batch_size": 64,
+      "replay_capacity": 65536,
+      "replay_every": 1,
+      "training_mode": "transition",
+      "vocab_size": 21,
+      "weight_decay": 0.0005
+    },
+    "identity": "nn0-tiny-gru",
+    "parameter_count": 82005
+  },
+  "optimizer": {
+    "learning_rate": 0.001,
+    "name": "AdamW",
+    "weight_decay": 0.0005
+  },
+  "oracle_semantics": {
+    "achievable_learner": "candidate receives rule components plus explicit per-symbol calibration; decisive combination is withheld",
+    "candidate_rejection_rule": "never reject a candidate solely for failing private random information",
+    "reference_ceiling": "generator-aware and labelled Bref_reference_ceiling"
+  },
+  "probe_definitions": {
+    "controls": [
+      "memorization",
+      "tail"
+    ],
+    "decisive": [
+      "composition",
+      "symbol_transfer"
+    ],
+    "held_out_rule": "templates (0,1,2) and (2,0,1) are absent from training; tiny dry-run uses the first only",
+    "identifiability": "one target per decisive context; stochastic distributions are not used"
+  },
+  "protected_surface": {
+    "aggregate_sha256": "e235a9ad945c8aa0a055d1c41fd070a12cffde9890dd71d8a589ec3dc60c0adb",
+    "count": 132,
+    "entries": [
+      {
+        "path": "GOVERNANCE_REGISTRY.yaml",
+        "sha256": "9967605550b80b4cc916145d0d37485f96b52bd6a7448f7e8056f4422d4e062a"
+      },
+      {
+        "path": "PROGRAM_D_CANONICAL.md",
+        "sha256": "058c078d49f023a1913cf8e9dfc6c499acae0e1e11642b135a50f3bbe0c14998"
+      },
+      {
+        "path": "REPOSITORY_CONSTITUTION.md",
+        "sha256": "c56513f5142e875359802c24b41ef76a4b72f5264b0fab81260508181769c8b5"
+      },
+      {
+        "path": "RESEARCH_PROTOCOL.md",
+        "sha256": "52d5699d310aa1daa15658eb6b16dc1d4071bb64a22c543f2c60642742db0306"
+      },
+      {
+        "path": "experiment_registry.yaml",
+        "sha256": "1b964cae00dcf4bf4d50cbb6efd9c7cb11ff20ab8fbc9513f329100c0d171793"
+      },
+      {
+        "path": "experiments/EXP0/EXP0_DIRECTORY_STRUCTURE.md",
+        "sha256": "d88fc07eeb78a9f29e2d8efe6d538b07888136daeba252a0b8109524a453d9d3"
+      },
+      {
+        "path": "experiments/EXP0/EXP0_IMPLEMENTATION_PLAN.md",
+        "sha256": "98ab12170acc895a38a249075d2c775669058dbcc245fa0505a910300dac6413"
+      },
+      {
+        "path": "experiments/EXP0/EXP0_PREREGISTRATION.md",
+        "sha256": "2b26668a44f17ea6c9c79a1dbdb1a9cbfc1bcffe988a73f13a7c226727477a97"
+      },
+      {
+        "path": "experiments/EXP0/EXP0_PROTOCOL.md",
+        "sha256": "ae65cb9e21c488697b9b3e7acb35918d52a0c61e2073c0815d86005aa0f43be8"
+      },
+      {
+        "path": "experiments/EXP0/EXP0_RUNBOOK.md",
+        "sha256": "422d58154462acb1aed2127f5488566261a1b50a0a63f2aff0036311a01fd8bd"
+      },
+      {
+        "path": "experiments/EXP0/EXP0_STATISTICAL_ANALYSIS.md",
+        "sha256": "1f4c730e1cc8c6a6ca26c95c69f75db52e015f935e5c672fd12caf9748e3853f"
+      },
+      {
+        "path": "experiments/EXP0/__init__.py",
+        "sha256": "98b757828df895771e6c71cf1cac6f17fe9b17251a208669c123218a6caf2539"
+      },
+      {
+        "path": "experiments/EXP0/analysis.py",
+        "sha256": "fa69a69328701273d180082df49e1119909b76e12bc9016a65786415630a2a57"
+      },
+      {
+        "path": "experiments/EXP0/artifacts/run_20260703T070728Z_seed1_tier12/exp0_manifest.json",
+        "sha256": "169729514ffe0d96f27f2005193dc5f0e0c36f3fa36b6c5bd71b12d072d063e5"
+      },
+      {
+        "path": "experiments/EXP0/artifacts/run_20260703T070728Z_seed1_tier12/exp0_raw_results.jsonl",
+        "sha256": "ba9511b1a987db8f32ebcd621130467dab532471e62e49e30e1a4cb58070258d"
+      },
+      {
+        "path": "experiments/EXP0/artifacts/run_20260703T070728Z_seed1_tier12/exp0_report.md",
+        "sha256": "80683bf18f211e9c413d5c481977fd91a5276533e560e4f114f6aca6d78a39bc"
+      },
+      {
+        "path": "experiments/EXP0/artifacts/run_20260703T070728Z_seed1_tier12/exp0_summary.json",
+        "sha256": "3c5e74d69c634b5c4aa9abc7d92b440bc1154d7b2f6e5da0fa39de852720e432"
+      },
+      {
+        "path": "experiments/EXP0/artifacts/run_20260703T074034Z_seed1_tier12/exp0_manifest.json",
+        "sha256": "6345ff2b43a76c3498d981efb14be31f4bde5ff3e5eaab5b335eea370bc9ab0b"
+      },
+      {
+        "path": "experiments/EXP0/artifacts/run_20260703T074034Z_seed1_tier12/exp0_raw_results.jsonl",
+        "sha256": "d3cb39e39dd5aa7d3b04c484c31b675ed19e4b317810bff079f3b7ce706c03b5"
+      },
+      {
+        "path": "experiments/EXP0/artifacts/run_20260703T074034Z_seed1_tier12/exp0_report.md",
+        "sha256": "80683bf18f211e9c413d5c481977fd91a5276533e560e4f114f6aca6d78a39bc"
+      },
+      {
+        "path": "experiments/EXP0/artifacts/run_20260703T074034Z_seed1_tier12/exp0_summary.json",
+        "sha256": "3c5e74d69c634b5c4aa9abc7d92b440bc1154d7b2f6e5da0fa39de852720e432"
+      },
+      {
+        "path": "experiments/EXP0/data/chroma_db/chroma.sqlite3",
+        "sha256": "c3d69ee5615752e34acc008671580de2fca13ad4341b910d061ef96439817ed6"
+      },
+      {
+        "path": "experiments/EXP0/dataset.py",
+        "sha256": "b4a11f23b8c863f89c89ec49874b87b1f000585acf4f4eb9246f9be458a1fb6e"
+      },
+      {
+        "path": "experiments/EXP0/detectors.py",
+        "sha256": "e243021f07b9137ca7638d62601bf53130543659d345bffffb2534faff35a503"
+      },
+      {
+        "path": "experiments/EXP0/leakage_check.py",
+        "sha256": "b53665ff40fcd946fa6aa1fff762cc0fde90b0de14c95841f5aa594df5417c6e"
+      },
+      {
+        "path": "experiments/EXP0/paraphrases.json",
+        "sha256": "6a33aefd68d16a6e64cf0d1c943e55ccdaccea53d92b04fedd0e7aa58d71ddee"
+      },
+      {
+        "path": "experiments/EXP0/run_exp0.py",
+        "sha256": "5d53970c704456a1e645cdb1d1717b4f075f25ebb1487815f07bb029796eba98"
+      },
+      {
+        "path": "experiments/EXP1/__init__.py",
+        "sha256": "7e944bafaa69bfa084f7f7171b8b21cdacd615b2500b21920e90feb14da8a372"
+      },
+      {
+        "path": "experiments/EXP1/__pycache__/__init__.cpython-311.pyc",
+        "sha256": "2bc1480f31de40de2c4ba82a7ce4490758fdc9d12a7abd2b22821e7157e7146b"
+      },
+      {
+        "path": "experiments/EXP1/__pycache__/artifact_specs.cpython-311.pyc",
+        "sha256": "c559e4a0caa741ff0de515b322e75aafea4504bdf5234a84d61faf688a3c17fe"
+      },
+      {
+        "path": "experiments/EXP1/__pycache__/calibration.cpython-311.pyc",
+        "sha256": "3f36e1439ed53e1000381d3f1cd6141169153819f38fda597f1b9c31a2fe61a6"
+      },
+      {
+        "path": "experiments/EXP1/__pycache__/dataset.cpython-311.pyc",
+        "sha256": "127bbbd53383ff7bb56e4c2df470de90613c0e43f3c82433fc444bdc42c25c7c"
+      },
+      {
+        "path": "experiments/EXP1/__pycache__/decision.cpython-311.pyc",
+        "sha256": "9e50bb5064373863adf25d50e6ef5cf70f5068cbec6cfc38a57b4d3f0e4ff10a"
+      },
+      {
+        "path": "experiments/EXP1/__pycache__/manifest.cpython-311.pyc",
+        "sha256": "e398f4a1ab2fc1263c235d84a6e1df2611c90e4602202a2f447df5104bdd81ab"
+      },
+      {
+        "path": "experiments/EXP1/__pycache__/program_a_adapter.cpython-311.pyc",
+        "sha256": "9c93c91d03da78ac3a00856a4f38013245cebde08f74d5b13c2e561836cb35b0"
+      },
+      {
+        "path": "experiments/EXP1/__pycache__/rubric.cpython-311.pyc",
+        "sha256": "6ad57450ee4d00c60138725f67ed76473fd8c13b69df0dddce2b33b223ea742e"
+      },
+      {
+        "path": "experiments/EXP1/__pycache__/run.cpython-311.pyc",
+        "sha256": "79380c590e47510954d2aa7f8dc301f82100e5d86c601390bee2a25f05507184"
+      },
+      {
+        "path": "experiments/EXP1/artifact_specs.py",
+        "sha256": "7f3cfc1070ac820d6f1e1df7ab5a40d2deadc75f8f374cd54bca9e021cc150ca"
+      },
+      {
+        "path": "experiments/EXP1/calibration.py",
+        "sha256": "e3729ef025d1820c22d9eaa355587e0b0f0034446a82db38ec29979a46c4beef"
+      },
+      {
+        "path": "experiments/EXP1/config.json",
+        "sha256": "9830deb2f21b866f2e614b4cdf060713493df9ace852402b3786422f0e66c645"
+      },
+      {
+        "path": "experiments/EXP1/dataset.py",
+        "sha256": "211c90cf847759d4c8713312a6cf692b56e4ea94028709606e790667169dabba"
+      },
+      {
+        "path": "experiments/EXP1/decision.py",
+        "sha256": "e592ad8656c4cb28c8db68657590d211148b1ec82e84db4719b0e3c2c531a9df"
+      },
+      {
+        "path": "experiments/EXP1/manifest.py",
+        "sha256": "c48b8fc0c8b2cd7879721cc47a31f72fcc52e14ce09d02d51f80f1f3590b2ec2"
+      },
+      {
+        "path": "experiments/EXP1/program_a_adapter.py",
+        "sha256": "5b8e695249edf260dc6862370029d88c2eca80b7c2e065d950bc995c1ba14aa8"
+      },
+      {
+        "path": "experiments/EXP1/report.py",
+        "sha256": "3a020a858a6db6b057ad9bf4c0333d94abae26cfba8ab617e2f43060db0e3174"
+      },
+      {
+        "path": "experiments/EXP1/rubric.py",
+        "sha256": "45bdd548c1091b064412b26170c26b363ccad13b00b5b6fce41c935e708c37c3"
+      },
+      {
+        "path": "experiments/EXP1/run.py",
+        "sha256": "3e38db977fcd6f79f1a6de4629caf3d5f83a7e12f638879f53f7f31be6646dfe"
+      },
+      {
+        "path": "outputs/P1_V2_CCR1_CCR3_INDEPENDENT_HOSTILE_CERTIFICATION.md",
+        "sha256": "b8b8407a3a2fa8777b66a8c924d2e10d4ad5beb151db40ffeace4fbf3bf22ea5"
+      },
+      {
+        "path": "outputs/P1_V2_CCR_1_STAGE3_UNIVERSAL_MIGRATION_DERIVATION.md",
+        "sha256": "1d4841e838f0f041a5f9133740102d28ef7ca32c148b9b7c4eb8188034b42378"
+      },
+      {
+        "path": "outputs/P1_V2_CCR_1_STAGE3_UNIVERSAL_MIGRATION_DERIVATION_v2.md",
+        "sha256": "2c7d7f2225232dd312a5c4d03b44b6ac5654f558cb634bc00c5fc5cb05ec0864"
+      },
+      {
+        "path": "outputs/P1_V2_CCR_3_STAGE3_COLLECTION_MIGRATION_VALIDITY.md",
+        "sha256": "a383ff1ca8052efed81763c093213760884e1abfa831656ce261b6a0a273b0ca"
+      },
+      {
+        "path": "outputs/P1_V2_CCR_3_STAGE3_COLLECTION_MIGRATION_VALIDITY_v2.md",
+        "sha256": "f39243a2429a27db858620f440199b0399a7b1076a53577c218ce0f197aa2acd"
+      },
+      {
+        "path": "outputs/P1_V2_CCR_STAGE3_MIGRATION_AUTHORIZATION_BOOTSTRAP.md",
+        "sha256": "882bdf1ec6a9f4c9b3f135dc5ac4095e39db2c107eecce2ac9e013ca4aa2906b"
+      },
+      {
+        "path": "outputs/P1_V2_STAGE3_CANONICAL_DISPUTE_RECONCILIATION.md",
+        "sha256": "592a1dc3b2e68e1febfaa17accdbd81deb74381115b338d2083d84287863dc8d"
+      },
+      {
+        "path": "outputs/P1_V2_STAGE3_CANONICAL_RESOLUTION_INDEPENDENT_CERTIFICATION.md",
+        "sha256": "202a2b5d6fc910643c43d4519d50bd7552cccd157551dff88edacdec34c57031"
+      },
+      {
+        "path": "outputs/P1_V2_STAGE3_CANONICAL_RESOLUTION_PACKAGE.md",
+        "sha256": "ed137fad0041c79469f707818f4f8ddb7fa63f5d3775ccca2ac7584935d9377d"
+      },
+      {
+        "path": "outputs/P1_V2_STAGE3_CCR1_CCR3_CLOSURE_REPORT.md",
+        "sha256": "e8498973aa1570ad8c3fc666aa2a13c0de36b808d11df318afd00971c0cb06be"
+      },
+      {
+        "path": "outputs/P1_V2_STAGE3_CCR1_CCR3_INDEPENDENT_CERTIFICATION.md",
+        "sha256": "f6c0e9cb2899852a4fe2c1fa8f9451d9c51f5730c2c2d72a74a90302ddaf8d6b"
+      },
+      {
+        "path": "outputs/P1_V2_STAGE3_INDEPENDENT_ENGINEERING_CERTIFICATION.md",
+        "sha256": "0520efd5ea31481a1fc4909f5f6e57e139893e229941637b4d79757df4087371"
+      },
+      {
+        "path": "outputs/P1_V2_STAGE3_NORMATIVE_REPAIR_V2_INDEPENDENT_CERTIFICATION.md",
+        "sha256": "4bffe726880633371d1df231ccc18f3ae83cf2444c730c0ad3d7d647929593b4"
+      },
+      {
+        "path": "outputs/P1_V2_STAGE3_NORMATIVE_REPAIR_V2_VALIDATION_REPORT.md",
+        "sha256": "982538555b2ea7ee480901a2b67aa96267758b253c790cfc56d439092c91ac98"
+      },
+      {
+        "path": "outputs/P1_V2_STAGE3_VERIFICATION_KERNEL_INDEPENDENT_CERTIFICATION.md",
+        "sha256": "084d5151adfacc687da238f189d78cb20b93f4975eba7e37ce43e65319d41c16"
+      },
+      {
+        "path": "outputs/P1_V2_STAGE3_VERIFICATION_KERNEL_REPORT.md",
+        "sha256": "354b4fb34b30138b872f5ef760e3232ef943dabdaa65531b4bdf18ce42e5ecd0"
+      },
+      {
+        "path": "outputs/stage3_canonical_reconciliation_probe.py",
+        "sha256": "a080bca2da23268ebc069a106c03ce1c7c2110eeef2a529562a768de221741a8"
+      },
+      {
+        "path": "outputs/stage3_census_reproduction.py",
+        "sha256": "cb12ee9543e88a136bfc82c3e8578b77726c53f6216fa9626ed2da8d1ffb2500"
+      },
+      {
+        "path": "outputs/stage3_present_invalid_census.py",
+        "sha256": "713d8d724367e08687800014dd7a09d41223eab3a8a382c174eb0a311ce3ba68"
+      },
+      {
+        "path": "outputs/stage3_v2_battery.py",
+        "sha256": "73efe017fc45fa51b81d97be6bd2b8fff9d7416346d0b89fce0f5e79f355bd59"
+      },
+      {
+        "path": "outputs/stage3_v2_battery_results.json",
+        "sha256": "ac75c4b2795092ef213e45216d2da8dcc9ac1ce34bd284238b133320fc9bd597"
+      },
+      {
+        "path": "outputs/stage3_v2_ledgers.py",
+        "sha256": "8cfc28a69a390adfd5cb431498b487d6b45ff3c7d82e38823118cf6f87389393"
+      },
+      {
+        "path": "outputs/stage3_v2_legacy_key_ledger.csv",
+        "sha256": "074a96413e9b8c94bc6eb749760199a52e065e62ac46f6f498254737d84d941d"
+      },
+      {
+        "path": "outputs/stage3_v2_missing_instance_ledger.csv",
+        "sha256": "a90e5f746480456bbdfa420a88d69f2575ccbf0a9a01177549eb5f5c91316043"
+      },
+      {
+        "path": "outputs/stage3_v2_obligations.json",
+        "sha256": "fccd992576676f36ac1f0a53d7262eadc6c7cf82890e76fae857a2cb2135b7d5"
+      },
+      {
+        "path": "outputs/stage3_v2_overlay_amendments.json",
+        "sha256": "1c2ba64549c9f5049e1a368ed3c34b3fb0dad390247e1ef0d96735d177ee9791"
+      },
+      {
+        "path": "outputs/stage3_v2_planned_records.json",
+        "sha256": "01c7f67502ebae2a4e150c36e65473b97ea3ef2aff011821353b1efdcc18452a"
+      },
+      {
+        "path": "outputs/stage3_v2_shadow_planner.py",
+        "sha256": "56f38ca1b10cd5a33f6d68eb166fbfc4ddd58f325a37f0fe7878d65ea9465fa5"
+      },
+      {
+        "path": "outputs/stage3_verification_kernel.py",
+        "sha256": "4f73ad4f082a3dc74b6313ff15cfe9b6413e03982a93acefa8bd9a67dd1dc4ca"
+      },
+      {
+        "path": "p1/specifications/milestone-1-gpt56.md",
+        "sha256": "a17f3d08efcc05c689ef9a0b9a088c88cdf4659714d8455e40414c990469cb4b"
+      },
+      {
+        "path": "parameter_registry.yaml",
+        "sha256": "5d7ee0aa278de30b523da1970e7ed4fdee691dd3e4438dd6dfcb4b9f8bd4edfa"
+      },
+      {
+        "path": "reproducibility.yaml",
+        "sha256": "ac35c0387f93d4fa5f5e5c2f85f5099355d565c136854c329ba6680e042760fb"
+      },
+      {
+        "path": "ros/__init__.py",
+        "sha256": "5005f570662dc2c79363efb33592f8e11db591ac26d899c53160233c3f525829"
+      },
+      {
+        "path": "ros/__main__.py",
+        "sha256": "8fd499734638689a11420b79d04789de61522e0097d9cc4ea3a5fa90cb0314ae"
+      },
+      {
+        "path": "ros/__pycache__/__init__.cpython-311.pyc",
+        "sha256": "aab6096968c2e691dc9d807f74fe0bcd7b6dabfcb4c9cc152b34fe7910c46c65"
+      },
+      {
+        "path": "ros/__pycache__/__init__.cpython-313.pyc",
+        "sha256": "9a3213fa4b66361d1a09e78cddc9a1b99538447d245f5a6e60a6cf4843903bb3"
+      },
+      {
+        "path": "ros/__pycache__/__main__.cpython-311.pyc",
+        "sha256": "07aad25e6d761e485a8780379b17e408a5c63cb68cf430afbfb5fbf5326a3d84"
+      },
+      {
+        "path": "ros/__pycache__/admissibility.cpython-311.pyc",
+        "sha256": "5ef2517311a0944b56155206199831ab26a40071a6c40bcc4f22ee702e87b595"
+      },
+      {
+        "path": "ros/__pycache__/authority.cpython-311.pyc",
+        "sha256": "cb79936293731f43941080dfacb10ca216db03cd7a66367cf984a4e8b311670f"
+      },
+      {
+        "path": "ros/__pycache__/cli.cpython-311.pyc",
+        "sha256": "ea21260b223a3500e07592b48e75e0ec0255c484affa30a4ff39c8051a03138a"
+      },
+      {
+        "path": "ros/__pycache__/events.cpython-311.pyc",
+        "sha256": "f02dbf6ccb0c48a5fd4fd453ee281f2a4b829cc1f9d97c7d4a32345f370c72a9"
+      },
+      {
+        "path": "ros/__pycache__/gates.cpython-311.pyc",
+        "sha256": "0f1091e6fdaff67be3ffe9ea7b7dced186ca570dc9e623f8c875f378dfd10e08"
+      },
+      {
+        "path": "ros/__pycache__/governance.cpython-311.pyc",
+        "sha256": "c59a580581025de309ecfc72e13f7bfaa157b3cc260f197e4ed5ae99366c66af"
+      },
+      {
+        "path": "ros/__pycache__/kpi.cpython-311.pyc",
+        "sha256": "bf32d1b45bb71c6119b03408804576c448e075363e6c9f4378cc817a5f4fd78d"
+      },
+      {
+        "path": "ros/__pycache__/model.cpython-311.pyc",
+        "sha256": "815ff450763751a1fa37d74dd169b6097d551e870a6d3076e652b47133d488fd"
+      },
+      {
+        "path": "ros/__pycache__/projections.cpython-311.pyc",
+        "sha256": "3b420989d335bb092afbe692c7ba3dd5a98db65dfff0169761b3e7255f320bbe"
+      },
+      {
+        "path": "ros/__pycache__/propagation.cpython-311.pyc",
+        "sha256": "09a218fe4669537d0c7babbb3a143f6a965c86ec312b528f706816fc1b4dc1ad"
+      },
+      {
+        "path": "ros/__pycache__/protocol.cpython-311.pyc",
+        "sha256": "7d3a12811afabbbcfa76c649087161e6852cf1a2f7ed99e00c5e2b028eb9f1c9"
+      },
+      {
+        "path": "ros/__pycache__/store.cpython-311.pyc",
+        "sha256": "b1d6d0d0ae90f176745353c195431fc1499fe9caf43fb7963b1ab9837c61682d"
+      },
+      {
+        "path": "ros/__pycache__/store.cpython-313.pyc",
+        "sha256": "3d22498d163e2314fcce355328dd56e8d0ce0702d9d3a314eb273e2418b0cb4c"
+      },
+      {
+        "path": "ros/admissibility.py",
+        "sha256": "51bf06b4de94ceb08798e8c8f2cf02437c0a74b215613b546bf5f5e4ce9207ee"
+      },
+      {
+        "path": "ros/authority.py",
+        "sha256": "8d5bbbbc44946a7d0fa3e2461e9e16607a6a00ab65cb73d866808ad1a12b0d5a"
+      },
+      {
+        "path": "ros/cli.py",
+        "sha256": "9b61d0d3ba1f09d3f5440c804a67c2bef2ac38c776fc196f6f50c9d907d14982"
+      },
+      {
+        "path": "ros/events.py",
+        "sha256": "5d2fda8ccfef62c7cad9dd6629a30da0056f9046af6a095766c2a3706111568a"
+      },
+      {
+        "path": "ros/gates.py",
+        "sha256": "0d0e666efcc42a141b0afb28550b40b9d08982900579d74318f844bf347d1a44"
+      },
+      {
+        "path": "ros/governance.py",
+        "sha256": "850ec49037d78e360b2bdc12fc5c0ec85a52d0831977bbc2224b89c1c86a77f7"
+      },
+      {
+        "path": "ros/kpi.py",
+        "sha256": "599e90656e8cf0eea64d857b0cae878c536ded8e2990b12556ec7902b3084ec7"
+      },
+      {
+        "path": "ros/model.py",
+        "sha256": "0d03bf2fcf3b8059839f4c7b110b395af059b73f9c7d46252f38d0a962584b97"
+      },
+      {
+        "path": "ros/projections.py",
+        "sha256": "bd9a453ffa29e274ce26fe87418812ea6a1c954ae412070715e75355789b207c"
+      },
+      {
+        "path": "ros/propagation.py",
+        "sha256": "8894473ccf3f2151ab12b7237bac855773e06155fb17b67bbeb8d0a082564b9f"
+      },
+      {
+        "path": "ros/protocol.py",
+        "sha256": "a06861279cf711966fffdc464929d98926d2bca83c32d4f77d8bcb467b736268"
+      },
+      {
+        "path": "ros/store.py",
+        "sha256": "a6932d4cf0f8d1d12c6c81b0d91aa9d355fddfdc1fca6fa28e0c2ca88d27f62b"
+      },
+      {
+        "path": "science/SKB_RECORDS_v1.0.yaml",
+        "sha256": "706172a6b303bbbee4dc1addbe90b6298266f28126978550aaca7536d5e96594"
+      },
+      {
+        "path": "science/__pycache__/__init__.cpython-311.pyc",
+        "sha256": "ec73fc90154fb149d5c6883fc0895ec846af2fc2e0174c5df9939c95cc4c3e78"
+      },
+      {
+        "path": "science/__pycache__/oracle.cpython-311.pyc",
+        "sha256": "5b9b8f0604555ea149687316e69058ea1fe730175e03f859b1530efabbf1278e"
+      },
+      {
+        "path": "science/__pycache__/registries.cpython-311.pyc",
+        "sha256": "9e134847175d8a99ddf29551c55a808dd3e396b6056d0bef11823cee20a4b3d1"
+      },
+      {
+        "path": "science/__pycache__/stats.cpython-311.pyc",
+        "sha256": "49fb23d16cb766c0884f7e4546f56ecbc69b29e53de0a2a4a521dcf9b2d23b0d"
+      },
+      {
+        "path": "science/mechanisms/__pycache__/__init__.cpython-311.pyc",
+        "sha256": "8eb7292420720a5a52bcb39c280f4921fce0ebf8f9d568f32606d09cf91a707b"
+      },
+      {
+        "path": "science/mechanisms/__pycache__/controls.cpython-311.pyc",
+        "sha256": "12a1916dd0f7a0e52b717a774d398b18ffd4284218c2ead16123fbb9843aff6a"
+      },
+      {
+        "path": "science/mechanisms/__pycache__/environments.cpython-311.pyc",
+        "sha256": "63dc3122e9d87601c5b94763318980472a39ddb5e5f88ae2de1980c738c41bd8"
+      },
+      {
+        "path": "science/mechanisms/__pycache__/v0.cpython-311.pyc",
+        "sha256": "a3491889d0736bd8843f5c22bb1e0231b234fea070ad03b1b99b3ffb47be8155"
+      },
+      {
+        "path": "science/metrics/__pycache__/__init__.cpython-311.pyc",
+        "sha256": "846ba957f619b0f89d3178afa618c888c20d9884ab84587d2dd2fb4e5784c70e"
+      },
+      {
+        "path": "science/metrics/__pycache__/base.cpython-311.pyc",
+        "sha256": "1fae2a53ada304251276aa14a6d8aa0999c51750817a3c27ac48863ade02f26d"
+      },
+      {
+        "path": "science/metrics/__pycache__/compute.cpython-311.pyc",
+        "sha256": "8d35c7b1e6b6c498818e52ffa6f78a4be60483e3ebf5b2174baacfe749c64037"
+      },
+      {
+        "path": "science/metrics/__pycache__/excess_loss.cpython-311.pyc",
+        "sha256": "58fc8e16be4d393603231ab4c6fc12d4fadb2bc5b89b28a97867f9974c9ca8ff"
+      },
+      {
+        "path": "science/metrics/__pycache__/gate_activity.cpython-311.pyc",
+        "sha256": "459f6e68cea93aea990e430173ae023dbe4b2487a07c210dc0bf0558d4e20110"
+      },
+      {
+        "path": "science/metrics/__pycache__/online_loss.cpython-311.pyc",
+        "sha256": "b78daa788a9fe37c378839f9f92697801558538123892102207a582abcbda237"
+      },
+      {
+        "path": "science/metrics/__pycache__/plasticity.cpython-311.pyc",
+        "sha256": "f5fbeff74e559033f6c47ce6ae029b90cf2a8ed63ddcec68ebe807430d359e90"
+      },
+      {
+        "path": "science/metrics/__pycache__/retention.cpython-311.pyc",
+        "sha256": "4d4ec25a9c989dba0a37b1dd3410f5020a44b2a711795362c2e2cbdfdcbdd37f"
+      },
+      {
+        "path": "v2/lske/__pycache__/__init__.cpython-311.pyc",
+        "sha256": "b57fa95b996d926d11a8caaaf27290c59113a72628d099363fe35df0846dc373"
+      },
+      {
+        "path": "v2/lske/__pycache__/__init__.cpython-313.pyc",
+        "sha256": "b4eae694a7531f7346c7b92b9170c7e2b9aca37598605ab3561a10d2518c052f"
+      },
+      {
+        "path": "v2/lske/__pycache__/errors.cpython-311.pyc",
+        "sha256": "43ffe69427b48c0081ddb16b119ba8323a66af308d115cbcfc29bd96deedd51b"
+      },
+      {
+        "path": "v2/lske/__pycache__/errors.cpython-313.pyc",
+        "sha256": "04467a641dc1f33b6ebe9ed4d4d7d5bbc04287091fea8845470dbf92bb4eeaac"
+      },
+      {
+        "path": "v2/lske/__pycache__/events.cpython-311.pyc",
+        "sha256": "1f52d594afaabc97710d229f734b8f4a6208bfe809ef835cf238df4018c6b177"
+      },
+      {
+        "path": "v2/lske/__pycache__/schema.cpython-311.pyc",
+        "sha256": "8d7eac2fe2ce1448610f62738cc246cddb0d7a88144a56b3e9eb1c996bcd977b"
+      }
+    ]
+  },
+  "protocol_version": "p1-ln-dec-protocol-1",
+  "replay_settings": {
+    "alpha": 0.6,
+    "batch_size": 64,
+    "capacity": 65536,
+    "seed_stream": "replay"
+  },
+  "software_environment": {
+    "cuda_build": "11.8",
+    "python": "3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]",
+    "torch": "2.6.0+cu118"
+  },
+  "source_state": {
+    "clean": false,
+    "divergent_files": [
+      "experiments/DEC/__init__.py"
+    ],
+    "files": {
+      "experiments/DEC/__init__.py": {
+        "head_blob": null,
+        "status": "untracked_at_head",
+        "worktree_blob": "1adc9b2460dc052b41c624cedaa79093e20a27d2"
+      },
+      "p1/live/neural/experiments/ln_dec/adapter.py": {
+        "head_blob": "d985682cc0477e11e69e0dc508ef9a2791efbbae",
+        "status": "clean",
+        "worktree_blob": "d985682cc0477e11e69e0dc508ef9a2791efbbae"
+      },
+      "p1/live/neural/experiments/ln_dec/baselines.py": {
+        "head_blob": "a99db56ef76647ad19558685e82838b236748ef2",
+        "status": "clean",
+        "worktree_blob": "a99db56ef76647ad19558685e82838b236748ef2"
+      },
+      "p1/live/neural/experiments/ln_dec/baselines2.py": {
+        "head_blob": "5d4eaccf1cbc7c29aa109d25acc9f769d957cda9",
+        "status": "clean",
+        "worktree_blob": "5d4eaccf1cbc7c29aa109d25acc9f769d957cda9"
+      },
+      "p1/live/neural/experiments/ln_dec/benchmark.py": {
+        "head_blob": "befb6140656a7291d9bb3330abe3ad84db29936d",
+        "status": "clean",
+        "worktree_blob": "befb6140656a7291d9bb3330abe3ad84db29936d"
+      },
+      "p1/live/neural/experiments/ln_dec/benchmark2.py": {
+        "head_blob": "85daea3cdc6c3918d4039a7d450c862fd52264d6",
+        "status": "clean",
+        "worktree_blob": "85daea3cdc6c3918d4039a7d450c862fd52264d6"
+      },
+      "p1/live/neural/experiments/ln_dec/claims.py": {
+        "head_blob": "79c1a8162318ee5ecf9ea1e9916c5cefe5dbd899",
+        "status": "clean",
+        "worktree_blob": "79c1a8162318ee5ecf9ea1e9916c5cefe5dbd899"
+      },
+      "p1/live/neural/experiments/ln_dec/oracle.py": {
+        "head_blob": "6699d1e86fb24ce944bf79a772c0f053a027a959",
+        "status": "clean",
+        "worktree_blob": "6699d1e86fb24ce944bf79a772c0f053a027a959"
+      },
+      "p1/live/neural/experiments/ln_dec/protocol.py": {
+        "head_blob": "3509da6fd810aceff507c6daf24b831d4c8a8f14",
+        "status": "clean",
+        "worktree_blob": "3509da6fd810aceff507c6daf24b831d4c8a8f14"
+      },
+      "p1/live/neural/experiments/ln_dec/provenance.py": {
+        "head_blob": "bfdf39327df60de9de2a306cd790b34cb41664e5",
+        "status": "clean",
+        "worktree_blob": "bfdf39327df60de9de2a306cd790b34cb41664e5"
+      },
+      "p1/live/neural/experiments/ln_dec/rng.py": {
+        "head_blob": "00be5d6cdbd6468b681c570af9b9582d55268407",
+        "status": "clean",
+        "worktree_blob": "00be5d6cdbd6468b681c570af9b9582d55268407"
+      },
+      "p1/live/neural/experiments/ln_dec/runner.py": {
+        "head_blob": "e72f916e596fa37ec3c9b60191264040e1a63c69",
+        "status": "clean",
+        "worktree_blob": "e72f916e596fa37ec3c9b60191264040e1a63c69"
+      },
+      "p1/live/neural/experiments/ln_dec/stats.py": {
+        "head_blob": "8f7614ae085e36a7215fbaec8dc5fcefaf6baeb1",
+        "status": "clean",
+        "worktree_blob": "8f7614ae085e36a7215fbaec8dc5fcefaf6baeb1"
+      },
+      "p1/live/neural/experiments/ln_dec/types.py": {
+        "head_blob": "8aa8099715f85dd9732efde9e3c780a68281a742",
+        "status": "clean",
+        "worktree_blob": "8aa8099715f85dd9732efde9e3c780a68281a742"
+      },
+      "p1/live/neural/nn0/nucleus.py": {
+        "head_blob": "17e6db5df7216969ae455f35708cf303a11700a4",
+        "status": "clean",
+        "worktree_blob": "17e6db5df7216969ae455f35708cf303a11700a4"
+      },
+      "p1/live/neural/playgarden/probes.py": {
+        "head_blob": "46bb76acb6d35e3cda810ed6617d57ef041d0687",
+        "status": "clean",
+        "worktree_blob": "46bb76acb6d35e3cda810ed6617d57ef041d0687"
+      },
+      "p1/live/neural/playgarden/verification.py": {
+        "head_blob": "37ca4b8f6fa5bc1838f693d60cccbd0eb05b3ef7",
+        "status": "clean",
+        "worktree_blob": "37ca4b8f6fa5bc1838f693d60cccbd0eb05b3ef7"
+      },
+      "p1/live/neural/playgarden/worlds.py": {
+        "head_blob": "7a1e376bb06535c6a192f3bceb96307c95b81ee6",
+        "status": "clean",
+        "worktree_blob": "7a1e376bb06535c6a192f3bceb96307c95b81ee6"
+      }
+    },
+    "head": "8c4186c8659f726a15f51151567c4cef787840fb",
+    "head_describes_implementation": false
+  },
+  "statistics": {
+    "failed_seed_policy": "retain failed/diverged seeds and block a complete gate",
+    "observation_unit": "seed-level paired contrast",
+    "primary": "mean paired NLL difference baseline minus candidate",
+    "relative": "mean paired difference divided by baseline mean NLL",
+    "sensitivity": "exact two-sided sign/permutation check",
+    "uncertainty": "seed-clustered 95% CI"
+  },
+  "store_content_hash": "e8c1ab3825e7ee0a99eb5cd0db124efd81dd6c0c608db6a3151b684445e08670",
+  "substream_derivation": {
+    "derivation": "SHA256(p1-ln-dec:<master>:<stream>) first 8 bytes modulo 2^31-1",
+    "streams": [
+      "generator",
+      "trajectory",
+      "probe",
+      "model_init",
+      "replay",
+      "evaluation"
+    ]
+  },
+  "training_exposure": {
+    "bptt_window": 1,
+    "context_target_alignment": "target is the final token; internal context transitions are learned in order",
+    "episode_boundary": "reset recurrent hidden state at each Experience.episode_start",
+    "experience_unit": "one full START-prefixed context plus one target",
+    "exposure_unit": "one token transition in the ordered training stream",
+    "exposure_unit_rationale": "DEC-1 fitted baselines on 11 (context -> final target) rows while NN-0 took 53 gradient steps on the same corpus. Counting transitions is the only unit under which the candidate and every baseline see the identical quantity of data.",
+    "training_mode": "transition",
+    "truncation_boundary": "the hidden state is detached only at a window boundary; within a window the gradient reaches the recurrent weights across every timestep in it"
+  },
+  "vocabulary": {
+    "abstract_tokens": [
+      6,
+      7,
+      8,
+      9,
+      10,
+      11
+    ],
+    "body_tokens": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "calibrate": 15,
+    "compose": 16,
+    "eos": 14,
+    "rule_tokens": [
+      18,
+      19,
+      20
+    ],
+    "separator": 13,
+    "size": 21,
+    "start": 12,
+    "transfer": 17,
+    "vocabulary_id": "ln-dec-vocab-body6-abstract6-special5-v1"
+  }
+}
